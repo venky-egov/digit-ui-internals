@@ -22,12 +22,11 @@ const GetReopenInstance = (obj, t) => {
 };
 
 const getResolvedInstance = async (obj, path, t, key) => {
-  console.log("wating....");
   let nextAction = await Digit.workflowService.getNextAction("pb", key);
-  console.log("finish....");
   let actions = nextAction.map(({ action }, index) => (
     <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
-      <ActionLinks>{GetTranslatedAction(action, t)}</ActionLinks>
+      {/* <ActionLinks>{GetTranslatedAction(action, t)}</ActionLinks> */}
+      <span style={{ color: "#F47738", marginLeft: "8px" }}>{GetTranslatedAction(action, t)}</span>
     </Link>
   ));
   return (
@@ -95,13 +94,12 @@ const getNextState = async (obj, path, t, complaint) => {
 const getComplaintHistory = async (processInstance, path, t, complaint) => {
   if (Object.keys(processInstance).length > 0) {
     let { ProcessInstances } = processInstance;
-    let history = ProcessInstances.map(async (instance) => {
+    let history = await ProcessInstances.map(async (instance) => {
       return {
         applicationStatus: instance.state.applicationStatus,
         text: await getNextState(instance, path, t, complaint),
       };
     });
-    console.log(">>>", history);
     return history;
   }
 };
@@ -109,12 +107,9 @@ const getComplaintHistory = async (processInstance, path, t, complaint) => {
 const getTimeLineFromProcessInstance = async (processInstance, path, t, complaint) => {
   let timelineList = [];
   let timeline = await getComplaintHistory(processInstance, path, t, complaint);
-  console.log("timeline:", timeline);
   if (timeline) {
     timelineList = await Promise.all(timeline);
   }
-  console.log("timelineList:", timelineList);
-
   return timelineList;
 };
 

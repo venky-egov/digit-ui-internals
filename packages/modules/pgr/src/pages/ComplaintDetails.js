@@ -56,8 +56,10 @@ const ComplaintDetailsPage = (props) => {
     const getTimelineValues = async () => {
       if (selectedComplaint.length > 0) {
         const historyData = await getTimeLineFromProcessInstance(selectedWorkFlow, props.match.path, t, selectedComplaint[0]);
-        console.log("history data", historyData);
-        setComplaintHistory(historyData);
+        console.log("history data received----", historyData);
+        if (historyData.length > 0) {
+          setComplaintHistory(historyData);
+        }
       }
     };
     getTimelineValues();

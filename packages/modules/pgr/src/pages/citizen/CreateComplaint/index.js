@@ -14,10 +14,9 @@ import Response from "../Response";
 import { createComplaint } from "../../../redux/actions/index";
 import ComplaintType from "./ComplaintType";
 import { PgrRoutes, getRoute } from "../../../constants/Routes";
-import { PgrStoreService } from "../_REDUX/storeApi";
+import { PgrStoreService } from "../_REDUX/service";
 
 const CreateComplaint = ({ match, history }) => {
-  PgrStoreService.dispatchAsynchronously();
   const SessionStorage = Digit.SessionStorage;
   const dispatch = useDispatch();
   const appState = useSelector((state) => state)["common"];

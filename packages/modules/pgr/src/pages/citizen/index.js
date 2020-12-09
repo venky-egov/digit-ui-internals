@@ -16,6 +16,8 @@ import { ComplaintsList } from "./ComplaintsList";
 // import { ComplaintsDetail } from "./ComplaintDetail";
 // import ComplaintsPage from "./Complaints";
 import ComplaintDetailsPage from "./ComplaintDetails";
+import { PgrStoreService } from "./_REDUX/service";
+import { StoreSingleton } from "@egovernments/digit-ui-module-core/src/redux_2/store";
 
 const App = () => {
   const { path, url } = useRouteMatch();

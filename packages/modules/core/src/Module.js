@@ -8,6 +8,7 @@ import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm/src/Modul
 import { Body, TopBar, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 
 import getStore from "./redux/store";
+import { CoreService } from "./redux_2/service";
 
 const AppModules = ({ stateCode, userType }) => {
   const { path } = useRouteMatch();
@@ -66,6 +67,10 @@ export const DigitUI = ({ stateCode }) => {
   }
 
   console.log("common i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
+
+  // console.log(new StoreSingleton().getInstance());
+  CoreService.dispatchAsyncMetho();
+  console.log(CoreService.state());
 
   return (
     <Provider store={getStore(initData, { pgr: PGRReducers(initData) })}>

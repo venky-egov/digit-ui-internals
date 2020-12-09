@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { connect } from "react-redux";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import useComplaintTypes from "../../../../hooks/useComplaintTypes";
+import { PgrStoreService } from "../../_REDUX/service";
 
 const SelectComplaintType = ({ config, onSelect }) => {
   const goNext = () => {
@@ -13,10 +15,13 @@ const SelectComplaintType = ({ config, onSelect }) => {
   const SessionStorage = Digit.SessionStorage;
   const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
 
+  PgrStoreService.dispatchAsynchronously();
+
   function selectedValue(value) {
     setComplaintType(value);
     SessionStorage.set("complaintType", value);
   }
+
   return (
     <TypeSelectCard
       {...textParams}
@@ -28,5 +33,12 @@ const SelectComplaintType = ({ config, onSelect }) => {
     />
   );
 };
+
+// const mapStateToProps = (state) => {
+//   console.log(state);
+//   return {
+//     pgr: state.PGR,
+//   };
+// };
 
 export default SelectComplaintType;

@@ -46,6 +46,13 @@ const CreateComplaint = (props) => {
       }
     }
   }
+
+  console.log("hello there running");
+
+  // useEffect(() => {
+
+  // });
+
   return (
     <Card>
       <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_COMPLAINT_TYPE_PLACEHOLDER`)}</CardHeader>

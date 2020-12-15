@@ -10,6 +10,7 @@ import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
 import { getI18n } from "react-i18next";
 import { fetchBusinessServiceByTenant } from "./redux/actions";
+import useCreateStep from "./hooks/useCreateSteps";
 
 export const PGRReducers = getRootReducer;
 
@@ -51,3 +52,41 @@ export const PGRLinks = ({ matchPath }) => (
     <HomeLink to={`${matchPath}/complaints`}>My Complaints</HomeLink>
   </React.Fragment>
 );
+
+export const useCreateSteps = useCreateStep;
+
+// class CreateSteps {
+//   constructor(steps) {
+//     this.steps = steps;
+//   }
+
+//   getAllStepNames() {
+//     return this.steps.map((step) => step.urlPath);
+//   }
+
+//   addNewStep(afterStepName, urlPath, Component) {
+//     const newStep = {
+//       urlPath,
+//       component: () => <Component />,
+//       options: {
+//         addFields: [],
+//       },
+//     };
+
+//     if (afterStepName === "") {
+//       this.steps = [...this.steps, newStep];
+//     }
+//   }
+// }
+
+// const Hello = () => <h1>Hello</h1>;
+
+// export const complainStepsTesting = new CreateSteps([
+//   {
+//     urlPath: "create-complaint",
+//     component: (options) => <Hello />,
+//     options: {
+//       addFields: [],
+//     },
+//   },
+// ]);

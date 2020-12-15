@@ -135,7 +135,7 @@ export const CreateComplaint = () => {
 
   // setSubmitForm(true); USE TO SUBMIT FORM
 
-  const { state: complaintSteps, setState: setComplaintSteps } = useCreateSteps([
+  const COMPLAINTS = [
     {
       urlPath: "complaint-type",
       component: (options) => <SelectComplaintType t={t} config={stepItems[0]} onSelect={selectComplaintType} {...options} />,
@@ -192,7 +192,12 @@ export const CreateComplaint = () => {
         addFields: [],
       },
     },
-  ]);
+  ];
+
+  const { state: complaintSteps } = useCreateSteps(COMPLAINTS);
+
+  // const __initComplaints = window.Digit.SessionStorage.get("PGR_COMPLAINTS");
+  // const complaintSteps = useState(__initComplaints.length > 0 ? __initComplaints : COMPLAINTS);
 
   return (
     <Switch>

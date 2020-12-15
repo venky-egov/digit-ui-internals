@@ -4,5 +4,8 @@ import { defaultArray } from "./default-steps";
 
 export const CreateComplaint = () => {
   const defaultComps = defaultArray();
-  return <React.Fragment>{<WorkFlowSteps defaultComponents={defaultComps} deltas={Digit.deltaComplaintArr} />}</React.Fragment>;
+  const onSubmit = (formState) => {
+    console.log("FormState called from form Submit", formState);
+  };
+  return <WorkFlowSteps defaultComponents={defaultComps} deltas={Digit.deltaComplaintArr} onSubmit={onSubmit} />;
 };

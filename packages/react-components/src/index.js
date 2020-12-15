@@ -64,6 +64,7 @@ import FormStep from "./molecules/FormStep";
 import RatingCard from "./molecules/RatingCard";
 import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
+import WorkFlowSteps from "./hoc/workflow-steps";
 
 import { PrivateRoute } from "./atoms/PrivateRoute";
 
@@ -140,4 +141,5 @@ export {
   FilterAction,
   ApplyFilterBar,
   RemoveableTag,
+  WorkFlowSteps,
 };

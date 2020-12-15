@@ -1,6 +1,6 @@
-import { useReducer, useCallback, useEffect, useState, useMemo } from "react";
+import React, { useReducer, useCallback, useEffect, useState, useMemo } from "react";
 
-function WorkflowSteps({ defaultComponents, onSubmit, deltas }) {
+const WorkflowSteps = ({ defaultComponents, onSubmit, deltas }) => {
   const formReducer = useCallback((state, action) => {
     let obj = {};
     for (const key in action.delta) {
@@ -67,7 +67,7 @@ function WorkflowSteps({ defaultComponents, onSubmit, deltas }) {
       const indicesToRemove = deltas.filter((comp) => comp.remove).map((comp) => comp.defaultStep - 1);
       console.log(indicesToRemove);
       const compToAdd = deltas.filter((comp) => !comp.remove);
-      const newCompArray = defaultArray.filter((comp, index) => !indicesToRemove.includes(index));
+      const newCompArray = defaultComponents.filter((comp, index) => !indicesToRemove.includes(index));
       console.log(newCompArray);
       compToAdd.sort((a, b) => a.step - b.step).forEach((comp) => mergeComponentIntoArray(comp, newCompArray));
       return newCompArray;
@@ -90,7 +90,7 @@ function WorkflowSteps({ defaultComponents, onSubmit, deltas }) {
     return arrayToRender[step].component(compProps);
   };
 
-  return <>{getView()}</>;
-}
+  return <React.Fragment>{getView()}</React.Fragment>;
+};
 
-export default WorkFlowSteps;
+export default WorkflowSteps;

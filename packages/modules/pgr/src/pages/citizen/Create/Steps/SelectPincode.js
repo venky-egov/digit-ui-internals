@@ -2,7 +2,7 @@ import { FormStep } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import useTenants from "../../../../hooks/useTenants";
 
-const SelectPincode = ({ t, config, onSelect }) => {
+const SelectPincode = ({ t, config, onSelect, ...props }) => {
   const tenants = useTenants();
   const __initPincode = Digit.SessionStorage.get("PGR_CREATE_PINCODE");
   const [pincode, setPincode] = useState(__initPincode ? __initPincode : "");
@@ -22,7 +22,9 @@ const SelectPincode = ({ t, config, onSelect }) => {
       Digit.SessionStorage.set("city_complaint", undefined);
       Digit.SessionStorage.set("selected_localities", undefined);
     }
-    onSelect(data);
+
+    props.dispatcher({ type: "EDIT", data });
+    props.nextStep();
   };
 
   const onSkip = () => onSelect();

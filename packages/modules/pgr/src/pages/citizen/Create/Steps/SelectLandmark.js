@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FormStep } from "@egovernments/digit-ui-react-components";
 
-const SelectLandmark = ({ t, config, onSelect }) => {
+const SelectLandmark = ({ t, config, onSelect, ...props }) => {
   const __initLandmark = Digit.SessionStorage.get("PGR_CREATE_LANDMARK");
   const [landmark, setLandmark] = useState(__initLandmark ? __initLandmark : "");
 
@@ -10,9 +10,22 @@ const SelectLandmark = ({ t, config, onSelect }) => {
     Digit.SessionStorage.set("PGR_CREATE_LANDMARK", e.target.value);
   }
 
-  const onSkip = () => onSelect();
-
-  return <FormStep config={config} value={landmark} onChange={onChange} onSelect={onSelect} onSkip={onSkip} t={t}></FormStep>;
+  const onSkip = () => {
+    props.nextStep();
+  };
+  return (
+    <FormStep
+      config={config}
+      value={landmark}
+      onChange={onChange}
+      onSelect={(d) => {
+        props.dispatcher({ type: "EDIT", ...d });
+        props.nextStep();
+      }}
+      onSkip={onSkip}
+      t={t}
+    ></FormStep>
+  );
 };
 
 export default SelectLandmark;

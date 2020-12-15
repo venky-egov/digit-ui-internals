@@ -62,25 +62,25 @@ const comp = (props) => (
   </div>
 );
 
-// window.Digit.deltaComplaintArr = [
-//   {
-//     component: comp,
-//     step: 2,
-//     props: { name: "step 2" },
-//   },
-//   {
-//     component: comp,
-//     step: 4,
-//     props: { name: "step 4" },
-//   },
-//   {
-//     defaultStep: 3,
-//     remove: true,
-//   },
-//   {
-//     defaultStep: 1,
-//     remove: true,
-//   },
-// ];
+window.Digit.deltaComplaintArr = [
+  {
+    component: comp,
+    step: 2,
+    props: { name: "step 2" },
+  },
+  {
+    component: comp,
+    step: 4,
+    props: { name: "step 4" },
+  },
+  {
+    defaultStep: 3,
+    remove: true,
+  },
+  {
+    defaultStep: 1,
+    remove: true,
+  },
+];
 
 ReactDOM.render(<DigitUI stateCode="pb" />, document.getElementById("root"));

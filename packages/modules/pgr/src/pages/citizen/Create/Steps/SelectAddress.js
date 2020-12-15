@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CardLabel, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 import useTenants from "../../../../hooks/useTenants";
 
-const SelectAddress = ({ t, config, onSelect }) => {
+const SelectAddress = ({ t, config, onSelect, ...props }) => {
   const cities = useTenants();
   console.log("tenents", cities);
 
@@ -37,7 +37,8 @@ const SelectAddress = ({ t, config, onSelect }) => {
   }
 
   function onSubmit() {
-    onSelect({ locality: selectedLocality, city: selectedCity });
+    props.dispatcher({ type: "EDIT", locality: selectedLocality, city: selectedCity });
+    props.nextStep();
   }
 
   return (

@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import useComplaintTypes from "../../../../hooks/useComplaintTypes";
 
-const SelectComplaintType = ({ t, config, onSelect }) => {
+const SelectComplaintType = ({ t, config, onSelect, ...props }) => {
   const goNext = () => {
-    onSelect(complaintType);
+    // onSelect(complaintType);
+    props.dispatcher({ type: "EDIT", complaintType });
+    props.nextStep();
   };
   const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
   const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});

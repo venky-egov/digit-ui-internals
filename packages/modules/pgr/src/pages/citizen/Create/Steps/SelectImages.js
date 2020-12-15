@@ -15,7 +15,8 @@ const SelectImages = ({ t, config, onSelect, ...props }) => {
   };
 
   const uploadImages = () => {
-    props.dispatcher({ type: "EDIT", uploadedImages });
+    props.dispatcher({ type: "EDIT", delta: { uploadedImages } });
+    props.nextStep();
   };
 
   return (

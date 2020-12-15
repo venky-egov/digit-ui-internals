@@ -37,7 +37,7 @@ const SelectAddress = ({ t, config, onSelect, ...props }) => {
   }
 
   function onSubmit() {
-    props.dispatcher({ type: "EDIT", locality: selectedLocality, city: selectedCity });
+    props.dispatcher({ type: "EDIT", delta: { locality: selectedLocality, city: selectedCity } });
     props.nextStep();
   }
 

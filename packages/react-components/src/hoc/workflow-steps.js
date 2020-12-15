@@ -1,12 +1,12 @@
-import React, { useReducer, useCallback, useEffect, useState, useMemo } from "react";
+import React, { useReducer, useCallback, useEffect, useState, useMemo, useRef } from "react";
 
-const WorkflowSteps = ({ defaultComponents, onSubmit, deltas }) => {
+const WorkflowSteps = ({ defaultComponents, onSubmit, deltas, ...props }) => {
   const formReducer = useCallback((state, action) => {
     let obj = {};
     for (const key in action.delta) {
-      if (key !== "type") obj[key] = action[key];
+      obj[key] = action.delta[key];
     }
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", { ...state, ...obj });
+    // Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", { ...state, ...obj });
     switch (action.type) {
       case "EDIT":
         return { ...state, ...obj };
@@ -26,9 +26,21 @@ const WorkflowSteps = ({ defaultComponents, onSubmit, deltas }) => {
   const [formState, dispatcher] = useReducer(formReducer, Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS"));
   const [step, setStep] = useState(() => 0);
   const [maxAllowedStep, setMaxStep] = useState(() => 0);
+  let prevStepNo = useRef(0);
+
+  useEffect(() => {
+    console.log("newest step in comp", step, prevStepNo.current);
+    return () => {
+      prevStepNo.current = step;
+    };
+  }, [step]);
 
   const nextStep = () => {
     setStep((old) => (old < maxAllowedStep ? old + 1 : old));
+    if (prevStepNo == maxAllowedStep && onSubmit) {
+      onSubmit(FormData);
+      if (props.clearFormOnSubmit) dispatcher({ type: "CLEAR" });
+    }
   };
 
   const prevStep = () => {
@@ -53,24 +65,24 @@ const WorkflowSteps = ({ defaultComponents, onSubmit, deltas }) => {
     [nextStep, prevStep, setMaxStep, dispatcher, step, formState, onSubmit]
   );
 
-  const mergeComponentIntoArray = ({ step, component, props }, newCompArray) => {
+  let holderArray = [];
+  const mergeComponentIntoArray = ({ step, component, props }) => {
     let index = step;
-    let _default = newCompArray;
+    let _default = holderArray;
     let a = _default.splice(0, index - 1);
     console.log("from mergeComp", a, step);
-    newCompArray = [...a, { component, props }, ..._default];
+    holderArray = [...a, { component, props }, ..._default];
   };
 
   const generateCompArray = () => {
     // index, component , props
     if (deltas?.length) {
       const indicesToRemove = deltas.filter((comp) => comp.remove).map((comp) => comp.defaultStep - 1);
-      console.log(indicesToRemove);
+      console.log("indices to remove", indicesToRemove);
       const compToAdd = deltas.filter((comp) => !comp.remove);
-      const newCompArray = defaultComponents.filter((comp, index) => !indicesToRemove.includes(index));
-      console.log(newCompArray);
-      compToAdd.sort((a, b) => a.step - b.step).forEach((comp) => mergeComponentIntoArray(comp, newCompArray));
-      return newCompArray;
+      holderArray = defaultComponents.filter((comp, index) => !indicesToRemove.includes(index));
+      compToAdd.sort((a, b) => a.step - b.step).forEach((comp) => mergeComponentIntoArray(comp));
+      return holderArray;
     }
     return defaultComponents;
   };
@@ -81,9 +93,12 @@ const WorkflowSteps = ({ defaultComponents, onSubmit, deltas }) => {
     setMaxStep(arrayToRender.length - 1);
   }, [arrayToRender]);
 
+  useEffect(() => {
+    console.log("============================>", formState);
+  }, [formState]);
+
   const getView = () => {
     let compProps = arrayToRender[step].props || {};
-    compProps = compProps || {};
     compProps["nextStep"] = nextStep;
     compProps["prevStep"] = prevStep;
     compProps.dispatcher = dispatcher;

@@ -8,7 +8,7 @@ const SelectSubType = ({ t, config, onSelect, ...props }) => {
   const menu = Digit.GetServiceDefinitions.getSubMenu(complaintType, t);
 
   const goNext = () => {
-    props.dispatcher({ type: "EDIT", subType });
+    props.dispatcher({ type: "EDIT", delta: { subType } });
     props.nextStep();
   };
 

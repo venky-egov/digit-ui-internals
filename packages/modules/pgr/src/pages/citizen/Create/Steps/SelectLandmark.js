@@ -7,19 +7,21 @@ const SelectLandmark = ({ t, config, onSelect, ...props }) => {
 
   function onChange(e) {
     setLandmark(e.target.value);
+    props.dispatcher({ type: "EDIT", delta: { landmark } });
     Digit.SessionStorage.set("PGR_CREATE_LANDMARK", e.target.value);
   }
 
   const onSkip = () => {
     props.nextStep();
   };
+
   return (
     <FormStep
       config={config}
       value={landmark}
       onChange={onChange}
       onSelect={(d) => {
-        props.dispatcher({ type: "EDIT", ...d });
+        props.dispatcher({ type: "EDIT", delta: { landMark: d } });
         props.nextStep();
       }}
       onSkip={onSkip}

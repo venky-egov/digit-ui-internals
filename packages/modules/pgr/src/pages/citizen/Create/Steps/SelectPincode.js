@@ -23,7 +23,7 @@ const SelectPincode = ({ t, config, onSelect, ...props }) => {
       Digit.SessionStorage.set("selected_localities", undefined);
     }
 
-    props.dispatcher({ type: "EDIT", data });
+    props.dispatcher({ type: "EDIT", delta: data });
     props.nextStep();
   };
 

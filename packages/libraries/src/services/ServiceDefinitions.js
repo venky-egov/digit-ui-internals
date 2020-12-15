@@ -42,17 +42,16 @@ export const GetServiceDefinitions = {
         }
       })
     );
+    console.log("----------------------", Menu);
     return Menu;
   },
 
   getSubMenu: (selectedType, t) => {
     return Storage.get("serviceDefinitions")
-      ? Storage.get("serviceDefinitions")
-          .filter((def) => def.menuPath === selectedType.key)
-          .map((id) => ({
-            key: id.serviceCode,
-            name: t("SERVICEDEFS." + id.serviceCode.toUpperCase()),
-          }))
-      : [];
+      .filter((def) => def.menuPath === selectedType.key)
+      .map((id) => ({
+        key: id.serviceCode,
+        name: t("SERVICEDEFS." + id.serviceCode.toUpperCase()),
+      }));
   },
 };

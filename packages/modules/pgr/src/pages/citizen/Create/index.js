@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,16 +19,50 @@ import SelectDetails from "./Steps/SelectDetails";
 import Response from "./Steps/Response";
 
 // steps type: radio, map location, input, city-mohalla, textarea, upload photo
+
 export const CreateComplaint = () => {
   const { t } = useTranslation();
-  const { path, url } = useRouteMatch();
-  const history = useHistory();
   const dispatch = useDispatch();
+  const formReducer = useCallback((state, action) => {
+    let obj = {};
+    for (const key in action) {
+      if (key !== "type") obj[key] = action[key];
+    }
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", { ...state, ...obj });
+    switch (action.type) {
+      case "EDIT":
+        return { ...state, ...obj };
+
+      case "SUBMIT":
+        return state;
+
+      case "CLEAR":
+        Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
+        return {};
+
+      default:
+        return state;
+    }
+  }, []);
+
+  const [formState, dispatcher] = useReducer(formReducer, {});
+  const [step, setStep] = useState(0);
+  const [maxAllowedStep, setMaxStep] = useState(0);
+
+  const nextStep = () => {
+    setStep((old) => (old < maxAllowedStep ? old + 1 : old));
+  };
+
+  const prevStep = () => {
+    setStep((old) => (old < 0 ? 0 : old - 1));
+  };
+
+  const updateMaxStep = (value) => {
+    setMaxStep((old) => (value > compArray.length - 1 ? old : value));
+  };
 
   const appState = useSelector((state) => state)["common"];
-  console.log("appstate form index", appState);
   const __initParams = Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS");
-  const [params, setParams] = useState(__initParams ? __initParams : {});
   const [submitForm, setSubmitForm] = useState(false);
 
   const stepItems = useMemo(
@@ -44,30 +78,27 @@ export const CreateComplaint = () => {
   );
 
   useEffect(() => {
-    console.log("submitForm", params);
+    console.log("submitForm");
   }, [submitForm]);
 
   const selectComplaintType = (complaintType) => {
-    // updateParams("complaintType", complaintType);
-    history.push(`${path}/sub-type`);
+    nextStep();
   };
 
   const selectSubType = (subType) => {
     const { key, name } = subType;
     const complaintType = key;
-    setParams({ ...params, complaintType });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    history.push(`${path}/pincode`);
+    dispatcher({ type: "EDIT", complaintType });
+    nextStep();
   };
 
   const selectPincode = (_pincode) => {
     if (_pincode) {
       const { pincode } = _pincode;
-      setParams({ ...params, pincode });
       console.log("index --->", pincode);
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+      dispatcher({ type: "EDIT", pincode });
     }
-    history.push(`${path}/address`);
+    nextStep();
   };
 
   const selectAddress = (address) => {
@@ -78,18 +109,16 @@ export const CreateComplaint = () => {
     const state = "Punjab";
     const localityCode = address.locality.code;
     const localityName = address.locality.name;
-    setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    history.push(`${path}/landmark`);
+    dispatcher({ type: "EDIT", cityCode, city, district, region, state, localityCode, localityName });
+    nextStep();
   };
 
   const saveLandmark = (_landmark) => {
     if (_landmark) {
       const { landmark } = _landmark;
-      setParams({ ...params, landmark });
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+      dispatcher({ type: "EDIT", landmark });
     }
-    history.push(`${path}/upload-photos`);
+    nextStep();
   };
 
   const saveImagesUrl = (images) => {
@@ -102,66 +131,143 @@ export const CreateComplaint = () => {
           additionalDetails: {},
         };
       });
-      setParams({ ...params, uploadedImages });
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+      dispatcher({ type: "EDIT", uploadedImages });
     }
-    history.push(`${path}/additional-details`);
+    nextStep();
   };
 
   const submitComplaint = async (_details) => {
     if (_details) {
       const { details } = _details;
-      details && details !== "" ? setParams({ ...params, details }) : null;
+      details && details !== "" ? dispatcher({ type: "EDIT", details }) : null;
     }
-    console.log("index params", params);
+    console.log("index params", formState);
 
     //Empty Session Storage for params
     Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
 
     // submit complaint through actions
-    await dispatch(createComplaint(params));
-    history.push(`${path}/response`);
+    await dispatch(createComplaint(formState));
+    // history.push(`${path}/response`);
+    nextStep();
   };
 
   const backToHome = () => {
-    history.push(`/digit-ui`);
+    setStep(0);
   };
 
   const updateParams = (param, value) => {
     setParams({ ...params, [param]: value });
   };
 
-  // setSubmitForm(true); USE TO SUBMIT FORM
+  const defaultArray = [
+    {
+      component: (props) => <SelectComplaintType {...props} />,
+      check: "has",
+      props: {
+        onSelect: selectComplaintType,
+        config: stepItems[0],
+        t: t,
+      },
+    },
+    {
+      component: (props) => <SelectSubType {...props} />,
+      props: {
+        onSelect: selectSubType,
+        config: stepItems[1],
+        t: t,
+      },
+    },
+    {
+      component: (props) => <SelectPincode {...props} />,
+      check: "has",
+      props: {
+        onSelect: selectPincode,
+        config: stepItems[2],
+        t: t,
+      },
+    },
+    {
+      component: (props) => <SelectAddress {...props} />,
+      props: {
+        onSelect: selectAddress,
+        config: stepItems[3],
+        t: t,
+      },
+    },
+    {
+      component: (props) => <SelectLandmark {...props} />,
+      props: {
+        onSelect: saveLandmark,
+        config: stepItems[4],
+        t: t,
+      },
+    },
+    {
+      component: (props) => <SelectImages {...props} />,
+      props: {
+        onSelect: saveImagesUrl,
+        config: stepItems[5],
+        t: t,
+      },
+    },
+    {
+      component: (props) => <SelectDetails {...props} />,
+      props: {
+        onSelect: submitComplaint,
+        config: stepItems[6],
+        t: t,
+      },
+    },
+    {
+      component: (props) => <Response {...props} />,
+      props: {
+        onSelect: backToHome,
+        config: stepItems[7],
+        t: t,
+      },
+    },
+  ];
 
-  return (
-    <Switch>
-      <Route path={`${path}/complaint-type`}>
-        <SelectComplaintType t={t} config={stepItems[0]} onSelect={selectComplaintType} />
-      </Route>
-      <Route path={`${path}/sub-type`}>
-        <SelectSubType t={t} config={stepItems[1]} onSelect={selectSubType} />
-      </Route>
-      <Route path={`${path}/pincode`}>
-        <SelectPincode t={t} config={stepItems[2]} onSelect={selectPincode} />
-      </Route>
-      <Route path={`${path}/address`}>
-        <SelectAddress t={t} config={stepItems[3]} onSelect={selectAddress} />
-      </Route>
-      <Route path={`${path}/landmark`}>
-        <SelectLandmark t={t} config={stepItems[4]} onSelect={saveLandmark} />
-      </Route>
-      <Route path={`${path}/upload-photos`}>
-        <SelectImages t={t} config={stepItems[5]} onSelect={saveImagesUrl} />
-      </Route>
-      <Route path={`${path}/additional-details`}>
-        <SelectDetails t={t} config={stepItems[6]} onSelect={submitComplaint} />
-      </Route>
-      <Route path={`${path}/response`}>
-        <Response t={t} config={stepItems[7]} onSelect={backToHome} />
-      </Route>
-      <Route>
-        <Redirect to={`${url}/complaint-type`} />
-      </Route>
-    </Switch>
-  );
+  const mergeComponentIntoArray = ({ step, component, props }) => {
+    let index = step;
+    let _default = Digit.createCompArray;
+    let a = _default.splice(0, index - 1);
+    console.log("from mergeComp", a, step);
+    Digit.createCompArray = [...a, { component, props }, ..._default];
+  };
+
+  const generateCompArray = () => {
+    // index, component , props
+    if (Digit.deltaComplaintArr?.length) {
+      const indicesToRemove = Digit.deltaComplaintArr.filter((comp) => comp.remove).map((comp) => comp.defaultStep - 1);
+      console.log(indicesToRemove);
+      const compToAdd = Digit.deltaComplaintArr.filter((comp) => !comp.remove);
+      Digit.createCompArray = defaultArray.filter((comp, index) => !indicesToRemove.includes(index));
+      console.log(Digit.createCompArray);
+      compToAdd.sort((a, b) => a.step - b.step).forEach((comp) => mergeComponentIntoArray(comp));
+    }
+    return Digit.createCompArray;
+  };
+
+  const compArray = generateCompArray() || defaultArray;
+
+  useEffect(() => {
+    setMaxStep(compArray.length - 1);
+  }, [compArray]);
+
+  const getView = () => {
+    let compProps = compArray[step].props;
+    if (compProps && compProps.onSelect) return compArray[step].component(compProps);
+    else {
+      compProps = compProps || {};
+      compProps["nextStep"] = nextStep;
+      compProps["prevStep"] = prevStep;
+      compProps.dispatcher = dispatcher;
+      return compArray[step].component(compProps);
+    }
+  };
+
+  // setSubmitForm(true); USE TO SUBMIT FORM
+  return <Fragment>{getView()}</Fragment>;
 };

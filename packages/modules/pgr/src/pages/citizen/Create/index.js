@@ -17,6 +17,8 @@ import SelectLandmark from "./Steps/SelectLandmark";
 import SelectImages from "./Steps/SelectImages";
 import SelectDetails from "./Steps/SelectDetails";
 import Response from "./Steps/Response";
+import { set } from "lodash";
+import useCreateSteps from "../../../hooks/useCreateSteps";
 
 // steps type: radio, map location, input, city-mohalla, textarea, upload photo
 export const CreateComplaint = () => {
@@ -133,32 +135,72 @@ export const CreateComplaint = () => {
 
   // setSubmitForm(true); USE TO SUBMIT FORM
 
+  const { state: complaintSteps, setState: setComplaintSteps } = useCreateSteps([
+    {
+      urlPath: "complaint-type",
+      component: (options) => <SelectComplaintType t={t} config={stepItems[0]} onSelect={selectComplaintType} {...options} />,
+      options: {
+        addFields: [],
+      },
+    },
+    {
+      urlPath: "sub-type",
+      component: (options) => <SelectSubType t={t} config={stepItems[1]} onSelect={selectSubType} />,
+      options: {
+        addFields: [],
+      },
+    },
+    {
+      urlPath: "pincode",
+      component: (options) => <SelectPincode t={t} config={stepItems[2]} onSelect={selectPincode} />,
+      options: {
+        addFields: [],
+      },
+    },
+    {
+      urlPath: "address",
+      component: (options) => <SelectAddress t={t} config={stepItems[3]} onSelect={selectAddress} />,
+      options: {
+        addFields: [],
+      },
+    },
+    {
+      urlPath: "landmark",
+      component: (options) => <SelectLandmark t={t} config={stepItems[4]} onSelect={saveLandmark} />,
+      options: {
+        addFields: [],
+      },
+    },
+    {
+      urlPath: "upload-photos",
+      component: (options) => <SelectImages t={t} config={stepItems[5]} onSelect={saveImagesUrl} />,
+      options: {
+        addFields: [],
+      },
+    },
+    {
+      urlPath: "additional-details",
+      component: (options) => <SelectDetails t={t} config={stepItems[6]} onSelect={submitComplaint} />,
+      options: {
+        addFields: [],
+      },
+    },
+    {
+      urlPath: "response",
+      component: (options) => <Response t={t} config={stepItems[7]} onSelect={backToHome} />,
+      options: {
+        addFields: [],
+      },
+    },
+  ]);
+
   return (
     <Switch>
-      <Route path={`${path}/complaint-type`}>
-        <SelectComplaintType t={t} config={stepItems[0]} onSelect={selectComplaintType} />
-      </Route>
-      <Route path={`${path}/sub-type`}>
-        <SelectSubType t={t} config={stepItems[1]} onSelect={selectSubType} />
-      </Route>
-      <Route path={`${path}/pincode`}>
-        <SelectPincode t={t} config={stepItems[2]} onSelect={selectPincode} />
-      </Route>
-      <Route path={`${path}/address`}>
-        <SelectAddress t={t} config={stepItems[3]} onSelect={selectAddress} />
-      </Route>
-      <Route path={`${path}/landmark`}>
-        <SelectLandmark t={t} config={stepItems[4]} onSelect={saveLandmark} />
-      </Route>
-      <Route path={`${path}/upload-photos`}>
-        <SelectImages t={t} config={stepItems[5]} onSelect={saveImagesUrl} />
-      </Route>
-      <Route path={`${path}/additional-details`}>
-        <SelectDetails t={t} config={stepItems[6]} onSelect={submitComplaint} />
-      </Route>
-      <Route path={`${path}/response`}>
-        <Response t={t} config={stepItems[7]} onSelect={backToHome} />
-      </Route>
+      {complaintSteps.map(({ urlPath, component, options }) => (
+        <Route key={urlPath} path={`${path}/${urlPath}`}>
+          {component(options)}
+        </Route>
+      ))}
       <Route>
         <Redirect to={`${url}/complaint-type`} />
       </Route>

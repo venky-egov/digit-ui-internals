@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import { AppContainer, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import { getI18n } from "react-i18next";
-import FileComplaint from "./FileComplaint/index";
+import FileComplaint from "./FileProperty/index";
 
 export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
   const { path, url } = useRouteMatch();

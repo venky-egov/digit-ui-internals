@@ -4,10 +4,13 @@ import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteM
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { config } from "./config";
 import SelectPropertyType from "./SelectPropertyType";
+import SelectPropertySubType from "./SelectPropertySubType";
 
 const FileComplaint = () => {
   const { path, url } = useRouteMatch();
   const { t } = useTranslation();
+  const history = useHistory();
+
   const stepItems = useMemo(
     () =>
       config.map((step, index) => {
@@ -20,17 +23,21 @@ const FileComplaint = () => {
     [config]
   );
 
-  function log(data) {
-    console.log("data", data);
+  function onSelectPropertyType(data) {
+    history.push(`${path}/property-sub-type`);
+  }
+
+  function onSelectPropertySubType(data) {
+    history.push(`${path}/property-sub-type`);
   }
 
   return (
     <Switch>
       <Route exact path={`${path}/`}>
-        <SelectPropertyType config={stepItems[0]} onSelect={log} />
+        <SelectPropertyType config={stepItems[0]} onSelect={onSelectPropertyType} t={t} />
       </Route>
       <Route path={`${path}/property-sub-type`}>
-        <h1>property sub type</h1>
+        <SelectPropertySubType config={stepItems[1]} onSelect={onSelectPropertySubType} t={t} />
       </Route>
     </Switch>
   );

@@ -1,10 +1,13 @@
 import { Card } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
+import ActionCard from "../../../../core/src/components/dashboardCards/ActionCard";
+import ActionLinks from "../../../../core/src/components/dashboardCards/ActionLinks";
 
 const ComplaintsLink = ({ isMobile, data }) => {
   const allLinks = [
     { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create" },
     { text: "Reports", link: "/employee" },
+    { text: "Dashboard", link: "/dashboard" },
   ];
 
   const [links, setLinks] = useState(allLinks);
@@ -31,18 +34,19 @@ const ComplaintsLink = ({ isMobile, data }) => {
   );
 
   return (
-    <Card style={{ paddingRight: 0, marginTop: 0 }} className="employeeCard filter">
-      <div className="complaint-links-container">
-        {GetLogo()}
+    // <Card style={{ paddingRight: 0, marginTop: 0 }} className="employeeCard filter">
+    <div>
+      {/* {GetLogo()}
         <div className="body">
           {links.map(({ link, text }, index) => (
             <span className="link" key={index}>
               <a href={link}>{text}</a>
             </span>
           ))}
-        </div>
-      </div>
-    </Card>
+          </div> */}
+      <ActionCard type="inbox" header="Complaints" links={allLinks} />
+    </div>
+    // </Card>
   );
 };
 

@@ -56,4 +56,11 @@ export const PGRService = {
       auth: true,
     });
   },
+  totalCount: (tenantId) => {
+    return Request({
+      url: Urls.pgr_count,
+      params: { tenantId },
+      auth: true,
+    });
+  },
 };

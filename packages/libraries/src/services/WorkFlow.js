@@ -35,9 +35,10 @@ export const WorkflowService = {
     return actions;
   },
   getDetailsById: async ({ tenantId, id, moduleCode, role }) => {
-    console.log("getWorkflowDetails", tenantId, id, moduleCode, role);
-    const workflow = await Digit.workflowService.getByBusinessId(tenantId, id);
-    const businessServiceResponse = (await Digit.workflowService.init(tenantId, moduleCode)).BusinessServices[0].states;
+    // console.log("getWorkflowDetails", tenantId, id, moduleCode, role);
+    // console.log(Digit);
+    const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
+    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode)).BusinessServices[0].states;
     if (workflow && workflow.ProcessInstances) {
       const processInstances = workflow.ProcessInstances;
       const nextStates = processInstances[0].nextActions.map((action) => ({ action: action.action, nextState: action.nextState }));

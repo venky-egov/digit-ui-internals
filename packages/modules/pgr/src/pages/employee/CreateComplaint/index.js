@@ -1,29 +1,29 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
-import { FormComposer } from "@egovernments/digit-ui-react-components";
-import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
+import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { useRouteMatch, useHistory } from "react-router-dom";
 
+import { FormComposer } from "../../../components/FormComposer";
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
 import { createComplaint } from "../../../redux/actions/index";
 
 export const CreateComplaint = ({ parentUrl }) => {
-  const SessionStorage = Digit.SessionStorage;
-  const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
-  const __initSubType__ = Digit.SessionStorage.get("subType");
+  // const SessionStorage = Digit.SessionStorage;
+  // const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
+  // const __initSubType__ = Digit.SessionStorage.get("subType");
 
-  const city_complaint = Digit.SessionStorage.get("city_complaint");
-  const selected_localities = Digit.SessionStorage.get("selected_localities");
-  const locality_complaint = Digit.SessionStorage.get("locality_complaint");
+  // const city_complaint = Digit.SessionStorage.get("city_complaint");
+  // const selected_localities = Digit.SessionStorage.get("selected_localities");
+  // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
 
-  const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});
-  const [subTypeMenu, setSubTypeMenu] = useState(__initSubType__ ? __initSubType__ : []);
+  const [complaintType, setComplaintType] = useState({});
+  const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [subType, setSubType] = useState({});
-  const [selectedCity, setSelectedCity] = useState(city_complaint ? city_complaint : null);
-  const [localities, setLocalities] = useState(selected_localities ? selected_localities : null);
-  const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [localities, setLocalities] = useState(null);
+  const [selectedLocality, setSelectedLocality] = useState(null);
   const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
 
@@ -38,12 +38,12 @@ export const CreateComplaint = ({ parentUrl }) => {
   function selectedType(value) {
     setComplaintType(value);
     setSubTypeMenu(Digit.GetServiceDefinitions.getSubMenu(value, t));
-    SessionStorage.set("complaintType", value);
+    // SessionStorage.set("complaintType", value);
   }
 
   function selectedSubType(value) {
     setSubType(value);
-    Digit.SessionStorage.set("subType", [value]);
+    // Digit.SessionStorage.set("subType", [value]);
   }
 
   // city locality logic
@@ -52,11 +52,11 @@ export const CreateComplaint = ({ parentUrl }) => {
     // setSelectedLocality(null);
     // setLocalities(null);
     setSelectedCity(city);
-    Digit.SessionStorage.set("city_complaint", city);
+    // Digit.SessionStorage.set("city_complaint", city);
     let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
     let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
     setLocalities(__localityList);
-    Digit.SessionStorage.set("selected_localities", __localityList);
+    // Digit.SessionStorage.set("selected_localities", __localityList);
   };
 
   // useEffect(async () => {
@@ -76,7 +76,7 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
-    Digit.SessionStorage.set("locality_complaint", locality);
+    // Digit.SessionStorage.set("locality_complaint", locality);
   }
 
   //On SUbmit
@@ -123,7 +123,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           populators: {
             name: "name",
             validation: {
-              pattern: /[A-Za-z]/,
+              pattern: /^[A-Za-z]/,
             },
             error: t("CS_ADDCOMPLAINT_NAME_ERROR"),
           },
@@ -180,9 +180,6 @@ export const CreateComplaint = ({ parentUrl }) => {
           type: "textarea",
           populators: {
             name: "landmark",
-            validation: {
-              required: true,
-            },
           },
         },
       ],

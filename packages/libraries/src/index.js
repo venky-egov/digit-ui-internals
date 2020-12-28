@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import mergeConfig from "./config/mergeConfig";
-import { useStore, useInitStore } from "./services/index";
+import { useStore } from "./services/index";
 import { initI18n } from "./translations/index";
 import { Storage } from "./services/Utils/Storage";
 import Enums from "./enums/index";
@@ -20,6 +20,7 @@ import { UserService } from "./services/User";
 import { ULBService } from "./services/Ulb";
 
 import Hooks from "./hooks";
+import Utils from "./utils";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -69,6 +70,7 @@ const initLibraries = () => {
 
   setupLibraries("Hooks", Hooks);
   setupLibraries("Customizations", {});
+  setupLibraries("Utils", Utils);
 
   setupDevice();
   initI18n();

@@ -5,9 +5,9 @@ import { Stats } from "./Stats";
 
 let ActionCard = ({ type, header, links, stats }) => (
   <div className="employee-app-container">
-    <div className="ground-container">
+    <div className={type === "dashboard" ? "ground-container" : ""}>
       <div className="employeeCard">
-        <div className={type === "dashboard" ? "complaint-links-container" : ""}>
+        <div className="complaint-links-container">
           <div className="header">
             <span className="logo">
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">

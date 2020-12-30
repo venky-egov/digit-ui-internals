@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
+import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
@@ -22,13 +23,15 @@ initLibraries();
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
 
-const enabledModules = ["PGR", "FSM"];
+const enabledModules = ["PGR", "FSM", "Payment"];
 const registry = new Registry({
   ...pgrComponents,
   PGRLinks,
   PGRModule,
   FSMModule,
   FSMLinks,
+  PaymentModule,
+  PaymentLinks,
 });
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),

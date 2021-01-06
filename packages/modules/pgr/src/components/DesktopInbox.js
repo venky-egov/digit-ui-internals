@@ -1,4 +1,4 @@
-import { CheckBox } from "@egovernments/digit-ui-react-components";
+import { CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useRouteMatch } from "react-router-dom";
@@ -10,13 +10,12 @@ import { useHistory } from "react-router-dom";
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
-  let { match } = useRouteMatch();
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
   const GetSlaCell = (value) => {
     return value < 0 ? (
-      <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
+      <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value || ""}</span>
     ) : (
-      <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
+      <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value || ""}</span>
     );
   };
   const history = useHistory();
@@ -86,22 +85,26 @@ const DesktopInbox = (props) => {
       <div>
         <SearchComplaint onSearch={props.onSearch} type="desktop" />
         <div style={{ marginTop: "24px", marginTop: "24px", width: "874px", marginLeft: "24px" }}>
-          <ComplaintTable
-            data={props.data}
-            columns={columns}
-            getCellProps={(cellInfo) => {
-              return {
-                style: {
-                  minWidth: cellInfo.column.Header === t("CS_COMMON_COMPLAINT_NO") ? "240px" : "",
-                  padding: "20px 18px",
-                  fontSize: "16px",
-                  // borderTop: "1px solid grey",
-                  // textAlign: "left",
-                  // verticalAlign: "middle",
-                },
-              };
-            }}
-          />
+          {props.isLoading ? (
+            <Loader />
+          ) : (
+            <ComplaintTable
+              data={props.data}
+              columns={columns}
+              getCellProps={(cellInfo) => {
+                return {
+                  style: {
+                    minWidth: cellInfo.column.Header === t("CS_COMMON_COMPLAINT_NO") ? "240px" : "",
+                    padding: "20px 18px",
+                    fontSize: "16px",
+                    // borderTop: "1px solid grey",
+                    // textAlign: "left",
+                    // verticalAlign: "middle",
+                  },
+                };
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

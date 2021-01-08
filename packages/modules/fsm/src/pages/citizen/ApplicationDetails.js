@@ -112,7 +112,7 @@ const ApplicationDetails = () => {
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
           note={`${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m`}
         />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={`application.noOfTrips`} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
         <Link to={`/digit-ui/citizen/fsm/rate/${application.complaintNo}`}>
           <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE_US")} />

@@ -108,10 +108,12 @@ const ApplicationDetails = () => {
           note={Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime)}
         />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")} note={`SERVICEDEFS.${application.propertyUsage}`} />
-        <KeyNote
-          keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
-          note={`${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m`}
-        />
+        {application.pitDetail && (
+          <KeyNote
+            keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
+            note={`${application.pitDetail?.length}m * ${application.pitDetail?.width}m * ${application.pitDetail?.height}m`}
+          />
+        )}
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
         <Link to={`/digit-ui/citizen/fsm/rate/${application.complaintNo}`}>

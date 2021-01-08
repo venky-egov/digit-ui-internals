@@ -2,12 +2,30 @@ var pdfMake = require("pdfmake/build/pdfmake.js");
 var pdfFonts = require("pdfmake/build/vfs_fonts.js");
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details }) => {
+function toDataURL(url, callback) {
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open("GET", url);
+    xhr.responseType = "blob";
+    xhr.send();
+  });
+}
+
+const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details }) => {
+  const base64Image = await toDataURL(logo);
+
   const dd = {
     header: {
       columns: [
         {
-          image: logo,
+          image: base64Image,
           width: 50,
           margin: [10, 10],
         },
@@ -65,6 +83,7 @@ function createContent(details) {
     const newArray = [];
     let count = 0;
     let arrayNumber = 0;
+    const imageToBase64 = require("image-to-base64");
 
     detail.values.forEach((value, index) => {
       if (count <= 3) {

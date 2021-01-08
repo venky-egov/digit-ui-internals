@@ -20,7 +20,7 @@ const Response = ({ data, onSuccess }) => {
   const mutation = Digit.Hooks.fsm.useDesludging(data.city_complaint ? data.city_complaint.code : tenantId);
   useEffect(() => {
     try {
-      const { subtype, landmark, pincode, pitDetail, city_complaint, locality_complaint } = data;
+      const { subtype, landmark, pincode, city_complaint, locality_complaint } = data;
 
       const formdata = {
         fsm: {
@@ -43,7 +43,7 @@ const Response = ({ data, onSuccess }) => {
               additionalDetails: {},
             },
           },
-          pitDetail,
+          pitDetail: null,
         },
         workflow: null,
       };

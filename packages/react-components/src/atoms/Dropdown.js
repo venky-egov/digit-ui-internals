@@ -74,7 +74,7 @@ const Dropdown = (props) => {
         />
         <ArrowDown onClick={dropdownSwitch} />
       </div>
-      {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
+
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">

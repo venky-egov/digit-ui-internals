@@ -141,9 +141,9 @@ const Login = ({ stateCode, cityCode }) => {
   };
 
   return (
-    <Switch>
-      <AppContainer>
-        <BackButton />
+    <AppContainer>
+      <BackButton />
+      <Switch>
         <Route path={`${path}`} exact>
           <SelectMobileNumber onSelect={selectMobileNumber} config={stepItems[0]} t={t} />
         </Route>
@@ -153,8 +153,8 @@ const Login = ({ stateCode, cityCode }) => {
         <Route path={`${path}/name`}>
           <SelectName config={stepItems[2]} onSelect={selectName} t={t} />
         </Route>
-      </AppContainer>
-    </Switch>
+      </Switch>
+    </AppContainer>
   );
 };
 

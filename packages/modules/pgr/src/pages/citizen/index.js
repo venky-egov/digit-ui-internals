@@ -15,17 +15,17 @@ const App = () => {
   console.log("pgr citizen", path, url, match);
   const location = useLocation();
   return (
-    <Switch>
-      <AppContainer>
-        {!location.pathname.includes("create-complaint/response") && <BackButton>Back</BackButton>}
+    <AppContainer>
+      {!location.pathname.includes("create-complaint/response") && <BackButton>Back</BackButton>}
+      <Switch>
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
         <PrivateRoute path={`${path}/reopen`} component={() => <ReopenComplaint match={{ ...match, url, path }} parentRoute={path} />} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response match={{ ...match, url, path }} />} />
-      </AppContainer>
-    </Switch>
+      </Switch>
+    </AppContainer>
   );
 };
 

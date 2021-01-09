@@ -21,9 +21,9 @@ import { useTranslation } from "react-i18next";
 
 const EmployeeApp = ({ path, url, userType }) => {
   return (
-    <Switch>
-      <div className="ground-container">
-        <BackButton>Back</BackButton>
+    <div className="ground-container">
+      <BackButton>Back</BackButton>
+      <Switch>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
 
         <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
@@ -33,24 +33,24 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
-      </div>
-    </Switch>
+      </Switch>
+    </div>
   );
 };
 
 const CitizenApp = ({ path }) => {
   const location = useLocation();
   return (
-    <Switch>
-      <div className="ground-container">
-        {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
+    <div className="ground-container">
+      {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
+      <Switch>
         <PrivateRoute path={`${path}/new-application`} component={() => <FileComplaint parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
         <PrivateRoute path={`${path}/application-details/:id`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
-      </div>
-    </Switch>
+      </Switch>
+    </div>
   );
 };
 

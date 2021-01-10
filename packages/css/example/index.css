@@ -520,6 +520,7 @@ img, video {
   background-color: rgba(255, 255, 255, var(--bg-opacity));
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+  padding: 16px;
   border-radius: 4px; }
   .employeeCard .card-header {
     font-size: 32px;
@@ -1219,7 +1220,8 @@ img, video {
 .photos-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  padding-top: 16px; }
   .photos-wrap img, .photos-wrap svg {
     margin-right: 14px; }
   .photos-wrap .last, .photos-wrap img, .photos-wrap svg {
@@ -1802,7 +1804,7 @@ img, video {
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
-      margin: calc(33% - 21px) auto auto;
+      margin: auto;
       margin-left: auto;
       margin-right: auto;
       top: calc(50% - 21px);
@@ -1846,6 +1848,11 @@ img, video {
     opacity: 0;
     height: 100%;
     width: 33.333333%; }
+
+@media (min-width: 780px) {
+  .multi-upload-wrap img {
+    width: 100%;
+    height: 158px; } }
 
 .toast-success {
   width: 480px;
@@ -2045,9 +2052,6 @@ img, video {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
   margin: 8px; }
   .searchBox .searchAction {
     display: -webkit-box;
@@ -2062,6 +2066,9 @@ img, video {
     color: rgba(244, 119, 56, var(--text-opacity)); }
     .searchBox .searchAction .searchText {
       margin-left: 8px; }
+
+.searchBox div:not(:first-child) {
+  margin-left: 65px; }
 
 .tag-container {
   display: -webkit-box;

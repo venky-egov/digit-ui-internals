@@ -13,6 +13,7 @@ import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
+import JALANDHAR_CSR from "./userInfo/jalandharlme.json";
 
 import Registry from "./ComponentRegistry";
 
@@ -20,7 +21,7 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, JALANDHAR_CSR };
 
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({
@@ -41,10 +42,10 @@ const userType = window.sessionStorage.getItem("userType") || process.env.REACT_
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
-const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
+const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || userInfo[userType].tenantId;
 
 const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
-const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
+const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || userInfo[userType].tenantId;
 
 const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);

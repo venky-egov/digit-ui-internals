@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Loader } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
-import DesktopInbox from "../../components/DesktopInbox";
-import MobileInbox from "../../components/MobileInbox";
+import DesktopInbox from "../../../components/DesktopInbox";
+import MobileInbox from "../../../components/MobileInbox";
 
 const Inbox = () => {
   const { t } = useTranslation();

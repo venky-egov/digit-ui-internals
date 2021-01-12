@@ -4,6 +4,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
   const dd = {
+    pageMargins: [40, 80, 40, 30],
     header: {
       columns: [
         {
@@ -14,32 +15,40 @@ const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details, t = 
         {
           text: name,
           margin: [20, 25],
+          fontSize: 14,
           bold: true,
         },
         {
           text: email,
-          alignment: "right",
-          margin: [0, 25, 20],
-          fontSize: "10",
+          margin: [145, 25, 0, 25],
+          fontSize: 11,
           color: "#464747",
+        },
+        {
+          text: phoneNumber,
+          color: "#6f777c",
+          fontSize: 11,
+          margin: [-58, 45, 0, 25],
         },
       ],
     },
+
+    footer: function (currentPage, pageCount) {
+      return {
+        columns: [
+          { text: `${name} / ${heading}`, margin: [15, 0, 0, 0], fontSize: 11, color: "#6f777c", width: 400 },
+          { text: `Page ${currentPage}`, alignment: "right", margin: [0, 0, 25, 0], fontSize: 11, color: "#6f777c" },
+        ],
+      };
+    },
     content: [
       {
-        text: phoneNumber,
-        alignment: "right",
-        margin: [-20, 0],
-        color: "#6f777c",
-        fontSize: 10,
-      },
-      {
         text: heading,
-        fontSize: 22,
+        fontSize: 24,
         bold: true,
-        margin: [-25, 32],
+        margin: [-25, 5, 0, 0],
       },
-      ...createContent(details),
+      ...createContent(details, phoneNumber),
       {
         text: t("PDF_SYSTEM_GENERATED_ACKNOWLEDGEMENT"),
         fontSize: 11,
@@ -49,23 +58,30 @@ const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details, t = 
     ],
   };
 
-  pdfMake.createPdf(dd).open();
+  pdfMake.createPdf(dd).download();
 };
 
 export default { generate: jsPdfGenerator };
 
-function createContent(details) {
+function createContent(details, phoneNumber) {
   const data = [];
 
-  details.forEach((detail) => {
+  details.forEach((detail, index) => {
     let column1 = [];
     let column2 = [];
 
+    if ((index + 1) % 7 === 0) {
+      data.push({
+        text: "",
+        margin: [-25, 0, 0, 200],
+      });
+    }
+
     data.push({
       text: `${detail.title}`,
-      fontSize: 16,
+      fontSize: 18,
       bold: true,
-      margin: [-25, 20],
+      margin: [-25, 20, 0, 20],
     });
 
     const newArray = [];

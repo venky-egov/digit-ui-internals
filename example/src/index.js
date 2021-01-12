@@ -13,8 +13,10 @@ import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
-import JALANDHAR_CSR from "./userInfo/jalandharcsr.json";
 import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
+import JALANDHAR_CSR from "./userInfo/jalandharcsr.json";
+import JALANDHAR_GRO from "./userInfo/jalandhargro.json";
+import JALANDHAR_LME from "./userInfo/jalandharlme.json";
 
 import Registry from "./ComponentRegistry";
 
@@ -22,7 +24,7 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, FSM_EMPLOYEE, JALANDHAR_CSR };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, FSM_EMPLOYEE, JALANDHAR_CSR, JALANDHAR_LME, JALANDHAR_GRO };
 
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({

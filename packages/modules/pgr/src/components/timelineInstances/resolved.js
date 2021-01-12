@@ -8,7 +8,7 @@ import Reopen from "./reopen";
 
 const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate }) => {
   const { t } = useTranslation();
-
+  console.log("FIND RATE / REOPEN HERE", action);
   if (action === "RESOLVE") {
     let actions =
       nextActions &&

@@ -1,0 +1,24 @@
+{
+    "id": 163,
+    "uuid": "72a596ca-18fb-406e-b2a1-d74c948cf5d6",
+    "userName": "QALME",
+    "name": "Manju",
+    "mobileNumber": "7975179334",
+    "emailId": "manjunath@ulb.gov",
+    "locale": null,
+    "type": "EMPLOYEE",
+    "roles": [
+      {
+        "name": "PGR Last Mile Employee",
+        "code": "PGR_LME",
+        "tenantId": "pb.jalandhar"
+      },
+      {
+        "name": "Employee",
+        "code": "EMPLOYEE",
+        "tenantId": "pb.jalandhar"
+      }
+    ],
+    "active": true,
+    "tenantId": "pb.jalandhar"
+  }

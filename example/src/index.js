@@ -13,7 +13,8 @@ import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
-import JALANDHAR_CSR from "./userInfo/jalandharlme.json";
+import JALANDHAR_CSR from "./userInfo/jalandharcsr.json";
+import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
 
 import Registry from "./ComponentRegistry";
 
@@ -21,7 +22,7 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, JALANDHAR_CSR };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, FSM_EMPLOYEE, JALANDHAR_CSR };
 
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({
@@ -51,9 +52,9 @@ const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-const userDetails = { token, info: userType === "CITIZEN" ? citizenInfo : employeeInfo };
-
-window.Digit.SessionStorage.set("User", userDetails);
+if (userType !== "CITIZEN") {
+  window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
+}
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);

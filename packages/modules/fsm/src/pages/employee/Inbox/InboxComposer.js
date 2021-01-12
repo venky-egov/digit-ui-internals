@@ -1,6 +1,12 @@
+import config from "./config";
+const importHead = config.head.map((component) => component.type);
+const importModules = { ...importHead };
+
+import importModules from "@egovernments/digit-ui-react-components";
+
 export const InboxComposer = ({ head, lhs, rhs, main, foot }) => {
   const Head = () => {
-    head;
+    head.map((component) => {});
   };
   const LHS = () => {
     lhs;

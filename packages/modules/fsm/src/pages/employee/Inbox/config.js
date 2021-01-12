@@ -14,7 +14,15 @@ const config = {
       children: [
         {
           type: "CardHeader",
-          label: "",
+          label: "Header",
+        },
+        {
+          type: "CardSubHeader",
+          label: "Subheader",
+        },
+        {
+          type: "DropDown",
+          menu: ["Apple", "Bal", "CAt"],
         },
       ],
     },

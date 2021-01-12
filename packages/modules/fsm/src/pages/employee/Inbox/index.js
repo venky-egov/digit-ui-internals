@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import DesktopInbox from "../../../components/DesktopInbox";
 import MobileInbox from "../../../components/MobileInbox";
 
+import InboxComposer from "./InboxComposer";
+
 const Inbox = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useState({ filters: {}, search: "", sort: {} });

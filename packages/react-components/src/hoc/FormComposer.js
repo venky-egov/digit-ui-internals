@@ -33,7 +33,17 @@ export const FormComposer = (props) => {
               alignItems: "center",
             }}
           >
-            {populators.componentInFront ? populators.componentInFront : null}
+            {populators.componentInFront ? (
+              <span
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {populators.componentInFront}
+              </span>
+            ) : null}
             <TextInput className="field" {...populators} inputRef={register(populators.validation)} />
           </div>
         );

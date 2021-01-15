@@ -7,7 +7,8 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled }) => {
+const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled, componentInFront }) => {
+  console.log("%c 🇿🇼: FormStep -> componentInFront ", "font-size:16px;background-color:#94d99d;color:black;", componentInFront);
   const { register, watch, errors, handleSubmit } = useForm();
 
   console.log("config", config);
@@ -24,14 +25,34 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
           {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
-          <TextInput
-            key={index}
-            name={input.name}
-            value={value}
-            onChange={onChange}
-            inputRef={register(input.validation)}
-            isMandatory={errors[input.name]}
-          />
+          <div
+            className="field-container"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {componentInFront ? (
+              <span
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {componentInFront}
+              </span>
+            ) : null}
+            <TextInput
+              key={index}
+              name={input.name}
+              value={value}
+              onChange={onChange}
+              inputRef={register(input.validation)}
+              isMandatory={errors[input.name]}
+            />
+          </div>
         </React.Fragment>
       );
     }

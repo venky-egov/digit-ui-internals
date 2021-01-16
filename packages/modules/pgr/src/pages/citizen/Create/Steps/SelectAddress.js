@@ -16,6 +16,7 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     return city_complaint ? city_complaint : null;
   });
   const [localities, setLocalities] = useState(null);
+  // console.log("find localities here", localities);
 
   const [selectedLocality, setSelectedLocality] = useState(() => {
     const { locality_complaint } = value;
@@ -70,7 +71,7 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <div>
         <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-        <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
+        <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="i18nKey" t={t} />
         {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
         {selectedCity && localities && (
           <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />

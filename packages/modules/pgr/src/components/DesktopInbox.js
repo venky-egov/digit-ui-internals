@@ -1,14 +1,14 @@
-import { CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import ComplaintsLink from "./inbox/ComplaintLinks";
 import ComplaintTable from "./inbox/ComplaintTable";
 import Filter from "./inbox/Filter";
 import SearchComplaint from "./inbox/search";
-import { useHistory } from "react-router-dom";
+import { LOCALE } from "../constants/Localization";
 
-const DesktopInbox = (props) => {
+const DesktopInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
   const { t } = useTranslation();
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
   const GetSlaCell = (value) => {
@@ -64,38 +64,62 @@ const DesktopInbox = (props) => {
     []
   );
 
+  let result;
+  if (isLoading) {
+    result = <Loader />;
+  } else if (data && data.length === 0) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t(LOCALE.NO_COMPLAINTS)
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  } else if (data.length > 0) {
+    result = (
+      <ComplaintTable
+        data={data}
+        columns={columns}
+        getCellProps={(cellInfo) => {
+          return {
+            style: {
+              minWidth: cellInfo.column.Header === t("CS_COMMON_COMPLAINT_NO") ? "240px" : "",
+              padding: "20px 18px",
+              fontSize: "16px",
+            },
+          };
+        }}
+      />
+    );
+  } else {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t(LOCALE.ERROR_LOADING_RESULTS)
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  }
+
   return (
     <div className="inbox-container">
       <div className="filters-container">
         <ComplaintsLink />
         <div>
-          <Filter complaints={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+          <Filter complaints={data} onFilterChange={onFilterChange} type="desktop" />
         </div>
       </div>
       <div style={{ flex: 1 }}>
-        <SearchComplaint onSearch={props.onSearch} type="desktop" />
-        <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>
-          {props.isLoading ? (
-            <Loader />
-          ) : (
-            <ComplaintTable
-              data={props.data}
-              columns={columns}
-              getCellProps={(cellInfo) => {
-                return {
-                  style: {
-                    minWidth: cellInfo.column.Header === t("CS_COMMON_COMPLAINT_NO") ? "240px" : "",
-                    padding: "20px 18px",
-                    fontSize: "16px",
-                    // borderTop: "1px solid grey",
-                    // textAlign: "left",
-                    // verticalAlign: "middle",
-                  },
-                };
-              }}
-            />
-          )}
-        </div>
+        <SearchComplaint onSearch={onSearch} type="desktop" />
+        <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

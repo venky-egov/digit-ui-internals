@@ -1,8 +1,9 @@
-import { Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { Loader, Card } from "@egovernments/digit-ui-react-components";
 import { ComplaintCard } from "./inbox/ComplaintCard";
 import ComplaintsLink from "./inbox/ComplaintLinks";
+import { LOCALE } from "../constants/Localization";
 
 const GetSlaCell = (value) => {
   return value < 0 ? (
@@ -23,19 +24,46 @@ const MobileInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
     [t("WF_INBOX_HEADER_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
     // status,
   }));
+
+  let result;
+  if (isLoading) {
+    result = <Loader />;
+  } else if (data && data.length === 0) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t(LOCALE.NO_COMPLAINTS)
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  } else if (localizedData.length > 0) {
+    result = (
+      <ComplaintCard data={localizedData} onFilterChange={onFilterChange} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} onSearch={onSearch} />
+    );
+  } else {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t(LOCALE.ERROR_LOADING_RESULTS)
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  }
+
   return (
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
           <ComplaintsLink isMobile={true} />
-          {
-            <ComplaintCard
-              data={localizedData}
-              onFilterChange={onFilterChange}
-              serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")}
-              onSearch={onSearch}
-            />
-          }
+          {result}
         </div>
       </div>
     </div>

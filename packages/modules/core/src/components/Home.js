@@ -27,6 +27,7 @@ const EmployeeHome = () => {
   return (
     <div className="employee-app-container">
       <div className="ground-container">
+        {/* PGR Card */}
         <div className="employeeCard card-home">
           <div className="complaint-links-container">
             <div className="header">
@@ -54,7 +55,9 @@ const EmployeeHome = () => {
             </div>
           </div>
         </div>
-        <div className="employeeCard card-home">
+
+        {/* FSM Card */}
+        {/* <div className="employeeCard card-home">
           <div className="complaint-links-container">
             <div className="header">
               <span className="logo">
@@ -80,7 +83,7 @@ const EmployeeHome = () => {
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

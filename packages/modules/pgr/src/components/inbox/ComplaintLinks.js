@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 const ComplaintsLink = ({ isMobile, data }) => {
   const allLinks = [
     { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
-    { text: "Reports", link: "/employee" },
-    { text: "Dashboard", link: "/employee" },
+    // { text: "Reports", link: "/employee" },
+    // { text: "Dashboard", link: "/employee" },
   ];
 
   const [links, setLinks] = useState([]);

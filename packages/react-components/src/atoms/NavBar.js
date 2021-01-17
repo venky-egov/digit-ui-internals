@@ -1,5 +1,20 @@
 import React, { useRef } from "react";
 
+const MenuItem = ({ item }) => {
+  let itemComponent;
+  if (item.type === "component") {
+    itemComponent = item.action;
+  } else {
+    itemComponent = item.text;
+  }
+  return (
+    <span className="menu-item" {...item.populators}>
+      {item?.icon && item.icon}
+      <div className="menu-label">{itemComponent}</div>
+    </span>
+  );
+};
+
 const NavBar = ({ open, profileItem, menuItems, onClose }) => {
   const node = useRef();
   Digit.Hooks.useClickOutside(node, onClose);
@@ -54,10 +69,13 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
                 //   justifyContent: "flex-start"
                 // }}
               >
-                <span className="menu-item" {...item.populators}>
-                  {item?.icon && item.icon}
-                  <div className="menu-label">{item?.type && item.type === "component" ? item.action : item.text}</div>
-                </span>
+                {item.type === "external-link" ? (
+                  <a href={item.link}>
+                    <MenuItem item={item} />
+                  </a>
+                ) : (
+                  <MenuItem item={item} />
+                )}
               </div>
             ))}
           </div>

@@ -4,6 +4,7 @@ import ChangeLanguage from "../components/ChangeLanguage";
 
 const SideBarMenu = (t) => [
   {
+    type: "external-link",
     text: t("COMMON_BOTTOM_NAVIGATION_HOME"),
     link: "/citizen/",
     icon: <HomeIcon className="icon" />,

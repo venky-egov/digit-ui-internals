@@ -49,7 +49,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
         <div className="search-container" style={{ width: "auto" }}>
-          <div className="search-complaint-container" style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
+          <div className="search-complaint-container" style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
             {type === "mobile" && (
               <div
                 className="complaint-header"

@@ -6,10 +6,10 @@ import { useTranslation } from "react-i18next";
 import Reopen from "./reopen";
 //const GetTranslatedAction = (action, t) => t(`CS_COMMON_${action}`);
 
-const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate, isCompleted }) => {
+const Rejected = ({ action, nextActions, rating, serviceRequestId, reopenDate, isCompleted }) => {
   const { t } = useTranslation();
 
-  if (action === "RESOLVE") {
+  if (action === "REJECTED") {
     let actions =
       nextActions &&
       nextActions.map((action, index) => {
@@ -21,12 +21,12 @@ const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate, i
           );
         }
       });
-    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_RESOLVED`)} customChild={<div>{actions}</div>} />;
+    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_REJECTED`)} customChild={<div>{actions}</div>} />;
   } else if (action === "RATE" && rating) {
     return (
       <CheckPoint
         isCompleted={isCompleted}
-        label={t(`CS_COMMON_COMPLAINT_RESOLVED`)}
+        label={t(`CS_COMMON_COMPLAINT_REJECTED`)}
         customChild={<StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={rating} />}
       />
     );
@@ -44,8 +44,8 @@ const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate, i
           );
         }
       });
-    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_RESOLVED`)} customChild={<div>{actions}</div>} />;
+    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_REJECTED`)} customChild={<div>{actions}</div>} />;
   }
 };
 
-export default Resolved;
+export default Rejected;

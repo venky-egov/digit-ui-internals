@@ -58,6 +58,10 @@
           .clear-search {
             @apply text-focus;
             display: none;
+            &:hover {
+              color: #003078;
+              cursor: pointer;
+            }
           }
         }
 
@@ -155,13 +159,5 @@
         }
       }
     }
-  }
-}
-
-.clear-search {
-  @apply text-focus;
-  &:hover {
-    color: #003078;
-    cursor: pointer;
   }
 }

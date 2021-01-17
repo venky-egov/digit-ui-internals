@@ -70,7 +70,7 @@ const DesktopInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
   } else if (data && data.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
-        {t(LOCALE.NO_COMPLAINTS)
+        {t(LOCALE.NO_COMPLAINTS_EMPLOYEE)
           .split("\\n")
           .map((text, index) => (
             <p key={index} style={{ textAlign: "center" }}>

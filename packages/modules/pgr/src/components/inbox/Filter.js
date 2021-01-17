@@ -9,7 +9,7 @@ const Filter = (props) => {
 
   const { t } = useTranslation();
 
-  const [selectAssigned, setSelectedAssigned] = useState(null);
+  const [selectAssigned, setSelectedAssigned] = useState({ code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") });
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
 

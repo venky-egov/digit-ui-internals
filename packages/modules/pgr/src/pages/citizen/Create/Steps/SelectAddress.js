@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value }) => {
   const allCities = Digit.Hooks.pgr.useTenants();
-  const cities = value?.pincode ? allCities.filter((city) => city.pincode.some((pin) => pin == value["pincode"])) : allCities;
+  const cities = value?.pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == value["pincode"])) : allCities;
   // console.log("find cities here", cities.filter(city => city.pincode.some( pin => pin == value["pincode"])),value["pincode"], cities );
   const localitiesObj = useSelector((state) => state.common.localities);
 

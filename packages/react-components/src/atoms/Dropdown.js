@@ -10,6 +10,8 @@ const TextField = (props) => {
   }, [props.selectedVal, props.forceSet]);
 
   function inputChange(e) {
+    if (props.freeze) return;
+
     setValue(e.target.value);
     props.setFilter(e.target.value);
   }
@@ -22,16 +24,7 @@ const TextField = (props) => {
     props.dropdownDisplay(false);
   }
 
-  return (
-    <input
-      type="text"
-      value={value}
-      onChange={props.freeze ? null : inputChange}
-      onClick={props.onClick}
-      onFocus={broadcastToOpen}
-      onBlur={broadcastToClose}
-    />
-  );
+  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
 };
 
 const Dropdown = (props) => {

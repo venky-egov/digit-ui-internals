@@ -9,8 +9,19 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
     return propertyType !== undefined ? propertyType : null;
   });
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertyType");
+  // const tenantId = Digit.ULBService.getCurrentTenantId();
+  // const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertyType");
+  // TODO: below data is hard coded, it should be fetch
+  const propertyTypesData = {
+    data: [
+      {
+        code: "NONRESIDENTIAL.COMMERCIAL",
+      },
+      {
+        code: "NONRESIDENTIAL.INSTITUTIONAL",
+      },
+    ],
+  };
 
   const goNext = () => {
     onSelect({ propertyType: propertyType });
@@ -28,7 +39,7 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
     <TypeSelectCard
       {...config.texts}
       {...{ menu: propertyTypesData.data }}
-      {...{ optionsKey: "name" }}
+      {...{ optionsKey: "code" }}
       {...{ selected: selectedValue }}
       {...{ selectedOption: propertyType }}
       {...{ onSave: goNext }}

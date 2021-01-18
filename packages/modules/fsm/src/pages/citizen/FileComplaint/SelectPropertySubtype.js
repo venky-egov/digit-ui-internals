@@ -8,8 +8,23 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
   });
   const { propertyType } = value;
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype");
+  // const tenantId = Digit.ULBService.getCurrentTenantId();
+  // const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype");
+
+  // TODO: below data is hard coded, it should be fetch
+  const propertySubtypesData = {
+    data: [
+      {
+        code: "NONRESIDENTIAL.COMMERCIAL.OTHERCOMMERCIALSUBMINOR.OTHERCOMMERCIAL",
+      },
+      {
+        code: "NONRESIDENTIAL.COMMERCIAL.RETAIL.ESTABLISHMENTSINMALLS",
+      },
+      {
+        code: "NONRESIDENTIAL.INSTITUTIONAL.OTHERINSTITUTIONALSUBMINOR.OTHERINSTITUTIONAL",
+      },
+    ],
+  };
 
   const selectedValue = (value) => {
     setSubtype(value);
@@ -23,13 +38,13 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
     return <Loader />;
   }
 
-  const menu = propertySubtypesData.data.filter((item) => item.propertyType === propertyType?.code);
+  const menu = propertySubtypesData.data.filter((item) => item.code.includes(propertyType?.code));
 
   return (
     <TypeSelectCard
       {...config.texts}
       {...{ menu: menu }}
-      {...{ optionsKey: "name" }}
+      {...{ optionsKey: "code" }}
       {...{ selected: selectedValue }}
       {...{ selectedOption: subtype }}
       {...{ onSave: goNext }}

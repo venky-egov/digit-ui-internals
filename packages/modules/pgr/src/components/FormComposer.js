@@ -60,7 +60,9 @@ export const FormComposer = (props) => {
                     {field.label}
                     {field.isMandatory ? " * " : null}
                   </CardLabel>
-                  {errors[field.populators.name] && <CardLabelError>{field.populators.error}</CardLabelError>}
+                  {errors[field.populators.name] && (field.populators?.validate ? errors[field.populators.validate] : true) && (
+                    <CardLabelError>{field.populators.error}</CardLabelError>
+                  )}
                   <div className="field">{fieldSelector(field.type, field.populators)}</div>
                 </LabelFieldPair>
               );

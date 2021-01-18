@@ -1,5 +1,5 @@
 import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, Loader, TelePhone } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../constants/Localization";
 import PendingAtLME from "./timelineInstances/pendingAtLme";
@@ -22,8 +22,17 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   let { timeline } = data;
 
   useEffect(() => {
+    const auditDetails = timeline?.filter((status, index, array) => {
+      // console.log("find audit details index and status here", status, index);
+      if (index === array.length - 1 && status.status === "PENDINGFORASSIGNMENT") {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    // console.log("find audit details here", auditDetails);
     timeline?.push({
-      auditDetails: { created: "17-Jan-2021", lastModified: "17-Jan-2021" },
+      auditDetails: { created: auditDetails.created, lastModified: auditDetails.lastModified },
       performedAction: "FILED",
       status: "COMPLAINT_FILED",
     });

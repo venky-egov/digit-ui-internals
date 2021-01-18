@@ -53,6 +53,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
     // console.log("find pincode selected city here", city)
     if (city?.code === getCities()[0]?.code) {
+      setPincodeNotValid(false);
       setSelectedCity(city);
       const __localityList = localitiesObj[city.code];
       const __filteredLocalities = __localityList.filter((city) => city["pincode"] == pincode);

@@ -32,13 +32,15 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
   }, []);
 
   return (
-    <TimeLine
-      isLoading={workFlowDetails.isLoading}
-      data={workFlowDetails.data}
-      serviceRequestId={id}
-      complaintWorkflow={complaintDetails.workflow}
-      rating={complaintDetails.audit.rating}
-    />
+    !workFlowDetails.isLoading && (
+      <TimeLine
+        // isLoading={workFlowDetails.isLoading}
+        data={workFlowDetails.data}
+        serviceRequestId={id}
+        complaintWorkflow={complaintDetails.workflow}
+        rating={complaintDetails.audit.rating}
+      />
+    )
   );
 };
 

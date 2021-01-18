@@ -82,7 +82,7 @@ const ComplaintDetailsPage = (props) => {
   }
 
   const onWorkFlowChange = (data) => {
-    console.log("ssdsodososooo ==== ", data);
+    // console.log("ssdsodososooo ==== ", data);
     let timeline = data?.timeline;
     timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
   };

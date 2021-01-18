@@ -60,9 +60,16 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   async function selectedType(value) {
     if (value.key !== complaintType.key) {
-      setSubType({ name: "" });
-      setComplaintType(value);
-      setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
+      if (value.key === "Others") {
+        // console.log("let me know if others is selected");
+        setSubType({ name: "" });
+        setComplaintType(value);
+        setSubTypeMenu([{ key: "Others", name: "Others" }]);
+      } else {
+        setSubType({ name: "" });
+        setComplaintType(value);
+        setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
+      }
     }
   }
 

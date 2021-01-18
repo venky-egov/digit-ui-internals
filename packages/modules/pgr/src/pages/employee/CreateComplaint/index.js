@@ -50,6 +50,9 @@ export const CreateComplaint = ({ parentUrl }) => {
       const __localityList = localitiesObj[city.code];
       const __filteredLocalities = __localityList.filter((city) => city["pincode"] == pincode);
       setLocalities(__filteredLocalities);
+    } else if (pincode === "" || pincode === null) {
+      setPincodeNotValid(false);
+      setLocalities(localitiesObj[getCities()[0]?.code]);
     } else {
       setPincodeNotValid(true);
     }

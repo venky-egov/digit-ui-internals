@@ -5,23 +5,17 @@ import React, { useEffect, useState } from "react";
 const ComplaintsLink = ({ isMobile, data }) => {
   const allLinks = [
     { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
-    { text: "Reports", link: "/employee" },
-    { text: "Dashboard", link: "/employee" },
+    // { text: "Reports", link: "/employee" },
+    // { text: "Dashboard", link: "/employee" },
   ];
 
   const [links, setLinks] = useState([]);
-
-  const { roles } = Digit.UserService.getUser().info;
-
-  const hasAccess = (accessTo) => {
-    return roles.filter((role) => accessTo.includes(role.code)).length;
-  };
 
   useEffect(() => {
     let linksToShow = [];
     allLinks.forEach((link) => {
       if (link.accessTo) {
-        if (hasAccess(link.accessTo)) {
+        if (Digit.UserService.hasAccess(link.accessTo)) {
           linksToShow.push(link);
         }
       } else {

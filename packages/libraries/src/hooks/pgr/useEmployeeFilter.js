@@ -1,31 +1,33 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
-const useEmployeeFilter = (cityCode, roles, complaintDetails) => {
+const useEmployeeFilter = (tenantId, roles, complaintDetails) => {
   const [employeeDetails, setEmployeeDetails] = useState(null);
-
+  const { t } = useTranslation();
   useEffect(async () => {
     // const _roles = roles.join(",");
-    const searchResponse = await Digit.PGRService.employeeSearch(cityCode, roles);
+    const searchResponse = await Digit.PGRService.employeeSearch(tenantId, roles);
 
-    const serviceDefs = Digit.SessionStorage.get("serviceDefs");
+    const serviceDefs = await Digit.MDMSService.getServiceDefs(tenantId, "PGR");
     const serviceCode = complaintDetails.service.serviceCode;
-    const service = serviceDefs.find((def) => def.serviceCode === serviceCode);
+    const service = serviceDefs?.find((def) => def.serviceCode === serviceCode);
+    // console.log("find service service details here", service, searchResponse.Employees)
     const department = service?.department;
     const employees = searchResponse.Employees.filter((employee) =>
       employee.assignments.map((assignment) => assignment.department).includes(department)
     );
 
-    console.log("useEMployeefilter", employees, searchResponse);
+    // console.log("useEMployeefilter", employees, searchResponse);
     //emplpoyess data sholld only conatin name uuid dept
     setEmployeeDetails([
       {
-        department: department,
+        department: t(`COMMON_MASTERS_DEPARTMENT_${department}`),
         employees: employees.map((employee) => {
           return { uuid: employee.user.uuid, name: employee.user.name };
         }),
       },
     ]);
-  }, [cityCode, roles]);
+  }, [tenantId, roles]);
 
   return employeeDetails;
 };

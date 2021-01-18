@@ -30,12 +30,14 @@ const Inbox = () => {
 
   if (complaints?.length !== null) {
     if (isMobile) {
-      return <MobileInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />
+      return <MobileInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     } else {
-      return <div>
+      return (
+        <div>
           <Header>{t("ES_COMMON_INBOX")}</Header>
           <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />
         </div>
+      );
     }
   } else {
     return <Loader />;

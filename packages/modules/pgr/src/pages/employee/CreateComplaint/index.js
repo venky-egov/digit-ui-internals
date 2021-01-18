@@ -29,8 +29,8 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [localities, setLocalities] = useState(localitiesObj && cities ? localitiesObj[getCities()[0]?.code] : null);
   // console.log("find localities state", localities, localitiesObj[getCities()[0].code], localitiesObj, getCities());
   const [selectedLocality, setSelectedLocality] = useState(null);
+  const [canSubmit, setSubmitValve] = useState(false);
   const [pincodeNotValid, setPincodeNotValid] = useState(false);
-  const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
   const menu = Digit.Hooks.pgr.useComplaintTypes({ stateCode: tenantId });
@@ -40,6 +40,14 @@ export const CreateComplaint = ({ parentUrl }) => {
   const history = useHistory();
   const serviceDefinitions = Digit.GetServiceDefinitions;
   const client = useQueryClient();
+
+  useEffect(() => {
+    if (complaintType?.key && subType?.key && selectedCity?.code && selectedLocality?.code) {
+      setSubmitValve(true);
+    } else {
+      setSubmitValve(false);
+    }
+  }, [complaintType, subType, selectedCity, selectedLocality]);
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
@@ -98,7 +106,7 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   //On SUbmit
   const onSubmit = async (data) => {
-    setSubmitValve(true);
+    if (!canSubmit) return;
     console.log("submit data", data, subType, selectedCity, selectedLocality);
     const cityCode = selectedCity.code;
     const city = selectedCity.city.name;
@@ -243,6 +251,7 @@ export const CreateComplaint = ({ parentUrl }) => {
       heading={t("ES_CREATECOMPLAINT_NEW_COMPLAINT")}
       config={config}
       onSubmit={onSubmit}
+      isDisabled={!canSubmit}
       label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")}
     />
   );

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 
-import { Card, DetailsCard, PopUp, SearchAction, RoundedLabel } from "@egovernments/digit-ui-react-components";
-import { FilterAction } from "@egovernments/digit-ui-react-components";
+import { FilterAction, Card, DetailsCard, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 import Filter from "./Filter";
 import SearchComplaint from "./search";
+import { LOCALE } from "../../constants/Localization";
 
 export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey }) => {
+  const { t } = useTranslation();
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [filterCount, setFilterCount] = useState(Digit.SessionStorage.get("pgr_filter_count") || 0);
@@ -24,6 +26,35 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
     setSelectedComponent(null);
   };
 
+  let result;
+  if (data && data.length === 0) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t(LOCALE.NO_COMPLAINTS_EMPLOYEE)
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  } else if (data && data.length > 0) {
+    result = <DetailsCard data={data} serviceRequestIdKey={serviceRequestIdKey} linkPrefix={"/digit-ui/employee/pgr/complaint/details/"} />;
+  } else {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t(LOCALE.ERROR_LOADING_RESULTS)
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  }
+
   return (
     <React.Fragment>
       <div className="searchBox">
@@ -35,7 +66,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
         />
         {/* <FilterAction text="SORT" handleActionClick={handlePopupAction} /> */}
       </div>
-      <DetailsCard data={data} serviceRequestIdKey={serviceRequestIdKey} linkPrefix={"/digit-ui/employee/pgr/complaint/details/"} />
+      {result}
       {popup && (
         <PopUp>
           <div className="popup-module">{selectedComponent}</div>

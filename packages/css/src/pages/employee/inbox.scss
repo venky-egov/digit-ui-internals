@@ -58,11 +58,15 @@
           .clear-search {
             @apply text-focus;
             display: none;
+            &:hover {
+              color: #003078;
+              cursor: pointer;
+            }
           }
         }
 
         .mobile-input {
-          @apply ml-sm;
+          
         }
       }
     }
@@ -71,6 +75,10 @@
   .status-container {
     margin-bottom: 50px;
   }
+}
+
+.button-clear{
+  @apply text-focus text-body-s-dt;
 }
 
 @screen dt {
@@ -155,13 +163,5 @@
         }
       }
     }
-  }
-}
-
-.clear-search {
-  @apply text-focus;
-  &:hover {
-    color: #003078;
-    cursor: pointer;
   }
 }

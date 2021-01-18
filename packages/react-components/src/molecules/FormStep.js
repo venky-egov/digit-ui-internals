@@ -8,7 +8,6 @@ import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
 const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled, componentInFront }) => {
-  console.log("%c 🇿🇼: FormStep -> componentInFront ", "font-size:16px;background-color:#94d99d;color:black;", componentInFront);
   const { register, watch, errors, handleSubmit } = useForm();
 
   console.log("config", config);
@@ -69,6 +68,7 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
     <form onSubmit={handleSubmit(goNext)}>
       <InputCard {...{ isDisable: isDisable }} {...config} submit {...{ onSkip: onSkip }} t={t}>
         {inputs}
+        {forcedError && <CardLabelError>{t(forcedError)}</CardLabelError>}
         {children}
       </InputCard>
     </form>

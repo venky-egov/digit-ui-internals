@@ -7,7 +7,7 @@ import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
-import "@egovernments/digit-ui-css/example/index.css";
+import "@egovernments/digit-ui-css/dist/index.css";
 
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
@@ -25,7 +25,7 @@ initLibraries();
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, FSM_EMPLOYEE };
 
-const enabledModules = ["PGR", "FSM"];
+const enabledModules = ["PGR"];
 const registry = new Registry({
   ...pgrComponents,
   PGRLinks,
@@ -41,7 +41,7 @@ window.Digit.Customizations = { PGR: pgrCustomizations };
 
 const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
 
-console.clear();
+// console.clear();
 console.log(stateCode);
 
 const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
@@ -61,9 +61,9 @@ const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-if (userType !== "CITIZEN") {
-  window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
-}
+// if (userType !== "CITIZEN") {
+window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
+// }
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);

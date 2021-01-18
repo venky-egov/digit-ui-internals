@@ -22,7 +22,16 @@ const TextField = (props) => {
     props.dropdownDisplay(false);
   }
 
-  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
+  return (
+    <input
+      type="text"
+      value={value}
+      onChange={props.freeze ? null : inputChange}
+      onClick={props.onClick}
+      onFocus={broadcastToOpen}
+      onBlur={broadcastToClose}
+    />
+  );
 };
 
 const Dropdown = (props) => {
@@ -86,10 +95,11 @@ const Dropdown = (props) => {
           filterVal={filterVal}
           // onClick={dropdownOn}
           dropdownDisplay={dropdownOn}
+          freeze={props.freeze ? true : false}
         />
         <ArrowDown onClick={dropdownSwitch} />
       </div>
-      {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
+      {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">

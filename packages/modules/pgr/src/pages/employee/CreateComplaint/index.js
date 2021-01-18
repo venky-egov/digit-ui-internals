@@ -16,38 +16,52 @@ export const CreateComplaint = ({ parentUrl }) => {
   // const city_complaint = Digit.SessionStorage.get("city_complaint");
   // const selected_localities = Digit.SessionStorage.get("selected_localities");
   // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
+  const cities = Digit.Hooks.pgr.useTenants();
+  const localitiesObj = useSelector((state) => state.common.localities);
+
+  const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
 
   const [complaintType, setComplaintType] = useState({});
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [subType, setSubType] = useState({});
   const [pincode, setPincode] = useState("");
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [localities, setLocalities] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
+  const [localities, setLocalities] = useState(localitiesObj && cities ? localitiesObj[getCities()[0]?.code] : null);
+  // console.log("find localities state", localities, localitiesObj[getCities()[0].code], localitiesObj, getCities());
   const [selectedLocality, setSelectedLocality] = useState(null);
+  const [pincodeNotValid, setPincodeNotValid] = useState(false);
   const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
   const menu = Digit.Hooks.pgr.useComplaintTypes({ stateCode: tenantId });
   const { t } = useTranslation();
-  const cities = Digit.Hooks.pgr.useTenants();
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();
-  const localitiesObj = useSelector((state) => state.common.localities);
   const serviceDefinitions = Digit.GetServiceDefinitions;
   const client = useQueryClient();
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
-    if (city) setSelectedCity(city);
+    // console.log("find pincode selected city here", city)
+    if (city?.code === getCities()[0]?.code) {
+      setSelectedCity(city);
+      const __localityList = localitiesObj[city.code];
+      const __filteredLocalities = __localityList.filter((city) => city["pincode"] == pincode);
+      setLocalities(__filteredLocalities);
+      // console.log("find localities here", __filteredLocalities);
+    } else {
+      setPincodeNotValid(true);
+      // console.log("find pincodeNotValid value here", pincodeNotValid)
+    }
   }, [pincode]);
 
-  useEffect(() => {
-    if (selectedCity) {
-      let __localityList = localitiesObj[selectedCity.code];
-      setLocalities(__localityList);
-    }
-  }, [selectedCity]);
+  // useEffect(() => {
+  //   if (selectedCity) {
+  //     let __localityList = localitiesObj[selectedCity.code];
+  //     setLocalities(__localityList);
+  //   }
+  // }, [selectedCity]);
 
   //TO USE this way
   // let getObject = window.Digit.CoreService;
@@ -70,10 +84,10 @@ export const CreateComplaint = ({ parentUrl }) => {
   // city locality logic
   const selectCity = async (city) => {
     if (selectedCity?.code !== city.code) {
-      setSelectedCity(city);
-      setSelectedLocality(null);
-      let __localityList = localitiesObj[city.code];
-      setLocalities(__localityList);
+      // setSelectedCity(city);
+      // setSelectedLocality(null);
+      // let __localityList = localitiesObj[city.code];
+      // setLocalities(__localityList);
     }
   };
 
@@ -109,7 +123,9 @@ export const CreateComplaint = ({ parentUrl }) => {
     setPincode(value);
   };
 
-  const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
+  const isPincodeNotValid = (data) => !pincodeNotValid;
+
+  // console.log("find get cities function response here", getCities()[0].code);
 
   const config = [
     {
@@ -168,7 +184,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           type: "text",
           populators: {
             name: "pincode",
-            validation: { pattern: /^[1-9][0-9]{5}$/ },
+            validation: { pattern: /^[1-9][0-9]{5}$/, validate: isPincodeNotValid },
             error: t("CORE_COMMON_PINCODE_INVALID"),
             onChange: handlePincode,
           },
@@ -177,7 +193,18 @@ export const CreateComplaint = ({ parentUrl }) => {
           label: t("CS_COMPLAINT_DETAILS_CITY"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="i18nKey" t={t} />,
+          populators: (
+            <Dropdown
+              isMandatory
+              selected={selectedCity}
+              freeze={true}
+              option={getCities()}
+              id="city"
+              select={selectCity}
+              optionKey="i18nKey"
+              t={t}
+            />
+          ),
         },
         {
           label: t("CS_CREATECOMPLAINT_MOHALLA"),

@@ -131,6 +131,7 @@ export const CreateComplaint = ({ parentUrl }) => {
         },
         {
           label: t("ES_CREATECOMPLAINT_COMPLAINT_NAME"),
+          isMandatory: true,
           type: "text",
           populators: {
             name: "name",

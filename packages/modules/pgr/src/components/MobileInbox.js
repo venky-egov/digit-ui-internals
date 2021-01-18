@@ -28,33 +28,9 @@ const MobileInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
   let result;
   if (isLoading) {
     result = <Loader />;
-  } else if (data && data.length === 0) {
-    result = (
-      <Card style={{ marginTop: 20 }}>
-        {t(LOCALE.NO_COMPLAINTS_EMPLOYEE)
-          .split("\\n")
-          .map((text, index) => (
-            <p key={index} style={{ textAlign: "center" }}>
-              {text}
-            </p>
-          ))}
-      </Card>
-    );
-  } else if (localizedData.length > 0) {
-    result = (
-      <ComplaintCard data={localizedData} onFilterChange={onFilterChange} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} onSearch={onSearch} />
-    );
   } else {
     result = (
-      <Card style={{ marginTop: 20 }}>
-        {t(LOCALE.ERROR_LOADING_RESULTS)
-          .split("\\n")
-          .map((text, index) => (
-            <p key={index} style={{ textAlign: "center" }}>
-              {text}
-            </p>
-          ))}
-      </Card>
+      <ComplaintCard data={localizedData} onFilterChange={onFilterChange} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} onSearch={onSearch} />
     );
   }
 

@@ -1,5 +1,5 @@
 import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, Loader, TelePhone } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../constants/Localization";
 import PendingAtLME from "./timelineInstances/pendingAtLme";
@@ -15,11 +15,19 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   // let GetComplaintInstance = ({}) => {
 
   // console.log("find complaintWorkflow here", complaintWorkflow, data)
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
 
   let { timeline } = data;
+
+  useEffect(() => {
+    timeline?.push({
+      auditDetails: { created: "17-Jan-2021", lastModified: "17-Jan-2021" },
+      performedAction: "FILED",
+      status: "COMPLAINT_FILED",
+    });
+  }, [timeline]);
 
   // console.log("find timeline here", timeline);
 
@@ -78,6 +86,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       //     reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
       //   />
       // );
+      case "COMPLAINT_FILED":
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_COMPLAINT_FILED")} info={auditDetails.created} />;
 
       default:
         return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${status}`)} />;

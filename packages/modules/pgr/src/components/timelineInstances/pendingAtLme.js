@@ -7,7 +7,7 @@ const PendingAtLME = ({ name, isCompleted, mobile, text }) => {
   return name && mobile ? (
     <CheckPoint isCompleted={isCompleted} customChild={<TelePhone mobile={mobile} text={`${text} ${name}`} />} />
   ) : (
-    <CheckPoint text={t("CS_COMMON_PENDINGATLME")} />
+    <CheckPoint label={t("CS_COMMON_PENDINGATLME")} />
   );
 };
 

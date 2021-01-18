@@ -35,7 +35,7 @@ const Inbox = () => {
       return (
         <div>
           <Header>{t("ES_COMMON_INBOX")}</Header>
-          <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+          <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />
         </div>
       );
     }

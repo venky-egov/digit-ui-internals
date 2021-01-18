@@ -72,6 +72,8 @@ export const FormComposer = (props) => {
     [props.config, errors]
   );
 
+  const isDisabled = props.isDisabled || false;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
@@ -79,7 +81,7 @@ export const FormComposer = (props) => {
         {formFields}
         {props.children}
         <ActionBar>
-          <SubmitBar label={t(props.label)} submit="submit" />
+          <SubmitBar disabled={isDisabled} label={t(props.label)} submit="submit" />
         </ActionBar>
       </Card>
     </form>

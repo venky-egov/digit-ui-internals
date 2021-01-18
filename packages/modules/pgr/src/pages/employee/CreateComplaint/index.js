@@ -17,6 +17,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   // const selected_localities = Digit.SessionStorage.get("selected_localities");
   // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
 
+  const [mobileNumber, setMobileNumber] = useState("");
   const [complaintType, setComplaintType] = useState({});
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [subType, setSubType] = useState({});
@@ -24,7 +25,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [selectedCity, setSelectedCity] = useState(null);
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-  const [submitValve, setSubmitValve] = useState(false);
+  const [canSubmit, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
   const menu = Digit.Hooks.pgr.useComplaintTypes({ stateCode: tenantId });
@@ -36,6 +37,14 @@ export const CreateComplaint = ({ parentUrl }) => {
   const localitiesObj = useSelector((state) => state.common.localities);
   const serviceDefinitions = Digit.GetServiceDefinitions;
   const client = useQueryClient();
+
+  useEffect(() => {
+    if (complaintType?.key && subType?.key && selectedCity?.code && selectedLocality?.code && mobileNumber.length > 0) {
+      setSubmitValve(true);
+    } else {
+      setSubmitValve(false);
+    }
+  }, [complaintType, subType, selectedCity, selectedLocality, mobileNumber]);
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
@@ -77,6 +86,11 @@ export const CreateComplaint = ({ parentUrl }) => {
     }
   };
 
+  const selectMobileNumber = (event) => {
+    const { value } = event.target;
+    setMobileNumber(value);
+  };
+
   function selectLocality(locality) {
     setSelectedLocality(locality);
     // Digit.SessionStorage.set("locality_complaint", locality);
@@ -84,7 +98,7 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   //On SUbmit
   const onSubmit = async (data) => {
-    setSubmitValve(true);
+    if (!canSubmit) return;
     console.log("submit data", data, subType, selectedCity, selectedLocality);
     const cityCode = selectedCity.code;
     const city = selectedCity.city.name;
@@ -126,6 +140,7 @@ export const CreateComplaint = ({ parentUrl }) => {
               pattern: /^[6-9]\d{9}$/,
             },
             error: t("CORE_COMMON_MOBILE_ERROR"),
+            onChange: selectMobileNumber,
           },
         },
         {
@@ -216,6 +231,7 @@ export const CreateComplaint = ({ parentUrl }) => {
       heading={t("ES_CREATECOMPLAINT_NEW_COMPLAINT")}
       config={config}
       onSubmit={onSubmit}
+      isDisabled={!canSubmit}
       label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")}
     />
   );

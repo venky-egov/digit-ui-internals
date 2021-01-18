@@ -9,13 +9,6 @@ import { FormComposer } from "../../../components/FormComposer";
 import { createComplaint } from "../../../redux/actions/index";
 
 export const CreateComplaint = ({ parentUrl }) => {
-  // const SessionStorage = Digit.SessionStorage;
-  // const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
-  // const __initSubType__ = Digit.SessionStorage.get("subType");
-
-  // const city_complaint = Digit.SessionStorage.get("city_complaint");
-  // const selected_localities = Digit.SessionStorage.get("selected_localities");
-  // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
   const cities = Digit.Hooks.pgr.useTenants();
   const localitiesObj = useSelector((state) => state.common.localities);
 
@@ -27,7 +20,6 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [pincode, setPincode] = useState("");
   const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
   const [localities, setLocalities] = useState(localitiesObj && cities ? localitiesObj[getCities()[0]?.code] : null);
-  // console.log("find localities state", localities, localitiesObj[getCities()[0].code], localitiesObj, getCities());
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [canSubmit, setSubmitValve] = useState(false);
   const [pincodeNotValid, setPincodeNotValid] = useState(false);
@@ -51,32 +43,18 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
-    // console.log("find pincode selected city here", city)
     if (city?.code === getCities()[0]?.code) {
       setPincodeNotValid(false);
       setSelectedCity(city);
+      setSelectedLocality(null);
       const __localityList = localitiesObj[city.code];
       const __filteredLocalities = __localityList.filter((city) => city["pincode"] == pincode);
       setLocalities(__filteredLocalities);
-      // console.log("find localities here", __filteredLocalities);
     } else {
       setPincodeNotValid(true);
-      // console.log("find pincodeNotValid value here", pincodeNotValid)
     }
   }, [pincode]);
 
-  // useEffect(() => {
-  //   if (selectedCity) {
-  //     let __localityList = localitiesObj[selectedCity.code];
-  //     setLocalities(__localityList);
-  //   }
-  // }, [selectedCity]);
-
-  //TO USE this way
-  // let getObject = window.Digit.CoreService;
-  // console.log(getObject.service("PGR").Name)
-
-  // //complaint logic
   async function selectedType(value) {
     if (value.key !== complaintType.key) {
       setSubType({ name: "" });
@@ -87,22 +65,16 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   function selectedSubType(value) {
     setSubType(value);
-    // Digit.SessionStorage.set("subType", [value]);
   }
 
   // city locality logic
   const selectCity = async (city) => {
-    if (selectedCity?.code !== city.code) {
-      // setSelectedCity(city);
-      // setSelectedLocality(null);
-      // let __localityList = localitiesObj[city.code];
-      // setLocalities(__localityList);
-    }
+    // if (selectedCity?.code !== city.code) {}
+    return;
   };
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
-    // Digit.SessionStorage.set("locality_complaint", locality);
   }
 
   //On SUbmit
@@ -130,11 +102,12 @@ export const CreateComplaint = ({ parentUrl }) => {
   const handlePincode = (event) => {
     const { value } = event.target;
     setPincode(value);
+    if (!value) {
+      setPincodeNotValid(false);
+    }
   };
 
-  const isPincodeNotValid = (data) => !pincodeNotValid;
-
-  // console.log("find get cities function response here", getCities()[0].code);
+  const isPincodeValid = () => !pincodeNotValid;
 
   const config = [
     {
@@ -193,7 +166,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           type: "text",
           populators: {
             name: "pincode",
-            validation: { pattern: /^[1-9][0-9]{5}$/, validate: isPincodeNotValid },
+            validation: { pattern: /^[1-9][0-9]{5}$/, validate: isPincodeValid },
             error: t("CORE_COMMON_PINCODE_INVALID"),
             onChange: handlePincode,
           },

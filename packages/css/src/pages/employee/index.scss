@@ -52,6 +52,19 @@
     }
   }
 
+  .main {
+    padding-top: 88px;
+  }
+}
+
+.citizen {
+  .main {
+    padding-top: 82px;
+  }
+}
+
+.citizen, .employee {
+  
   .sidebar {
     position: fixed;
     left: 0;
@@ -73,16 +86,6 @@
       }
     }
   }
-
-  .main {
-    padding-top: 88px;
-  }
-}
-
-.citizen {
-  .main {
-    padding-top: 82px;
-  }
 }
 
 .link {
@@ -94,7 +97,7 @@
 }
 
 @media (min-width: 640px) {
-  .employee {
+  .employee, .citizen {
     .main {
       padding-top: 80px;
       margin-left: 88px;

@@ -57,7 +57,7 @@ const EmployeeHome = () => {
         </div>
 
         {/* FSM Card */}
-        {/* <div className="employeeCard card-home">
+        <div className="employeeCard card-home">
           <div className="complaint-links-container">
             <div className="header">
               <span className="logo">
@@ -83,7 +83,7 @@ const EmployeeHome = () => {
               </span>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

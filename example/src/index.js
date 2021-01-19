@@ -7,7 +7,7 @@ import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
-import "@egovernments/digit-ui-css/dist/index.css";
+import "@egovernments/digit-ui-css/example/index.css";
 
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";

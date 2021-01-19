@@ -25,12 +25,15 @@ export const UserService = {
     return Digit.SessionStorage.get("User");
   },
   logout: () => {
-    window.localStorage.setItem("Citizen.user-info", {});
-    window.localStorage.setItem("Citizen.token", "");
-    window.localStorage.setItem("Citizen.refresh-token", "");
-    window.localStorage.setItem("token", "");
-    window.localStorage.setItem(".refresh-token", "");
-    return Digit.SessionStorage.set("User", {});
+    const userType = UserService.getType();
+    Digit.SessionStorage.set("User", {});
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+    if (userType === "citizen") {
+      window.location.replace("/citizen");
+    } else {
+      window.location.replace("/employee");
+    }
   },
   sendOtp: (details, stateCode) =>
     ServiceRequest({

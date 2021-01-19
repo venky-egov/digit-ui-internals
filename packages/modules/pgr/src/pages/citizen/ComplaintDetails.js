@@ -32,13 +32,15 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
   }, []);
 
   return (
-    <TimeLine
-      isLoading={workFlowDetails.isLoading}
-      data={workFlowDetails.data}
-      serviceRequestId={id}
-      complaintWorkflow={complaintDetails.workflow}
-      rating={complaintDetails.audit.rating}
-    />
+    !workFlowDetails.isLoading && (
+      <TimeLine
+        // isLoading={workFlowDetails.isLoading}
+        data={workFlowDetails.data}
+        serviceRequestId={id}
+        complaintWorkflow={complaintDetails.workflow}
+        rating={complaintDetails.audit.rating}
+      />
+    )
   );
 };
 
@@ -48,6 +50,7 @@ const ComplaintDetailsPage = (props) => {
 
   let tenantId = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
   const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
+  // console.log("find complaint details here", complaintDetails);
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -79,7 +82,7 @@ const ComplaintDetailsPage = (props) => {
   }
 
   const onWorkFlowChange = (data) => {
-    console.log("ssdsodososooo ==== ", data);
+    // console.log("ssdsodososooo ==== ", data);
     let timeline = data?.timeline;
     timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
   };
@@ -127,7 +130,7 @@ const ComplaintDetailsPage = (props) => {
                   label={t(flag)}
                   text={
                     Array.isArray(complaintDetails.details[flag])
-                      ? complaintDetails.details[flag].map((val) => t(val))
+                      ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
                       : t(complaintDetails.details[flag])
                   }
                   last={index === arr.length - 1}

@@ -7,9 +7,11 @@ const TextField = (props) => {
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");
-  }, [props.selectedVal]);
+  }, [props.selectedVal, props.forceSet]);
 
   function inputChange(e) {
+    if (props.freeze) return;
+
     setValue(e.target.value);
     props.setFilter(e.target.value);
   }
@@ -30,6 +32,7 @@ const Dropdown = (props) => {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
+  const [forceSet, setforceSet] = useState(0);
 
   useEffect(() => {
     setSelectedOption(props.selected);
@@ -56,6 +59,9 @@ const Dropdown = (props) => {
       props.select(val);
       setSelectedOption(val);
       setDropdownStatus(false);
+    } else {
+      setSelectedOption(val);
+      setforceSet(forceSet + 1);
     }
   }
 
@@ -69,6 +75,7 @@ const Dropdown = (props) => {
       <div className={dropdownStatus ? "select-active" : "select"}>
         <TextField
           setFilter={setFilter}
+          forceSet={forceSet}
           selectedVal={
             selectedOption
               ? props.t
@@ -81,10 +88,11 @@ const Dropdown = (props) => {
           filterVal={filterVal}
           // onClick={dropdownOn}
           dropdownDisplay={dropdownOn}
+          freeze={props.freeze ? true : false}
         />
         <ArrowDown onClick={dropdownSwitch} />
       </div>
-      {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
+      {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">

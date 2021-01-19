@@ -7,7 +7,8 @@ import MobileInbox from "../../components/MobileInbox";
 
 const Inbox = () => {
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useState({ filters: {}, search: "", sort: {} });
+  const { uuid } = Digit.UserService.getUser().info;
+  const [searchParams, setSearchParams] = useState({ filters: { wfFilters: { assignee: [{ code: uuid }] } }, search: "", sort: {} });
 
   const handleFilterChange = (filterParam) => {
     console.log("handleFilterChange", { ...searchParams, filters: filterParam });
@@ -34,7 +35,7 @@ const Inbox = () => {
       return (
         <div>
           <Header>{t("ES_COMMON_INBOX")}</Header>
-          <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+          <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />
         </div>
       );
     }

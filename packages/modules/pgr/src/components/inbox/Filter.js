@@ -9,7 +9,7 @@ const Filter = (props) => {
 
   const { t } = useTranslation();
 
-  const [selectAssigned, setSelectedAssigned] = useState(null);
+  const [selectAssigned, setSelectedAssigned] = useState({ code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") });
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
 
@@ -23,7 +23,7 @@ const Filter = (props) => {
 
   const [wfFilters, setWfFilters] = useState(
     Digit.SessionStorage.get("pgr_wfFilters") || {
-      assignee: [],
+      assignee: [{ code: uuid }],
     }
   );
 
@@ -138,6 +138,7 @@ const Filter = (props) => {
   }
 
   const handleFilterSubmit = () => {
+    // console.log("submit filter called",{ pgrQuery: pgrQuery, wfQuery: wfQuery } )
     props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
   };
 

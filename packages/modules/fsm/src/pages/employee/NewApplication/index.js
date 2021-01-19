@@ -41,8 +41,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const history = useHistory();
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
-  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertyType");
-  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype");
+  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "PropertyType");
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "PropertySubtype");
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {

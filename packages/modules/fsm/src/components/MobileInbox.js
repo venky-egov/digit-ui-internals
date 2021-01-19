@@ -23,11 +23,13 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
   // }));
   const localizedData = data;
 
+  const DSO = Digit.UserService.hasAccess("DSO");
+
   return (
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          <ApplicationLinks isMobile={true} />
+          {!DSO && <ApplicationLinks isMobile={true} />}
           <ApplicationCard
             data={localizedData}
             onFilterChange={onFilterChange}

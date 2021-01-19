@@ -30,8 +30,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const cityProperty = Digit.SessionStorage.get("city_property");
   const selectedLocalities = Digit.SessionStorage.get("selected_localities");
   const localityProperty = Digit.SessionStorage.get("locality_property");
+  const vehicleNo = Digit.SessionStorage.get("vehicle_no");
 
   const [selectedCity, setSelectedCity] = useState(cityProperty ? cityProperty : null);
+  const [selectedVehicleNo, setSelectedVehicleNumberNo] = useState(vehicleNo ? vehicleNo : null);
   const [localities, setLocalities] = useState(selectedLocalities ? selectedLocalities : null);
   const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
 
@@ -40,6 +42,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();
+
+  const vehicleNumbers = [];
+
+  const DSO = Digit.UserService.hasAccess("DSO");
 
   useEffect(() => {
     setMenu(() => {
@@ -86,6 +92,15 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
     setLocalities(__localityList);
     Digit.SessionStorage.set("selected_localities", __localityList);
+  };
+
+  const selectVehicleNo = async (vehicleNo) => {
+    setSelectedVehicleNo(vehicleNo);
+    Digit.SessionStorage.set("vehicle_no", vehicleNo);
+    // let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
+    // let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+    // setLocalities(__localityList);
+    // Digit.SessionStorage.set("selected_localities", __localityList);
   };
 
   function selectLocality(locality) {
@@ -191,42 +206,99 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     history.push("digit-ui/employee/fsm/response");
   };
 
+  const applicationDetails = {
+    head: t("ES_TITLE_APPLICATION_DETAILS"),
+    body: [
+      {
+        label: t("ES_MODIFY_APPLICATION_APPLICANT_NAME"),
+        type: "text",
+        isMandatory: true,
+        populators: {
+          name: "applicantName",
+          validation: {
+            required: true,
+            pattern: /[A-Za-z]/,
+          },
+        },
+      },
+      {
+        label: t("ES_MODIFY_APPLICATION_APPLICANT_MOBILE_NO"),
+        type: "text",
+        isMandatory: true,
+        populators: {
+          name: "mobileNumber",
+          validation: {
+            required: true,
+            pattern: /^[6-9]\d{9}$/,
+          },
+        },
+      },
+      {
+        label: t("ES_MODIFY_APPLICATION_SLUM_NAME"),
+        type: "radio",
+        isMandatory: true,
+        populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+      },
+    ],
+  };
+
+  const locationDetails = {
+    head: t("ES_MODIFY_APPLICATION_LOCATION_DETAILS"),
+    body: [
+      {
+        label: t("ES_MODIFY_APPLICATION_LOCATION_PINCODE"),
+        type: "text",
+        populators: {
+          name: "pincode",
+          validation: { pattern: /^[1-9][0-9]{5}$/ },
+        },
+        disable: DSO,
+      },
+      {
+        label: t("ES_MODIFY_APPLICATION_LOCATION_CITY"),
+        isMandatory: true,
+        type: "dropdown",
+        populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" disable={DSO} />,
+        disable: DSO,
+      },
+      {
+        label: t("ES_MODIFY_APPLICATION_LOCATION_MOHALLA"),
+        isMandatory: true,
+        type: "dropdown",
+        populators: (
+          <Dropdown
+            isMandatory
+            selected={selectedLocality}
+            optionKey="code"
+            id="locality"
+            option={localities}
+            select={selectLocality}
+            t={t}
+            disable={DSO}
+          />
+        ),
+        disable: DSO,
+      },
+    ],
+  };
+
+  if (!DSO) {
+    locationDetails.body.push({
+      label: t("ES_MODIFY_APPLICATION_LOCATION_LANDMARK"),
+      type: "textarea",
+      populators: {
+        name: "landmark",
+      },
+    });
+    locationDetails.body.push({
+      label: t("ES_MODIFY_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+      isMandatory: true,
+      type: "dropdown",
+      populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
+    });
+  }
+
   const config = [
-    {
-      head: t("ES_TITLE_APPLICATION_DETAILS"),
-      body: [
-        {
-          label: t("ES_MODIFY_APPLICATION_APPLICANT_NAME"),
-          type: "text",
-          isMandatory: true,
-          populators: {
-            name: "applicantName",
-            validation: {
-              required: true,
-              pattern: /[A-Za-z]/,
-            },
-          },
-        },
-        {
-          label: t("ES_MODIFY_APPLICATION_APPLICANT_MOBILE_NO"),
-          type: "text",
-          isMandatory: true,
-          populators: {
-            name: "mobileNumber",
-            validation: {
-              required: true,
-              pattern: /^[6-9]\d{9}$/,
-            },
-          },
-        },
-        {
-          label: t("ES_MODIFY_APPLICATION_SLUM_NAME"),
-          type: "radio",
-          isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
-        },
-      ],
-    },
     {
       head: t("ES_MODIFY_APPLICATION_PROPERTY_DETAILS"),
       body: [
@@ -234,57 +306,22 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           label: t("ES_MODIFY_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={menu} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />,
+          populators: <Dropdown option={menu} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} disable={DSO} />,
+          disable: DSO,
         },
         {
           label: t("ES_MODIFY_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} />,
-        },
-      ],
-    },
-    {
-      head: t("ES_MODIFY_APPLICATION_LOCATION_DETAILS"),
-      body: [
-        {
-          label: t("ES_MODIFY_APPLICATION_LOCATION_PINCODE"),
-          type: "text",
-          populators: {
-            name: "pincode",
-            validation: { pattern: /^[1-9][0-9]{5}$/ },
-          },
-        },
-        {
-          label: t("ES_MODIFY_APPLICATION_LOCATION_CITY"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
-        },
-        {
-          label: t("ES_MODIFY_APPLICATION_LOCATION_MOHALLA"),
-          isMandatory: true,
-          type: "dropdown",
           populators: (
-            <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
+            <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} disable={DSO} />
           ),
-        },
-        {
-          label: t("ES_MODIFY_APPLICATION_LOCATION_LANDMARK"),
-          type: "textarea",
-          populators: {
-            name: "landmark",
-          },
-        },
-        {
-          label: t("ES_MODIFY_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
+          disable: DSO,
         },
       ],
     },
+    { ...locationDetails },
     {
       head: t("ES_MODIFY_APPLICATION_PAYMENT_DETAILS"),
       body: [
@@ -295,6 +332,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "noOfTrips",
             validation: { pattern: /[0-9]+/ },
           },
+          disable: DSO,
         },
         {
           label: t("ES_MODIFY_APPLICATION_PAYMENT_AMOUNT"),
@@ -309,30 +347,76 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  borderColor: DSO ? "#ccc" : "revert",
+                  color: DSO ? "#ccc" : "revert",
                 }}
               >
                 ₹
               </span>
             ),
           },
+          disable: DSO,
         },
       ],
     },
   ];
-  searchnDetail = {
-    title: t("ES_APPLICATION_DETAILS_APPLICATION_NO"),
+
+  const applicationDetail = {
+    title: t("ES_EDIT_APPLICATION_APPLICATION_NO"),
     value: "FSM-277373",
   };
 
+  const dsoDetails = {
+    head: t("ES_MODIFY_APPLICATION_DSO_DETAILS"),
+    body: [
+      {
+        label: t("ES_MODIFY_APPLICATION_ASSIGNED_DSO"),
+        type: "text",
+        populators: {
+          name: "assignedDso",
+        },
+        isMandatory: true,
+        disable: DSO,
+      },
+      {
+        label: t("ES_MODIFY_APPLICATION_VEHICLE_NO."),
+        isMandatory: true,
+        type: "dropdown",
+        populators: (
+          <Dropdown isMandatory selected={selectedVehicleNo} option={vehicleNumbers} id="vehicleNo" select={selectVehicleNo} optionKey="name" />
+        ),
+        isMandatory: true,
+      },
+      {
+        label: t("ES_MODIFY_APPLICATION_VEHICLE_CAPACITY"),
+        type: "text",
+        populators: {
+          name: "vehicleCapacity",
+        },
+        isMandatory: true,
+      },
+      {
+        label: t("ES_MODIFY_APPLICATION_POSSIBLE_SERVICE_DATE"),
+        type: "text",
+        populators: {
+          name: "possibleServiceDate",
+        },
+        isMandatory: true,
+      },
+    ],
+  };
+
+  if (DSO) config.push(dsoDetails);
+
   return (
-    <React.Fragment>
-      <FormComposer label={t("ES_COMMON_UPDATE")} config={config} onSubmit={onSubmit} beforeSubHeader>
-        <CardSubHeader style={{ marginBottom: "16px" }}>Modify Application</CardSubHeader>
+    <div style={{ marginBottom: "96px" }}>
+      <FormComposer label={t("ES_COMMON_UPDATE")} config={DSO ? config : [applicationDetails, ...config]} onSubmit={onSubmit} beforeSubHeader>
+        <CardSubHeader style={{ marginBottom: "16px" }}>{t("ES_TITLE_EDIT_APPLICATION")}</CardSubHeader>
         <StatusTable>
           <Row key={applicationDetail.title} label={applicationDetail.title} text={applicationDetail.value} />
         </StatusTable>
       </FormComposer>
-    </React.Fragment>
+    </div>
   );
 };
 

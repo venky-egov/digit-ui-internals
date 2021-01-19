@@ -15,14 +15,26 @@ const TextField = (props) => {
   }
 
   function broadcastToOpen() {
-    props.dropdownDisplay(true);
+    if (!props.disable) {
+      props.dropdownDisplay(true);
+    }
   }
 
   function broadcastToClose() {
     props.dropdownDisplay(false);
   }
 
-  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
+  return (
+    <input
+      type="text"
+      value={value}
+      onChange={inputChange}
+      onClick={props.onClick}
+      onFocus={broadcastToOpen}
+      onBlur={broadcastToClose}
+      disabled={props.disable}
+    />
+  );
 };
 
 const Dropdown = (props) => {
@@ -73,7 +85,7 @@ const Dropdown = (props) => {
   return (
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
-      <div className={dropdownStatus ? "select-active" : "select"}>
+      <div className={dropdownStatus ? "select-active" : "select"} style={{ borderColor: props.disable ? "#ccc" : "revert" }}>
         <TextField
           setFilter={setFilter}
           selectedVal={
@@ -88,8 +100,9 @@ const Dropdown = (props) => {
           filterVal={filterVal}
           // onClick={dropdownOn}
           dropdownDisplay={dropdownOn}
+          disable={props.disable}
         />
-        <ArrowDown onClick={dropdownSwitch} />
+        <ArrowDown onClick={dropdownSwitch} disable={props.disable} />
       </div>
       {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
       {dropdownStatus ? (

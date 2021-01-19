@@ -18,14 +18,15 @@ const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
-  const { pgr } = useSelector((state) => state);
+  const { fsm } = useSelector((state) => state);
 
   const [selectAssigned, setSelectedAssigned] = useState("");
   const [selectedApplicationType, setSelectedApplicationType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [pendingApplicationCount, setPendingApplicationCount] = useState([]);
+  const DSO = Digit.UserService.hasAccess("DSO");
 
-  const [pgrfilters, setPgrFilters] = useState({
+  const [fsmFilters, setFsmFilter] = useState({
     serviceCode: [],
     locality: ["ALakapuri", "Railway medical Colony"],
     applicationStatus: [],
@@ -36,10 +37,10 @@ const Filter = (props) => {
   });
 
   //TODO change city fetch from user tenantid
-  // let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
+  // let localities = Digit.Hooks.fsm.useLocalities({ city: "Amritsar" });
   let localities = ["Alakapuri", "Railway medical Colony"];
-  // let applicationStatus = Digit.Hooks.pgr.useApplicationStatus();
-  // let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
+  // let applicationStatus = Digit.Hooks.fsm.useApplicationStatus();
+  // let serviceDefs = Digit.Hooks.fsm.useServiceDefs();
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
@@ -51,9 +52,9 @@ const Filter = (props) => {
   let wfQuery = {};
 
   useEffect(() => {
-    for (const property in pgrfilters) {
-      if (Array.isArray(pgrfilters[property])) {
-        let params = pgrfilters[property].map((prop) => prop.code).join();
+    for (const property in fsmFilters) {
+      if (Array.isArray(fsmFilters[property])) {
+        let params = fsmFilters[property].map((prop) => prop.code).join();
         if (params) {
           pgrQuery[property] = params;
         }
@@ -69,7 +70,7 @@ const Filter = (props) => {
     }
     //queryString = queryString.substring(0, queryString.length - 1);
     handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-  }, [pgrfilters, wfFilters]);
+  }, [fsmFilters, wfFilters]);
 
   const ifExists = (list, key) => {
     return list.filter((object) => object.code === key.code).length;
@@ -77,56 +78,56 @@ const Filter = (props) => {
 
   function applicationType(_type) {
     const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
-    if (!ifExists(pgrfilters.serviceCode, type)) {
-      setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
+    if (!ifExists(fsmFilters.serviceCode, type)) {
+      setFsmFilter({ ...fsmFilters, serviceCode: [...fsmFilters.serviceCode, type] });
     }
   }
 
   function onSelectLocality(value, type) {
-    // if (!ifExists(pgrfilters.locality, value)) {
-    //   setPgrFilters({ ...pgrfilters, locality: [...pgrfilters.locality, value] });
+    // if (!ifExists(fsmFilters.locality, value)) {
+    //   setFsmFilter({ ...fsmFilters, locality: [...fsmFilters.locality, value] });
     // }
-    setPgrFilters((prevState) => {
+    setFsmFilter((prevState) => {
       return { ...prevState, locality: [...prevState.locality.filter((item) => item !== value), value] };
     });
   }
 
   useEffect(() => {
-    if (pgrfilters.serviceCode.length > 1) {
-      setSelectedApplicationType(`${pgrfilters.serviceCode.length} selected`);
+    if (fsmFilters.serviceCode.length > 1) {
+      setSelectedApplicationType(`${fsmFilters.serviceCode.length} selected`);
     } else {
-      setSelectedApplicationType(pgrfilters.serviceCode[0]);
+      setSelectedApplicationType(fsmFilters.serviceCode[0]);
     }
-  }, [pgrfilters.serviceCode]);
+  }, [fsmFilters.serviceCode]);
 
   useEffect(() => {
-    if (pgrfilters.locality.length > 1) {
-      setSelectedLocality(`${pgrfilters.locality.length} selected`);
+    if (fsmFilters.locality.length > 1) {
+      setSelectedLocality(`${fsmFilters.locality.length} selected`);
     } else {
-      setSelectedLocality(pgrfilters.locality[0]);
+      setSelectedLocality(fsmFilters.locality[0]);
     }
-  }, [pgrfilters.locality]);
+  }, [fsmFilters.locality]);
 
   const onRemove = (index, key) => {
-    let afterRemove = pgrfilters[key].filter((value, i) => {
+    let afterRemove = fsmFilters[key].filter((value, i) => {
       return i !== index;
     });
-    setPgrFilters({ ...pgrfilters, [key]: afterRemove });
+    setFsmFilter({ ...fsmFilters, [key]: afterRemove });
   };
 
   const handleAssignmentChange = (e, type) => {
     if (e.target.checked) {
-      setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
+      setFsmFilter({ ...fsmFilters, applicationStatus: [...fsmFilters.applicationStatus, { code: type.code }] });
     } else {
-      const filteredStatus = pgrfilters.applicationStatus.filter((value) => {
+      const filteredStatus = fsmFilters.applicationStatus.filter((value) => {
         return value.code !== type.code;
       })[0];
-      setPgrFilters({ ...pgrfilters, applicationStatus: [{ code: filteredStatus }] });
+      setFsmFilter({ ...fsmFilters, applicationStatus: [{ code: filteredStatus }] });
     }
   };
 
   function clearAll() {
-    setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
+    setFsmFilter({ serviceCode: [], locality: [], applicationStatus: [] });
     setWfFilters({ assigned: [{ code: [] }] });
     setSelectedAssigned("");
     setSelectedApplicationType(null);
@@ -149,8 +150,8 @@ const Filter = (props) => {
         }}
       />
       <div className="tag-container">
-        {pgrfilters[key].length > 0 &&
-          pgrfilters[key].map((value, index) => {
+        {fsmFilters[key].length > 0 &&
+          fsmFilters[key].map((value, index) => {
             if (value[displayKey]) {
               return <RemoveableTag key={index} text={value[displayKey]} onClick={() => onRemove(index, key)} />;
             } else {
@@ -163,7 +164,7 @@ const Filter = (props) => {
 
   return (
     <React.Fragment>
-      <div className="filter">
+      <div className="filter" style={{ marginTop: "100px" }}>
         <div className="filter-card">
           <div className="heading">
             <div className="filter-label">{t("ES_INBOX_FILTER_BY")}:</div>
@@ -178,19 +179,21 @@ const Filter = (props) => {
             {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
           </div>
           <div>
-            <RadioButtons
-              onSelect={onRadioChange}
-              selectedOption={selectAssigned}
-              optionsKey="name"
-              options={[
-                { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
-                { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
-              ]}
-            />
+            {!DSO && (
+              <RadioButtons
+                onSelect={onRadioChange}
+                selectedOption={selectAssigned}
+                optionsKey="name"
+                options={[
+                  { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+                  { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
+                ]}
+              />
+            )}
             <div>
               {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}
             </div>
-            <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
+            <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmFilters={fsmFilters} />
           </div>
         </div>
       </div>

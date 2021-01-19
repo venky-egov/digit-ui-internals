@@ -10,6 +10,8 @@ const Inbox = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useState({ filters: {}, search: "", sort: {} });
 
+  const DSO = Digit.UserService.hasAccess("DSO");
+
   const handleFilterChange = (filterParam) => {
     // console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     // setSearchParams({ ...searchParams, filters: filterParam });
@@ -60,7 +62,7 @@ const Inbox = () => {
 
   let isMobile = window.Digit.Utils.browser.isMobile;
   if (applications.length !== null) {
-    if (isMobile) {
+    if (DSO || isMobile) {
       return <MobileInbox data={applications} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     } else {
       return <DesktopInbox data={applications} onFilterChange={handleFilterChange} onSearch={onSearch} />;

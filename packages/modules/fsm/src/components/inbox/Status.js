@@ -2,7 +2,7 @@ import React from "react";
 import { CheckBox } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const Status = ({ applications, onAssignmentChange, pgrfilters }) => {
+const Status = ({ applications, onAssignmentChange, fsmFilters }) => {
   const { t } = useTranslation();
   // const applicationsWithCount = useComplaintStatusCount(applications);
   const applicationsWithCount = [
@@ -27,7 +27,7 @@ const Status = ({ applications, onAssignmentChange, pgrfilters }) => {
         <CheckBox
           key={index}
           onChange={(e) => onAssignmentChange(e, option)}
-          checked={pgrfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
+          checked={fsmFilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
           label={`${option.name} (${option.count})`}
         />
       ))}

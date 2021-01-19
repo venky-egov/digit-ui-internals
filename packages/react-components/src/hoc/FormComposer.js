@@ -21,7 +21,7 @@ export const FormComposer = (props) => {
     props.onSubmit(data);
   }
 
-  const fieldSelector = (type, populators) => {
+  const fieldSelector = (type, populators, disable = false) => {
     switch (type) {
       case "text":
         return (
@@ -34,11 +34,11 @@ export const FormComposer = (props) => {
             }}
           >
             {populators.componentInFront ? populators.componentInFront : null}
-            <TextInput className="field" {...populators} inputRef={register(populators.validation)} />
+            <TextInput className="field" {...populators} inputRef={register(populators.validation)} disable={disable} />
           </div>
         );
       case "textarea":
-        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} />;
+        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} disable={disable} />;
       default:
         return populators.dependency !== false ? populators : null;
     }
@@ -53,11 +53,11 @@ export const FormComposer = (props) => {
             {section.body.map((field, index) => {
               const FieldPair = () => (
                 <React.Fragment>
-                  <CardLabel style={props.inline && { marginBottom: "8px" }}>
+                  <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field.disable ? "#ccc" : "revert" }}>
                     {field.label}
                     {field.isMandatory ? " * " : null}
                   </CardLabel>
-                  <div className="field">{fieldSelector(field.type, field.populators)}</div>
+                  <div className="field">{fieldSelector(field.type, field.populators, field.disable)}</div>
                 </React.Fragment>
               );
 

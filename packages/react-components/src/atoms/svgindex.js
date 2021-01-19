@@ -6,8 +6,16 @@ const ArrowLeft = ({ className }) => (
   </svg>
 );
 
-const ArrowDown = ({ className, onClick }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" className={className} onClick={onClick} width="18px" height="18px">
+const ArrowDown = ({ className, onClick, disable }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill={disable ? "#ccc" : "black"}
+    className={className}
+    onClick={onClick}
+    width="18px"
+    height="18px"
+  >
     <path d="M0 0h24v24H0V0z" fill="none" />
     <path d="M7 10l5 5 5-5H7z" />
   </svg>

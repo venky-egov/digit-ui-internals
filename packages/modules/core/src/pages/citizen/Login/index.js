@@ -11,7 +11,7 @@ const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 
-const Login = ({ stateCode, cityCode }) => {
+const Login = ({ stateCode }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const { path, url } = useRouteMatch();
@@ -30,10 +30,10 @@ const Login = ({ stateCode, cityCode }) => {
       info: { name },
     } = user;
     if (!name || name === DEFAULT_USER) {
-      history.push(`${path}/name`);
+      history.replace(`${path}/name`);
     } else {
-      const redirectPath = location.state?.from || "/";
-      history.push(redirectPath);
+      const redirectPath = location.state?.from || "/digit-ui";
+      history.replace(redirectPath);
     }
   }, [user]);
 
@@ -66,13 +66,13 @@ const Login = ({ stateCode, cityCode }) => {
     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
     if (!err) {
       setIsUserRegistered(true);
-      history.push(`${path}/otp`, { from: location.state.from });
+      history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
       return;
     }
     const [res2, err2] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
     if (!err2) {
       setIsUserRegistered(false);
-      history.push(`${path}/otp`, { from: location.state.from });
+      history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
       return;
     }
   };
@@ -106,7 +106,6 @@ const Login = ({ stateCode, cityCode }) => {
           username: mobileNumber,
           otpReference: otp,
           tenantId: stateCode,
-          permanentCity: cityCode,
         };
 
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser(requestData, stateCode);

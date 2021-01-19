@@ -4,6 +4,7 @@ import {
   BreakLine,
   Card,
   CardLabel,
+  CardLabelError,
   CardSubHeader,
   CardSectionHeader,
   TextArea,
@@ -16,7 +17,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const { t } = useTranslation();
 
   function onSubmit(data) {
@@ -54,21 +55,28 @@ export const FormComposer = (props) => {
             <CardSectionHeader>{section.head}</CardSectionHeader>
             {section.body.map((field, index) => {
               return (
-                <LabelFieldPair key={index}>
-                  <CardLabel>
-                    {field.label}
-                    {field.isMandatory ? " * " : null}
-                  </CardLabel>
-                  <div className="field">{fieldSelector(field.type, field.populators)}</div>
-                </LabelFieldPair>
+                <React.Fragment key={index}>
+                  {errors[field.populators.name] && (field.populators?.validate ? errors[field.populators.validate] : true) && (
+                    <CardLabelError>{field.populators.error}</CardLabelError>
+                  )}
+                  <LabelFieldPair>
+                    <CardLabel>
+                      {field.label}
+                      {field.isMandatory ? " * " : null}
+                    </CardLabel>
+                    <div className="field">{fieldSelector(field.type, field.populators)}</div>
+                  </LabelFieldPair>
+                </React.Fragment>
               );
             })}
             {array.length - 1 === index ? null : <BreakLine />}
           </React.Fragment>
         );
       }),
-    [props.config]
+    [props.config, errors]
   );
+
+  const isDisabled = props.isDisabled || false;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -77,7 +85,7 @@ export const FormComposer = (props) => {
         {formFields}
         {props.children}
         <ActionBar>
-          <SubmitBar label={t(props.label)} submit="submit" />
+          <SubmitBar disabled={isDisabled} label={t(props.label)} submit="submit" />
         </ActionBar>
       </Card>
     </form>

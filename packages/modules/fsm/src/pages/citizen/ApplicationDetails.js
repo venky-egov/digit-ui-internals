@@ -107,11 +107,11 @@ const ApplicationDetails = () => {
           keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_DATE")}
           note={Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime)}
         />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")} note={`SERVICEDEFS.${application.propertyUsage}`} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")} note={t(`PROPERTYTAX_BILLING_SLAB_${application.propertyUsage}`)} />
         {application.pitDetail && (
           <KeyNote
             keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
-            note={`${application.pitDetail?.length}m * ${application.pitDetail?.width}m * ${application.pitDetail?.height}m`}
+            note={`${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m`}
           />
         )}
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />

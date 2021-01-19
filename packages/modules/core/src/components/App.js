@@ -111,7 +111,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
               <div className="left w-80"><ChangeLanguage dropdown={ true}/></div>
             <div className="left margin-top-10">
               <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"}  toggleMenu={toggleLogoutMenu} />
-              {displayMenu &&  <Card><Menu options={["Logout"]} onSelect={handleLogout} /></Card> }
+              {displayMenu &&  <Menu options={["Logout"]} onSelect={handleLogout} />}
             </div>
               {/* <img className="state" src={logoUrl} /> */}
             </div>

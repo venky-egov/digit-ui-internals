@@ -24,7 +24,7 @@ const ActionButton = ({ jumpTo }) => {
     history.push(jumpTo);
   }
 
-  return <LinkButton label={t("CS_COMMON_CHANGE")} style={{ color: "#F47738" }} onClick={routeTo} />;
+  return <LinkButton label={t("CS_COMMON_CHANGE")} className="check-page-link-button" onClick={routeTo} />;
 };
 
 const CheckPage = ({ onSubmit, value }) => {

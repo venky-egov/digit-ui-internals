@@ -66,7 +66,6 @@
         }
 
         .mobile-input {
-          
         }
       }
     }
@@ -77,7 +76,7 @@
   }
 }
 
-.button-clear{
+.button-clear {
   @apply text-focus text-body-s-dt;
 }
 
@@ -134,15 +133,15 @@
     }
 
     .search-container {
-      width: 874px;
-      @apply ml-lg;
+      @apply ml-lg w-auto;
 
       .search-complaint-container {
-        @apply flex items-center bg-white p-md;
+        @apply flex items-center bg-white p-md flex-col items-start;
 
         .complaint-header {
-          display: flex;
-          @apply flex justify-between w-full;
+          marginbottom: "20px";
+          width: 100%;
+          @apply flex justify-between w-full justify-between;
         }
 
         .complaint-input-container {
@@ -164,4 +163,27 @@
       }
     }
   }
+}
+
+.cell-text {
+  color: "#505A5F";
+}
+
+.sla-cell-error {
+  color: "#D4351C";
+  background-color: "rgba(212, 53, 28, 0.12)";
+  padding: "0 24px";
+  border-radius: "11px";
+}
+
+.sla-cell-success {
+  color: "#00703C";
+  background-color: "rgba(0, 112, 60, 0.12)";
+  padding: "0 24px";
+  border-radius: "11px";
+}
+
+.complain-no-cell-text {
+  margin-top: "4px";
+  color: "#505A5F";
 }

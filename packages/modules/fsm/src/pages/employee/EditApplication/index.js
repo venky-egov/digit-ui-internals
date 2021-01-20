@@ -303,17 +303,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
-            componentInFront: (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                ₹
-              </span>
-            ),
+            componentInFront: "₹",
           },
         },
       ],

@@ -275,17 +275,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
-            componentInFront: (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                ₹
-              </span>
-            ),
+            componentInFront: "₹",
           },
         },
       ],

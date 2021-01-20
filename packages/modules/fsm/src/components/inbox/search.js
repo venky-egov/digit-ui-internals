@@ -49,15 +49,7 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
         <div className="search-container" style={{ width: "auto" }}>
           <div className="search-complaint-container" style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
             {type === "mobile" && (
-              <div
-                className="complaint-header"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  marginBottom: "20px",
-                }}
-              >
+              <div className="complaint-header">
                 <h2>SEARCH BY:</h2>
                 <span onClick={onClose}>x</span>
               </div>

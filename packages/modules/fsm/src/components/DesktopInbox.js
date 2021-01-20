@@ -48,7 +48,10 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t("ES_INBOX_APPLICATION_DATE"),
-        accessor: "applicationDate",
+        accessor: "createdTime",
+        Cell: ({ row }) => {
+          return GetCell(`${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth()}/${row.original.createdTime.getFullYear()}`);
+        },
         // Cell: (row) => {
         //   return GetCell(
         //     t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
@@ -57,7 +60,9 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t("ES_INBOX_LOCALITY"),
-        accessor: "locality",
+        Cell: ({ row }) => {
+          return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
+        },
         // Cell: (row) => {
         //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
         // },
@@ -71,7 +76,7 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
-        accessor: "slaDaysRemaining",
+        accessor: "sla",
         // Cell: (row) => {
         //   return GetSlaCell(row.row.original["sla"]);
         // },

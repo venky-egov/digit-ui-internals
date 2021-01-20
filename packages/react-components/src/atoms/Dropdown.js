@@ -52,8 +52,7 @@ const Dropdown = (props) => {
   }
 
   function handleClick(e) {
-    console.log("event calll", optionRef);
-    if (!optionRef.current.contains(e.target)) {
+    if (!optionRef.current || !optionRef.current.contains(e.target)) {
       document.removeEventListener("mousedown", handleClick, false);
       setDropdownStatus(false);
     }
@@ -128,10 +127,10 @@ const Dropdown = (props) => {
                     // console.log(props.t(option[props.optionKey]));
                   }
                   return (
-                    <p className="cp" key={index} onClick={() => onSelect(option)}>
+                    <div className="cp profile-dropdown--item" key={index} onClick={() => onSelect(option)}>
                       {option.icon && <span className="icon"> {option.icon} </span>}
-                      {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
-                    </p>
+                      {<span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>}
+                    </div>
                   );
                 })}
           </div>

@@ -119,7 +119,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
               <div className="left w-80">
                 <ChangeLanguage dropdown={true} />
               </div>
-              <div className="left margin-top-6">
+              <div className="left margin-top-6 width-20">
                 <Dropdown
                   option={userOptions}
                   optionKey={"name"}

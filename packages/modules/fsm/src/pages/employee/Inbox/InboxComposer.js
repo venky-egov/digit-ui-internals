@@ -1,33 +1,29 @@
 import config from "./config";
-const importHead = config.head.map((component) => component.type);
-const importModules = { ...importHead };
 
-import importModules from "@egovernments/digit-ui-react-components";
+import FSMLink from "../../../components/inbox/FSMLink";
+import ApplicationTable from "../../../components/inbox/ApplicationTable";
+import Filter from "../../../components/inbox/Filter";
+import SearchApplication from "../../../components/inbox/search";
 
-export const InboxComposer = ({ head, lhs, rhs, main, foot }) => {
-  const Head = () => {
-    head.map((component) => {});
-  };
-  const LHS = () => {
-    lhs;
-  };
-  const RHS = () => {
-    rhs;
-  };
-  const Main = () => {
-    main;
-  };
-  const Foot = () => {
-    foot;
+export const InboxComposer = () => {
+  const selector = ({ component }) => {
+    switch (component.type) {
+      // case "links":
+      //   return <FSMLink/>
+
+      // case "filter":
+      //   return <Filter />
+
+      // case "search":
+      //   return <SearchApplication />
+
+      // case "table":
+      //   return <ApplicationTable />
+
+      default:
+        return <div>{component.type} not supported please add in InboxComposer</div>;
+    }
   };
 
-  return (
-    <>
-      <Head></Head>
-      <LHS></LHS>
-      <RHS></RHS>
-      <Main></Main>
-      <Foot></Foot>
-    </>
-  );
+  return config.map((component) => selector(component.type));
 };

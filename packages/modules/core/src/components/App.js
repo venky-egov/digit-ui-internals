@@ -115,11 +115,11 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
             <span className="ulb">
               {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
             </span>
-            <div className="right width-20">
-              <div className="left w-80">
+            <div className="right width-20 flex-right">
+              <div className="left">
                 <ChangeLanguage dropdown={true} />
               </div>
-              <div className="left margin-top-6 width-20">
+              <div className="left width-20">
                 <Dropdown
                   option={userOptions}
                   optionKey={"name"}

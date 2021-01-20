@@ -88,9 +88,9 @@ const Dropdown = (props) => {
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
       {hasCustomSelector && (
-        <div className="margin-right-30 cp" onClick={dropdownSwitch}>
-          {props.showArrow && <ArrowDown className="right" onClick={dropdownSwitch} />}
+        <div className={`margin-right-30 cp margin-top-6 ${props.showArrow ? "flex-right" : ""}`} onClick={dropdownSwitch}>
           {props.customSelector}
+          {props.showArrow && <ArrowDown onClick={dropdownSwitch} />}
         </div>
       )}
       {!hasCustomSelector && (
@@ -118,7 +118,7 @@ const Dropdown = (props) => {
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
-          <div className={`${hasCustomSelector ? "margin-top-35" : ""} options-card`} ref={optionRef}>
+          <div className={`${hasCustomSelector ? "margin-top-10" : ""} options-card`} ref={optionRef}>
             {props.option &&
               props.option
                 .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))

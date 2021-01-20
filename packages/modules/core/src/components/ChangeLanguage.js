@@ -23,7 +23,7 @@ const ChangeLanguage = (prop) => {
           optionKey={"label"}
           select={handleChangeLanguage}
           freeze={true}
-          customSelector={<label className="right cp">{languages.find((language) => language.value === selected).label}</label>}
+          customSelector={<label className="cp">{languages.find((language) => language.value === selected).label}</label>}
         />
       </div>
     );

@@ -7,7 +7,11 @@ import ChangeLanguage from "./ChangeLanguage";
 import { AppModules } from "./AppModules";
 import { CitizenSidebar } from "./Sidebar";
 
-const TextToImg = (props) => <span className="user-img-txt" onClick={props.toggleMenu}>{props.name[0].toUpperCase()}</span>;
+const TextToImg = (props) => (
+  <span className="user-img-txt" onClick={props.toggleMenu}>
+    {props.name[0].toUpperCase()}
+  </span>
+);
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
 
@@ -25,8 +29,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
 
   const toggleLogoutMenu = () => {
     toggleMenu(!displayMenu);
-  }
-
+  };
 
   const mobileView = innerWidth <= 640;
   return (
@@ -39,7 +42,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           </span>
           {!mobileView && (
             <div className="right">
-              <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"}   />
+              <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />
               <img className="state" src={logoUrl} />
             </div>
           )}
@@ -93,31 +96,36 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         </div>
       </Route>
       <Route path="/digit-ui/citizen">
-        {mobileView && (<TopBar
-          img={cityDetails?.logoId}
-          ulb={`${t(cityDetails?.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
-          isMobile={true}
-          toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
-          logoUrl={logoUrl}
-          onLogout={handleLogout}
-          userDetails={userDetails}
-        />)}
-      { !mobileView && (<div className="topbar">
-          <img className="city" src={cityDetails?.logoId} />
-          <span className="ulb">
-            {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
-          </span>
-          <div className="right width-20">
-              <div className="left w-80"><ChangeLanguage dropdown={ true}/></div>
-            <div className="left margin-top-10">
-              <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"}  toggleMenu={toggleLogoutMenu} />
-              {displayMenu &&  <Menu options={["Logout"]} onSelect={handleLogout} />}
-            </div>
-              {/* <img className="state" src={logoUrl} /> */}
-            </div>
-        </div>
+        {mobileView && (
+          <TopBar
+            img={cityDetails?.logoId}
+            ulb={`${t(cityDetails?.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
+            isMobile={true}
+            toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
+            logoUrl={logoUrl}
+            onLogout={handleLogout}
+            userDetails={userDetails}
+          />
         )}
-        {!mobileView && (<div className="sidebar">
+        {!mobileView && (
+          <div className="topbar">
+            <img className="city" src={cityDetails?.logoId} />
+            <span className="ulb">
+              {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
+            </span>
+            <div className="right width-20">
+              <div className="left w-80">
+                <ChangeLanguage dropdown={true} />
+              </div>
+              <div className="left margin-top-10">
+                <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} toggleMenu={toggleLogoutMenu} />
+                {displayMenu && <Menu options={["Logout"]} onSelect={handleLogout} />}
+              </div>
+            </div>
+          </div>
+        )}
+        {!mobileView && (
+          <div className="sidebar">
             <Link to="/digit-ui/citizen">
               <div className="actions active">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -126,7 +134,8 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
                 </svg>
               </div>
             </Link>
-          </div>)}
+          </div>
+        )}
         <CitizenSidebar isOpen={isSidebarOpen} isMobile={mobileView} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />

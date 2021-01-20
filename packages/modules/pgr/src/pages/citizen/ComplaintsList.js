@@ -14,6 +14,10 @@ export const ComplaintsList = (props) => {
   const { path, url } = useRouteMatch();
   let { isLoading, error, data, revalidate } = Digit.Hooks.pgr.useComplaintsListByMobile(tenantId, mobileNumber);
 
+  useEffect(() => {
+    revalidate();
+  }, []);
+
   if (isLoading) {
     return (
       <React.Fragment>
@@ -32,8 +36,10 @@ export const ComplaintsList = (props) => {
       <Card>
         {t(LOCALE.ERROR_LOADING_RESULTS)
           .split("\\n")
-          .map((text) => (
-            <p style={{ textAlign: "center" }}>{text}</p>
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
           ))}
       </Card>
     );
@@ -42,8 +48,10 @@ export const ComplaintsList = (props) => {
       <Card>
         {t(LOCALE.NO_COMPLAINTS)
           .split("\\n")
-          .map((text) => (
-            <p style={{ textAlign: "center" }}>{text}</p>
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
           ))}
       </Card>
     );

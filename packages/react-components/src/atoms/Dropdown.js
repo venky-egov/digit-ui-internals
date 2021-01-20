@@ -7,9 +7,11 @@ const TextField = (props) => {
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");
-  }, [props.selectedVal]);
+  }, [props.selectedVal, props.forceSet]);
 
   function inputChange(e) {
+    if (props.freeze) return;
+
     setValue(e.target.value);
     props.setFilter(e.target.value);
   }
@@ -42,16 +44,11 @@ const Dropdown = (props) => {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
+  const [forceSet, setforceSet] = useState(0);
 
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
-
-  useEffect(() => {
-    if (props.forceClose) {
-      setDropdownStatus(false);
-    }
-  }, [props.forceClose]);
 
   function dropdownSwitch() {
     var current = dropdownStatus;
@@ -59,8 +56,7 @@ const Dropdown = (props) => {
   }
 
   function dropdownOn(val) {
-    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 200);
-
+    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 500);
     const timerId = waitForOptions();
 
     return () => {
@@ -69,12 +65,15 @@ const Dropdown = (props) => {
   }
 
   function onSelect(val) {
-    // console.log(val,"curent", selectedOption,"old");
+    //console.log(val, "curent", selectedOption, "old");
     if (val !== selectedOption) {
       // console.log(val,"is selected");
       props.select(val);
       setSelectedOption(val);
       setDropdownStatus(false);
+    } else {
+      setSelectedOption(val);
+      setforceSet(forceSet + 1);
     }
   }
 
@@ -88,6 +87,7 @@ const Dropdown = (props) => {
       <div className={dropdownStatus ? "select-active" : "select"} style={{ borderColor: props.disable ? "#ccc" : "revert" }}>
         <TextField
           setFilter={setFilter}
+          forceSet={forceSet}
           selectedVal={
             selectedOption
               ? props.t
@@ -101,10 +101,10 @@ const Dropdown = (props) => {
           // onClick={dropdownOn}
           dropdownDisplay={dropdownOn}
           disable={props.disable}
-        />
+          freeze={props.freeze ? true : false}
         <ArrowDown onClick={dropdownSwitch} disable={props.disable} />
       </div>
-      {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
+      {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">

@@ -49,11 +49,11 @@ const initRequestBody = (tenantId) => ({
   },
 });
 
-const getCriteria = ({ tenantId, moduleDetails }) => {
+const getCriteria = (tenantId, moduleDetails) => {
   return {
     MdmsCriteria: {
       tenantId,
-      moduleDetails,
+      ...moduleDetails,
     },
   };
 };
@@ -129,6 +129,24 @@ const getPropertyTypeCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getPropertyUsageCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PropertyType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -136,7 +154,7 @@ const GetEgovLocations = (MdmsRes) => {
   }));
 };
 
-const GetServiceDefs = (MdmsRes) => MdmsRes["RAINMAKER-PGR"].ServiceDefs.filter((def) => def.active);
+const GetServiceDefs = (MdmsRes, moduleCode) => MdmsRes[`RAINMAKER-${moduleCode}`].ServiceDefs.filter((def) => def.active);
 
 const GetSanitationType = (MdmsRes) => MdmsRes["FSM"].SanitationType.filter((type) => type.active);
 
@@ -145,14 +163,14 @@ const GetApplicationChannel = (MdmsRes) => MdmsRes["FSM"].ApplicationChannel.fil
 const GetPropertyType = (MdmsRes) =>
   MdmsRes["PropertyTax"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({
     ...item,
-    name: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
+    i18nKey: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
     code: item.code,
   }));
 
 const GetPropertySubtype = (MdmsRes) =>
   MdmsRes["PropertyTax"].PropertyType.filter((property) => property.active && property.propertyType).map((item) => ({
     ...item,
-    name: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
+    i18nKey: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
     code: item.code,
   }));
 
@@ -163,7 +181,7 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
     case "egovLocation":
       return GetEgovLocations(MdmsRes);
     case "serviceDefs":
-      return GetServiceDefs(MdmsRes);
+      return GetServiceDefs(MdmsRes, moduleCode);
     case "ApplicationChannel":
       return GetApplicationChannel(MdmsRes);
     case "SanitationType":
@@ -186,32 +204,35 @@ export const MdmsService = {
       useCache: true,
       params: { tenantId: stateCode },
     }),
-  call: (details, tenantId) =>
+  call: (tenantId, details) =>
     ServiceRequest({
       serviceName: "mdmsCall",
       url: Urls.MDMS,
-      data: getCriteria(details),
+      data: getCriteria(tenantId, details),
       useCache: true,
       params: { tenantId },
     }),
-  getDataByCriteria: async (mdmsDetails, moduleCode) => {
+  getDataByCriteria: async (tenantId, mdmsDetails, moduleCode) => {
     console.log("mdms request details ---->", mdmsDetails);
-    const { MdmsRes } = await MdmsService.call(mdmsDetails.details);
-    return transformResponse(mdmsDetails.type, MdmsRes, moduleCode);
+    const { MdmsRes } = await MdmsService.call(tenantId, mdmsDetails.details);
+    return transformResponse(mdmsDetails.type, MdmsRes, moduleCode.toUpperCase());
   },
   getServiceDefs: (tenantId, moduleCode) => {
-    return MdmsService.getDataByCriteria(getModuleServiceDefsCriteria(tenantId, moduleCode), moduleCode);
+    return MdmsService.getDataByCriteria(tenantId, getModuleServiceDefsCriteria(tenantId, moduleCode), moduleCode);
   },
   getSanitationType: (tenantId, moduleCode) => {
-    return MdmsService.getDataByCriteria(getSanitationTypeCriteria(tenantId, moduleCode), moduleCode);
+    return MdmsService.getDataByCriteria(tenantId, getSanitationTypeCriteria(tenantId, moduleCode), moduleCode);
   },
   getApplicationChannel: (tenantId, moduleCode) => {
-    return MdmsService.getDataByCriteria(getApplicationChannelCriteria(tenantId, moduleCode), moduleCode);
+    return MdmsService.getDataByCriteria(tenantId, getApplicationChannelCriteria(tenantId, moduleCode), moduleCode);
   },
   getPropertyType: (tenantId, moduleCode, type) => {
-    return MdmsService.getDataByCriteria(getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
+    return MdmsService.getDataByCriteria(tenantId, getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getPropertyUsage: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getPropertyUsageCriteria(tenantId, moduleCode, type), moduleCode);
   },
   getPropertySubtype: (tenantId, moduleCode, type) => {
-    return MdmsService.getDataByCriteria(getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
+    return MdmsService.getDataByCriteria(tenantId, getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
   },
 };

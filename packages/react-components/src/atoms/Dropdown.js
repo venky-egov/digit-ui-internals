@@ -41,11 +41,7 @@ const Dropdown = (props) => {
 
   function dropdownSwitch() {
     var current = dropdownStatus;
-    if (current) {
-      console.log("insidh else");
-      document.removeEventListener("mousedown", handleClick, false);
-    } else {
-      console.log("insidh");
+    if (!current) {
       document.addEventListener("mousedown", handleClick, false);
     }
     setDropdownStatus(!current);
@@ -73,7 +69,7 @@ const Dropdown = (props) => {
       // console.log(val,"is selected");
       props.select(val);
       setSelectedOption(val);
-      dropdownSwitch();
+      setDropdownStatus(false);
     } else {
       setSelectedOption(val);
       setforceSet(forceSet + 1);

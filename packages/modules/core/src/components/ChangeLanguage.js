@@ -9,7 +9,6 @@ const ChangeLanguage = (prop) => {
   const commonState = useSelector((state) => state.common);
   const { languages, selectedLanguage, stateInfo } = commonState;
   const [selected, setselected] = useState(selectedLanguage);
-
   const handleChangeLanguage = (language) => {
     console.log("changing language", language);
     setselected(language.value);
@@ -23,6 +22,7 @@ const ChangeLanguage = (prop) => {
         optionKey={"label"}
         select={handleChangeLanguage}
         freeze={true}
+        customSelector={<label className="right cp" >{languages.find((language)=>language.value === selected).label}</label>}
       />
     </div>
   } else {

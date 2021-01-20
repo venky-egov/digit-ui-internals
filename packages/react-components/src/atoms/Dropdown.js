@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
 
@@ -7,7 +7,7 @@ const TextField = (props) => {
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");
-  }, [props.selectedVal, props.forceSet]);
+  }, [props.selectedVal, props.forceSet, ref]);
 
   function inputChange(e) {
     if (props.freeze) return;
@@ -33,14 +33,30 @@ const Dropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
   const [forceSet, setforceSet] = useState(0);
-
+  const optionRef = useRef(null);
+  const hasCustomSelector = props.customSelector ? true : false;
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
 
   function dropdownSwitch() {
     var current = dropdownStatus;
+    if (current) {
+      console.log("insidh else");
+      document.removeEventListener("mousedown", handleClick, false);
+    } else {
+      console.log("insidh");
+      document.addEventListener("mousedown", handleClick, false);
+    }
     setDropdownStatus(!current);
+  }
+
+  function handleClick(e) {
+    console.log("event calll", optionRef);
+    if (!optionRef.current.contains(e.target)) {
+      document.removeEventListener("mousedown", handleClick, false);
+      setDropdownStatus(false);
+    }
   }
 
   function dropdownOn(val) {
@@ -58,7 +74,7 @@ const Dropdown = (props) => {
       // console.log(val,"is selected");
       props.select(val);
       setSelectedOption(val);
-      setDropdownStatus(false);
+      dropdownSwitch();
     } else {
       setSelectedOption(val);
       setforceSet(forceSet + 1);
@@ -72,30 +88,38 @@ const Dropdown = (props) => {
   return (
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
-      <div className={dropdownStatus ? "select-active" : "select"}>
-        <TextField
-          setFilter={setFilter}
-          forceSet={forceSet}
-          selectedVal={
-            selectedOption
-              ? props.t
-                ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
-                : props.optionKey
-                ? selectedOption[props.optionKey]
-                : selectedOption
-              : null
-          }
-          filterVal={filterVal}
-          // onClick={dropdownOn}
-          dropdownDisplay={dropdownOn}
-          freeze={props.freeze ? true : false}
-        />
-        <ArrowDown onClick={dropdownSwitch} />
-      </div>
+      {hasCustomSelector && (
+        <div className="margin-right-30 cp" onClick={dropdownSwitch}>
+          {props.showArrow && <ArrowDown className="right" onClick={dropdownSwitch} />}
+          {props.customSelector}
+        </div>
+      )}
+      {!hasCustomSelector && (
+        <div className={dropdownStatus ? "select-active" : "select"}>
+          <TextField
+            setFilter={setFilter}
+            forceSet={forceSet}
+            selectedVal={
+              selectedOption
+                ? props.t
+                  ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
+                  : props.optionKey
+                  ? selectedOption[props.optionKey]
+                  : selectedOption
+                : null
+            }
+            filterVal={filterVal}
+            // onClick={dropdownOn}
+            dropdownDisplay={dropdownOn}
+            freeze={props.freeze ? true : false}
+          />
+          <ArrowDown onClick={dropdownSwitch} />
+        </div>
+      )}
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
-          <div className="options-card">
+          <div className={`${hasCustomSelector ? "margin-top-35" : ""} options-card`} ref={optionRef}>
             {props.option &&
               props.option
                 .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
@@ -104,7 +128,8 @@ const Dropdown = (props) => {
                     // console.log(props.t(option[props.optionKey]));
                   }
                   return (
-                    <p key={index} onClick={() => onSelect(option)}>
+                    <p className="cp" key={index} onClick={() => onSelect(option)}>
+                      {option.icon && <span className="icon"> {option.icon} </span>}
                       {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
                     </p>
                   );
@@ -129,6 +154,8 @@ const Dropdown = (props) => {
 };
 
 Dropdown.propTypes = {
+  customSelector: PropTypes.any,
+  showArrow: PropTypes.bool,
   selected: PropTypes.any,
   style: PropTypes.object,
   option: PropTypes.array,
@@ -137,6 +164,9 @@ Dropdown.propTypes = {
   t: PropTypes.func,
 };
 
-Dropdown.defaultProps = {};
+Dropdown.defaultProps = {
+  customSelector: null,
+  showArrow: true,
+};
 
 export default Dropdown;

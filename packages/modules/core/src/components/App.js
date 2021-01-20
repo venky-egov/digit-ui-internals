@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
-import { TopBar, Menu, Card } from "@egovernments/digit-ui-react-components";
+import { TopBar, Dropdown, LogoutIcon } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "./ChangeLanguage";
 
 import { AppModules } from "./AppModules";
@@ -27,9 +27,11 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
     Digit.UserService.logout();
   };
 
-  const toggleLogoutMenu = () => {
-    toggleMenu(!displayMenu);
+  const handleUserSelection = (option) => {
+    option.func();
   };
+
+  const userOptions = [{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
 
   const mobileView = innerWidth <= 640;
   return (
@@ -117,10 +119,17 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
               <div className="left w-80">
                 <ChangeLanguage dropdown={true} />
               </div>
-              <div className="left margin-top-10">
-                <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} toggleMenu={toggleLogoutMenu} />
-                {displayMenu && <Menu options={["Logout"]} onSelect={handleLogout} />}
+              <div className="left margin-top-6">
+                <Dropdown
+                  option={userOptions}
+                  optionKey={"name"}
+                  select={handleUserSelection}
+                  showArrow={false}
+                  freeze={true}
+                  customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} />}
+                />
               </div>
+              {/* <img className="state" src={logoUrl} /> */}
             </div>
           </div>
         )}

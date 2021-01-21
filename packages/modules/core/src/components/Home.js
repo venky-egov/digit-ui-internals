@@ -23,7 +23,7 @@ const allLinks = [
 
 const EmployeeHome = () => {
   const { t } = useTranslation();
-  const DSO = Digit.UserService.hasAccess("DSO") || 1;
+  const DSO = Digit.UserService.hasAccess("DSO");
 
   return (
     <div className="employee-app-container">

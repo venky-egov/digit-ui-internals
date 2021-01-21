@@ -10,7 +10,7 @@ const Inbox = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useState({ filters: {}, search: "", sort: {} });
 
-  const DSO = Digit.UserService.hasAccess("DSO") || 1;
+  const DSO = Digit.UserService.hasAccess("DSO");
 
   const handleFilterChange = (filterParam) => {
     // console.log("handleFilterChange", { ...searchParams, filters: filterParam });

@@ -39,7 +39,7 @@ const ApplicationDetails = (props) => {
     { key: "Type B", name: "Type B" },
   ]);
 
-  const DSO = Digit.UserService.hasAccess("DSO") || 1;
+  const DSO = Digit.UserService.hasAccess("DSO");
 
   function selectVehicle(value) {
     setVehicle(value);

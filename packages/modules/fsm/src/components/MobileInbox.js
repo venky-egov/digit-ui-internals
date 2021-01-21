@@ -23,7 +23,7 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
   // }));
   const localizedData = data;
 
-  const DSO = Digit.UserService.hasAccess("DSO") || 1;
+  const DSO = Digit.UserService.hasAccess("DSO");
 
   return (
     <div style={{ padding: 0 }}>

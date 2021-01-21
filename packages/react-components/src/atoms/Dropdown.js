@@ -84,7 +84,7 @@ const Dropdown = (props) => {
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
       {hasCustomSelector && (
-        <div className={`margin-right-30 cp margin-top-6 ${props.showArrow ? "flex-right" : ""}`} onClick={dropdownSwitch}>
+        <div className={props.showArrow ? "cp margin-top-6 flex-right column-gap-5" : "cp margin-top-6"} onClick={dropdownSwitch}>
           {props.customSelector}
           {props.showArrow && <ArrowDown onClick={dropdownSwitch} />}
         </div>

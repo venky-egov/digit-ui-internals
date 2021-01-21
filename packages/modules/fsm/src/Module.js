@@ -15,7 +15,8 @@ import CollectPayment from "./pages/employee/CollectPayment";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
-import Inbox from "./pages/employee/Inbox";
+// import Inbox from "./pages/employee/Inbox";
+import Inbox from "./pages/employee/Inbox/alt";
 
 import { useTranslation } from "react-i18next";
 

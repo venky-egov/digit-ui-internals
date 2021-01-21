@@ -1,13 +1,14 @@
 import config from "./config";
+import React from "react";
 
 import FSMLink from "../../../components/inbox/FSMLink";
 import ApplicationTable from "../../../components/inbox/ApplicationTable";
 import Filter from "../../../components/inbox/Filter";
 import SearchApplication from "../../../components/inbox/search";
 
-export const InboxComposer = () => {
-  const selector = ({ component }) => {
-    switch (component.type) {
+const InboxComposer = () => {
+  const selector = ({ type }) => {
+    switch (type) {
       // case "links":
       //   return <FSMLink/>
 
@@ -21,9 +22,11 @@ export const InboxComposer = () => {
       //   return <ApplicationTable />
 
       default:
-        return <div>{component.type} not supported please add in InboxComposer</div>;
+        return <div>{type} not supported please add in InboxComposer</div>;
     }
   };
 
-  return config.map((component) => selector(component.type));
+  return config.map((component) => selector(component));
 };
+
+export default InboxComposer;

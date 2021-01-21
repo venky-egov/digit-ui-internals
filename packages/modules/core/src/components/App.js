@@ -27,7 +27,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
     Digit.UserService.logout();
   };
 
-  const handleUserSelection = (option) => {
+  const handleUserDropdownSelection = (option) => {
     option.func();
   };
 
@@ -43,8 +43,20 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
             {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
           </span>
           {!mobileView && (
-            <div className="right">
-              <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />
+            <div className="flex-right w-80 right">
+              <div className="left">
+                <ChangeLanguage dropdown={true} />
+              </div>
+              <div className="left">
+                <Dropdown
+                  option={userOptions}
+                  optionKey={"name"}
+                  select={handleUserDropdownSelection}
+                  showArrow={false}
+                  freeze={true}
+                  customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
+                />
+              </div>
               <img className="state" src={logoUrl} />
             </div>
           )}
@@ -123,7 +135,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
                 <Dropdown
                   option={userOptions}
                   optionKey={"name"}
-                  select={handleUserSelection}
+                  select={handleUserDropdownSelection}
                   showArrow={false}
                   freeze={true}
                   customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} />}

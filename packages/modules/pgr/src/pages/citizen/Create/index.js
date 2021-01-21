@@ -42,7 +42,7 @@ export const CreateComplaint = () => {
     let { nextStep } = config.routes[currentPath];
     let compType = Digit.SessionStorage.get(PGR_CITIZEN_CREATE_COMPLAINT);
     if (nextStep === "sub-type" && compType.complaintType.key === "Others") {
-      setParams({ ...params, subType: { key: "Others" } });
+      setParams({ ...params, complaintType: { key: "Others", name: "Others" }, subType: { key: "Others", name: "Others" } });
       nextStep = config.routes[nextStep].nextStep;
     }
     setNextStep(nextStep);
@@ -52,7 +52,6 @@ export const CreateComplaint = () => {
     if (paramState?.complaintType) {
       const { city_complaint, locality_complaint, uploadedImages, complaintType, subType, details, ...values } = paramState;
       const { code: cityCode, name: city } = city_complaint;
-
       const { code: localityCode, name: localityName } = locality_complaint;
       const _uploadImages = uploadedImages?.map((url) => ({
         documentType: "PHOTO",

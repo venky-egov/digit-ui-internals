@@ -7,7 +7,7 @@ const TextField = (props) => {
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");
-  }, [props.selectedVal, props.forceSet, ref]);
+  }, [props.selectedVal, props.forceSet]);
 
   function inputChange(e) {
     if (props.freeze) return;

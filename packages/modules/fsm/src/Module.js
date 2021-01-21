@@ -16,6 +16,7 @@ import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
+import MarkForDisposal from "./pages/MarkForDisposal";
 
 import { useTranslation } from "react-i18next";
 
@@ -33,6 +34,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
+        <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />
       </div>
     </Switch>
   );

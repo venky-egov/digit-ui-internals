@@ -102,6 +102,7 @@ const Dropdown = (props) => {
           dropdownDisplay={dropdownOn}
           disable={props.disable}
           freeze={props.freeze ? true : false}
+        />
         <ArrowDown onClick={dropdownSwitch} disable={props.disable} />
       </div>
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}

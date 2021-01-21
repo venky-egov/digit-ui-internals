@@ -39,7 +39,7 @@ const ApplicationDetails = (props) => {
     { key: "Type B", name: "Type B" },
   ]);
 
-  const DSO = Digit.UserService.hasAccess("DSO");
+  const DSO = Digit.UserService.hasAccess("DSO") || 1;
 
   function selectVehicle(value) {
     setVehicle(value);
@@ -145,17 +145,20 @@ const ApplicationDetails = (props) => {
           { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
         ],
       },
-      {
-        title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
-        values: [
-          { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: "Jagdamba Cleaners" },
-          { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: "KA8272722" },
-          { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: "2280 ltrs" },
-          { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: "12/08/2020" },
-        ],
-      },
     ],
   };
+
+  if (DSO) {
+    applicationDetails?.details?.push({
+      title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
+      values: [
+        { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: "Jagdamba Cleaners" },
+        { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: "KA8272722" },
+        { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: "2280 ltrs" },
+        { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: "12/08/2020" },
+      ],
+    });
+  }
 
   const timeline = [
     {

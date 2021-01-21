@@ -4,18 +4,21 @@ import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
+let pgrQuery = {};
+let wfQuery = {};
+
 const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
   const { searchParams } = props;
   const { t } = useTranslation();
-  const isAssignedToMe = searchParams?.filters?.wfQuery?.assignee ? true : false;
+  const isAssignedToMe = searchParams?.filters?.wfFilters?.assignee && searchParams?.filters?.wfFilters?.assignee[0]?.code ? true : false;
   const [selectAssigned, setSelectedAssigned] = useState(
     isAssignedToMe ? { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") } : { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") }
   );
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [pgrfilters, setPgrFilters] = useState(
-    ((searchParams || {}).filters || {}).pgrfilters || {
+    searchParams?.filters?.pgrfilters || {
       serviceCode: [],
       locality: [],
       applicationStatus: [],
@@ -23,8 +26,8 @@ const Filter = (props) => {
   );
 
   const [wfFilters, setWfFilters] = useState(
-    ((searchParams || {}).filters || {}).wfFilters || {
-      assignee: [{ code: uuid }],
+    searchParams?.filters?.wfFilters || {
+      assignee: [{ code: "" }],
     }
   );
 
@@ -37,8 +40,6 @@ const Filter = (props) => {
     uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
     setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
   };
-  let pgrQuery = {};
-  let wfQuery = {};
 
   useEffect(() => {
     let count = 0;
@@ -56,16 +57,19 @@ const Filter = (props) => {
         let params = wfFilters[property].map((prop) => prop.code).join();
         if (params) {
           wfQuery[property] = params;
+        } else {
+          wfQuery = {};
         }
       }
     }
     count += wfFilters?.assignee?.length || 0;
 
-    Digit.SessionStorage.set("pgr_filter_count", count);
     if (props.type !== "mobile") {
       handleFilterSubmit();
     }
-    console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
+
+    Digit.inboxFilterCount = count;
+    // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
   }, [pgrfilters, wfFilters]);
 
   const ifExists = (list, key) => {
@@ -133,7 +137,6 @@ const Filter = (props) => {
   }
 
   const handleFilterSubmit = () => {
-    console.log("submit filter called", { pgrQuery: pgrQuery, wfQuery: wfQuery, wfFilters, pgrfilters });
     props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery, wfFilters, pgrfilters });
   };
 

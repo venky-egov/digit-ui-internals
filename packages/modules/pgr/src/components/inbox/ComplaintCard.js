@@ -10,7 +10,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
   const { t } = useTranslation();
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
-  const [filterCount, setFilterCount] = useState(Digit.SessionStorage.get("pgr_filter_count") || 0);
+  const [filterCount, setFilterCount] = useState(Digit.inboxFilterCount || 1);
 
   const handlePopupAction = (type) => {
     if (type === "SEARCH") {
@@ -61,11 +61,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
     <React.Fragment>
       <div className="searchBox">
         <SearchAction text="SEARCH" handleActionClick={() => handlePopupAction("SEARCH")} />
-        <FilterAction
-          filterCount={Digit.SessionStorage.get("pgr_filter_count")}
-          text="FILTER"
-          handleActionClick={() => handlePopupAction("FILTER")}
-        />
+        <FilterAction filterCount={filterCount} text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
         {/* <FilterAction text="SORT" handleActionClick={handlePopupAction} /> */}
       </div>
       {result}

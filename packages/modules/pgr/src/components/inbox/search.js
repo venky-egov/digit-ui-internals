@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar } from "@egovernments/digit-ui-react-components";
 
-const SearchComplaint = ({ onSearch, type, onClose, searchParams}) => {
+const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
   const [complaintNo, setComplaintNo] = useState(searchParams?.search?.serviceRequestId || "");
   const [mobileNo, setMobileNo] = useState(searchParams?.search?.mobileNumber || "");
   const { register, errors, handleSubmit, reset } = useForm();
@@ -15,7 +15,10 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams}) => {
         onSearch({ serviceRequestId: data.serviceRequestId });
       } else if (data.mobileNumber !== "") {
         onSearch({ mobileNumber: data.mobileNumber });
+      } else {
+        onSearch({});
       }
+
       if (type === "mobile") {
         onClose();
       }

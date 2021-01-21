@@ -6,7 +6,7 @@ import Filter from "./Filter";
 import SearchComplaint from "./search";
 import { LOCALE } from "../../constants/Localization";
 
-export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey }) => {
+export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey, searchParams }) => {
   const { t } = useTranslation();
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -16,7 +16,9 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
     if (type === "SEARCH") {
       setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} onSearch={onSearch} />);
     } else if (type === "FILTER") {
-      setSelectedComponent(<Filter complaints={data} onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
+      setSelectedComponent(
+        <Filter complaints={data} onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" searchParams={searchParams} />
+      );
     }
     setPopup(true);
   };

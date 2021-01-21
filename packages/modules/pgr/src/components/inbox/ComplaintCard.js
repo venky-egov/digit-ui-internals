@@ -14,7 +14,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
 
   const handlePopupAction = (type) => {
     if (type === "SEARCH") {
-      setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} onSearch={onSearch} />);
+      setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} onSearch={onSearch} searchParams={searchParams} />);
     } else if (type === "FILTER") {
       setSelectedComponent(
         <Filter complaints={data} onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" searchParams={searchParams} />

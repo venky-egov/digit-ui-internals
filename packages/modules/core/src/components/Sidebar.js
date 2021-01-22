@@ -50,7 +50,7 @@ export const CitizenSidebar = ({ isOpen, isMobile, toggleSidebar, onLogout }) =>
   const { stateInfo } = useSelector((state) => state.common);
   const user = Digit.UserService.getUser();
   const { t } = useTranslation();
-  let menuItems = SideBarMenu;
+  let menuItems = [...SideBarMenu(t)];
   let profileItem;
   if (user && user.access_token) {
     profileItem = <Profile info={user.info} stateName={stateInfo.name} />;

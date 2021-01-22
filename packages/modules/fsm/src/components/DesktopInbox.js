@@ -31,26 +31,24 @@ const DesktopInbox = (props) => {
       {
         Header: t("ES_INBOX_APPLICATION_NO"),
         accessor: "applicationNo",
-        // Cell: (row) => {
-        //   return (
-        //     <div>
-        //       <span className="link">
-        //         <Link to={"/digit-ui/employee/fsm/complaint/details/" + row.row.original["serviceRequestId"]}>
-        //           {row.row.original["serviceRequestId"]}
-        //         </Link>
-        //       </span>
-        //       {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
-        //       <br />
-        //       <span style={{ marginTop: "4px", color: "#505A5F" }}>{t(`SERVICEDEFS.${row.row.original["complaintSubType"].toUpperCase()}`)}</span>
-        //     </div>
-        //   );
-        // },
+        Cell: ({ row }) => {
+          return (
+            <div>
+              <span className="link">
+                <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+              </span>
+              {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
+            </div>
+          );
+        },
       },
       {
         Header: t("ES_INBOX_APPLICATION_DATE"),
         accessor: "createdTime",
         Cell: ({ row }) => {
-          return GetCell(`${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth()}/${row.original.createdTime.getFullYear()}`);
+          return GetCell(
+            `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
+          );
         },
         // Cell: (row) => {
         //   return GetCell(
@@ -76,10 +74,9 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
-        accessor: "sla",
-        // Cell: (row) => {
-        //   return GetSlaCell(row.row.original["sla"]);
-        // },
+        Cell: ({ row }) => {
+          return GetSlaCell(row.original["sla"]);
+        },
       },
     ],
     []

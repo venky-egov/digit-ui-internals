@@ -9,15 +9,23 @@ import MobileInbox from "../../components/MobileInbox";
 const Inbox = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
-  const { data: applications, isLoading, isIdle, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, { mobileNumber: "9999999999" });
+  const [searchParams, setSearchParams] = useState({ mobileNumber: "9999999999" });
+  const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
+    ...searchParams,
+    uuid: Digit.UserService.getUser().uuid,
+  });
+
+  // useEffect(() => {
+  //   revalidate();
+  // }, [searchParams])
 
   const handleFilterChange = (filterParam) => {
     // console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     // setSearchParams({ ...searchParams, filters: filterParam });
   };
 
-  const onSearch = (params = "") => {
-    // setSearchParams({ ...searchParams, search: params });
+  const onSearch = (params = {}) => {
+    setSearchParams({ ...searchParams, ...params });
   };
 
   let isMobile = window.Digit.Utils.browser.isMobile;

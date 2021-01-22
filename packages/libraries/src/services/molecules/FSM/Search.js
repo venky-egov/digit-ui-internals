@@ -6,6 +6,6 @@ export const Search = {
   },
 
   application: (tenantId, filters = {}) => {
-    return FSMService.search(tenantId, { ...filters });
+    return FSMService.search(tenantId, { ...filters, limit: 1000 });
   },
 };

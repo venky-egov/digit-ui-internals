@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from "react-query";
 import useSearchAll from "./useSearch";
 
-const useInbox = (tenantId, filters = {}) => {
+const useInbox = (tenantId, filters) => {
   const client = useQueryClient();
-  const { isLoading, isError, data } = useSearchAll({ tenantId, ...filters });
+  const { isLoading, isError, data } = useSearchAll(tenantId, filters);
 
   const fetchInboxData = async () => {
     let result = [];
@@ -22,7 +22,7 @@ const useInbox = (tenantId, filters = {}) => {
     }
   };
 
-  const result = useQuery("FSM_INBOX", fetchInboxData, { enabled: !!data });
+  const result = useQuery(["FSM_INBOX", data], fetchInboxData, { enabled: !!data });
   return { ...result, revalidate: () => client.refetchQueries(["FSM_INBOX"]) };
 };
 

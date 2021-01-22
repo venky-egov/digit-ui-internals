@@ -77,7 +77,7 @@ const Response = ({ data, onSuccess }) => {
           title: "Application Details",
           values: [
             { title: "Application No.", value: applicationDetails.applicationNo },
-            { title: "Application Date", value: "12/08/2020" },
+            { title: "Application Date", value: date.toLocaleDateString() },
             { title: "Application Channel", value: "Counter" },
           ],
         },

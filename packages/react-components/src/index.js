@@ -71,6 +71,7 @@ import FormStep from "./molecules/FormStep";
 import RatingCard from "./molecules/RatingCard";
 import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
+import Links from "./molecules/Links";
 
 import { FormComposer } from "./hoc/FormComposer";
 
@@ -157,6 +158,7 @@ export {
   FilterAction,
   ApplyFilterBar,
   RemoveableTag,
+  Links,
   // hoc
   FormComposer,
   RoundedLabel,

@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader, Header } from "@egovernments/digit-ui-react-components";
 
-import DesktopInbox from "../../components/DesktopInbox";
-import MobileInbox from "../../components/MobileInbox";
+import DesktopInbox from "../../../components/DesktopInbox";
+import MobileInbox from "../../../components/MobileInbox";
 
 const Inbox = () => {
   const { t } = useTranslation();

@@ -4,7 +4,7 @@ import { Switch, Route, useRouteMatch, useLocation } from "react-router-dom";
 import { BackButton, ActionBar, Menu, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { ComplaintDetails } from "./ComplaintDetails";
 import { CreateComplaint } from "./CreateComplaint";
-import Inbox from "./Inbox";
+import Inbox from "./Inbox/alt";
 import { Employee } from "../../constants/Routes";
 import Response from "./Response";
 

@@ -53,11 +53,11 @@ export const FormComposer = (props) => {
             {section.body.map((field, index) => {
               const FieldPair = () => (
                 <React.Fragment>
-                  <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field.disable ? "#ccc" : "revert" }}>
-                    {field.label}
-                    {field.isMandatory ? " * " : null}
+                  <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
+                    {field?.label}
+                    {field?.isMandatory ? " * " : null}
                   </CardLabel>
-                  <div className="field">{fieldSelector(field.type, field.populators, field.disable)}</div>
+                  <div className="field">{fieldSelector(field?.type, field?.populators, field?.disable)}</div>
                 </React.Fragment>
               );
 
@@ -69,7 +69,7 @@ export const FormComposer = (props) => {
                 </LabelFieldPair>
               );
             })}
-            {array.length - 1 === index ? null : <BreakLine />}
+            {!props.noBreakLine && (array.length - 1 === index ? null : <BreakLine />)}
           </React.Fragment>
         );
       }),

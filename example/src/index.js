@@ -20,6 +20,7 @@ import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
 import Registry from "./ComponentRegistry";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
+import { fsmCustomizations, fsmComponents } from "./fsm";
 
 initLibraries();
 
@@ -28,6 +29,7 @@ const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, FSM_EMPLOYEE };
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({
   ...pgrComponents,
+  ...fsmComponents,
   PGRLinks,
   PGRModule,
   FSMModule,
@@ -37,7 +39,7 @@ const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
 });
 
-window.Digit.Customizations = { PGR: pgrCustomizations };
+window.Digit.Customizations = { PGR: pgrCustomizations, FSM: fsmCustomizations };
 
 const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
 

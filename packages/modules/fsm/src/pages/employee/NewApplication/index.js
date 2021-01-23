@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Dropdown, FormComposer } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import CONSTANTS from "../../../constants";
+import FSM_UTILS from "../../../utils";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
@@ -155,151 +157,56 @@ export const NewApplication = ({ parentUrl, heading }) => {
     history.push("/digit-ui/employee/fsm/response", formData);
   };
 
-  const config = [
-    {
-      head: t("ES_TITLE_APPLICATION_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
-          type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} />,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
-          type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
-          type: "text",
-          isMandatory: true,
-          populators: {
-            name: "applicantName",
-            validation: {
-              required: true,
-              pattern: /[A-Za-z]/,
-            },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
-          type: "text",
-          isMandatory: true,
-          populators: {
-            name: "mobileNumber",
-            validation: {
-              required: true,
-              pattern: /^[6-9]\d{9}$/,
-            },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-          type: "radio",
-          isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
-        },
-      ],
-    },
-    {
-      head: t("ES_NEW_APPLICATION_PROPERTY_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />
-          ),
-        },
-        {
-          label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
-          isMandatory: true,
-          type: "dropdown",
-          menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} />,
-        },
-      ],
-    },
-    {
-      head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_PINCODE"),
-          type: "text",
-          populators: {
-            name: "pincode",
-            validation: { pattern: /^[1-9][0-9]{5}$/ },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
-          ),
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
-          type: "textarea",
-          populators: {
-            name: "landmark",
-          },
-        },
-      ],
-    },
-    {
-      head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
-          type: "text",
-          populators: {
-            name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
-          isMandatory: true,
-          type: "text",
-          populators: {
-            name: "amount",
-            validation: { pattern: /[0-9]+/ },
-            componentInFront: (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                ₹
-              </span>
-            ),
-          },
-        },
-      ],
-    },
-    {
-      head: t(),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
-        },
-      ],
-    },
-  ];
+  const { detailsConfig } = CONSTANTS({
+    t,
+    channelMenu,
+    channel,
+    selectChannel,
+    sanitationMenu,
+    sanitation,
+    selectSanitation,
+    slumMenu,
+    slum,
+    selectSlum,
+    propertyTypesData,
+    propertyType,
+    selectedType,
+    subTypeMenu,
+    subType,
+    selectedSubType,
+    vehicleMenu,
+    vehicle,
+    selectVehicle,
+    selectedCity,
+    selectCity,
+    cities,
+    selectedLocality,
+    localities,
+    selectLocality,
+  });
+
+  let config = [];
+
+  const defaultConfig = ["applicationDetails", "propertyDetails", "locationDetails", "paymentDetails"];
+
+  const { Customizations } = window.Digit;
+  let employeeCustomizations = false;
+
+  if (Customizations?.FSM?.getEmployeeApplicationCustomization) {
+    employeeCustomizations = Customizations?.FSM?.getEmployeeApplicationCustomization(defaultConfig, t);
+  }
+
+  if (employeeCustomizations?.config?.length > 0) {
+    FSM_UTILS.updateConfiguration({
+      config,
+      defaultConfig,
+      detailsConfig,
+      customConfiguration: employeeCustomizations?.config,
+      isDefaultConfig: employeeCustomizations?.defaultConfig,
+    });
+  } else {
+    defaultConfig.forEach((fieldSectionName) => config.push(detailsConfig[fieldSectionName]));
+  }
 
   return <FormComposer heading={heading} label={t("ES_COMMON_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit}></FormComposer>;
 };

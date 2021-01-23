@@ -84,7 +84,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
 
   const DSO = Digit.UserService.hasAccess("DSO");
   const { Customizations } = window.Digit;
-  const dsoCustomizations = Customizations.FSM.getDsoEditApplicationCustomization(t, dsoConfig);
+  const dsoCustomizations = Customizations.FSM.getDsoEditApplicationCustomization(dsoConfig, t);
   console.log("%c 🐺: ModifyApplication -> dsoCustomizations ", "font-size:16px;background-color:#1904dd;color:white;", dsoCustomizations);
 
   useEffect(() => {
@@ -484,21 +484,33 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const config = [];
 
   const updateConfiguration = (customConfiguration, config) => {
-    customConfiguration.forEach((item) => {
-      if (details[item.name]) {
-        details[item.name].body.push(...item.customFields);
+    customConfiguration.forEach((detail) => {
+      if (detailsConfig[detail.name]) {
+        detailsConfig[detail.name].body.push(...detail.customFields);
       }
 
-      const body = [];
-      item.fieldsOrder.forEach((fieldName) => {
-        if (details[item.name]) {
-          body.push(details[item.name].body.find((value) => value.name === fieldName));
-        }
-      });
+      let body = [];
 
-      if (details[item.name]) {
+      if (detail?.fieldsOrder?.length > 0) {
+        detail.fieldsOrder.forEach((fieldName) => {
+          if (detailsConfig[detail.name]) {
+            body.push(detailsConfig[detail.name].body.find((value) => value.name === fieldName));
+          }
+        });
+        if (detail?.allFields) {
+          detailsConfig[detail.name]?.body?.forEach((field) => {
+            if (!detail?.fieldsOrder?.includes(field.name)) {
+              body.push(detailsConfig[detail.name].body.find((value) => value.name === field.name));
+            }
+          });
+        }
+      } else {
+        body = detailsConfig[detail.name].body;
+      }
+
+      if (detailsConfig[detail.name]) {
         config.push({
-          head: details[item.name].head,
+          head: detailsConfig[detail.name].head,
           body,
         });
       }

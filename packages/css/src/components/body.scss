@@ -40,6 +40,21 @@
     @apply inline float-right;
   }
 }
+.bread-crumb{
+  font-size: 14px;
+  color: #505A5F;
+  display: flex;
+  margin-bottom: 10px;
+}
+.bread-crumb--item {
+  margin-left: 5px;
+  &:not(:last-child):after {
+    content: '  /'
+  }
+  .last {
+    color:#0B0C0C;
+  }
+}
 
 .back-btn2 {
   width: fit-content;

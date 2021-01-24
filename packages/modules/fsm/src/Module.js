@@ -20,12 +20,17 @@ import Inbox from "./pages/employee/Inbox";
 import { useTranslation } from "react-i18next";
 
 const EmployeeApp = ({ path, url, userType }) => {
+  const location = useLocation();
   return (
     <Switch>
       <div className="ground-container">
-        <BackButton>Back</BackButton>
+        <p style={{ marginBottom: "24px" }}>
+          <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
+            Home
+          </Link>{" "}
+          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
+        </p>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
-
         <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/modify-application`} component={() => <EditApplication />} />

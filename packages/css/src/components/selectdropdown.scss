@@ -91,6 +91,13 @@
   }
 }
 
+.employee-select-wrap--elipses{
+  width: 85% !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .select-wrap {
   @apply mb-lg relative;
 

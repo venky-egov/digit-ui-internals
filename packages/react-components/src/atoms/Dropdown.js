@@ -24,7 +24,7 @@ const TextField = (props) => {
     props.dropdownDisplay(false);
   }
 
-  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
+  return <input className = "employee-select-wrap--elipses" type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
 };
 
 const Dropdown = (props) => {

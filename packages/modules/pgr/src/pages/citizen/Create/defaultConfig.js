@@ -1,10 +1,12 @@
-import SelectAddress from "./Steps/SelectAddress";
 import SelectComplaintType from "./Steps/SelectComplaintType";
-import SelectDetails from "./Steps/SelectDetails";
-import SelectImages from "./Steps/SelectImages";
-import SelectLandmark from "./Steps/SelectLandmark";
-import SelectPincode from "./Steps/SelectPincode";
 import SelectSubType from "./Steps/SelectSubType";
+
+import SelectPincode from "./Steps/SelectPincode";
+import SelectAddress from "./Steps/SelectAddress";
+import SelectLandmark from "./Steps/SelectLandmark";
+
+import SelectImages from "./Steps/SelectImages";
+import SelectDetails from "./Steps/SelectDetails";
 
 export const config = {
   routes: {

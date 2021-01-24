@@ -1,4 +1,6 @@
-export const newComplaintSteps = [
+import React from "react";
+
+const complaintTypeConfig = [
   {
     path: "/complaint-type",
     texts: {
@@ -16,6 +18,9 @@ export const newComplaintSteps = [
       submitBarLabel: "PT_COMMONS_NEXT",
     },
   },
+];
+
+const addressConfig = [
   {
     path: "/pincode",
     texts: {
@@ -64,6 +69,9 @@ export const newComplaintSteps = [
       },
     ],
   },
+];
+
+const additionalDetails = [
   {
     path: "/upload-photos",
     texts: {
@@ -88,6 +96,9 @@ export const newComplaintSteps = [
       },
     ],
   },
+];
+
+const response = [
   {
     path: "/response",
     texts: {
@@ -96,3 +107,32 @@ export const newComplaintSteps = [
     },
   },
 ];
+
+const configMerger = ({ customizations, ...configs }) => {
+  function convolute(defaultConfig, modificationConfig) {
+    //remove fields
+    const CatalystConfig = modificationConfig["remove"].map((component) =>
+      defaultConfig[component.segment].filter((segment) => !segment[component.name])
+    );
+
+    //add fields
+    const finalConfig = modificationConfig["add"].map((component) => CatalystConfig[component.segment].push(component));
+    return finalConfig;
+  }
+  const newComplaintSteps = {
+    complaintType: configs.complaintTypeConfig,
+    address: configs.addressConfig,
+    additionalDetails: configs.additionalDetails,
+    response: configs.response,
+  };
+
+  return convolute(newComplaintSteps, customizations);
+};
+
+configMerger({
+  customizations: Digit.Customizations.PGR.complaintConfig,
+  complaintTypeConfig,
+  addressConfig,
+  additionalDetails,
+  response,
+});

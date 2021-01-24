@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import merge from "lodash.merge";
+// import merge from "lodash.merge";
+// import pick from "lodash.pick";
 import { useDispatch, useSelector } from "react-redux";
 import { createComplaint } from "../../../redux/actions/index";
 import { PGR_CITIZEN_COMPLAINT_CONFIG, PGR_CITIZEN_CREATE_COMPLAINT } from "../../../constants/Citizen";
@@ -21,7 +22,8 @@ export const CreateComplaint = () => {
   const common = useSelector((state) => state.common);
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
   // const [customConfig, setConfig] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_COMPLAINT_CONFIG, {});
-  const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PGR.complaintConfig), [Digit.Customizations.PGR.complaintConfig]);
+
+  const config = useMemo(() => defaultConfig, [Digit.Customizations.PGR.complaintConfig]);
   const [paramState, setParamState] = useState(params);
   const [nextStep, setNextStep] = useState("");
   const [rerender, setRerender] = useState(0);

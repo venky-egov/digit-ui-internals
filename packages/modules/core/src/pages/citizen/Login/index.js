@@ -26,15 +26,8 @@ const Login = ({ stateCode }) => {
       return;
     }
     Digit.UserService.setUser(user);
-    const {
-      info: { name },
-    } = user;
-    if (!name || name === DEFAULT_USER) {
-      history.replace(`${path}/name`);
-    } else {
-      const redirectPath = location.state?.from || "/digit-ui";
-      history.replace(redirectPath);
-    }
+    const redirectPath = location.state?.from || "/digit-ui";
+    history.replace(redirectPath);
   }, [user]);
 
   const stepItems = useMemo(() =>
@@ -69,27 +62,24 @@ const Login = ({ stateCode }) => {
       history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
       return;
     }
-    const [res2, err2] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
-    if (!err2) {
-      setIsUserRegistered(false);
-      history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
-      return;
-    }
+    setIsUserRegistered(false);
+    history.push(`${path}/name`, { from: location.state?.from || "/digit-ui" });
   };
 
   const selectName = async (name) => {
-    const { info } = user;
     const data = {
-      ...info,
-      ...name,
+      ...params,
+      tenantId: stateCode,
+      userType: getUserType(),
     };
-    const { user: updatedUser } = await Digit.UserService.updateUser(data, stateCode);
-    setUser({ ...user, info: { ...updatedUser[0] } });
+    setParmas({ ...params, ...name });
+    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+    history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
   };
 
   const selectOtp = async () => {
     try {
-      const { mobileNumber, otp } = params;
+      const { mobileNumber, otp, name } = params;
       if (isUserRegistered) {
         const requestData = {
           username: mobileNumber,
@@ -102,7 +92,7 @@ const Login = ({ stateCode }) => {
         setUser({ info, ...tokens });
       } else if (!isUserRegistered) {
         const requestData = {
-          name: DEFAULT_USER,
+          name,
           username: mobileNumber,
           otpReference: otp,
           tenantId: stateCode,

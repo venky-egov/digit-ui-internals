@@ -40,6 +40,7 @@
     @apply inline float-right;
   }
 }
+
 .bread-crumb{
   font-size: 14px;
   color: #505A5F;
@@ -48,9 +49,15 @@
 }
 .bread-crumb--item {
   margin-left: 5px;
+  
   &:not(:last-child):after {
     content: '  /'
   }
+
+  button{
+    outline: none;
+  }
+  
   .last {
     color:#0B0C0C;
   }

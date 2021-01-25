@@ -59,7 +59,7 @@ import { GetApp, ArrowLeft, HomeIcon, LanguageIcon, LogoutIcon } from "./atoms/s
 import CustomButton from "./atoms/CustomButton";
 import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
 import RoundedLabel from "./atoms/RoundedLabel";
-import BreadCrumb from "./atoms/BreadCrumb"
+import BreadCrumb from "./atoms/BreadCrumb";
 
 import RemoveableTag from "./molecules/RemoveableTag";
 import TypeSelectCard from "./molecules/TypeSelectCard";

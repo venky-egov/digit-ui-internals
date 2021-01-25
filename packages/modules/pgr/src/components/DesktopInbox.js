@@ -8,7 +8,7 @@ import Filter from "./inbox/Filter";
 import SearchComplaint from "./inbox/search";
 import { LOCALE } from "../constants/Localization";
 
-const DesktopInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
+const DesktopInbox = ({ data, onFilterChange, onSearch, isLoading, searchParams }) => {
   const { t } = useTranslation();
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
   const GetSlaCell = (value) => {
@@ -114,7 +114,7 @@ const DesktopInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
       <div className="filters-container">
         <ComplaintsLink />
         <div>
-          <Filter complaints={data} onFilterChange={onFilterChange} type="desktop" />
+          <Filter complaints={data} onFilterChange={onFilterChange} type="desktop" searchParams={searchParams} />
         </div>
       </div>
       <div style={{ flex: 1 }}>

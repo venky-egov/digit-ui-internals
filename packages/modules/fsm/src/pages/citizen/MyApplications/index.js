@@ -8,7 +8,7 @@ export const MyApplications = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { info: userInfo } = Digit.UserService.getUser();
 
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch({ tenantId, uuid: userInfo.uuid });
+  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch(tenantId, { uuid: userInfo.uuid, limit: 100 });
 
   if (isLoading) {
     return <Loader />;

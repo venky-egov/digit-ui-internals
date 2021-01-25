@@ -6,11 +6,11 @@ import { PGR_EMPLOYEE_COMPLAINT_DETAILS, PGR_EMPLOYEE_CREATE_COMPLAINT } from ".
 
 export const PgrRoutes = {
   ComplaintsPage: "/complaints",
-  RatingAndFeedBack: "/rate/:id",
-  ComplaintDetailsPage: "/complaint/details/:id",
-  ReasonPage: `/:id`,
-  UploadPhoto: `/upload-photo/:id`,
-  AddtionalDetails: `/addional-details/:id`,
+  RatingAndFeedBack: "/rate/:id*",
+  ComplaintDetailsPage: "/complaint/details/:id*",
+  ReasonPage: `/:id*`,
+  UploadPhoto: `/upload-photo/:id*`,
+  AddtionalDetails: `/addional-details/:id*`,
   CreateComplaint: "/create-complaint",
   ReopenComplaint: "/reopen",
   Response: "/response",

@@ -6,17 +6,19 @@ import Filter from "./Filter";
 import SearchComplaint from "./search";
 import { LOCALE } from "../../constants/Localization";
 
-export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey }) => {
+export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey, searchParams }) => {
   const { t } = useTranslation();
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
-  const [filterCount, setFilterCount] = useState(Digit.SessionStorage.get("pgr_filter_count") || 0);
+  const [filterCount, setFilterCount] = useState(Digit.inboxFilterCount || 1);
 
   const handlePopupAction = (type) => {
     if (type === "SEARCH") {
-      setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} onSearch={onSearch} />);
+      setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} onSearch={onSearch} searchParams={searchParams} />);
     } else if (type === "FILTER") {
-      setSelectedComponent(<Filter complaints={data} onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
+      setSelectedComponent(
+        <Filter complaints={data} onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" searchParams={searchParams} />
+      );
     }
     setPopup(true);
   };
@@ -59,11 +61,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
     <React.Fragment>
       <div className="searchBox">
         <SearchAction text="SEARCH" handleActionClick={() => handlePopupAction("SEARCH")} />
-        <FilterAction
-          filterCount={Digit.SessionStorage.get("pgr_filter_count")}
-          text="FILTER"
-          handleActionClick={() => handlePopupAction("FILTER")}
-        />
+        <FilterAction filterCount={filterCount} text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
         {/* <FilterAction text="SORT" handleActionClick={handlePopupAction} /> */}
       </div>
       {result}

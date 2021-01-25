@@ -4,6 +4,7 @@ import SelectAddress from "./SelectAddress";
 import SelectLandmark from "./SelectLandmark";
 import SelectPincode from "./SelectPincode";
 import SelectTankSize from "./SelectTankSize";
+import SelectPitType from "./SelectPitType";
 
 export const config = {
   routes: {
@@ -76,6 +77,15 @@ export const config = {
           name: "landmark",
         },
       ],
+      nextStep: "pit-type",
+    },
+    "pit-type": {
+      component: SelectPitType,
+      texts: {
+        header: "CS_FILE_PROPERTY_PIT_TYPE",
+        cardText: "CS_FILE_PROPERTY_PIT_TYPE_TEXT",
+        nextText: "PT_COMMONS_NEXT",
+      },
       nextStep: "tank-size",
     },
     "tank-size": {

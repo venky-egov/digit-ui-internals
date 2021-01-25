@@ -27,7 +27,7 @@ const Complaint = () => {
         {!location.includes(Employee.Response) && <BackButton>Back</BackButton>}
         <Switch>
           <Route path={match.url + Employee.CreateComplaint} component={() => <CreateComplaint parentUrl={match.url} />} />
-          <Route path={match.url + Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails />} />
+          <Route path={match.url + Employee.ComplaintDetails + ":id*"} component={() => <ComplaintDetails />} />
           <Route path={match.url + Employee.Inbox} component={Inbox} />
           <Route path={match.url + Employee.Response} component={Response} />
         </Switch>

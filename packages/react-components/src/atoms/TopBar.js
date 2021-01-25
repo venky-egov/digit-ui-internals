@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Hamburger from "./Hamburger";
 import Menu from "./Menu";
-import { ArrowDown } from "./svgindex";
 
 const TextToImg = ({ name }) => <span className="user-img-txt">{name[0].toUpperCase()}</span>;
 

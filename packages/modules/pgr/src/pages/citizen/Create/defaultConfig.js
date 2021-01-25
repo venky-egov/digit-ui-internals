@@ -5,6 +5,7 @@ import SelectImages from "./Steps/SelectImages";
 import SelectLandmark from "./Steps/SelectLandmark";
 import SelectPincode from "./Steps/SelectPincode";
 import SelectSubType from "./Steps/SelectSubType";
+import SelectGeolocation from "./Steps/SelectGeolocation";
 
 export const config = {
   routes: {
@@ -25,6 +26,10 @@ export const config = {
         cardText: "CS_COMPLAINT_SUBTYPE_TEXT",
         submitBarLabel: "PT_COMMONS_NEXT",
       },
+      nextStep: "map",
+    },
+    map: {
+      component: SelectGeolocation,
       nextStep: "pincode",
     },
     pincode: {

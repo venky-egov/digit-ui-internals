@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import { SearchIconSvg } from "./svgindex";
+import { Loader } from "@googlemaps/js-api-loader";
+
+//API key
+const key = globalConfigs.getConfig("GMAPS_API_KEY");
 
 const GetPinCode = (places) => {
-  console.log("Places addre component:", places.address_components);
+  console.log("Places address component:", places.address_components);
   let postalCode = null;
   places.address_components.forEach((place) => {
     let hasPostalCode = place.types.includes("postal_code");
@@ -13,26 +17,20 @@ const GetPinCode = (places) => {
 };
 
 const loadGoogleMaps = (callback) => {
-  const id = "google-maps-script";
-  const key1 = "AIzaSyCbVz7R7btwMPqVLnd7Pnhra";
-  const key2 = "c62SJHYws";
-  const url = `https://maps.googleapis.com/maps/api/js?key=${key1}_${key2}&libraries=places`;
-  const isScriptExist = document.getElementById(id);
+  const loader = new Loader({
+    apiKey: key,
+    version: "weekly",
+    libraries: ["places"],
+  });
 
-  if (!isScriptExist) {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.async = true;
-    script.defer = true;
-    script.src = url;
-    script.id = id;
-    script.onload = function () {
+  loader
+    .load()
+    .then(() => {
       if (callback) callback();
-    };
-    document.body.appendChild(script);
-  }
-
-  if (isScriptExist && callback) callback();
+    })
+    .catch((e) => {
+      // do something
+    });
 };
 
 const LocationSearch = (props) => {

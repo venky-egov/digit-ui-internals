@@ -10,11 +10,11 @@ const RadioButtons = (props) => {
   }
 
   return (
-    <div className="radio-wrap">
+    <div style={props.style} className="radio-wrap">
       {props.options.map((option, ind) => {
         if (props.optionsKey) {
           return (
-            <div key={ind}>
+            <div style={props.innerStyles} key={ind}>
               <span className="radio-btn-wrap">
                 <input
                   className="radio-btn"
@@ -55,6 +55,8 @@ RadioButtons.propTypes = {
   onSelect: PropTypes.func,
   options: PropTypes.any,
   optionsKey: PropTypes.string,
+  innerStyles: PropTypes.any,
+  style: PropTypes.any,
 };
 
 RadioButtons.defaultProps = {};

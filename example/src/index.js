@@ -18,11 +18,15 @@ import QACSR from "./userInfo/qa-csr.json";
 import QACT from "./userInfo/qa-citizen.json";
 import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
 
+import * as comps from "@egovernments/digit-ui-react-components";
+
 import Registry from "./ComponentRegistry";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
+
+console.log("comps", comps);
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, FSM_EMPLOYEE };
 

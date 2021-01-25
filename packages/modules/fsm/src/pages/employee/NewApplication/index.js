@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { Dropdown, PitDimension } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,6 +10,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = tenantId.split(".")[0];
+  console.log(state, "state");
   const [menu, setMenu] = useState([]);
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
@@ -22,6 +24,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [channelMenu, setChannelMenu] = useState([]);
   const [sanitation, setSanitation] = useState([]);
   const [sanitationMenu, setSanitationMenu] = useState([]);
+  const [pitDimension, setPitDimension] = useState({});
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
@@ -37,16 +40,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
 
   const { t } = useTranslation();
+  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const cities = Digit.Hooks.fsm.useTenants();
   const history = useHistory();
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
-  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "PropertyType");
-  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "PropertySubtype");
+  const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
-      const data = applicationChannelData.data?.map((channel) => ({ i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}` }));
+      const data = applicationChannelData.data?.map((channel) => ({
+        ...channel,
+        i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}`,
+      }));
 
       setChannelMenu(data);
     }
@@ -54,7 +61,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
 
       setSanitationMenu(data);
     }
@@ -92,6 +99,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
     setLocalities(__localityList);
   };
 
+  const handlePitDimension = (event) => {
+    const { name, value } = event.target;
+    if (!isNaN(value)) {
+      setPitDimension({ ...pitDimension, [name]: value });
+    }
+  };
+
   function selectLocality(locality) {
     setSelectedLocality(locality);
   }
@@ -102,6 +116,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;
     const pincode = data.pincode;
+    const street = data.streetName;
+    const doorNo = data.doorNo;
     const landmark = data.landmark;
     const noOfTrips = data.noOfTrips;
     const amount = data.amount;
@@ -127,9 +143,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
           tripAmount: amount,
         },
         propertyUsage: subType.code,
+        pitDetail: pitDimension,
         address: {
           tenantId: cityCode,
           landmark,
+          doorNo,
+          street,
           city,
           state,
           pincode,
@@ -166,11 +185,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "dropdown",
           populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} />,
         },
-        {
-          label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
-          type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
-        },
+        // {
+        //   label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
+        //   type: "dropdown",
+        //   populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
+        // },
         {
           label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
           type: "text",
@@ -195,12 +214,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
             },
           },
         },
-        {
-          label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-          type: "radio",
-          isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
-        },
+        // {
+        //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
+        //   type: "radio",
+        //   isMandatory: true,
+        //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+        // },
       ],
     },
     {
@@ -249,6 +268,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
           ),
         },
         {
+          label: t("ES_NEW_APPLICATION_STREET_NAME"),
+          type: "text",
+          populators: {
+            name: "streetName",
+          },
+        },
+        {
+          label: t("ES_NEW_APPLICATION_DOOR_NO"),
+          type: "text",
+          populators: {
+            name: "doorNo",
+          },
+        },
+        {
           label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
           type: "textarea",
           populators: {
@@ -260,6 +293,15 @@ export const NewApplication = ({ parentUrl, heading }) => {
     {
       head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
       body: [
+        {
+          label: t("ES_NEW_APPLICATION_PIT_TYPE"),
+          type: "dropdown",
+          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
+        },
+        {
+          label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
+          populators: <PitDimension t={t} size={pitDimension} handleChange={handlePitDimension} />,
+        },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
           type: "text",

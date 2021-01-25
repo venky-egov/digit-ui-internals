@@ -20,12 +20,12 @@ const App = () => {
         {!location.pathname.includes("/response") && <BackButton>Back</BackButton>}
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
-        <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
+        <PrivateRoute path={`${path}/complaints/:id*`} component={ComplaintDetailsPage} />
         <PrivateRoute
           path={`${path}/reopen`}
           component={() => <ReopenComplaint match={{ ...match, url, path: `${path}/reopen` }} parentRoute={path} />}
         />
-        <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
+        <PrivateRoute path={`${path}/rate/:id*`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response match={{ ...match, url, path }} />} />
       </AppContainer>
     </Switch>

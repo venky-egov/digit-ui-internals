@@ -319,7 +319,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       ],
     },
   ];
-  searchnDetail = {
+  const applicationDetail = {
     title: t("ES_APPLICATION_DETAILS_APPLICATION_NO"),
     value: "FSM-277373",
   };

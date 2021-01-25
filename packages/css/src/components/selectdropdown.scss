@@ -19,7 +19,7 @@
 }
 */
 .employee-select-wrap {
-  @apply  relative;
+  @apply mb-lg relative;
 
   .select {
     @apply relative block w-full h-10 border-2 border-solid border-input-border;
@@ -161,14 +161,6 @@
   }
 }
 
-.select-wrap-emp {
-  @extend .select-wrap;
-  @apply mb-xs;
-}
-
 @screen dt {
-  .select-wrap {
-  }
-  .employee-select-wrap {
-  }
+  
 }

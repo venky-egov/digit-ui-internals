@@ -9,7 +9,7 @@ import MobileInbox from "../../components/MobileInbox";
 const Inbox = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useState({ mobileNumber: "9999999999" });
+  const [searchParams, setSearchParams] = useState({});
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
     ...searchParams,
   });

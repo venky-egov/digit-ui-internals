@@ -18,10 +18,7 @@ const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
-  const [selectAssigned, setSelectedAssigned] = useState("");
-  const [selectedApplicationType, setSelectedApplicationType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-  const [pendingApplicationCount, setPendingApplicationCount] = useState([]);
 
   const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
@@ -31,24 +28,17 @@ const Filter = (props) => {
 
   const [wfFilters, setWfFilters] = useState({
     applicationStatus: [],
+    locality: [],
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
   });
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  // let localities = Digit.Hooks.pgr.useLocalities({ city: tenantId });
-  // const localities = useSelector((state) => state.common.localities);
-
-  //TODO change city fetch from user tenantid
-  // let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
-  let localities = ["Alakapuri", "Railway medical Colony"];
-  // let applicationStatus = Digit.Hooks.pgr.useApplicationStatus();
-  // let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
+  const localities = useSelector((state) => state.common.localities[tenantId]);
 
   useEffect(() => {
     let filters = {};
     filters.applicationStatus = wfFilters.applicationStatus.map((status) => status.code).join(",");
-    // if (wfFilters.applicationStatus.length > 0) {
-    // }
+    filters.locality = wfFilters.locality.map((item) => item.code.split("_").pop()).join(",");
     if (wfFilters.uuid && Object.keys(wfFilters.uuid).length > 0) {
       filters.uuid = wfFilters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
     }
@@ -57,79 +47,37 @@ const Filter = (props) => {
   }, [wfFilters]);
 
   const onRadioChange = (value) => {
-    // setSelectedAssigned(value);
-    // uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
     setWfFilters({ ...wfFilters, uuid: value });
   };
-
-  // useEffect(() => {
-  //   for (const property in pgrfilters) {
-  //     if (Array.isArray(pgrfilters[property])) {
-  //       let params = pgrfilters[property].map((prop) => prop.code).join();
-  //       if (params) {
-  //         pgrQuery[property] = params;
-  //       }
-  //     }
-  //   }
-  //   for (const property in wfFilters) {
-  //     if (Array.isArray(wfFilters[property])) {
-  //       let params = wfFilters[property].map((prop) => prop.code).join();
-  //       if (params) {
-  //         wfQuery[property] = params;
-  //       }
-  //     }
-  //   }
-  //   //queryString = queryString.substring(0, queryString.length - 1);
-  //   handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-  // }, [pgrfilters, wfFilters]);
 
   const ifExists = (list, key) => {
     return list.filter((object) => object.code === key.code).length;
   };
 
-  function applicationType(_type) {
-    const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
-    if (!ifExists(pgrfilters.serviceCode, type)) {
-      setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
-    }
-  }
-
-  function onSelectLocality(value, type) {
-    // if (!ifExists(pgrfilters.locality, value)) {
-    //   setPgrFilters({ ...pgrfilters, locality: [...pgrfilters.locality, value] });
-    // }
-    setPgrFilters((prevState) => {
-      return { ...prevState, locality: [...prevState.locality.filter((item) => item !== value), value] };
+  function onSelectLocality(value) {
+    setWfFilters((prevState) => {
+      return { ...prevState, locality: [...prevState.locality.filter((item) => item.code !== value.code), value] };
     });
   }
 
-  // useEffect(() => {
-  //   if (pgrfilters.serviceCode.length > 1) {
-  //     setSelectedApplicationType(`${pgrfilters.serviceCode.length} selected`);
-  //   } else {
-  //     setSelectedApplicationType(pgrfilters.serviceCode[0]);
-  //   }
-  // }, [pgrfilters.serviceCode]);
-
-  // useEffect(() => {
-  //   if (pgrfilters.locality.length > 1) {
-  //     setSelectedLocality(`${pgrfilters.locality.length} selected`);
-  //   } else {
-  //     setSelectedLocality(pgrfilters.locality[0]);
-  //   }
-  // }, [pgrfilters.locality]);
+  useEffect(() => {
+    if (wfFilters.locality.length > 1) {
+      setSelectedLocality({ code: `${wfFilters.locality.length} selected` });
+    } else {
+      setSelectedLocality(wfFilters.locality[0]);
+    }
+  }, [wfFilters.locality]);
 
   const onRemove = (index, key) => {
-    let afterRemove = pgrfilters[key].filter((value, i) => {
+    let afterRemove = wfFilters[key].filter((value, i) => {
       return i !== index;
     });
-    setPgrFilters({ ...pgrfilters, [key]: afterRemove });
+    setWfFilters({ ...pgrfilters, [key]: afterRemove });
   };
 
   const handleAssignmentChange = (e, type) => {
     if (e.target.checked) {
       setWfFilters({ ...wfFilters, applicationStatus: [...wfFilters.applicationStatus, type] });
-      // setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
     } else {
       const filteredStatus = wfFilters.applicationStatus.filter((value) => {
         return value.code !== type.code;
@@ -139,24 +87,13 @@ const Filter = (props) => {
   };
 
   function clearAll() {
-    setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
-    setWfFilters({ applicationStatus: [] });
-    setSelectedAssigned("");
-    setSelectedApplicationType(null);
+    setWfFilters({
+      applicationStatus: [],
+      locality: [],
+      uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+    });
     setSelectedLocality(null);
   }
-
-  // const handleFilterSubmit = () => {
-  //   let filters = {};
-  //   if (wfFilters.applicationStatus.length > 0) {
-  //     filters.applicationStatus = wfFilters.applicationStatus.map(status => status.code).join(',')
-  //   }
-  //   if (wfFilters.uuid && Object.keys(wfFilters.uuid).length > 0) {
-  //     filters.uuid = wfFilters.uuid.code === "ASSIGNED_TO_ME" ? "" : uuid
-  //   }
-  //   props.onFilterChange(filters);
-  //   //props.onClose();
-  // };
 
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
@@ -167,10 +104,12 @@ const Filter = (props) => {
         select={(value) => {
           select(value, key);
         }}
+        optionKey={optionKey}
+        t={t}
       />
       <div className="tag-container">
-        {pgrfilters[key].length > 0 &&
-          pgrfilters[key].map((value, index) => {
+        {wfFilters[key].length > 0 &&
+          wfFilters[key].map((value, index) => {
             if (value[displayKey]) {
               return <RemoveableTag key={index} text={`${value[displayKey].slice(0, 22)} ...`} onClick={() => onRemove(index, key)} />;
             } else {
@@ -208,7 +147,7 @@ const Filter = (props) => {
               ]}
             />
             <div>
-              {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}
+              {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")}
             </div>
             <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={wfFilters} />
           </div>

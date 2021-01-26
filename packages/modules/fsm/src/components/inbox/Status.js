@@ -17,7 +17,7 @@ const Status = ({ applications, onAssignmentChange, fsmfilters }) => {
           key={index}
           onChange={(e) => onAssignmentChange(e, option)}
           checked={fsmfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
-          label={`${option.name} (2)`}
+          label={`${option.name}`}
         />
       ))}
     </div>

@@ -21,6 +21,7 @@ import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
 import * as comps from "@egovernments/digit-ui-react-components";
 
 import Registry from "./ComponentRegistry";
+import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
 
@@ -88,6 +89,16 @@ window.mdmsInitPost = (data) => {
     }, 2000);
   });
 };
+
+subFormRegistry.changeConfig("testForm", async (config) => {
+  config.state = { ...config.state, firstDDoptions: ["j", "k", "l"] };
+  config.fields[0] = {
+    ...config.fields[0],
+    defaultValue: "j",
+  };
+  console.log(config);
+  return config;
+});
 
 ReactDOM.render(
   <DigitUI stateCode={stateCode} registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />,

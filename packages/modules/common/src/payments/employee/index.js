@@ -4,26 +4,17 @@ import { useParams, useRouteMatch, Switch, Route } from "react-router-dom";
 import { CollectPayment } from "./payment-collect";
 import { SuccessfulPayment, FailedPayment } from "./response";
 import { SubformComposer } from "../../hoc";
+// import { subFormRegistry } from "../../hoc/subFormClass";
+import { testForm } from "../../hoc/testForm-config";
+import { subFormRegistry } from "@egovernments/digit-ui-libraries";
+
+subFormRegistry.addSubForm("testForm", testForm);
 
 const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
   const userType = "employee";
   const { t } = useTranslation();
   const { path: currentPath } = useRouteMatch();
   const param = useParams();
-
-  // const [formData, setFormData] = Digit.Hooks.useSessionStorage("paymentFormData", {});
-
-  // const addParams = (data) => {
-  //   setFormData({ ...formData, ...data });
-  // };
-
-  // const clearParams = () => {
-  //   setFormData({});
-  // };
-
-  // useEffect(() => {
-  //   console.log(formData);
-  // }, [formData]);
 
   const commonProps = { stateCode, cityCode, moduleCode };
   const routes = {

@@ -5,6 +5,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useCardPaymentDetails } from "./card";
 import { useChequeDetails, ChequeDetailsComponent } from "./cheque";
 import isEqual from "lodash/isEqual";
+import {} from "../../../hoc/testForm-config";
 
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;

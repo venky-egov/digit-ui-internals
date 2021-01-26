@@ -24,6 +24,7 @@ import { FileDesludging } from "./services/molecules/FSM/FileDesludging";
 import Contexts from "./contexts";
 import Hooks from "./hooks";
 import Utils from "./utils";
+import { subFormRegistry } from "./subFormRegistry";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -62,4 +63,4 @@ const initLibraries = () => {
   window.i18next = i18next;
 };
 
-export { initLibraries, Enums, Hooks };
+export { initLibraries, Enums, Hooks, subFormRegistry };

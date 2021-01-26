@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RadioButtons, FormComposer, Dropdown, CardSectionHeader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { useCardPaymentDetails } from "./card";
 import { useChequeDetails, ChequeDetailsComponent } from "./cheque";
 import isEqual from "lodash/isEqual";
@@ -12,12 +12,16 @@ export const CollectPayment = (props) => {
   const { t } = useTranslation();
   const history = useHistory();
 
+  const { path: currentPath } = useRouteMatch();
+  const { consumerCode } = useParams();
+
   const { cardConfig } = useCardPaymentDetails(props);
   const { chequeConfig, date } = useChequeDetails(props);
 
   const [formState, setFormState] = useState({});
 
-  const { consumerCode } = useParams();
+  console.log("collect page", currentPath, consumerCode, props);
+
   const defaultPaymentModes = [
     { code: "CASH", label: "Cash" },
     { code: "CHEQUE", label: "Cheque" },
@@ -41,12 +45,12 @@ export const CollectPayment = (props) => {
 
   const onSubmit = (data) => {
     console.log(data);
-    history.push("success");
+    history.push(`${props.basePath}/success`);
   };
 
   useEffect(() => {
-    let el = document?.getElementById("paymentInfo");
-    el?.scrollIntoView();
+    document?.getElementById("paymentInfo")?.scrollIntoView({ behavior: "smooth" });
+    document?.querySelector("#paymentInfo + .label-field-pair input")?.focus();
   }, [selectedPaymentMode]);
 
   const config = [
@@ -54,8 +58,16 @@ export const CollectPayment = (props) => {
       head: "Payment Details",
       body: [
         {
+          label: "Fee",
+          populators: <div style={{ marginBottom: 0, textAlign: "right" }}>₹ 1500.00</div>,
+        },
+        {
+          label: "Add Charge",
+          populators: <div style={{ marginBottom: 0, textAlign: "right" }}>₹ 100.00</div>,
+        },
+        {
           label: "Total Amount",
-          populators: <CardSectionHeader>₹ 500.00</CardSectionHeader>,
+          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}>₹ 1600.00</CardSectionHeader>,
         },
       ],
     },

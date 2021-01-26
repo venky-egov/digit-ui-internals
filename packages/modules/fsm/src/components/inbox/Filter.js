@@ -18,8 +18,6 @@ const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
-  const { pgr } = useSelector((state) => state);
-
   const [selectAssigned, setSelectedAssigned] = useState("");
   const [selectedApplicationType, setSelectedApplicationType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
@@ -27,13 +25,18 @@ const Filter = (props) => {
 
   const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
-    locality: ["ALakapuri", "Railway medical Colony"],
+    locality: [],
     applicationStatus: [],
   });
 
   const [wfFilters, setWfFilters] = useState({
-    assignee: [],
+    applicationStatus: [],
+    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
   });
+
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  // let localities = Digit.Hooks.pgr.useLocalities({ city: tenantId });
+  // const localities = useSelector((state) => state.common.localities);
 
   //TODO change city fetch from user tenantid
   // let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
@@ -41,35 +44,44 @@ const Filter = (props) => {
   // let applicationStatus = Digit.Hooks.pgr.useApplicationStatus();
   // let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
+  useEffect(() => {
+    let filters = {};
+    filters.applicationStatus = wfFilters.applicationStatus.map((status) => status.code).join(",");
+    // if (wfFilters.applicationStatus.length > 0) {
+    // }
+    if (wfFilters.uuid && Object.keys(wfFilters.uuid).length > 0) {
+      filters.uuid = wfFilters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
+    }
+    props.onFilterChange(filters);
+    //props.onClose();
+  }, [wfFilters]);
+
   const onRadioChange = (value) => {
-    setSelectedAssigned(value);
-    uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
-    setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
+    // setSelectedAssigned(value);
+    // uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
+    setWfFilters({ ...wfFilters, uuid: value });
   };
 
-  let pgrQuery = {};
-  let wfQuery = {};
-
-  useEffect(() => {
-    for (const property in pgrfilters) {
-      if (Array.isArray(pgrfilters[property])) {
-        let params = pgrfilters[property].map((prop) => prop.code).join();
-        if (params) {
-          pgrQuery[property] = params;
-        }
-      }
-    }
-    for (const property in wfFilters) {
-      if (Array.isArray(wfFilters[property])) {
-        let params = wfFilters[property].map((prop) => prop.code).join();
-        if (params) {
-          wfQuery[property] = params;
-        }
-      }
-    }
-    //queryString = queryString.substring(0, queryString.length - 1);
-    handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-  }, [pgrfilters, wfFilters]);
+  // useEffect(() => {
+  //   for (const property in pgrfilters) {
+  //     if (Array.isArray(pgrfilters[property])) {
+  //       let params = pgrfilters[property].map((prop) => prop.code).join();
+  //       if (params) {
+  //         pgrQuery[property] = params;
+  //       }
+  //     }
+  //   }
+  //   for (const property in wfFilters) {
+  //     if (Array.isArray(wfFilters[property])) {
+  //       let params = wfFilters[property].map((prop) => prop.code).join();
+  //       if (params) {
+  //         wfQuery[property] = params;
+  //       }
+  //     }
+  //   }
+  //   //queryString = queryString.substring(0, queryString.length - 1);
+  //   handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
+  // }, [pgrfilters, wfFilters]);
 
   const ifExists = (list, key) => {
     return list.filter((object) => object.code === key.code).length;
@@ -91,21 +103,21 @@ const Filter = (props) => {
     });
   }
 
-  useEffect(() => {
-    if (pgrfilters.serviceCode.length > 1) {
-      setSelectedApplicationType(`${pgrfilters.serviceCode.length} selected`);
-    } else {
-      setSelectedApplicationType(pgrfilters.serviceCode[0]);
-    }
-  }, [pgrfilters.serviceCode]);
+  // useEffect(() => {
+  //   if (pgrfilters.serviceCode.length > 1) {
+  //     setSelectedApplicationType(`${pgrfilters.serviceCode.length} selected`);
+  //   } else {
+  //     setSelectedApplicationType(pgrfilters.serviceCode[0]);
+  //   }
+  // }, [pgrfilters.serviceCode]);
 
-  useEffect(() => {
-    if (pgrfilters.locality.length > 1) {
-      setSelectedLocality(`${pgrfilters.locality.length} selected`);
-    } else {
-      setSelectedLocality(pgrfilters.locality[0]);
-    }
-  }, [pgrfilters.locality]);
+  // useEffect(() => {
+  //   if (pgrfilters.locality.length > 1) {
+  //     setSelectedLocality(`${pgrfilters.locality.length} selected`);
+  //   } else {
+  //     setSelectedLocality(pgrfilters.locality[0]);
+  //   }
+  // }, [pgrfilters.locality]);
 
   const onRemove = (index, key) => {
     let afterRemove = pgrfilters[key].filter((value, i) => {
@@ -116,27 +128,35 @@ const Filter = (props) => {
 
   const handleAssignmentChange = (e, type) => {
     if (e.target.checked) {
-      setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
+      setWfFilters({ ...wfFilters, applicationStatus: [...wfFilters.applicationStatus, type] });
+      // setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
     } else {
-      const filteredStatus = pgrfilters.applicationStatus.filter((value) => {
+      const filteredStatus = wfFilters.applicationStatus.filter((value) => {
         return value.code !== type.code;
-      })[0];
-      setPgrFilters({ ...pgrfilters, applicationStatus: [{ code: filteredStatus }] });
+      });
+      setWfFilters({ ...wfFilters, applicationStatus: filteredStatus });
     }
   };
 
   function clearAll() {
     setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
-    setWfFilters({ assigned: [{ code: [] }] });
+    setWfFilters({ applicationStatus: [] });
     setSelectedAssigned("");
     setSelectedApplicationType(null);
     setSelectedLocality(null);
   }
 
-  const handleFilterSubmit = () => {
-    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-    //props.onClose();
-  };
+  // const handleFilterSubmit = () => {
+  //   let filters = {};
+  //   if (wfFilters.applicationStatus.length > 0) {
+  //     filters.applicationStatus = wfFilters.applicationStatus.map(status => status.code).join(',')
+  //   }
+  //   if (wfFilters.uuid && Object.keys(wfFilters.uuid).length > 0) {
+  //     filters.uuid = wfFilters.uuid.code === "ASSIGNED_TO_ME" ? "" : uuid
+  //   }
+  //   props.onFilterChange(filters);
+  //   //props.onClose();
+  // };
 
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
@@ -180,7 +200,7 @@ const Filter = (props) => {
           <div>
             <RadioButtons
               onSelect={onRadioChange}
-              selectedOption={selectAssigned}
+              selectedOption={wfFilters.uuid}
               optionsKey="name"
               options={[
                 { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
@@ -190,7 +210,7 @@ const Filter = (props) => {
             <div>
               {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}
             </div>
-            <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
+            <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={wfFilters} />
           </div>
         </div>
       </div>

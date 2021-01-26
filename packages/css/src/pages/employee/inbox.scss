@@ -77,6 +77,14 @@
   }
 }
 
+.clear-search, .clear-search .link-label {
+  @apply text-focus;
+  @apply block;
+  cursor: pointer;
+  &:hover {
+    color: #000;
+  }
+}
 .button-clear{
   @apply text-focus text-body-s-dt;
 }
@@ -154,6 +162,11 @@
             .clear-search {
               @apply text-focus;
               @apply block;
+              cursor: pointer;
+              &:hover {
+                color: #003078;
+                cursor: pointer;
+              }
             }
           }
 

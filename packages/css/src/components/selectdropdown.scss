@@ -23,7 +23,10 @@
 
   .select {
     @apply relative block w-full h-10 border-2 border-solid border-input-border;
-
+    &:hover {
+      @apply border-2 border-solid border-primary-main;
+    }
+    
     input[type="text"] {
       width: calc(100% - 32px);
       background-color: transparent;

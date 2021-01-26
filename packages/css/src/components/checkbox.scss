@@ -34,7 +34,7 @@
     height: 24px;
   }
 
-  input:checked ~ .custom-checkbox {
+  input:checked ~ .custom-checkbox, input:hover ~ .custom-checkbox {
     @apply border-4 border-primary-main;
   }
 

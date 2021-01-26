@@ -3,6 +3,7 @@ import { Header, Loader, TypeSelectCard } from "@egovernments/digit-ui-react-com
 import { useTranslation } from "react-i18next";
 import { Switch, Route, useParams, useRouteMatch, Redirect } from "react-router-dom";
 import { SelectPaymentType } from "./payment-type/index";
+import { SuccessfulPayment, FailedPayment } from "./response";
 
 const CitizenPayment = ({ stateCode, cityCode, moduleCode }) => {
   const userType = "citizen";
@@ -16,14 +17,11 @@ const CitizenPayment = ({ stateCode, cityCode, moduleCode }) => {
     ["payment-type"]: {
       component: () => <SelectPaymentType {...commonProps} />,
     },
-    cash: {
-      component: () => <SelectPaymentType {...commonProps} />,
+    ["success"]: {
+      component: () => <SuccessfulPayment {...commonProps} />,
     },
-    cheque: {
-      component: () => <SelectPaymentType {...commonProps} />,
-    },
-    ["credit-debit-card"]: {
-      component: () => <SelectPaymentType {...commonProps} />,
+    ["failure"]: {
+      component: () => <FailedPayment {...commonProps} />,
     },
   };
 
@@ -36,7 +34,7 @@ const CitizenPayment = ({ stateCode, cityCode, moduleCode }) => {
     <React.Fragment>
       <Switch>
         {paths.map((path, index) => (
-          <Route path={`${currentPath}/:consumerCode/${path}`} key={index} component={config[path].component} />
+          <Route path={`${currentPath}/${path}/:consumerCode`} key={index} component={config[path].component} />
         ))}
       </Switch>
     </React.Fragment>

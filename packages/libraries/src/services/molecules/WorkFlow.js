@@ -59,9 +59,14 @@ export const WorkflowService = {
             })),
           nextActions: actionRolePair,
         };
-        if (role !== "CITIZEN") {
+        if (role !== "CITIZEN" && moduleCode === "PGR") {
           details.timeline.push({
             status: "COMPLAINT_FILED",
+          });
+        }
+        if (role !== "CITIZEN" && moduleCode === "FSM") {
+          details.timeline.push({
+            status: "APPLICATION_FILED",
           });
         }
         return details;

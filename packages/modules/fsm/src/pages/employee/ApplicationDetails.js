@@ -30,7 +30,13 @@ const ApplicationDetails = (props) => {
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const { isLoading, isError, data, error } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber, uuid: Digit.UserService.getUser().uuid });
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id: applicationNumber, moduleCode: "FSM", role: "FSM_EMPLOYEE" });
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({
+    tenantId,
+    id: applicationNumber,
+    moduleCode: "FSM",
+    role: "FSM_EMPLOYEE",
+    serviceData: data,
+  });
   const [vehicle, setVehicle] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([
     { key: "Type A", name: "Type A" },

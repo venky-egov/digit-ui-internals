@@ -17,27 +17,19 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
   const param = useParams();
 
   const commonProps = { stateCode, cityCode, moduleCode };
-  const routes = {
-    ["payment-collect"]: {
-      // component: () => <CollectPayment {...commonProps} />,
-      component: () => <SubformComposer _key="testForm" getSubFormValue={(d) => console.log("formValue", d)} />,
-    },
-    success: {
-      component: () => <SuccessfulPayment {...commonProps} />,
-    },
-    failed: {
-      component: () => <FailedPayment {...commonProps} />,
-    },
-  };
-
-  const paths = Object.keys(routes);
 
   return (
     <React.Fragment>
       <Switch>
-        {paths.map((path, index) => (
-          <Route path={`${currentPath}/${path}/:consumerCode`} key={index} component={routes[path].component} />
-        ))}
+        <Route path={`${currentPath}/collect/:consumerCode`}>
+          <CollectPayment {...commonProps} basePath={currentPath} />
+        </Route>
+        <Route path={`${currentPath}/success`}>
+          <SuccessfulPayment {...commonProps} />
+        </Route>
+        <Route path={`${currentPath}/failure`}>
+          <FailedPayment {...commonProps} />
+        </Route>
       </Switch>
     </React.Fragment>
   );

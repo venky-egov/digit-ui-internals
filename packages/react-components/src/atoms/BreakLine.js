@@ -1,7 +1,7 @@
 import React from "react";
 
 const BreakLine = () => {
-  return <div className="break-line"></div>;
+  return <hr color="#d6d5d4" className="break-line"></hr>;
 };
 
 export default BreakLine;

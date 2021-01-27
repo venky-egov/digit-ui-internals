@@ -12,6 +12,45 @@ export const SelectPaymentType = (props) => {
 
   const onSubmit = (d) => {
     console.log(d);
+    // Req details
+    const url = "/pg-service/transaction/v1/_create";
+    const method = "POST";
+    const reqData = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: ".01",
+        action: "_create",
+        did: "1",
+        key: "",
+        msgId: "20170310130900|en_IN",
+        requesterId: "",
+        authToken: "87330839-8797-4ad4-96b6-8d33f5b76ebe",
+      },
+      Transaction: {
+        tenantId: "pb.amritsar",
+        txnAmount: 0,
+        module: "TL",
+        billId: "9e754ee2-b76f-4a90-8a48-552ad943e16f",
+        consumerCode: "PB-TL-2020-03-27-005274",
+        productInfo: "Common Payment",
+        gateway: "AXIS",
+        taxAndPayments: [
+          {
+            billId: "9e754ee2-b76f-4a90-8a48-552ad943e16f",
+            amountPaid: 0,
+          },
+        ],
+        user: {
+          name: "Shreya B",
+          mobileNumber: "9686987977",
+          tenantId: "pb.amritsar",
+        },
+        callbackUrl: "https://egov-micro-dev.egovernments.org/citizen/egov-common/paymentRedirectPage",
+        additionalDetails: {
+          isWhatsapp: false,
+        },
+      },
+    };
   };
 
   return (

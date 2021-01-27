@@ -10,6 +10,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = tenantId.split(".")[0];
+  console.log(state, "state");
   const [menu, setMenu] = useState([]);
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
@@ -22,6 +24,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [channelMenu, setChannelMenu] = useState([]);
   const [sanitation, setSanitation] = useState([]);
   const [sanitationMenu, setSanitationMenu] = useState([]);
+  const [pitDimension, setPitDimension] = useState({});
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
@@ -37,16 +40,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
 
   const { t } = useTranslation();
+  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const cities = Digit.Hooks.fsm.useTenants();
   const history = useHistory();
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
-  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertyType");
-  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype");
+  const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
-      const data = applicationChannelData.data?.map((channel) => ({ i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}` }));
+      const data = applicationChannelData.data?.map((channel) => ({
+        ...channel,
+        i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}`,
+      }));
 
       setChannelMenu(data);
     }
@@ -54,7 +61,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
 
       setSanitationMenu(data);
     }
@@ -92,6 +99,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
     setLocalities(__localityList);
   };
 
+  const handlePitDimension = (event) => {
+    const { name, value } = event.target;
+    if (!isNaN(value)) {
+      setPitDimension({ ...pitDimension, [name]: value });
+    }
+  };
+
   function selectLocality(locality) {
     setSelectedLocality(locality);
   }
@@ -102,6 +116,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;
     const pincode = data.pincode;
+    const street = data.streetName;
+    const doorNo = data.doorNo;
     const landmark = data.landmark;
     const noOfTrips = data.noOfTrips;
     const amount = data.amount;
@@ -127,9 +143,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
           tripAmount: amount,
         },
         propertyUsage: subType.code,
+        pitDetail: pitDimension,
         address: {
           tenantId: cityCode,
           landmark,
+          doorNo,
+          street,
           city,
           state,
           pincode,

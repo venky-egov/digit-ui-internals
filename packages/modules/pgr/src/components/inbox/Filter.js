@@ -4,17 +4,21 @@ import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
+let pgrQuery = {};
+let wfQuery = {};
+
 const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
-
+  const { searchParams } = props;
   const { t } = useTranslation();
-
-  const [selectAssigned, setSelectedAssigned] = useState({ code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") });
+  const isAssignedToMe = searchParams?.filters?.wfFilters?.assignee && searchParams?.filters?.wfFilters?.assignee[0]?.code ? true : false;
+  const [selectAssigned, setSelectedAssigned] = useState(
+    isAssignedToMe ? { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") } : { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") }
+  );
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-
   const [pgrfilters, setPgrFilters] = useState(
-    Digit.SessionStorage.get("pgr_filters") || {
+    searchParams?.filters?.pgrfilters || {
       serviceCode: [],
       locality: [],
       applicationStatus: [],
@@ -22,7 +26,7 @@ const Filter = (props) => {
   );
 
   const [wfFilters, setWfFilters] = useState(
-    Digit.SessionStorage.get("pgr_wfFilters") || {
+    searchParams?.filters?.wfFilters || {
       assignee: [{ code: uuid }],
     }
   );
@@ -33,12 +37,9 @@ const Filter = (props) => {
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
-    Digit.SessionStorage.set("pgr_assigned", value);
     uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
     setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
   };
-  let pgrQuery = {};
-  let wfQuery = {};
 
   useEffect(() => {
     let count = 0;
@@ -56,26 +57,28 @@ const Filter = (props) => {
         let params = wfFilters[property].map((prop) => prop.code).join();
         if (params) {
           wfQuery[property] = params;
+        } else {
+          wfQuery = {};
         }
       }
     }
     count += wfFilters?.assignee?.length || 0;
-    Digit.SessionStorage.set("pgr_filters", pgrfilters);
-    Digit.SessionStorage.set("pgr_wfFilters", wfFilters);
 
-    Digit.SessionStorage.set("pgr_filter_count", count);
-    //queryString = queryString.substring(0, queryString.length - 1);
-    handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-    // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
-    if (Digit.SessionStorage.get("pgr_assigned")) {
-      setSelectedAssigned(Digit.SessionStorage.get("pgr_assigned"));
+    if (props.type !== "mobile") {
+      handleFilterSubmit();
     }
+
+    Digit.inboxFilterCount = count;
+    // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
   }, [pgrfilters, wfFilters]);
 
   const ifExists = (list, key) => {
     return list.filter((object) => object.code === key.code).length;
   };
-
+  function applyFiltersAndClose() {
+    handleFilterSubmit();
+    props.onClose();
+  }
   function complaintType(_type) {
     const type = { i18nKey: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
     if (!ifExists(pgrfilters.serviceCode, type)) {
@@ -131,15 +134,10 @@ const Filter = (props) => {
     setSelectedAssigned("");
     setSelectedComplaintType(null);
     setSelectedLocality(null);
-
-    Digit.SessionStorage.set("pgr_filters", null);
-    Digit.SessionStorage.set("pgr_wfFilters", null);
-    Digit.SessionStorage.set("pgr_assigned", null);
   }
 
   const handleFilterSubmit = () => {
-    // console.log("submit filter called",{ pgrQuery: pgrQuery, wfQuery: wfQuery } )
-    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
+    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery, wfFilters, pgrfilters });
   };
 
   const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key) => {
@@ -203,7 +201,12 @@ const Filter = (props) => {
       </div>
       <ActionBar>
         {props.type === "mobile" && (
-          <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={props.onClose} />
+          <ApplyFilterBar
+            labelLink={t("CS_COMMON_CLEAR_ALL")}
+            buttonLink={t("CS_COMMON_FILTER")}
+            onClear={clearAll}
+            onSubmit={applyFiltersAndClose}
+          />
         )}
       </ActionBar>
     </React.Fragment>

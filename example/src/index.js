@@ -13,9 +13,11 @@ import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
+import QAGRO from "./userInfo/qa-gro.json";
 import QACSR from "./userInfo/qa-csr.json";
 import QACT from "./userInfo/qa-citizen.json";
 import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
+import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
 
 import Registry from "./ComponentRegistry";
 
@@ -24,7 +26,7 @@ import { fsmCustomizations, fsmComponents } from "./fsm";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, FSM_EMPLOYEE };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, QAGRO, FSM_EMPLOYEE, NAWANSHAHR_QA_GRO };
 
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({
@@ -63,9 +65,9 @@ const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-// if (userType !== "CITIZEN") {
-window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
-// }
+if (userType !== "CITIZEN") {
+  window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
+}
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);

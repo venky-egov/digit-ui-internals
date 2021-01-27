@@ -161,16 +161,16 @@ const GetSanitationType = (MdmsRes) => MdmsRes["FSM"].SanitationType.filter((typ
 const GetApplicationChannel = (MdmsRes) => MdmsRes["FSM"].ApplicationChannel.filter((type) => type.active);
 
 const GetPropertyType = (MdmsRes) =>
-  MdmsRes["PropertyTax"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({
+  MdmsRes["FSM"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({
     ...item,
-    i18nKey: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
+    i18nKey: `PROPERTYTYPE_MASTERS_${item.code}`,
     code: item.code,
   }));
 
 const GetPropertySubtype = (MdmsRes) =>
-  MdmsRes["PropertyTax"].PropertyType.filter((property) => property.active && property.propertyType).map((item) => ({
+  MdmsRes["FSM"].PropertyType.filter((property) => property.active && property.propertyType).map((item) => ({
     ...item,
-    i18nKey: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
+    i18nKey: `PROPERTYTYPE_MASTERS_${item.code}`,
     code: item.code,
   }));
 

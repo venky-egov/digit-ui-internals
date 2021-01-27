@@ -71,6 +71,7 @@ import FormStep from "./molecules/FormStep";
 import RatingCard from "./molecules/RatingCard";
 import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
+import PitDimension from "./molecules/PitDimension";
 
 import { FormComposer } from "./hoc/FormComposer";
 
@@ -160,4 +161,5 @@ export {
   // hoc
   FormComposer,
   RoundedLabel,
+  PitDimension,
 };

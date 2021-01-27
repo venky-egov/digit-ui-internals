@@ -246,11 +246,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     history.push("digit-ui/employee/fsm/response");
   };
 
-  const applicationDetail = {
-    title: t("ES_EDIT_APPLICATION_APPLICATION_NO"),
-    value: "FSM-277373",
-  };
-
   const details = {
     propertyDetails: {
       head: t("ES_MODIFY_APPLICATION_PROPERTY_DETAILS"),
@@ -479,6 +474,44 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         },
       ],
     },
+    paymentDetails: {
+      head: t("ES_MODIFY_APPLICATION_PAYMENT_DETAILS"),
+      body: [
+        {
+          label: t("ES_MODIFY_APPLICATION_PAYMENT_NO_OF_TRIPS"),
+          type: "text",
+          populators: {
+            name: "noOfTrips",
+            validation: { pattern: /[0-9]+/ },
+          },
+        },
+        {
+          label: t("ES_MODIFY_APPLICATION_PAYMENT_AMOUNT"),
+          isMandatory: true,
+          type: "text",
+          populators: {
+            name: "amount",
+            validation: { pattern: /[0-9]+/ },
+            componentInFront: (
+              <span
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                ₹
+              </span>
+            ),
+          },
+        },
+      ],
+    },
+  };
+
+  const applicationDetail = {
+    title: t("ES_APPLICATION_DETAILS_APPLICATION_NO"),
+    value: "FSM-277373",
   };
 
   const config = [];

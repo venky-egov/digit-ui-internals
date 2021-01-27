@@ -7,8 +7,17 @@ import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 
 const Inbox = () => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useState({ filters: {}, search: "", sort: {} });
+  const [searchParams, setSearchParams] = useState({ mobileNumber: "9999999999" });
+  const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
+    ...searchParams,
+    uuid: Digit.UserService.getUser().uuid,
+  });
+
+  // useEffect(() => {
+  //   revalidate();
+  // }, [searchParams])
 
   const DSO = Digit.UserService.hasAccess("DSO");
 
@@ -17,50 +26,16 @@ const Inbox = () => {
     // setSearchParams({ ...searchParams, filters: filterParam });
   };
 
-  const onSearch = (params = "") => {
-    // setSearchParams({ ...searchParams, search: params });
+  const onSearch = (params = {}) => {
+    setSearchParams({ ...searchParams, ...params });
   };
 
-  // let applications = Digit.Hooks.pgr.useInboxData(searchParams) || [];
-  const applications = React.useMemo(
-    () => [
-      {
-        applicationNo: (
-          <div>
-            <span className="link">
-              <Link to={"/digit-ui/employee/fsm/application-details"}>PB-FSM-2019-04-23-898898</Link>
-            </span>
-            {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
-            <br />
-            {/* <span style={{ marginTop: "4px", color: "#505A5F" }}>{t(`SERVICEDEFS.${row.row.original["complaintSubType"].toUpperCase()}`)}</span> */}
-          </div>
-        ),
-        applicationDate: "12/08/2020",
-        locality: "Alakapuri",
-        status: "Pending for Payment",
-        slaDaysRemaining: "12",
-      },
-      {
-        applicationNo: (
-          <div>
-            <span className="link">
-              <Link to={"/digit-ui/employee/fsm/application-details"}>PB-FSM-2019-04-23-898898</Link>
-            </span>
-            {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
-            <br />
-            {/* <span style={{ marginTop: "4px", color: "#505A5F" }}>{t(`SERVICEDEFS.${row.row.original["complaintSubType"].toUpperCase()}`)}</span> */}
-          </div>
-        ),
-        applicationDate: "12/08/2020",
-        locality: "Alakapuri",
-        status: "Pending for Payment",
-        slaDaysRemaining: "12",
-      },
-    ],
-    []
-  );
+  if (isLoading || isIdle) {
+    return <Loader />;
+  }
 
   let isMobile = window.Digit.Utils.browser.isMobile;
+
   if (applications.length !== null) {
     if (DSO || isMobile) {
       return <MobileInbox data={applications} onFilterChange={handleFilterChange} onSearch={onSearch} />;
@@ -72,8 +47,6 @@ const Inbox = () => {
         </div>
       );
     }
-  } else {
-    return <Loader />;
   }
 };
 

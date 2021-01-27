@@ -83,6 +83,8 @@ const ApplicationDetails = (props) => {
         return setShowModal(true);
       case "SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+      case "PAY":
+        return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
         console.log("default case");
         break;

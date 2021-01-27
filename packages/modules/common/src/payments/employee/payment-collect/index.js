@@ -74,7 +74,7 @@ export const CollectPayment = (props) => {
     }
     const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
     console.log(resposne);
-    history.push(`${props.basePath}/success/${businessService}/${resposne.id}`);
+    history.push(`${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}`);
   };
 
   function getAdditionalCharge() {

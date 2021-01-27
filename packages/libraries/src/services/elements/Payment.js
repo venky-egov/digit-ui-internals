@@ -23,13 +23,34 @@ export const PaymentService = {
       data: { ...details },
     }),
 
-    printReciept: (tenantId,businessservice, filters = {}) =>
+  getReciept: (tenantId, businessservice, filters = {}) =>
     Request({
       url: `${Urls.payment.print_reciept}/${businessservice}/_search`,
       useCache: false,
       method: "POST",
       auth: true,
       userService: true,
-      params: { tenantId, ...filters }
+      params: { tenantId, ...filters },
+    }),
+
+  generatePdf: (tenantId, data = {}) =>
+    Request({
+      url: Urls.payment.generate_pdf,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId, key: "consolidatedreceipt" },
+      data: data,
+    }),
+
+  printReciept: (tenantId, filters = {}) =>
+    Request({
+      url: Urls.payment.file_store,
+      useCache: false,
+      method: "GET",
+      auth: true,
+      userService: true,
+      params: { tenantId, ...filters },
     }),
 };

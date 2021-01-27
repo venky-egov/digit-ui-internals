@@ -30,10 +30,10 @@ export const CollectPayment = (props) => {
     { code: "CASH", label: "Cash" },
     { code: "CHEQUE", label: "Cheque" },
     { code: "CARD", label: "Debit/Credit Card" },
-    { code: "DD", label: "Demand Draft" },
-    { code: "OFFLINE_NEFT", label: "Offline NEFT" },
-    { code: "OFFLINE_RTGS", label: "Offline RTGS" },
-    { code: "POSTAL_ORDER", label: "Postal Order" },
+    // { code: "DD", label: "Demand Draft" },
+    // { code: "OFFLINE_NEFT", label: "Offline NEFT" },
+    // { code: "OFFLINE_RTGS", label: "Offline RTGS" },
+    // { code: "POSTAL_ORDER", label: "Postal Order" },
   ];
 
   const formConfigMap = {

@@ -10,6 +10,8 @@ const TextField = (props) => {
   }, [props.selectedVal, props.forceSet]);
 
   function inputChange(e) {
+    if (props.freeze) return;
+
     setValue(e.target.value);
     props.setFilter(e.target.value);
   }
@@ -86,10 +88,11 @@ const Dropdown = (props) => {
           filterVal={filterVal}
           // onClick={dropdownOn}
           dropdownDisplay={dropdownOn}
+          freeze={props.freeze ? true : false}
         />
         <ArrowDown onClick={dropdownSwitch} />
       </div>
-      {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
+      {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">

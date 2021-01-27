@@ -55,14 +55,18 @@ export const FormComposer = (props) => {
             <CardSectionHeader>{section.head}</CardSectionHeader>
             {section.body.map((field, index) => {
               return (
-                <LabelFieldPair key={index}>
-                  <CardLabel>
-                    {field.label}
-                    {field.isMandatory ? " * " : null}
-                  </CardLabel>
-                  {errors[field.populators.name] && <CardLabelError>{field.populators.error}</CardLabelError>}
-                  <div className="field">{fieldSelector(field.type, field.populators)}</div>
-                </LabelFieldPair>
+                <React.Fragment key={index}>
+                  {errors[field.populators.name] && (field.populators?.validate ? errors[field.populators.validate] : true) && (
+                    <CardLabelError>{field.populators.error}</CardLabelError>
+                  )}
+                  <LabelFieldPair>
+                    <CardLabel>
+                      {field.label}
+                      {field.isMandatory ? " * " : null}
+                    </CardLabel>
+                    <div className="field">{fieldSelector(field.type, field.populators)}</div>
+                  </LabelFieldPair>
+                </React.Fragment>
               );
             })}
             {array.length - 1 === index ? null : <BreakLine />}
@@ -72,6 +76,8 @@ export const FormComposer = (props) => {
     [props.config, errors]
   );
 
+  const isDisabled = props.isDisabled || false;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
@@ -79,7 +85,7 @@ export const FormComposer = (props) => {
         {formFields}
         {props.children}
         <ActionBar>
-          <SubmitBar label={t(props.label)} submit="submit" />
+          <SubmitBar disabled={isDisabled} label={t(props.label)} submit="submit" />
         </ActionBar>
       </Card>
     </form>

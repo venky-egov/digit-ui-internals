@@ -8,7 +8,7 @@ import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-commo
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
-import "@egovernments/digit-ui-css/dist/index.css";
+import "@egovernments/digit-ui-css/example/index.css";
 
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
@@ -18,11 +18,16 @@ import QACSR from "./userInfo/qa-csr.json";
 import QACT from "./userInfo/qa-citizen.json";
 import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
 
+import * as comps from "@egovernments/digit-ui-react-components";
+
 import Registry from "./ComponentRegistry";
+import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
+
+console.log("comps", comps);
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, FSM_EMPLOYEE };
 
@@ -84,6 +89,16 @@ window.mdmsInitPost = (data) => {
     }, 2000);
   });
 };
+
+subFormRegistry.changeConfig("testForm", async (config) => {
+  config.state = { ...config.state, firstDDoptions: ["j", "k", "l"] };
+  config.fields[0] = {
+    ...config.fields[0],
+    defaultValue: "j",
+  };
+  console.log(config);
+  return config;
+});
 
 ReactDOM.render(
   <DigitUI stateCode={stateCode} registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />,

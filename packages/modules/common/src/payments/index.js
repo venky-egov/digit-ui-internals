@@ -1,7 +1,10 @@
 import React, { Fragment } from "react";
-import { BrowserRouter as Router, Switch, useRouteMatch } from "react-router-dom";
+import { BrowserRouter as Router, Switch, useRouteMatch, Route } from "react-router-dom";
 import { Body, Loader } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
+
+import EmployeePayment from "./employee";
+import CitizenPayment from "./citizen";
 
 export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "Payment", userType }) => {
   const { path, url } = useRouteMatch();
@@ -15,11 +18,11 @@ export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCod
 
   console.log("payment", userType, state, store);
 
-  return (
-    <Fragment>
-      <p>Payment</p>
-    </Fragment>
-  );
+  const getPaymentHome = () => {
+    if (userType === "citizen") return <CitizenPayment {...{ stateCode, moduleCode, cityCode, path, url }} />;
+    else return <EmployeePayment {...{ stateCode, cityCode, moduleCode }} />;
+  };
+  return <React.Fragment>{getPaymentHome()}</React.Fragment>;
 };
 
 export const PaymentLinks = ({ matchPath }) => <Fragment></Fragment>;

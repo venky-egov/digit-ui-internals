@@ -3,6 +3,7 @@ import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
 import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
+import useFetchPayment from "./payment";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -43,6 +44,6 @@ const fsm = {
   useSearch: useSearch,
 };
 
-const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
+const Hooks = { useSessionStorage, useFetchPayment, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
 
 export default Hooks;

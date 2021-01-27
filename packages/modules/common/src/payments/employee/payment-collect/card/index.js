@@ -10,7 +10,7 @@ export const useCardPaymentDetails = (props) => {
           label: "Last 4 Digits",
           type: "text",
           populators: {
-            name: "cardLastDigits",
+            name: "instrumentNumber",
             validation: {
               required: true,
               pattern: /^\d{4}$/,
@@ -22,7 +22,7 @@ export const useCardPaymentDetails = (props) => {
           label: "Transanction Number",
           type: "text",
           populators: {
-            name: "transanctionNumber",
+            name: "transactionNumber",
             validation: {
               required: true,
               pattern: /^\d{5,}$/,

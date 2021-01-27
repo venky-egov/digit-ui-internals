@@ -11,4 +11,15 @@ export const PaymentService = {
       userService: true,
       params: { tenantId, ...filters },
     }),
+
+  createReciept: (tenantId, details = {}) =>
+    Request({
+      url: Urls.payment.create_reciept,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId },
+      data: { ...details },
+    }),
 };

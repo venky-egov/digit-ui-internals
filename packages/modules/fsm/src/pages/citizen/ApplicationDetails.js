@@ -112,7 +112,7 @@ const ApplicationDetails = () => {
         />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
-        {application.status !== "PAYMENT" && (
+        {application.status !== "PENDING_APPL_FEE_PAYMENT" && (
           <Link to={`/digit-ui/citizen/fsm/rate/${application.applicationNo}`}>
             <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE_US")} />
           </Link>

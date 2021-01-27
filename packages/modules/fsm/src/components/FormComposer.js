@@ -16,7 +16,10 @@ import {
 import { useTranslation } from "react-i18next";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm({
+    defaultValues: props.defaultValues,
+  });
+  // console.log("find default values here",props.defaultValues);
   const { t } = useTranslation();
 
   function onSubmit(data) {

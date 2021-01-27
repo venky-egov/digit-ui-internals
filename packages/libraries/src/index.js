@@ -10,6 +10,7 @@ import { LocalizationService } from "./services/molecules/Localization/service";
 import { LoginService } from "./services/Login";
 import { PGRService } from "./services/molecules/PGR";
 import { FSMService } from "./services/elements/FSM";
+import { PaymentService } from "./services/elements/Payment";
 import * as dateUtils from "./services/atoms/Utils/Date";
 import { WorkflowService } from "./services/molecules/WorkFlow";
 import { MdmsService } from "./services/molecules/MDMS";
@@ -24,6 +25,7 @@ import { FileDesludging } from "./services/molecules/FSM/FileDesludging";
 import Contexts from "./contexts";
 import Hooks from "./hooks";
 import Utils from "./utils";
+import { subFormRegistry } from "./subFormRegistry";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -45,6 +47,7 @@ const initLibraries = () => {
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("FSMService", FSMService);
+  setupLibraries("PaymentService", PaymentService);
   setupLibraries("DateUtils", dateUtils);
   setupLibraries("WorkflowService", WorkflowService);
   setupLibraries("MDMSService", MdmsService);
@@ -62,4 +65,4 @@ const initLibraries = () => {
   window.i18next = i18next;
 };
 
-export { initLibraries, Enums, Hooks };
+export { initLibraries, Enums, Hooks, subFormRegistry };

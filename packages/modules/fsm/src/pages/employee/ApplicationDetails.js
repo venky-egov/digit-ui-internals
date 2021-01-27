@@ -30,7 +30,13 @@ const ApplicationDetails = (props) => {
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const { isLoading, isError, data, error } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber, uuid: Digit.UserService.getUser().uuid });
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id: applicationNumber, moduleCode: "FSM", role: "FSM_EMPLOYEE" });
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({
+    tenantId,
+    id: applicationNumber,
+    moduleCode: "FSM",
+    role: "FSM_EMPLOYEE",
+    serviceData: data,
+  });
   const [vehicle, setVehicle] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([
     { key: "Type A", name: "Type A" },
@@ -75,8 +81,10 @@ const ApplicationDetails = (props) => {
     switch (selectedAction) {
       case "GENERATE_DEMAND":
         return setShowModal(true);
-      case "MODIFY_APPLICATION":
-        return history.push("/digit-ui/employee/fsm/modify-application");
+      case "SUBMIT":
+        return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+      case "PAY":
+        return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
         console.log("default case");
         break;

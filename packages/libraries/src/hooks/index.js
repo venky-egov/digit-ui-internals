@@ -3,6 +3,7 @@ import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
 import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
+import useFetchPayment from "./payment";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -22,6 +23,8 @@ import useApplicationStatus from "./fsm/useApplicationStatus";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
 import useInbox from "./fsm/useInbox";
+import useApplicationUpdate from "./fsm/useApplicationUpdate";
+import useWorkflowData from "./fsm/useWorkflowData";
 
 const pgr = {
   useComplaintDetails,
@@ -44,9 +47,11 @@ const fsm = {
   useMDMS: useMDMS,
   useSearch: useSearch,
   useInbox,
+  useApplicationUpdate,
   useApplicationStatus,
+  useWorkflowData,
 };
 
-const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
+const Hooks = { useSessionStorage, useFetchPayment, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
 
 export default Hooks;

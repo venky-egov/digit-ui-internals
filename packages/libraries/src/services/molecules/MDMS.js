@@ -165,6 +165,24 @@ const getPropertyUsageCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "VehicleType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -194,6 +212,14 @@ const GetPropertySubtype = (MdmsRes) =>
     code: item.code,
   }));
 
+const GetVehicleType = (MdmsRes) =>
+  MdmsRes["FSM"].VehicleType.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
+    return {
+      ...vehicleDetails,
+      i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code.split(/\.|\//).join("_")}`,
+    };
+  });
+
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
     case "citymodule":
@@ -212,6 +238,8 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetPropertySubtype(MdmsRes);
     case "PitType":
       return GetPitType(MdmsRes);
+    case "VehicleType":
+      return GetVehicleType(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -259,5 +287,8 @@ export const MdmsService = {
   },
   getPitType: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getPitTypeCriteria(tenantId, moduleCode), moduleCode);
+  },
+  getVehicleType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getVehicleTypeCriteria(tenantId, moduleCode, type), moduleCode);
   },
 };

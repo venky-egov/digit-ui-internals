@@ -35,21 +35,40 @@ const Response = (props) => {
   const queryClient = useQueryClient();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mutation = Digit.Hooks.fsm.useDesludging(tenantId);
+  const updateMutation = Digit.Hooks.fsm.useApplicationUpdate(tenantId);
   useEffect(() => {
     const onSuccess = () => {
       queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
     };
     const { state } = props.location;
-    mutation.mutate(state, {
-      onSuccess,
-    });
+    console.log("state -------->", state);
+    if (state.key === "update") {
+      updateMutation.mutate(state.formData, {
+        onSuccess,
+      });
+    } else {
+      mutation.mutate(state, {
+        onSuccess,
+      });
+    }
   }, []);
 
-  return mutation.isLoading || mutation.isIdle ? (
+  return mutation.isLoading || mutation.isIdle || updateMutation.isLoading || updateMutation.isIdle ? (
     <Loader />
   ) : (
     <Card>
-      <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+      {(!mutation.isIdle || !mutation.isLoading) && (
+        <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+      )}
+      {(!updateMutation.isIdle || !updateMutation.isLoading) && (
+        <BannerPicker
+          t={t}
+          data={updateMutation.data}
+          isSuccess={updateMutation.isSuccess}
+          isLoading={updateMutation.isIdle || updateMutation.isLoading}
+        />
+      )}
+
       <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
       <Link to={`/digit-ui/employee`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />

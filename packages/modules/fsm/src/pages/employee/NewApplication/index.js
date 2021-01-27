@@ -15,10 +15,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
   const [subType, setSubType] = useState({});
-  const [vehicleMenu, setVehicleMenu] = useState([
-    { key: "Tracker (500 ltrs)", name: "Tracker (500 ltrs)" },
-    { key: "Tracker (1000 ltrs)", name: "Tracker (1000 ltrs)" },
-  ]);
   const [channel, setChannel] = useState(null);
   const [channelMenu, setChannelMenu] = useState([]);
   const [sanitation, setSanitation] = useState([]);
@@ -49,6 +45,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
+  // console.log("find vehicle menu", vehicleMenu);
   const [canSubmit, setSubmitValve] = useState(false);
 
   useEffect(() => {
@@ -149,7 +147,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   }
 
   const onSubmit = (data) => {
-    const applicationChannel = channel.code;
+    const applicationChannel = channel?.code;
     const sanitationtype = sanitation.code;
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;
@@ -181,6 +179,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           tripAmount: amount,
         },
         propertyUsage: subType.code,
+        vehicleType: vehicle.code,
         pitDetail: pitDimension,
         address: {
           tenantId: cityCode,
@@ -376,7 +375,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
+          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
         },
       ],
     },

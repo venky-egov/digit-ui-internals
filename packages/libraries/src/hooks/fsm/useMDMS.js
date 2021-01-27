@@ -22,6 +22,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
     return useQuery("FSM_PROPERTY_SUBTYPE", () => MdmsService.getPropertyType(tenantId, moduleCode, type), config);
   };
 
+  const useVehicleType = () => {
+    return useQuery("FSM_VEHICLE_TYPE", () => MdmsService.getVehicleType(tenantId, moduleCode, type), config);
+  };
+
   switch (type) {
     case "SanitationType":
       return useSanitationType();
@@ -37,6 +41,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
 
     case "PitType":
       return usePitType();
+
+    case "VehicleType":
+      return useVehicleType();
   }
 };
 

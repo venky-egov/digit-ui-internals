@@ -78,7 +78,12 @@ const Response = ({ data, onSuccess }) => {
           title: "Application Details",
           values: [
             { title: "Application No.", value: applicationDetails.applicationNo },
-            { title: "Application Date", value: "12/08/2020" },
+            {
+              title: "Application Date",
+              value: applicationDetails?.auditDetails?.createdTime
+                ? Digit.DateUtils.ConvertTimestampToDate(applicationDetails?.auditDetails?.createdTime)
+                : "",
+            },
             { title: "Application Channel", value: "Counter" },
           ],
         },

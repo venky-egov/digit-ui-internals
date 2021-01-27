@@ -44,6 +44,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
       },
     },
   });
+
   const ComponentProvider = Digit.Contexts.ComponentProvider;
 
   return (

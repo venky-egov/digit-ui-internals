@@ -21,7 +21,7 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
   return (
     <React.Fragment>
       <Switch>
-        <Route path={`${currentPath}/collect/:consumerCode`}>
+        <Route path={`${currentPath}/collect/:businessService/:consumerCode`}>
           <CollectPayment {...commonProps} basePath={currentPath} />
         </Route>
         <Route path={`${currentPath}/success`}>

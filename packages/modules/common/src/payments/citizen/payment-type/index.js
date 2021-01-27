@@ -7,8 +7,12 @@ export const SelectPaymentType = (props) => {
   const { t } = useTranslation();
 
   const menu = ["UPI", "NEFT", "Debit/Credit Card"];
-
+  const { consumerCode, businessService } = useParams();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
+  const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
+  const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
+  console.log({ billDetails, payment: paymentdetails?.Bill });
 
   const onSubmit = (d) => {
     console.log(d);
@@ -34,7 +38,7 @@ export const SelectPaymentType = (props) => {
               <h2>Total Amount Due</h2>
             </span>
             <span style={{ fontSize: "20px" }} className="name">
-              1500
+              {billDetails.totalAmount}
             </span>
           </div>
 

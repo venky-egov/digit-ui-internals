@@ -13,7 +13,11 @@ export const CollectPayment = (props) => {
   const history = useHistory();
 
   const { path: currentPath } = useRouteMatch();
-  const { consumerCode } = useParams();
+  const { consumerCode, businessService } = useParams();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
+  const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
+  console.log({ billDetails, payment: paymentdetails?.Bill });
 
   const { cardConfig } = useCardPaymentDetails(props);
   const { chequeConfig, date } = useChequeDetails(props);
@@ -67,7 +71,7 @@ export const CollectPayment = (props) => {
         },
         {
           label: "Total Amount",
-          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}>₹ 1600.00</CardSectionHeader>,
+          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {billDetails.totalAmount} </CardSectionHeader>,
         },
       ],
     },

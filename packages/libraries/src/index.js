@@ -10,6 +10,7 @@ import { LocalizationService } from "./services/molecules/Localization/service";
 import { LoginService } from "./services/Login";
 import { PGRService } from "./services/molecules/PGR";
 import { FSMService } from "./services/elements/FSM";
+import { PaymentService } from "./services/elements/Payment";
 import * as dateUtils from "./services/atoms/Utils/Date";
 import { WorkflowService } from "./services/molecules/WorkFlow";
 import { MdmsService } from "./services/molecules/MDMS";
@@ -46,6 +47,7 @@ const initLibraries = () => {
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("FSMService", FSMService);
+  setupLibraries("PaymentService", PaymentService);
   setupLibraries("DateUtils", dateUtils);
   setupLibraries("WorkflowService", WorkflowService);
   setupLibraries("MDMSService", MdmsService);

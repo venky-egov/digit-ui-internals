@@ -21,4 +21,14 @@ export const FSMService = {
       params: { tenantId },
       auth: true,
     }),
+  update: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.update,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
 };

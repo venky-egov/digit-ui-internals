@@ -55,7 +55,7 @@ export const CitizenSidebar = ({ isOpen, isMobile, toggleSidebar, onLogout }) =>
   if (user && user.access_token) {
     profileItem = <Profile info={user.info} stateName={stateInfo.name} />;
     menuItems = [
-      ...SideBarMenu(t),
+      ...menuItems,
       {
         text: t("CORE_COMMON_LOGOUT"),
         icon: <LogoutIcon className="icon" />,

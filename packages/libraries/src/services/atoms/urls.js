@@ -25,6 +25,7 @@ const Urls = {
   fsm: {
     search: "/fsm/v1/_search",
     create: "/fsm/v1/_create",
+    update: "/fsm/v1/_update",
   },
 
   payment: {

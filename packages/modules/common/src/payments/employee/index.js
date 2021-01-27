@@ -24,7 +24,7 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
         <Route path={`${currentPath}/collect/:businessService/:consumerCode`}>
           <CollectPayment {...commonProps} basePath={currentPath} />
         </Route>
-        <Route path={`${currentPath}/success`}>
+        <Route path={`${currentPath}/success/:businessService/:receiptId`}>
           <SuccessfulPayment {...commonProps} />
         </Route>
         <Route path={`${currentPath}/failure`}>

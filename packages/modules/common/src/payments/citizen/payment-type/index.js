@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Header, Card, RadioButtons, CardSubHeader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
+import { useParams } from "react-router-dom";
 
 export const SelectPaymentType = (props) => {
   const { t } = useTranslation();

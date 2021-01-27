@@ -22,4 +22,14 @@ export const PaymentService = {
       params: { tenantId },
       data: { ...details },
     }),
+
+    printReciept: (tenantId,businessservice, filters = {}) =>
+    Request({
+      url: `${Urls.payment.print_reciept}/${businessservice}/_search`,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId, ...filters }
+    }),
 };

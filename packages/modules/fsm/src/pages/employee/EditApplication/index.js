@@ -129,7 +129,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
 
       setSanitationMenu(data);
     }
@@ -377,7 +377,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       ],
     },
     {
-      head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
+      head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
       body: [
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),

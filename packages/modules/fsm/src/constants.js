@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { Dropdown, PitDimension } from "@egovernments/digit-ui-react-components";
 
 const CONSTANTS = ({
   t,
@@ -27,6 +27,11 @@ const CONSTANTS = ({
   selectedLocality,
   localities,
   selectLocality,
+  handlePincode,
+  isPincodeValid,
+  getCities,
+  pitDimension,
+  handlePitDimension,
 }) => {
   const detailsConfig = {
     applicationDetails: {
@@ -46,6 +51,15 @@ const CONSTANTS = ({
         },
         {
           name: "applicantName",
+          type: "text",
+          isMandatory: true,
+          populators: {
+            name: "applicantName",
+            validation: {
+              required: true,
+              pattern: /[A-Za-z]/,
+            },
+          },
           label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
           type: "text",
           isMandatory: true,
@@ -110,7 +124,9 @@ const CONSTANTS = ({
           type: "text",
           populators: {
             name: "pincode",
-            validation: { pattern: /^[1-9][0-9]{5}$/ },
+            error: t("CORE_COMMON_PINCODE_INVALID"),
+            onChange: handlePincode,
+            validation: { pattern: /^[1-9][0-9]{5}$/, validate: isPincodeValid },
           },
         },
         {
@@ -118,7 +134,9 @@ const CONSTANTS = ({
           label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
+          populators: (
+            <Dropdown isMandatory freeze={true} selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />
+          ),
         },
         {
           name: "mohalla",
@@ -128,6 +146,22 @@ const CONSTANTS = ({
           populators: (
             <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
           ),
+        },
+        {
+          name: "streetName",
+          label: t("ES_NEW_APPLICATION_STREET_NAME"),
+          type: "text",
+          populators: {
+            name: "streetName",
+          },
+        },
+        {
+          name: "doorNo",
+          label: t("ES_NEW_APPLICATION_DOOR_NO"),
+          type: "text",
+          populators: {
+            name: "doorNo",
+          },
         },
         {
           name: "landmark",
@@ -142,6 +176,15 @@ const CONSTANTS = ({
     paymentDetails: {
       head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
       body: [
+        {
+          label: t("ES_NEW_APPLICATION_PIT_TYPE"),
+          type: "dropdown",
+          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
+        },
+        {
+          label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
+          populators: <PitDimension t={t} size={pitDimension} handleChange={handlePitDimension} />,
+        },
         {
           name: "noOfTrips",
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),

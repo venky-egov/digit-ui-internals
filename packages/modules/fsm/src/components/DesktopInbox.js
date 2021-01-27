@@ -1,4 +1,4 @@
-import { CheckBox } from "@egovernments/digit-ui-react-components";
+import { Card, CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useRouteMatch } from "react-router-dom";
@@ -13,6 +13,7 @@ const DesktopInbox = (props) => {
   let { match } = useRouteMatch();
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
   const GetSlaCell = (value) => {
+    if (isNaN(value)) value = "-";
     return value < 0 ? (
       <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
     ) : (
@@ -82,6 +83,43 @@ const DesktopInbox = (props) => {
     []
   );
 
+  let result;
+  if (props.isLoading) {
+    result = <Loader />;
+  } else if (props.data.length === 0) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {/* TODO Change localization key */}
+        {t("CS_MYCOMPLAINTS_NO_COMPLAINTS")
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  } else if (props.data.length > 0) {
+    result = (
+      <ApplicationTable
+        data={props.data}
+        columns={columns}
+        getCellProps={(cellInfo) => {
+          return {
+            style: {
+              minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+              padding: "20px 18px",
+              fontSize: "16px",
+              // borderTop: "1px solid grey",
+              // textAlign: "left",
+              // verticalAlign: "middle",
+            },
+          };
+        }}
+      />
+    );
+  }
+
   return (
     <div className="inbox-container">
       <div className="filters-container">
@@ -92,24 +130,7 @@ const DesktopInbox = (props) => {
       </div>
       <div style={{ flex: 1 }}>
         <SearchApplication onSearch={props.onSearch} type="desktop" />
-        <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>
-          <ApplicationTable
-            data={props.data}
-            columns={columns}
-            getCellProps={(cellInfo) => {
-              return {
-                style: {
-                  minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
-                  padding: "20px 18px",
-                  fontSize: "16px",
-                  // borderTop: "1px solid grey",
-                  // textAlign: "left",
-                  // verticalAlign: "middle",
-                },
-              };
-            }}
-          />
-        </div>
+        <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

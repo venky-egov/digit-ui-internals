@@ -1,24 +1,13 @@
 import React from "react";
-import { CheckBox } from "@egovernments/digit-ui-react-components";
+import { CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const Status = ({ applications, onAssignmentChange, fsmFilters }) => {
+const Status = ({ applications, onAssignmentChange, fsmfilters }) => {
   const { t } = useTranslation();
-  // const applicationsWithCount = useComplaintStatusCount(applications);
-  const applicationsWithCount = [
-    {
-      name: "Pending for Payment",
-      count: 4,
-    },
-    {
-      name: "Pending for DSO Assignment",
-      count: 2,
-    },
-    {
-      name: "Pending for Demand Generation",
-      count: 6,
-    },
-  ];
+  const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus();
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="status-container">
@@ -27,7 +16,7 @@ const Status = ({ applications, onAssignmentChange, fsmFilters }) => {
         <CheckBox
           key={index}
           onChange={(e) => onAssignmentChange(e, option)}
-          checked={fsmFilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
+          checked={fsmfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
           label={`${option.name} (${option.count})`}
         />
       ))}

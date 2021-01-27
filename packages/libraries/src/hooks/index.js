@@ -18,6 +18,7 @@ import useComplaintSubType from "./pgr/useComplaintSubType";
 
 import useTenantsFSM from "./fsm/useTenants";
 import useDesludging from "./fsm/useDesludging";
+import useApplicationStatus from "./fsm/useApplicationStatus";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
 import useInbox from "./fsm/useInbox";
@@ -43,6 +44,7 @@ const fsm = {
   useMDMS: useMDMS,
   useSearch: useSearch,
   useInbox,
+  useApplicationStatus,
 };
 
 const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };

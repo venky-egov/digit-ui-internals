@@ -11,7 +11,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
-  console.log(state, "state");
   const [menu, setMenu] = useState([]);
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
@@ -35,18 +34,22 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const selectedLocalities = Digit.SessionStorage.get("selected_localities");
   const localityProperty = Digit.SessionStorage.get("locality_property");
 
-  const [selectedCity, setSelectedCity] = useState(cityProperty ? cityProperty : null);
   const [localities, setLocalities] = useState(selectedLocalities ? selectedLocalities : null);
+  const [pincode, setPincode] = useState("");
+  const [pincodeNotValid, setPincodeNotValid] = useState(false);
   const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
 
   const { t } = useTranslation();
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const cities = Digit.Hooks.fsm.useTenants();
+  const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
+  const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
   const history = useHistory();
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
+  const [canSubmit, setSubmitValve] = useState(false);
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
@@ -66,6 +69,31 @@ export const NewApplication = ({ parentUrl, heading }) => {
       setSanitationMenu(data);
     }
   }, [sanitationTypeData]);
+
+  useEffect(() => {
+    if (propertyType?.code && subType?.code && selectedCity?.code && selectedLocality?.code) {
+      setSubmitValve(true);
+    } else {
+      setSubmitValve(false);
+    }
+  }, [propertyType, subType, selectedCity, selectedLocality]);
+
+  useEffect(() => {
+    const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
+    if (city?.code === getCities()[0]?.code) {
+      setPincodeNotValid(false);
+      setSelectedCity(city);
+      setSelectedLocality(null);
+      const __localityList = localitiesObj[city.code];
+      const __filteredLocalities = __localityList.filter((city) => city["pincode"] == pincode);
+      setLocalities(__filteredLocalities);
+    } else if (pincode === "" || pincode === null) {
+      setPincodeNotValid(false);
+      setLocalities(localitiesObj[getCities()[0]?.code]);
+    } else {
+      setPincodeNotValid(true);
+    }
+  }, [pincode]);
 
   function selectedType(value) {
     setPropertyType(value);
@@ -105,6 +133,16 @@ export const NewApplication = ({ parentUrl, heading }) => {
       setPitDimension({ ...pitDimension, [name]: value });
     }
   };
+
+  const handlePincode = (event) => {
+    const { value } = event.target;
+    setPincode(value);
+    if (!value) {
+      setPincodeNotValid(false);
+    }
+  };
+
+  const isPincodeValid = () => !pincodeNotValid;
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
@@ -202,6 +240,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
     selectedLocality,
     localities,
     selectLocality,
+    handlePincode,
+    isPincodeValid,
+    getCities,
+    pitDimension,
+    handlePitDimension,
   });
 
   let config = [];
@@ -227,5 +270,5 @@ export const NewApplication = ({ parentUrl, heading }) => {
     defaultConfig.forEach((fieldSectionName) => config.push(detailsConfig[fieldSectionName]));
   }
 
-  return <FormComposer heading={heading} label={t("ES_COMMON_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit}></FormComposer>;
+  return <FormComposer heading={heading} isDisabled={!canSubmit} label={t("ES_COMMON_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit} />;
 };

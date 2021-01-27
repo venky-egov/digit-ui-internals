@@ -64,22 +64,20 @@ const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const history = useHistory();
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch({ tenantId: "pb", applicationNumber: id });
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
   const coreData = Digit.Hooks.useCoreData();
 
   if (isLoading) {
     return <Loader />;
   }
-  console.log("data-coreData", data, coreData);
   const { fsm: applications } = data;
   if (applications.length === 0) {
-    console.log("invalid application", id);
     history.goBack();
   }
 
   const application = applications[0];
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
-  console.log("tenantInfo", tenantInfo);
 
   return (
     <React.Fragment>

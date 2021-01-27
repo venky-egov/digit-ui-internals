@@ -22,7 +22,7 @@ import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
 import Registry from "./ComponentRegistry";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
-import { fsmCustomizations, fsmComponents } from "./fsm";
+// import { fsmCustomizations, fsmComponents } from "./fsm";
 
 initLibraries();
 
@@ -31,7 +31,7 @@ const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, QAGRO, FSM_EMPLOYEE
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({
   ...pgrComponents,
-  ...fsmComponents,
+  // ...fsmComponents,
   PGRLinks,
   PGRModule,
   FSMModule,
@@ -41,7 +41,10 @@ const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
 });
 
-window.Digit.Customizations = { PGR: pgrCustomizations, FSM: fsmCustomizations };
+window.Digit.Customizations = {
+  PGR: pgrCustomizations,
+  // FSM: fsmCustomizations
+};
 
 const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
 

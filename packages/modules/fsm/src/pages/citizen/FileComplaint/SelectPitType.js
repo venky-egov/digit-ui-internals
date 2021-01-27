@@ -3,12 +3,14 @@ import { FormStep, Dropdown, Loader, CardLabel } from "@egovernments/digit-ui-re
 
 const SelectPitType = ({ t, config, onSelect, value }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
+
   const [sanitationMenu, setSanitationMenu] = useState([]);
   const [pitType, setPitType] = useState(() => {
     const { pitType } = value;
     return pitType !== undefined ? pitType : null;
   });
-  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "PitType");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PitType");
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {

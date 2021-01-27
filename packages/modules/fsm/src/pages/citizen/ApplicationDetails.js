@@ -112,9 +112,15 @@ const ApplicationDetails = () => {
         />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
-        <Link to={`/digit-ui/citizen/fsm/rate/${application.complaintNo}`}>
-          <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE_US")} />
-        </Link>
+        {application.status !== "PAYMENT" ? (
+          <Link to={`/digit-ui/citizen/fsm/rate/${application.applicationNo}`}>
+            <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE_US")} />
+          </Link>
+        ) : (
+          <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
+            <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
+          </Link>
+        )}
       </Card>
     </React.Fragment>
   );

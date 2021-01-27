@@ -6,6 +6,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
     return useQuery("FSM_SANITATION_TYPE", () => MdmsService.getSanitationType(tenantId, moduleCode), config);
   };
 
+  const usePitType = () => {
+    return useQuery("FSM_PIT_TYPE", () => MdmsService.getPitType(tenantId, moduleCode, config));
+  };
+
   const useApplicationChannel = () => {
     return useQuery("FSM_APPLICATION_CHANNEL", () => MdmsService.getApplicationChannel(tenantId, moduleCode, type), config);
   };
@@ -30,6 +34,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
 
     case "PropertySubtype":
       return usePropertySubType();
+
+    case "PitType":
+      return usePitType();
   }
 };
 

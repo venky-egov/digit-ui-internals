@@ -93,6 +93,24 @@ const getSanitationTypeCriteria = (tenantId, moduleCode) => ({
   },
 });
 
+const getPitTypeCriteria = (tenantId, moduleCode) => ({
+  type: "PitType",
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PitType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getApplicationChannelCriteria = (tenantId, moduleCode) => ({
   type: "ApplicationChannel",
   details: {
@@ -158,6 +176,8 @@ const GetServiceDefs = (MdmsRes, moduleCode) => MdmsRes[`RAINMAKER-${moduleCode}
 
 const GetSanitationType = (MdmsRes) => MdmsRes["FSM"].SanitationType.filter((type) => type.active);
 
+const GetPitType = (MdmsRes) => MdmsRes["FSM"].PitType.filter((item) => item.active);
+
 const GetApplicationChannel = (MdmsRes) => MdmsRes["FSM"].ApplicationChannel.filter((type) => type.active);
 
 const GetPropertyType = (MdmsRes) =>
@@ -190,6 +210,8 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetPropertyType(MdmsRes);
     case "PropertySubtype":
       return GetPropertySubtype(MdmsRes);
+    case "PitType":
+      return GetPitType(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -234,5 +256,8 @@ export const MdmsService = {
   },
   getPropertySubtype: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getPitType: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getPitTypeCriteria(tenantId, moduleCode), moduleCode);
   },
 };

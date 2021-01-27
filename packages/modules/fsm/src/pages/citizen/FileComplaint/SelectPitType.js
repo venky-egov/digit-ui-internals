@@ -8,11 +8,11 @@ const SelectPitType = ({ t, config, onSelect, value }) => {
     const { pitType } = value;
     return pitType !== undefined ? pitType : null;
   });
-  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "PitType");
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
 
       setSanitationMenu(data);
     }

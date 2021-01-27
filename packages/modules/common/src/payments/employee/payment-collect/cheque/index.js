@@ -13,7 +13,7 @@ export const useChequeDetails = (props) => {
           populators: {
             name: "chequeDetails",
             customProps: {},
-            defaultValue: { chequeNo: "", chequeDate: "", ifsc: "", bankName: "", bankBranch: "" },
+            defaultValue: { instrumentNumber: "", instrumentDate: "", ifscCode: "", bankName: "", bankBranch: "" },
             component: (props, customProps) => <ChequeDetailsComponent onChange={props.onChange} chequeDetails={props.value} {...customProps} />,
           },
         },
@@ -27,19 +27,19 @@ export const useChequeDetails = (props) => {
 // to be used in config
 
 export const ChequeDetailsComponent = (props) => {
-  const [chequeDate, setChequeDate] = useState(props.chequeDetails.chequeDate);
-  const [chequeNo, setChequeNo] = useState(props.chequeDetails.chequeNo);
-  const [ifsc, setIfsc] = useState(props.chequeDetails.ifsc);
+  const [instrumentDate, setChequeDate] = useState(props.chequeDetails.instrumentDate);
+  const [instrumentNumber, setChequeNo] = useState(props.chequeDetails.instrumentNumber);
+  const [ifscCode, setIfsc] = useState(props.chequeDetails.ifscCode);
   const [bankName, setBankName] = useState(props.chequeDetails.bankName);
   const [bankBranch, setBankBranch] = useState(props.chequeDetails.bankBranch);
 
   useEffect(() => {
-    if (props.onChange) props.onChange({ chequeDate, chequeNo, ifsc, bankName, bankBranch });
-  }, [bankName, bankBranch]);
+    if (props.onChange) props.onChange({ instrumentDate, instrumentNumber, ifscCode, bankName, bankBranch });
+  }, [bankName, bankBranch, instrumentDate, instrumentNumber]);
 
   const setBankDetailsFromIFSC = async () => {
     try {
-      const res = await window.fetch(`https://ifsc.razorpay.com/${ifsc}`);
+      const res = await window.fetch(`https://ifsc.razorpay.com/${ifscCode}`);
       console.log(res.ok);
       if (res.ok) {
         const { BANK, BRANCH } = await res.json();
@@ -60,9 +60,9 @@ export const ChequeDetailsComponent = (props) => {
           <div className="field-container">
             <input
               className="employee-card-input"
-              value={chequeNo}
+              value={instrumentNumber}
               type="text"
-              className="employee-card-input"
+              name="instrumentNumber"
               onChange={(e) => setChequeNo(e.target.value)}
             />
           </div>
@@ -74,9 +74,9 @@ export const ChequeDetailsComponent = (props) => {
           <div className="field-container">
             <input
               className="employee-card-input"
-              value={chequeDate}
+              value={instrumentDate}
               type="date"
-              className="employee-card-input"
+              name="instrumentDate"
               onChange={(e) => setChequeDate(e.target.value)}
             />
           </div>
@@ -99,7 +99,7 @@ export const ChequeDetailsComponent = (props) => {
                       textIndent: "5px",
                       padding: "6px 0px",
                     }}
-                    value={ifsc}
+                    value={ifscCode}
                     type="text"
                     onChange={(e) => setIfsc(e.target.value)}
                   />

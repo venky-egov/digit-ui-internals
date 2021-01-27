@@ -26,6 +26,12 @@ const Urls = {
     search: "/fsm/v1/_search",
     create: "/fsm/v1/_create",
   },
+
+  payment: {
+    fetch_bill: "/billing-service/bill/v2/_fetchbill",
+    create_reciept: "/collection-services/payments/_create",
+    print_reciept: "/collection-services/payments"
+  },
 };
 
 export default Urls;

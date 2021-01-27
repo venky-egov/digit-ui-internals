@@ -1,34 +1,64 @@
 {
-    "id": 27481,
-    "uuid": "6b55dc64-5dc9-4284-a46f-6e264c22cf97",
-    "userName": "EMP-107-000253",
-    "name": "Karan",
-    "mobileNumber": "9898909739",
-    "emailId": "asd@123.com",
-    "locale": null,
-    "type": "EMPLOYEE",
-    "roles": [
-        {
-            "name": "TL Approver",
-            "code": "TL_APPROVER",
-            "tenantId": "pb.amritsar"
-        },
-        {
-            "name": "Employee",
-            "code": "EMPLOYEE",
-            "tenantId": "pb.amritsar"
-        },
-        {
-            "name": "FSM Employee Application Creator",
-            "code": "FSM_CREATOR_EMP",
-            "tenantId": "pb.amritsar"
-        },
-        {
-            "name": "BPAREG Approver",
-            "code": "BPAREG_APPROVER",
-            "tenantId": "pb.amritsar"
-        }
-    ],
-    "active": true,
-    "tenantId": "pb.amritsar"
+  "id": 29766,
+  "uuid": "e63d2234-0c59-4713-9387-56b420e8041b",
+  "userName": "EMP-107-000351",
+  "name": "UITEAMFSMADMIN",
+  "mobileNumber": "9876543215",
+  "emailId": null,
+  "locale": null,
+  "type": "EMPLOYEE",
+  "roles": [
+    {
+      "name": "FSM Administrator",
+      "code": "FSM_ADMIN",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM Employee Application Viewer",
+      "code": "FSM_VIEW_EMP",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM FSTP Opperator",
+      "code": "FSM_EMP_FSTPO",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM Desluding Operator",
+      "code": "FSM_DSO",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM Employee Report Viewer",
+      "code": "FSM_REPORT_VIEWER",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM Payment Collector",
+      "code": "FSM_COLLECTOR",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM Employee Application Creator",
+      "code": "FSM_CREATOR_EMP",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM Driver",
+      "code": "FSM_DRIVER",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM Employee Dashboard Viewer",
+      "code": "FSM_DASHBOARD_VIEWER",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "FSM Employee Application Editor",
+      "code": "FSM_EDITOR_EMP",
+      "tenantId": "pb.amritsar"
+    }
+  ],
+  "active": true,
+  "tenantId": "pb.amritsar"
 }

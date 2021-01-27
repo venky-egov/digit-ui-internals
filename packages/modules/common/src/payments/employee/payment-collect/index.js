@@ -13,14 +13,18 @@ export const CollectPayment = (props) => {
   const history = useHistory();
 
   const { path: currentPath } = useRouteMatch();
-  const { consumerCode } = useParams();
+  const { consumerCode, businessService } = useParams();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
+  const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const { cardConfig } = useCardPaymentDetails(props);
   const { chequeConfig, date } = useChequeDetails(props);
+  const additionalCharges = getAdditionalCharge() || [];
 
   const [formState, setFormState] = useState({});
 
-  console.log("collect page", currentPath, consumerCode, props);
+  console.log("collect page", currentPath, consumerCode, props, bill);
 
   const defaultPaymentModes = [
     { code: "CASH", label: "Cash" },
@@ -43,10 +47,50 @@ export const CollectPayment = (props) => {
 
   const paidByMenu = ["Owner", "Other"];
 
-  const onSubmit = (data) => {
-    console.log(data);
-    history.push(`${props.basePath}/success`);
+  const onSubmit = async (data) => {
+    bill.totalAmount = Math.round(bill.totalAmount);
+    console.log(data, bill.totalAmount);
+    const recieptRequest = {
+      Payment: {
+        ...data,
+        mobileNumber: data.payerMobile,
+        paymentDetails: [
+          {
+            businessService,
+            billId: bill.id,
+            totalDue: bill.totalAmount,
+            totalAmountPaid: bill.totalAmount,
+          },
+        ],
+        tenantId: bill.tenantId,
+        totalDue: bill.totalAmount,
+        totalAmountPaid: bill.totalAmount,
+      },
+    };
+
+    recieptRequest.Payment.paymentMode = data?.paymentMode?.code;
+    if (data.chequeDetails) {
+      recieptRequest.Payment = { ...recieptRequest.Payment, ...data.chequeDetails };
+    }
+    const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
+    console.log(resposne);
+    history.push(`${props.basePath}/success/${businessService}/${resposne.id}`);
   };
+
+  function getAdditionalCharge() {
+    const billAccountDetails = bill?.billDetails
+      ?.map((billDetail) => {
+        return billDetail.billAccountDetails;
+      })
+      ?.flat();
+
+    return billAccountDetails?.map((billAccountDetail) => {
+      return {
+        label: t(billAccountDetail.taxHeadCode),
+        populators: <div style={{ marginBottom: 0, textAlign: "right" }}>₹ {billAccountDetail.amount}</div>,
+      };
+    });
+  }
 
   useEffect(() => {
     document?.getElementById("paymentInfo")?.scrollIntoView({ behavior: "smooth" });
@@ -57,17 +101,10 @@ export const CollectPayment = (props) => {
     {
       head: "Payment Details",
       body: [
-        {
-          label: "Fee",
-          populators: <div style={{ marginBottom: 0, textAlign: "right" }}>₹ 1500.00</div>,
-        },
-        {
-          label: "Add Charge",
-          populators: <div style={{ marginBottom: 0, textAlign: "right" }}>₹ 100.00</div>,
-        },
+        ...additionalCharges,
         {
           label: "Total Amount",
-          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}>₹ 1600.00</CardSectionHeader>,
+          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {bill.totalAmount} </CardSectionHeader>,
         },
       ],
     },

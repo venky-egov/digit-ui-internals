@@ -81,8 +81,8 @@ const ApplicationDetails = (props) => {
     switch (selectedAction) {
       case "GENERATE_DEMAND":
         return setShowModal(true);
-      case "MODIFY_APPLICATION":
-        return history.push("/digit-ui/employee/fsm/modify-application");
+      case "SUBMIT":
+        return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       default:
         console.log("default case");
         break;

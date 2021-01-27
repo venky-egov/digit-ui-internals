@@ -14,28 +14,23 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   let { id: applicationNumber } = useParams();
   const userInfo = Digit.UserService.getUser();
   const cities = Digit.Hooks.fsm.useTenants();
+  console.log("find cities here", cities);
 
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(state, "FSM", "ApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "SanitationType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
-  console.log("find propertyTypesData here", propertyTypesData);
+  // console.log("find propertyTypesData sanitationTypeData here", propertyTypesData, sanitationTypeData);
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
 
   const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNumber, uuid: userInfo.uuid },
     { staleTime: Infinity }
   );
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({
-    tenantId,
-    id: applicationNumber,
-    moduleCode: "FSM",
-    role: "FSM_EMPLOYEE",
-    serviceData: applicationData,
-    getStaleData: true,
-  });
+  const workflowDetails = Digit.Hooks.fsm.useWorkflowData(tenantId, applicationNumber);
   const [defaultValues, setDefaultValues] = useState();
 
   console.log("find application details and workflow data here", applicationData, workflowDetails);
@@ -44,10 +39,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
   const [subType, setSubType] = useState({});
-  const [vehicleMenu, setVehicleMenu] = useState([
-    { key: "Tracker (500 ltrs)", name: "Tracker (500 ltrs)" },
-    { key: "Tracker (1000 ltrs)", name: "Tracker (1000 ltrs)" },
-  ]);
 
   const [channelMenu, setChannelMenu] = useState([]);
 
@@ -65,9 +56,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const selectedLocalities = Digit.SessionStorage.get("selected_localities");
   const localityProperty = Digit.SessionStorage.get("locality_property");
 
-  const [selectedCity, setSelectedCity] = useState(cityProperty ? cityProperty : null);
-  const [localities, setLocalities] = useState(selectedLocalities ? selectedLocalities : null);
-  const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
+  const [selectedCity, setSelectedCity] = useState(() => cities.filter((city) => city.code === tenantId)[0]);
+  const [localities, setLocalities] = useState(() => localitiesObj[tenantId]);
+  const [selectedLocality, setSelectedLocality] = useState();
+  const [canSubmit, setSubmitValve] = useState(false);
 
   console.log("find channel state here", channel);
   useEffect(() => {
@@ -81,7 +73,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         doorNo: applicationDetails.address?.plotNo,
         landmark: applicationDetails.address?.landmark,
         noOfTrips: applicationDetails.noOfTrips,
-        amount: JSON.parse(JSON.parse(applicationDetails.additionalDetails))?.tripAmount,
+        distanceFromRoad: applicationDetails?.pitDetail?.distanceFromRoad,
       });
     }
   }, [applicationData]);
@@ -103,7 +95,37 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       console.log("find channel here", channelMenu);
       setChannel(channelMenu[0]);
     }
-  }, [channelMenu, applicationData]);
+    if (applicationData && applicationData.fsm && !selectedLocality && localities) {
+      const prePopulatedLocality = applicationData.fsm[0].address?.locality;
+      const adminPreCode = tenantId.toUpperCase().split(".").join("_") + "_ADMIN_";
+      const __selectedLocality = localities.filter((locality) => locality.code === `${adminPreCode + prePopulatedLocality.code}`)[0];
+      // console.log("find localities here", localities, __selectedLocality);
+      setSelectedLocality(__selectedLocality);
+    }
+    if (applicationData && applicationData.fsm && propertyTypesData.data && propertySubtypesData.data) {
+      const prePropertyUsage = applicationData.fsm[0].propertyUsage;
+      const prePropertyType = prePropertyUsage.split(".")[0];
+
+      setPropertyType(propertyTypesData.data.filter((type) => type.code === prePropertyType)[0]);
+      setSubType(propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)[0]);
+    }
+
+    if (applicationData && applicationData.fsm && sanitationMenu) {
+      const prePitType = applicationData.fsm[0].sanitationtype;
+      // console.log("find prePitType and sanitationType data here",prePitType, sanitationMenu, sanitationMenu.filter( pitType => pitType.code === prePitType)[0])
+      setSanitation(sanitationMenu.filter((pitType) => pitType.code === prePitType)[0]);
+    }
+    if (applicationData && applicationData.fsm && Object.keys(pitDimension).length === 0) {
+      const __height = applicationData.fsm[0].pitDetail?.height;
+      const __length = applicationData.fsm[0].pitDetail?.length;
+      const __width = applicationData.fsm[0].pitDetail?.width;
+      setPitDimension({
+        height: __height,
+        length: __length,
+        width: __width,
+      });
+    }
+  }, [channelMenu, selectedLocality, localities, applicationData, propertyTypesData.data, propertySubtypesData.data, sanitationMenu, pitDimension]);
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
@@ -112,6 +134,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       setSanitationMenu(data);
     }
   }, [sanitationTypeData]);
+
+  useEffect(() => {
+    if (sanitation && propertyType && subType && vehicle) {
+      setSubmitValve(true);
+    } else {
+      setSubmitValve(false);
+    }
+  }, [sanitation, propertyType, subType, vehicle]);
 
   function selectedType(value) {
     setPropertyType(value);
@@ -150,6 +180,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     if (!isNaN(value)) {
       setPitDimension({ ...pitDimension, [name]: value });
     }
+    // console.log("test pitDeminsion working here",{ ...pitDimension, [name]: value })
   };
 
   function selectLocality(locality) {
@@ -172,10 +203,11 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const district = selectedCity.city.name;
     const region = selectedCity.city.name;
     const state = "Punjab";
-    const localityCode = selectedLocality.code;
+    const localityCode = selectedLocality.code.split("_").pop();
     const localityName = selectedLocality.name;
     const { name } = subType;
     const propertyType = name;
+    const { height, length, width } = pitDimension;
     const formData = {
       fsm: {
         citizen: {
@@ -189,7 +221,13 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           tripAmount: amount,
         },
         propertyUsage: subType.code,
-        pitDetail: pitDimension,
+        vehicleType: vehicle.code,
+        pitDetail: {
+          distanceFromRoad: data.distanceFromRoad,
+          height,
+          length,
+          width,
+        },
         address: {
           tenantId: cityCode,
           landmark,
@@ -209,9 +247,11 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         },
         noOfTrips,
       },
-      workflow: null,
+      workflow: {
+        assign: "SUBMIT",
+      },
     };
-    console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData, subType);
+    console.log("%c: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData, subType);
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -219,7 +259,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
 
-    history.push("/digit-ui/employee/fsm/response", formData);
+    history.push("/digit-ui/employee/fsm/response", { formData, key: "update" });
   };
 
   const config = [
@@ -349,6 +389,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: <PitDimension t={t} size={pitDimension} handleChange={handlePitDimension} />,
         },
         {
+          label: t("ES_NEW_APPLICATION_PIT_DISTANCE_FROM_ROAD"),
+          type: "text",
+          populators: {
+            name: "distanceFromRoad",
+            validation: { pattern: /[0-9]+/ },
+          },
+        },
+        {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
           type: "text",
           populators: {
@@ -362,7 +410,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "amount",
-            validation: { pattern: /[0-9]+/ },
+            validation: {
+              required: true,
+              pattern: /[0-9]+/,
+            },
             componentInFront: (
               <span
                 style={{
@@ -385,14 +436,21 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
+          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
         },
       ],
     },
   ];
   if (defaultValues) {
     return (
-      <FormComposer heading={heading} label={t("ES_COMMON_UPDATE")} config={config} onSubmit={onSubmit} defaultValues={defaultValues}></FormComposer>
+      <FormComposer
+        heading={heading}
+        isDisabled={!canSubmit}
+        label={t("ES_COMMON_UPDATE")}
+        config={config}
+        onSubmit={onSubmit}
+        defaultValues={defaultValues}
+      ></FormComposer>
     );
   } else {
     return <Loader />;

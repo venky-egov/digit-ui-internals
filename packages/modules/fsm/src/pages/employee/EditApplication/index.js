@@ -19,7 +19,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(state, "FSM", "ApplicationChannel");
-  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "SanitationType");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   // console.log("find propertyTypesData sanitationTypeData here", propertyTypesData, sanitationTypeData);
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
@@ -129,7 +129,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
 
       setSanitationMenu(data);
     }
@@ -377,7 +377,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       ],
     },
     {
-      head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
+      head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
       body: [
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),

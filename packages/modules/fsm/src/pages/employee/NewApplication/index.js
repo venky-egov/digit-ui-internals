@@ -42,7 +42,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
   const history = useHistory();
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
-  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
@@ -62,7 +62,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
 
       setSanitationMenu(data);
     }
@@ -327,7 +327,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       ],
     },
     {
-      head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
+      head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
       body: [
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
@@ -381,5 +381,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
     },
   ];
 
-  return <FormComposer heading={heading} isDisabled={!canSubmit} label={t("ES_COMMON_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit} />;
+  return (
+    <FormComposer
+      heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
+      isDisabled={!canSubmit}
+      label={t("ES_COMMON_APPLICATION_SUBMITTED")}
+      config={config}
+      onSubmit={onSubmit}
+    />
+  );
 };

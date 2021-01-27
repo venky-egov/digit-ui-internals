@@ -111,7 +111,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   }
 
   const onSubmit = (data) => {
-    const applicationChannel = channel.code;
+    const applicationChannel = channel?.code;
     const sanitationtype = sanitation.code;
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;

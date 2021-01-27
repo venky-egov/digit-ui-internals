@@ -21,6 +21,7 @@ import useDesludging from "./fsm/useDesludging";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
 import useInbox from "./fsm/useInbox";
+import useApplicationUpdate from "./fsm/useApplicationUpdate";
 
 const pgr = {
   useComplaintDetails,
@@ -43,6 +44,7 @@ const fsm = {
   useMDMS: useMDMS,
   useSearch: useSearch,
   useInbox,
+  useApplicationUpdate,
 };
 
 const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };

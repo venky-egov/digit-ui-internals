@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 export const SelectPaymentType = (props) => {
   const { t } = useTranslation();
 
-  const menu = ["UPI", "NEFT", "Debit/Credit Card"];
+  const menu = ["Online Payment"];
   const { consumerCode, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
@@ -87,7 +87,7 @@ export const SelectPaymentType = (props) => {
           {menu?.length && (
             <Controller
               name="paymentType"
-              defaultValue={"UPI"}
+              defaultValue={menu[0]}
               control={control}
               render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
             />

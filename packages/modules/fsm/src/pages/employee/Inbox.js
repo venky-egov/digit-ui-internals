@@ -1,86 +1,44 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Loader } from "@egovernments/digit-ui-react-components";
+import { Loader, Header } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
 import DesktopInbox from "../../components/DesktopInbox";
+import MobileInbox from "../../components/MobileInbox";
 
 const Inbox = () => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useState({ filters: {}, search: "", sort: {} });
+  const [searchParams, setSearchParams] = useState({});
+  const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
+    ...searchParams,
+  });
+
+  // useEffect(() => {
+  //   revalidate();
+  // }, [searchParams])
 
   const handleFilterChange = (filterParam) => {
     // console.log("handleFilterChange", { ...searchParams, filters: filterParam });
-    // setSearchParams({ ...searchParams, filters: filterParam });
+    setSearchParams({ ...searchParams, ...filterParam });
   };
 
-  const onSearch = (params = "") => {
-    // setSearchParams({ ...searchParams, search: params });
+  const onSearch = (params = {}) => {
+    setSearchParams({ ...searchParams, ...params });
   };
 
-  // let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
-  const complaints = React.useMemo(
-    () => [
-      {
-        applicationNo: (
-          <div>
-            <span className="link">
-              <Link to={"/digit-ui/employee/fsm/application-details"}>PB-FSM-2019-04-23-898898</Link>
-            </span>
-            {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
-            <br />
-            {/* <span style={{ marginTop: "4px", color: "#505A5F" }}>{t(`SERVICEDEFS.${row.row.original["complaintSubType"].toUpperCase()}`)}</span> */}
-          </div>
-        ),
-        applicationDate: "12/08/2020",
-        locality: "Alakapuri",
-        status: "Pending for Payment",
-        slaDaysRemaining: "12",
-      },
-      {
-        applicationNo: (
-          <div>
-            <span className="link">
-              <Link to={"/digit-ui/employee/fsm/application-details"}>PB-FSM-2019-04-23-898898</Link>
-            </span>
-            {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
-            <br />
-            {/* <span style={{ marginTop: "4px", color: "#505A5F" }}>{t(`SERVICEDEFS.${row.row.original["complaintSubType"].toUpperCase()}`)}</span> */}
-          </div>
-        ),
-        applicationDate: "12/08/2020",
-        locality: "Alakapuri",
-        status: "Pending for Payment",
-        slaDaysRemaining: "12",
-      },
-    ],
-    []
-  );
+  let isMobile = window.Digit.Utils.browser.isMobile;
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "When",
-        accessor: "when",
-      },
-      {
-        Header: "Who",
-        accessor: "who",
-      },
-      {
-        Header: "What",
-        accessor: "what",
-      },
-    ],
-    []
-  );
-
-  let isMobile = Digit.Utils.browser.isMobile;
-  // if (complaints.length !== null) {
-  return <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSearch={onSearch} />;
-  // } else {
-  //   return <Loader />;
-  // }
+  if (isMobile) {
+    return <MobileInbox data={applications} isLoading={isLoading || isIdle} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+  } else {
+    return (
+      <div>
+        <Header>{t("ES_COMMON_INBOX")}</Header>
+        <DesktopInbox data={applications} isLoading={isLoading || isIdle} onFilterChange={handleFilterChange} onSearch={onSearch} />
+      </div>
+    );
+  }
 };
 
 export default Inbox;

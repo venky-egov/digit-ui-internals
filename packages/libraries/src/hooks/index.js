@@ -1,6 +1,9 @@
 import { useInitStore } from "./store";
 import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
+import useClickOutside from "./useClickOutside";
+import useCoreData from "./useCoreData";
+import { useFetchPayment, usePaymentUpdate } from "./payment";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -15,6 +18,13 @@ import useTenants from "./pgr/useTenants";
 import useComplaintSubType from "./pgr/useComplaintSubType";
 
 import useTenantsFSM from "./fsm/useTenants";
+import useDesludging from "./fsm/useDesludging";
+import useApplicationStatus from "./fsm/useApplicationStatus";
+import useMDMS from "./fsm/useMDMS";
+import useSearch from "./fsm/useSearch";
+import useInbox from "./fsm/useInbox";
+import useApplicationUpdate from "./fsm/useApplicationUpdate";
+import useWorkflowData from "./fsm/useWorkflowData";
 
 const pgr = {
   useComplaintDetails,
@@ -33,8 +43,15 @@ const pgr = {
 
 const fsm = {
   useTenants: useTenantsFSM,
+  useDesludging: useDesludging,
+  useMDMS: useMDMS,
+  useSearch: useSearch,
+  useInbox,
+  useApplicationUpdate,
+  useApplicationStatus,
+  useWorkflowData,
 };
 
-const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, pgr, fsm };
+const Hooks = { useSessionStorage, useFetchPayment, usePaymentUpdate, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
 
 export default Hooks;

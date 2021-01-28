@@ -4,7 +4,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 import { toDataURL } from "./toDataURL";
 
-const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details }) => {
+const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
   const base64Image = await toDataURL(logo);
 
   const dd = {
@@ -44,10 +44,16 @@ const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details
         margin: [-25, 32],
       },
       ...createContent(details),
+      {
+        text: t("PDF_SYSTEM_GENERATED_ACKNOWLEDGEMENT"),
+        fontSize: 11,
+        color: "#6f777c",
+        margin: [-25, 32],
+      },
     ],
   };
 
-  pdfMake.createPdf(dd).download();
+  pdfMake.createPdf(dd).open();
 };
 
 export default { generate: jsPdfGenerator };

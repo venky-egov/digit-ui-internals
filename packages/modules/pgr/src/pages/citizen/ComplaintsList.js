@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 
@@ -9,9 +9,14 @@ import Complaint from "../../components/Complaint";
 export const ComplaintsList = (props) => {
   const User = Digit.UserService.getUser();
   const mobileNumber = User.mobileNumber || User?.info?.mobileNumber || User?.info?.userInfo?.mobileNumber;
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
-  let { isLoading, error, data } = Digit.Hooks.pgr.useComplaintsListByMobile(mobileNumber);
+  let { isLoading, error, data, revalidate } = Digit.Hooks.pgr.useComplaintsListByMobile(tenantId, mobileNumber);
+
+  useEffect(() => {
+    revalidate();
+  }, []);
 
   if (isLoading) {
     return (
@@ -31,8 +36,10 @@ export const ComplaintsList = (props) => {
       <Card>
         {t(LOCALE.ERROR_LOADING_RESULTS)
           .split("\\n")
-          .map((text) => (
-            <p style={{ textAlign: "center" }}>{text}</p>
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
           ))}
       </Card>
     );
@@ -41,8 +48,10 @@ export const ComplaintsList = (props) => {
       <Card>
         {t(LOCALE.NO_COMPLAINTS)
           .split("\\n")
-          .map((text) => (
-            <p style={{ textAlign: "center" }}>{text}</p>
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
           ))}
       </Card>
     );

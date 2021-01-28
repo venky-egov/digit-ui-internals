@@ -24,7 +24,18 @@ export const UserService = {
   getUser: () => {
     return Digit.SessionStorage.get("User");
   },
-  sendOtp: (details, stateCode = "pb") =>
+  logout: () => {
+    const userType = UserService.getType();
+    Digit.SessionStorage.set("User", {});
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+    if (userType === "citizen") {
+      window.location.replace("/citizen");
+    } else {
+      window.location.replace("/employee");
+    }
+  },
+  sendOtp: (details, stateCode) =>
     ServiceRequest({
       serviceName: "sendOtp",
       url: Urls.OTP_Send,
@@ -32,10 +43,10 @@ export const UserService = {
       auth: false,
       params: { tenantId: stateCode },
     }),
-  setUser: () => {
-    return Digit.SessionStorage.set("User");
+  setUser: (data) => {
+    return Digit.SessionStorage.set("User", data);
   },
-  registerUser: (details, stateCode = "pb") =>
+  registerUser: (details, stateCode) =>
     ServiceRequest({
       serviceName: "registerUser",
       url: Urls.RegisterUser,
@@ -44,7 +55,7 @@ export const UserService = {
       },
       params: { tenantId: stateCode },
     }),
-  updateUser: async (details, stateCode = "pb") =>
+  updateUser: async (details, stateCode) =>
     ServiceRequest({
       serviceName: "updateUser",
       url: Urls.UserProfileUpdate,

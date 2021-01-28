@@ -15,5 +15,10 @@ module.exports = function (app) {
     "/egov-hrms",
     "/user-otp",
     "/user",
+    "/fsm",
+    "/billing-service",
+    "/collection-services",
+    "/pdf-service",
+    "/pg-service"
   ].forEach((location) => app.use(location, createProxy));
 };

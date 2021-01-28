@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
+  BreakLine,
   Card,
-  Header,
   CardSubHeader,
   StatusTable,
   Row,
-  TextArea,
   SubmitBar,
-  DisplayPhotos,
-  ImageViewer,
   Loader,
   CardSectionHeader,
   ConnectingCheckPoints,
@@ -18,78 +15,53 @@ import {
   ActionBar,
   Menu,
   LinkButton,
+  Dropdown,
 } from "@egovernments/digit-ui-react-components";
 
+import { useHistory, useParams } from "react-router-dom";
 import Modal from "../../components/Modal";
-import { useHistory } from "react-router-dom";
-
-const applicationDetails = {
-  details: [
-    {
-      title: "Application Details",
-      values: [{ title: "Application No.", value: "FSM-277373" }],
-    },
-    {
-      title: "Applicant Details",
-      values: [
-        { title: "Applicant Name", value: "Nawal Kishore" },
-        { title: "Applicant Mobile No.", value: "+91 9645234533" },
-        { title: "Slum Name", value: "Jagbandhu huda" },
-      ],
-    },
-    {
-      title: "Property Details",
-      values: [
-        { title: "Property Type", value: "Commercial" },
-        { title: "Property Sub-Type", value: "Shopping Mail" },
-      ],
-    },
-    {
-      title: "Property Location Details",
-      values: [
-        { title: "Locality", value: "Alakapuri" },
-        { title: "City", value: "Berhampur" },
-        { title: "Pincode", value: "345123" },
-        { title: "Landmark", value: "SBI Bank" },
-        { title: "Geolocation", value: "" },
-      ],
-    },
-  ],
-};
-
-const timeline = [
-  {
-    label: "Pending for Demand Generation",
-    caption: [""],
-  },
-  {
-    label: "Application Submitted",
-    caption: [
-      {
-        date: "12/08/2020",
-        name: "Nawal Kishore",
-        mobileNumber: "+91 4534234512",
-        source: "Filed Via Mobile App",
-      },
-    ],
-  },
-];
-
-const workflowDetails = {
-  data: {
-    nextActions: [{ action: "GENERATE_DEMAND" }, { action: "MODIFY_APPLICATION" }, { action: "REJECT_APPLICATION" }],
-  },
-};
 
 const ApplicationDetails = (props) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const history = useHistory();
+  let { id: applicationNumber } = useParams();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const { isLoading, isError, data, error } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber, uuid: Digit.UserService.getUser().uuid });
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({
+    tenantId,
+    id: applicationNumber,
+    moduleCode: "FSM",
+    role: "FSM_EMPLOYEE",
+    serviceData: data,
+  });
+  const [vehicle, setVehicle] = useState(null);
+  const [vehicleMenu, setVehicleMenu] = useState([
+    { key: "Type A", name: "Type A" },
+    { key: "Type B", name: "Type B" },
+  ]);
+
+  function selectVehicle(value) {
+    setVehicle(value);
+  }
+
+  const config = [
+    {
+      body: [
+        {
+          label: t("ES_VEHICLE_TYPE"),
+          type: "dropdown",
+          populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+        },
+      ],
+    },
+  ];
 
   function onActionSelect(action) {
     setSelectedAction(action);
+    setDisplayMenu(false);
   }
 
   const TLCaption = ({ data }) => {
@@ -109,8 +81,10 @@ const ApplicationDetails = (props) => {
     switch (selectedAction) {
       case "GENERATE_DEMAND":
         return setShowModal(true);
-      case "MODIFY_APPLICATION":
-        return history.push("/digit-ui/employee/fsm/modify-application");
+      case "SUBMIT":
+        return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+      case "PAY":
+        return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
         console.log("default case");
         break;
@@ -132,7 +106,79 @@ const ApplicationDetails = (props) => {
 
   const closeModal = () => {
     setShowModal(false);
+    setSelectedAction(null);
   };
+
+  const handleGenerateDemand = (data) => {
+    closeModal();
+    console.log("%c 🍓: handleGenerateDemand -> data ", "font-size:16px;background-color:#582dc7;color:white;", {
+      ...data,
+      vehicle,
+    });
+    setVehicle(null);
+  };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  const application = data?.fsm[0];
+  const applicationDetails = {
+    details: [
+      {
+        title: t("ES_TITLE_APPLICATION_DETAILS"),
+        values: [
+          { title: t("ES_APPLICATION_NO"), value: application.applicationNo },
+          { title: t("ES_APPLICATION_CHANNEL"), value: application.source },
+        ],
+      },
+      {
+        title: t("ES_TITLE_APPLICATION_DETAILS"),
+        values: [
+          { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: application.citizen.name },
+          { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: application.citizen.mobileNumber },
+          { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
+        ],
+      },
+      {
+        title: t("ES_APPLICATION_DETAILS_PROPERTY_DETAILS"),
+        values: [
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: application.propertyUsage },
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: "Shopping Mail" },
+        ],
+      },
+      {
+        title: t("ES_APPLICATION_DETAILS_LOCATION_DETAILS"),
+        values: [
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"), value: t(application.address.locality.code) },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: application.address.city },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: application.address.pincode },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_STREET"), value: application.address.street },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_DOOR"), value: application.address.doorNo },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_LANDMARK"), value: application.address.landmark },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
+        ],
+      },
+    ],
+  };
+
+  const timeline = [
+    {
+      label: t("ES_TIMELINE_PENDING_FOR_DEMAND_GENERATION"),
+      caption: [""],
+    },
+    {
+      label: t("ES_COMMON_APPLICATION_SUBMITTED"),
+      caption: [
+        {
+          date: "12/08/2020",
+          name: "Nawal Kishore",
+          mobileNumber: "+91 4534234512",
+          source: "Filed Via Mobile App",
+        },
+      ],
+    },
+  ];
 
   return (
     <React.Fragment>
@@ -140,7 +186,7 @@ const ApplicationDetails = (props) => {
         <React.Fragment>
           <Card style={{ position: "relative" }}>
             <LinkButton
-              label={<span style={{ color: "#f47738", marginLeft: "8px" }}>VIEW AUDIT TRAIL</span>}
+              label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
               style={{ position: "absolute", top: 0, right: 20 }}
               onClick={() => {}}
             />
@@ -159,33 +205,44 @@ const ApplicationDetails = (props) => {
               </React.Fragment>
             ))}
 
-            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>Application Timeline</CardSectionHeader>
-            {timeline && timeline.length > 0 ? (
-              <ConnectingCheckPoints>
-                {timeline.map((value, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <CheckPoint
-                        keyValue={index}
-                        isCompleted={index === 0 ? true : false}
-                        label={value.label}
-                        customChild={getTimelineCaptions(value)}
-                      />
-                    </React.Fragment>
-                  );
-                })}
-              </ConnectingCheckPoints>
-            ) : (
-              <Loader />
+            <BreakLine />
+            {workflowDetails?.isLoading && <Loader />}
+            {!workflowDetails?.isLoading && (
+              <Fragment>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+                  {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+                </CardSectionHeader>
+                {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
+                  <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
+                ) : (
+                  <ConnectingCheckPoints>
+                    {workflowDetails?.data?.timeline &&
+                      workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
+                        return (
+                          <React.Fragment key={index}>
+                            <CheckPoint
+                              keyValue={index}
+                              isCompleted={index === 0}
+                              label={t("CS_COMMON_" + checkpoint.status)}
+                              // customChild={getTimelineCaptions(checkpoint)}
+                            />
+                          </React.Fragment>
+                        );
+                      })}
+                  </ConnectingCheckPoints>
+                )}
+              </Fragment>
             )}
           </Card>
-          {showModal ? <Modal onClose={closeModal} /> : null}
-          <ActionBar>
-            {displayMenu && workflowDetails?.data?.nextActions ? (
-              <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
-            ) : null}
-            <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
-          </ActionBar>
+          {showModal ? <Modal closeModal={closeModal} onSubmit={handleGenerateDemand} config={config} /> : null}
+          {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+            <ActionBar>
+              {displayMenu && workflowDetails?.data?.nextActions ? (
+                <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
+              ) : null}
+              <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+            </ActionBar>
+          )}
         </React.Fragment>
       ) : (
         <Loader />

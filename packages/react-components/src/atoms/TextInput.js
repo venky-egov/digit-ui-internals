@@ -14,6 +14,7 @@ const TextInput = (props) => {
           onChange={props.onChange}
           ref={props.inputRef}
           value={props.value}
+          defaultValue={props.defaultValue}
         />
       ) : (
         <input
@@ -25,6 +26,7 @@ const TextInput = (props) => {
           ref={props.inputRef}
           value={props.value}
           style={{ ...props.style }}
+          defaultValue={props.defaultValue}
         />
       )}
     </React.Fragment>
@@ -38,7 +40,7 @@ TextInput.propTypes = {
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
   ref: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.any,
 };
 
 TextInput.defaultProps = {

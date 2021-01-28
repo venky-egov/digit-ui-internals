@@ -4,6 +4,7 @@ import SelectAddress from "./SelectAddress";
 import SelectLandmark from "./SelectLandmark";
 import SelectPincode from "./SelectPincode";
 import SelectTankSize from "./SelectTankSize";
+import SelectPitType from "./SelectPitType";
 
 export const config = {
   routes: {
@@ -53,9 +54,9 @@ export const config = {
     address: {
       component: SelectAddress,
       texts: {
-        headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
-        header: "CS_ADDCOMPLAINT_PROVIDE_COMPLAINT_ADDRESS",
-        cardText: "CS_ADDCOMPLAINT_CITY_MOHALLA_TEXT",
+        headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
+        header: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_ADDRESS",
+        cardText: "CS_ADDCOMPLAINT_PROPERTY_CITY_MOHALLA_TEXT",
         nextText: "PT_COMMONS_NEXT",
       },
       nextStep: "landmark",
@@ -63,27 +64,36 @@ export const config = {
     landmark: {
       component: SelectLandmark,
       texts: {
-        headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
+        headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
         header: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK",
-        cardText: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK_TEXT",
+        cardText: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_LANDMARK_TEXT",
         nextText: "PT_COMMONS_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
         {
-          label: "CS_ADDCOMPLAINT_LANDMARK",
+          label: "CS_ADDCOMPLAINT_PROPERTY_LANDMARK",
           type: "textarea",
           name: "landmark",
         },
       ],
+      nextStep: "pit-type",
+    },
+    "pit-type": {
+      component: SelectPitType,
+      texts: {
+        header: "CS_FILE_PROPERTY_PIT_TYPE",
+        cardText: "CS_FILE_PROPERTY_PIT_TYPE_TEXT",
+        nextText: "PT_COMMONS_NEXT",
+      },
       nextStep: "tank-size",
     },
     "tank-size": {
       component: SelectTankSize,
       texts: {
         headerCaption: "",
-        header: "CS_FILE_PROPERTY_SUBTYPE_PLACEHOLDER",
-        cardText: "CS_FILE_PROPERTY_SUBTYPE_TEXT",
+        header: "CS_FILE_PROPERTY_TANKSIZE_PLACEHOLDER",
+        cardText: "CS_FILE_PROPERTY_TANKSIZE_TEXT",
         nextText: "PT_COMMONS_NEXT",
       },
       nextStep: null,

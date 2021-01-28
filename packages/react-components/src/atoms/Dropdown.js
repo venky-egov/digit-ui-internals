@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
 
@@ -7,14 +7,24 @@ const TextField = (props) => {
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");
-  }, [props.selectedVal]);
+  }, [props.selectedVal, props.forceSet]);
 
   function inputChange(e) {
+    if (props.freeze) return;
+
     setValue(e.target.value);
     props.setFilter(e.target.value);
   }
 
-  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} />;
+  function broadcastToOpen() {
+    props.dropdownDisplay(true);
+  }
+
+  function broadcastToClose() {
+    props.dropdownDisplay(false);
+  }
+
+  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
 };
 
 const Dropdown = (props) => {
@@ -22,26 +32,48 @@ const Dropdown = (props) => {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
-
-  console.log("%c 🏎️: props in dropdown ", "font-size:16px;background-color:#c239cc;color:white;", props.selected);
-
+  const [forceSet, setforceSet] = useState(0);
+  const optionRef = useRef(null);
+  const hasCustomSelector = props.customSelector ? true : false;
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
 
   function dropdownSwitch() {
     var current = dropdownStatus;
+    if (!current) {
+      document.addEventListener("mousedown", handleClick, false);
+    }
     setDropdownStatus(!current);
   }
 
-  function dropdownOn() {
-    setDropdownStatus(true);
+  function handleClick(e) {
+    if (!optionRef.current || !optionRef.current.contains(e.target)) {
+      document.removeEventListener("mousedown", handleClick, false);
+      setDropdownStatus(false);
+    }
   }
 
-  function onSelect(selectedOption) {
-    props.select(selectedOption);
-    setSelectedOption(selectedOption);
-    setDropdownStatus(false);
+  function dropdownOn(val) {
+    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 500);
+    const timerId = waitForOptions();
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }
+
+  function onSelect(val) {
+    //console.log(val, "curent", selectedOption, "old");
+    if (val !== selectedOption) {
+      // console.log(val,"is selected");
+      props.select(val);
+      setSelectedOption(val);
+      setDropdownStatus(false);
+    } else {
+      setSelectedOption(val);
+      setforceSet(forceSet + 1);
+    }
   }
 
   function setFilter(val) {
@@ -51,26 +83,38 @@ const Dropdown = (props) => {
   return (
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
-      <div className={dropdownStatus ? "select-active" : "select"}>
-        <TextField
-          setFilter={setFilter}
-          selectedVal={
-            selectedOption
-              ? props.t
-                ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
-                : props.optionKey
-                ? selectedOption[props.optionKey]
-                : selectedOption
-              : null
-          }
-          filterVal={filterVal}
-          onClick={dropdownOn}
-        />
-        <ArrowDown onClick={dropdownSwitch} />
-      </div>
+      {hasCustomSelector && (
+        <div className={props.showArrow ? "cp margin-top-6 flex-right column-gap-5" : "cp margin-top-6"} onClick={dropdownSwitch}>
+          {props.customSelector}
+          {props.showArrow && <ArrowDown onClick={dropdownSwitch} />}
+        </div>
+      )}
+      {!hasCustomSelector && (
+        <div className={dropdownStatus ? "select-active" : "select"}>
+          <TextField
+            setFilter={setFilter}
+            forceSet={forceSet}
+            selectedVal={
+              selectedOption
+                ? props.t
+                  ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
+                  : props.optionKey
+                  ? selectedOption[props.optionKey]
+                  : selectedOption
+                : null
+            }
+            filterVal={filterVal}
+            // onClick={dropdownOn}
+            dropdownDisplay={dropdownOn}
+            freeze={props.freeze ? true : false}
+          />
+          <ArrowDown onClick={dropdownSwitch} />
+        </div>
+      )}
+      {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
-          <div className="options-card">
+          <div className={`${hasCustomSelector ? "margin-top-10" : ""} options-card`} ref={optionRef}>
             {props.option &&
               props.option
                 .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
@@ -79,9 +123,10 @@ const Dropdown = (props) => {
                     // console.log(props.t(option[props.optionKey]));
                   }
                   return (
-                    <p key={index} onClick={() => onSelect(option)}>
-                      {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
-                    </p>
+                    <div className="cp profile-dropdown--item" key={index} onClick={() => onSelect(option)}>
+                      {option.icon && <span className="icon"> {option.icon} </span>}
+                      {<span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>}
+                    </div>
                   );
                 })}
           </div>
@@ -104,6 +149,8 @@ const Dropdown = (props) => {
 };
 
 Dropdown.propTypes = {
+  customSelector: PropTypes.any,
+  showArrow: PropTypes.bool,
   selected: PropTypes.any,
   style: PropTypes.object,
   option: PropTypes.array,
@@ -112,6 +159,9 @@ Dropdown.propTypes = {
   t: PropTypes.func,
 };
 
-Dropdown.defaultProps = {};
+Dropdown.defaultProps = {
+  customSelector: null,
+  showArrow: true,
+};
 
 export default Dropdown;

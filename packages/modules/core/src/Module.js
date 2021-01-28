@@ -22,7 +22,13 @@ const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
     <Provider store={getStore(initData, moduleReducers(initData))}>
       <Router>
         <Body>
-          <DigitApp stateCode={stateCode} modules={initData?.modules} appTenants={initData.tenants} logoUrl={initData?.stateInfo?.logoUrl} />
+          <DigitApp
+            initData={initData}
+            stateCode={stateCode}
+            modules={initData?.modules}
+            appTenants={initData.tenants}
+            logoUrl={initData?.stateInfo?.logoUrl}
+          />
         </Body>
       </Router>
     </Provider>
@@ -38,6 +44,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
       },
     },
   });
+
   const ComponentProvider = Digit.Contexts.ComponentProvider;
 
   return (

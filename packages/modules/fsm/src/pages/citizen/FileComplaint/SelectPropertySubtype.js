@@ -1,26 +1,40 @@
 import React, { useState } from "react";
-import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
-import data from "../../../propertyType.json";
+import { Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
 
-const SelectPropertySubtype = ({ config, onSelect, t }) => {
-  const [subtype, setSubtype] = useState(null);
-  const menu = data.propertySubtype;
+const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
+  const [subtype, setSubtype] = useState(() => {
+    const { subtype } = value;
+    return subtype !== undefined ? subtype : null;
+  });
+  const { propertyType } = value;
+  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertySubtype", { select });
 
   const selectedValue = (value) => {
     setSubtype(value);
   };
 
   const goNext = () => {
-    onSelect(subtype);
+    onSelect({ subtype: subtype });
   };
+
+  if (propertySubtypesData.isLoading) {
+    return <Loader />;
+  }
+
+  const menu = propertySubtypesData.data.filter((item) => item.propertyType === propertyType?.code);
+
   return (
     <TypeSelectCard
       {...config.texts}
-      {...{ menu }}
-      {...{ optionsKey: "name" }}
-      {...{ selected: selectedValue }}
-      {...{ selectedOption: subtype }}
-      {...{ onSave: goNext }}
+      disabled={subtype ? false : true}
+      menu={menu}
+      optionsKey="i18nKey"
+      selected={selectedValue}
+      selectedOption={subtype}
+      onSave={goNext}
       t={t}
     />
   );

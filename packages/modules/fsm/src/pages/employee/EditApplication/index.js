@@ -216,6 +216,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         },
         tenantId: cityCode,
         sanitationtype: sanitationtype,
+        applicationNo: applicationNumber,
         source: applicationChannel,
         additionalDetails: {
           tripAmount: amount,

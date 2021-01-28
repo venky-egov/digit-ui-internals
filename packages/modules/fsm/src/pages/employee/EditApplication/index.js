@@ -119,10 +119,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       const __height = applicationData.fsm[0].pitDetail?.height;
       const __length = applicationData.fsm[0].pitDetail?.length;
       const __width = applicationData.fsm[0].pitDetail?.width;
+      const __diameter = applicationData.fsm[0].pitDetail?.diameter;
       setPitDimension({
         height: __height,
         length: __length,
         width: __width,
+        diameter: __diameter,
       });
     }
   }, [channelMenu, selectedLocality, localities, applicationData, propertyTypesData.data, propertySubtypesData.data, sanitationMenu, pitDimension]);
@@ -398,7 +400,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
-          populators: <PitDimension t={t} size={pitDimension} handleChange={handlePitDimension} />,
+          populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DISTANCE_FROM_ROAD"),

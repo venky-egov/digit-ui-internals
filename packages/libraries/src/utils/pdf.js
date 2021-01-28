@@ -2,12 +2,16 @@ var pdfMake = require("pdfmake/build/pdfmake.js");
 var pdfFonts = require("pdfmake/build/vfs_fonts.js");
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
+import { toDataURL } from "./toDataURL";
+
+const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
+  const base64Image = await toDataURL(logo);
+
   const dd = {
     header: {
       columns: [
         {
-          image: logo,
+          image: base64Image,
           width: 50,
           margin: [10, 10],
         },
@@ -71,6 +75,7 @@ function createContent(details) {
     const newArray = [];
     let count = 0;
     let arrayNumber = 0;
+    const imageToBase64 = require("image-to-base64");
 
     detail.values.forEach((value, index) => {
       if (count <= 3) {

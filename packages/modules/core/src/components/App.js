@@ -124,10 +124,20 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         )}
         {!mobileView && (
           <div className="topbar">
-            <img className="city" src={cityDetails?.logoId} />
-            <span className="ulb">
-              {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
-            </span>
+            <img
+              className="city"
+              style={cityDetails ? null : { marginTop: "8px", height: "30px", width: "auto" }}
+              src={
+                cityDetails
+                  ? cityDetails.logoId
+                  : "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png"
+              }
+            />
+            {cityDetails ? (
+              <span className="ulb">
+                {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
+              </span>
+            ) : null}
             <div className="right width-20 flex-right column-gap-15">
               <div className="left">
                 <ChangeLanguage dropdown={true} />

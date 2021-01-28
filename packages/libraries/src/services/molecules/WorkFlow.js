@@ -37,7 +37,7 @@ export const WorkflowService = {
         state: businessServiceResponse.find((state) => state.uuid === id.nextState),
       }));
       const actionRolePair = nextActions?.map((action) => ({
-        action: action.action,
+        action: moduleCode === "FSM" ? `FSM_${action.action}` : action.action,
         roles: action.state.actions?.map((action) => action.roles).join(","),
       }));
 

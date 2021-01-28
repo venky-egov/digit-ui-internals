@@ -209,25 +209,26 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const propertyType = name;
     const { height, length, width } = pitDimension;
 
-    (applicationData.fsm[0].citizen = {
-      name: applicantName,
-      mobileNumber,
-    }),
-      (applicationData.fsm[0].tenantId = cityCode),
-      (applicationData.fsm[0].sanitationtype = sanitationtype),
-      (applicationData.fsm[0].source = applicationChannel),
-      (applicationData.fsm[0].additionalDetails = {
+    applicationData.fsm[0] = {
+      citizen: {
+        name: applicantName,
+        mobileNumber,
+      },
+      tenantId: cityCode,
+      sanitationtype: sanitationtype,
+      source: applicationChannel,
+      additionalDetails: {
         tripAmount: amount,
-      }),
-      (applicationData.fsm[0].propertyUsage = subType.code),
-      (applicationData.fsm[0].vehicleType = vehicle.code),
-      (applicationData.fsm[0].pitDetail = {
+      },
+      propertyUsage: subType.code,
+      vehicleType: vehicle.code,
+      pitDetail: {
         distanceFromRoad: data.distanceFromRoad,
         height,
         length,
         width,
-      }),
-      (applicationData.fsm[0].address = {
+      },
+      address: {
         tenantId: cityCode,
         landmark,
         doorNo,
@@ -243,11 +244,13 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           latitude: selectedLocality.latitude,
           longitude: selectedLocality.longitude,
         },
-      }),
-      (applicationData.fsm[0].noOfTrips = noOfTrips),
-      (applicationData.workflow = {
-        action: "SUBMIT",
-      }),
+      },
+      noOfTrips,
+    };
+
+    (applicationData.workflow = {
+      action: "SUBMIT",
+    }),
       delete applicationData["responseInfo"];
     console.log(
       "%c: onSubmit -> formData ",

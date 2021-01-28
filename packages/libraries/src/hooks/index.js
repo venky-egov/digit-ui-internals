@@ -3,7 +3,7 @@ import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
 import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
-import useFetchPayment from "./payment";
+import { useFetchPayment, usePaymentUpdate } from "./payment";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -52,6 +52,6 @@ const fsm = {
   useWorkflowData,
 };
 
-const Hooks = { useSessionStorage, useFetchPayment, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
+const Hooks = { useSessionStorage, useFetchPayment, usePaymentUpdate, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
 
 export default Hooks;

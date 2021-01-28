@@ -164,6 +164,5 @@ export {
   RemoveableTag,
   // hoc
   FormComposer,
-  RoundedLabel,
   PitDimension,
 };

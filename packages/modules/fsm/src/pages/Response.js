@@ -23,7 +23,7 @@ const BannerPicker = (props) => {
   return (
     <Banner
       message={GetActionMessage(props.data?.fsm[0].applicationStatus)}
-      complaintNumber={props.data?.fsm[0].applicationNo}
+      applicationNumber={props.data?.fsm[0].applicationNo}
       info={t("ES_RECEIPT_NO")}
       successful={props.isSuccess}
     />

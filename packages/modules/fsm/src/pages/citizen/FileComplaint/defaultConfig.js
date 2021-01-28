@@ -67,18 +67,18 @@ export const config = {
       texts: {
         headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
         header: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_ADDRESS",
-        cardText: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_STREET_DOOR_NO",
+        cardText: "ES_NEW_APPLICATION_PROVIDE_PROPERTY_STREET_DOOR_NO",
         nextText: "PT_COMMONS_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
         {
-          label: "CS_ADDCOMPLAINT_PROPERTY_STREET",
+          label: "ES_NEW_APPLICATION_STREET_NAME",
           type: "text",
           name: "street",
         },
         {
-          label: "CS_ADDCOMPLAINT_PROPERTY_DOOR_NO",
+          label: "ES_NEW_APPLICATION_DOOR_NO",
           type: "text",
           name: "doorNo",
         },

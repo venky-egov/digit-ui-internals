@@ -25,7 +25,7 @@ export const PaymentService = {
 
   getReciept: (tenantId, businessservice, filters = {}) =>
     Request({
-      url: `${Urls.payment.print_reciept}/${businessservice}/_search`,
+      url: businessservice ? `${Urls.payment.print_reciept}/${businessservice}/_search` : `${Urls.payment.print_reciept}/_search`,
       useCache: false,
       method: "POST",
       auth: true,

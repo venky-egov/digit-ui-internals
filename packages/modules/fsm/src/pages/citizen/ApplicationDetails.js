@@ -61,7 +61,7 @@ const ApplicationDetails = () => {
         <KeyNote keyValue={t("ES_NEW_APPLICATION_STREET_NAME")} note={application.address.street} />
         <KeyNote keyValue={t("ES_NEW_APPLICATION_DOOR_NO")} note={application.address.door} />
         <KeyNote keyValue={t("CS_ADDCOMPLAINT_PROPERTY_LANDMARK")} note={application.address.landmark} />
-        <KeyNote keyValue={t("CS_CHECK_PIT_TYPE")} note={application.pitDetail.type} />
+        <KeyNote keyValue={t("CS_CHECK_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : ""} />
         <KeyNote
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
           note={`${!!application.pitDetail.length ? application.pitDetail.length + "m " : ""}${

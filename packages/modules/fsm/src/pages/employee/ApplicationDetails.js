@@ -163,7 +163,7 @@ const ApplicationDetails = (props) => {
       {
         title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
         values: [
-          { title: t("ES_NEW_APPLICATION_PIT_TYPE"), value: !!application.pitDetail.type ? t(`PITTYPE_MASTERS_${application.pitDetail.type}`) : "" },
+          { title: t("ES_NEW_APPLICATION_PIT_TYPE"), value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "" },
           {
             title: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
             value: `${!!application.pitDetail.length ? application.pitDetail.length + "m " : ""}${

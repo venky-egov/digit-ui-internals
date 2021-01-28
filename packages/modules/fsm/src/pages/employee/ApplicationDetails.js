@@ -163,14 +163,12 @@ const ApplicationDetails = (props) => {
       {
         title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
         values: [
-          { title: t("ES_NEW_APPLICATION_PIT_TYPE"), value: t(`PITTYPE_MASTERS_${application.pitDetail.type}`) },
+          { title: t("ES_NEW_APPLICATION_PIT_TYPE"), value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "" },
           {
             title: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
             value: `${!!application.pitDetail.length ? application.pitDetail.length + "m " : ""}${
-              !!application.pitDetail.width ? "x " + application.pitDetail.width + "m " : ""
-            }${!!application.pitDetail.height ? "x " + application.pitDetail.height + "m " : ""}${
-              !!application.pitDetail.diameter ? "x" + application.pitDetail.diameter + "m" : ""
-            }`,
+              !!application.pitDetail.width ? "x " + application.pitDetail.width + "m x " : ""
+            }${application.pitDetail.height + "m "}${!!application.pitDetail.diameter ? "x" + application.pitDetail.diameter + "m" : ""}`,
           },
           { title: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"), value: application.noOfTrips === 0 ? "N/A" : application.noOfTrips },
           { title: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"), value: "N/A" },

@@ -32,8 +32,8 @@ const getPDFData = (application, tenantInfo, t) => ({
     {
       title: "Property Details",
       values: [
-        { title: "Property Type", value: application.propertyUsage },
-        { title: "Property Sub Type", value: application.propertyUsage },
+        { title: "Property Type", value: t(`PROPERTYTYPE_MASTERS_${application.propertyUsage}`) },
+        { title: "Property Sub Type", value: t(`PROPERTYTYPE_MASTERS_${application.propertyUsage}`) },
       ],
     },
     {

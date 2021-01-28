@@ -208,51 +208,47 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const { name } = subType;
     const propertyType = name;
     const { height, length, width } = pitDimension;
-    const formData = {
-      fsm: {
-        citizen: {
-          name: applicantName,
-          mobileNumber,
-        },
+
+    (applicationData.fsm[0].citizen = {
+      name: applicantName,
+      mobileNumber,
+    }),
+      (applicationData.fsm[0].tenantId = cityCode),
+      (applicationData.fsm[0].sanitationtype = sanitationtype),
+      (applicationData.fsm[0].source = applicationChannel),
+      (applicationData.fsm[0].additionalDetails = {
+        tripAmount: amount,
+      }),
+      (applicationData.fsm[0].propertyUsage = subType.code),
+      (applicationData.fsm[0].vehicleType = vehicle.code),
+      (applicationData.fsm[0].pitDetail = {
+        distanceFromRoad: data.distanceFromRoad,
+        height,
+        length,
+        width,
+      }),
+      (applicationData.fsm[0].address = {
         tenantId: cityCode,
-        sanitationtype: sanitationtype,
-        applicationNo: applicationNumber,
-        source: applicationChannel,
-        additionalDetails: {
-          tripAmount: amount,
+        landmark,
+        doorNo,
+        street,
+        city,
+        state,
+        pincode,
+        locality: {
+          code: localityCode.split("_").pop(),
+          name: localityName,
         },
-        propertyUsage: subType.code,
-        vehicleType: vehicle.code,
-        pitDetail: {
-          distanceFromRoad: data.distanceFromRoad,
-          height,
-          length,
-          width,
+        geoLocation: {
+          latitude: selectedLocality.latitude,
+          longitude: selectedLocality.longitude,
         },
-        address: {
-          tenantId: cityCode,
-          landmark,
-          doorNo,
-          street,
-          city,
-          state,
-          pincode,
-          locality: {
-            code: localityCode.split("_").pop(),
-            name: localityName,
-          },
-          geoLocation: {
-            latitude: selectedLocality.latitude,
-            longitude: selectedLocality.longitude,
-          },
-        },
-        noOfTrips,
-      },
-      workflow: {
+      }),
+      (applicationData.fsm[0].noOfTrips = noOfTrips),
+      (applicationData.workflow = {
         assign: "SUBMIT",
-      },
-    };
-    console.log("%c: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData, subType);
+      }),
+      console.log("%c: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", applicationData, subType);
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);

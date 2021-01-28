@@ -59,9 +59,9 @@ export const FSMModule = ({ stateCode, userType }) => {
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;
-  const store = Digit.Services.useStore({ stateCode, moduleCode, language });
+  const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
-  if (Object.keys(store).length === 0) {
+  if (isLoading) {
     return <Loader />;
   }
 

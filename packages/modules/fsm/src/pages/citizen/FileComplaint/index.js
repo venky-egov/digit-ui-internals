@@ -31,7 +31,7 @@ const FileComplaint = ({ parentRoute }) => {
   };
 
   function handleSelect(data) {
-    setParams({ ...params, ...data });
+    setParams({ ...params, ...data, ...{ source: "ONLINE" } });
     goNext();
   }
 

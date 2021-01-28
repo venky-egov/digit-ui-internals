@@ -18,7 +18,7 @@ const getPDFData = (application, tenantInfo, t) => ({
       title: "Application Details",
       values: [
         { title: "Application No.", value: application.applicationNo },
-        { title: "Application Date", value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime) },
+        { title: "Application Date", value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime, "dd/MM/yyyy") },
         { title: "Application Channel", value: application.source },
       ],
     },

@@ -3,7 +3,7 @@ import TextInput from "../atoms/TextInput";
 import CardText from "../atoms/CardText";
 
 const PitDimension = ({ sanitationType, t, size = {}, handleChange }) => {
-  // console.log("find sanitationType in pitDimensions here",sanitationType.dimension)
+  // console.log("find sanitationType in pitDimensions here",sanitationType.dimension, size)
   return sanitationType?.dimension === "dd" ? (
     <div className="inputWrapper">
       <div>

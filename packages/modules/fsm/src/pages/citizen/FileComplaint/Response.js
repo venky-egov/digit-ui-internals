@@ -81,7 +81,7 @@ const Response = ({ data, onSuccess }) => {
             {
               title: "Application Date",
               value: applicationDetails?.auditDetails?.createdTime
-                ? Digit.DateUtils.ConvertTimestampToDate(applicationDetails?.auditDetails?.createdTime)
+                ? Digit.DateUtils.ConvertTimestampToDate(applicationDetails?.auditDetails?.createdTime, "dd/MM/yyyy")
                 : "",
             },
             { title: "Application Channel", value: "Counter" },

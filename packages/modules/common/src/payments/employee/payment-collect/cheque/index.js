@@ -45,10 +45,10 @@ export const ChequeDetailsComponent = (props) => {
         const { BANK, BRANCH } = await res.json();
         setBankName(BANK);
         setBankBranch(BRANCH);
-      } else alert("Wrong IFSC Code");
+      } else alert("Please enter correct IFSC Code!");
     } catch (er) {
       console.log(er);
-      alert("Something Went Wrong !");
+      alert("Please enter correct IFSC Code!");
     }
   };
 
@@ -64,6 +64,8 @@ export const ChequeDetailsComponent = (props) => {
               type="text"
               name="instrumentNumber"
               onChange={(e) => setChequeNo(e.target.value)}
+              minlength="6"
+              maxLength="6"
             />
           </div>
         </div>
@@ -102,6 +104,8 @@ export const ChequeDetailsComponent = (props) => {
                     value={ifscCode}
                     type="text"
                     onChange={(e) => setIfsc(e.target.value)}
+                    minlength="11"
+                    maxlength="11"
                   />
                   <button
                     type="button"

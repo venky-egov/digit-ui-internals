@@ -208,51 +208,56 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const { name } = subType;
     const propertyType = name;
     const { height, length, width } = pitDimension;
-    const formData = {
-      fsm: {
-        citizen: {
-          name: applicantName,
-          mobileNumber,
-        },
+
+    applicationData.fsm[0] = {
+      citizen: {
+        name: applicantName,
+        mobileNumber,
+      },
+      tenantId: cityCode,
+      sanitationtype: sanitationtype,
+      source: applicationChannel,
+      additionalDetails: {
+        tripAmount: amount,
+      },
+      propertyUsage: subType.code,
+      vehicleType: vehicle.code,
+      pitDetail: {
+        distanceFromRoad: data.distanceFromRoad,
+        height,
+        length,
+        width,
+      },
+      address: {
         tenantId: cityCode,
-        sanitationtype: sanitationtype,
-        applicationNo: applicationNumber,
-        source: applicationChannel,
-        additionalDetails: {
-          tripAmount: amount,
+        landmark,
+        doorNo,
+        street,
+        city,
+        state,
+        pincode,
+        locality: {
+          code: localityCode.split("_").pop(),
+          name: localityName,
         },
-        propertyUsage: subType.code,
-        vehicleType: vehicle.code,
-        pitDetail: {
-          distanceFromRoad: data.distanceFromRoad,
-          height,
-          length,
-          width,
+        geoLocation: {
+          latitude: selectedLocality.latitude,
+          longitude: selectedLocality.longitude,
         },
-        address: {
-          tenantId: cityCode,
-          landmark,
-          doorNo,
-          street,
-          city,
-          state,
-          pincode,
-          locality: {
-            code: localityCode.split("_").pop(),
-            name: localityName,
-          },
-          geoLocation: {
-            latitude: selectedLocality.latitude,
-            longitude: selectedLocality.longitude,
-          },
-        },
-        noOfTrips,
       },
-      workflow: {
-        assign: "SUBMIT",
-      },
+      noOfTrips,
     };
-    console.log("%c: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData, subType);
+
+    (applicationData.workflow = {
+      action: "SUBMIT",
+    }),
+      delete applicationData["responseInfo"];
+    console.log(
+      "%c: onSubmit -> formData ",
+      "font-size:16px;background-color:#3dd445;color:white;",
+      { fsm: applicationData.fsm[0], workflow: applicationData.workflow },
+      subType
+    );
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -260,7 +265,13 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
 
-    history.push("/digit-ui/employee/fsm/response", { formData, key: "update" });
+    history.push("/digit-ui/employee/fsm/response", {
+      applicationData: {
+        fsm: applicationData.fsm[0],
+        workflow: applicationData.workflow,
+      },
+      key: "update",
+    });
   };
 
   const config = [

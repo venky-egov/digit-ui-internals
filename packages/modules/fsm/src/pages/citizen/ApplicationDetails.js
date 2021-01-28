@@ -79,6 +79,7 @@ const ApplicationDetails = () => {
   const application = applications[0];
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
+  console.log("%c 👨‍💼: ApplicationDetails -> application ", "font-size:16px;background-color:#61d186;color:white;", application);
   return (
     <React.Fragment>
       <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
@@ -112,7 +113,7 @@ const ApplicationDetails = () => {
         />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
-        {application.status === "PENDING_APPL_FEE_PAYMENT" && (
+        {application.applicationStatus === "PENDING_APPL_FEE_PAYMENT" && (
           <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
             <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
           </Link>

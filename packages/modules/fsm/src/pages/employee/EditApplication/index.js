@@ -211,26 +211,25 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const propertyType = name;
     const { height, length, width } = pitDimension;
 
-    applicationData.fsm[0] = {
-      citizen: {
-        name: applicantName,
-        mobileNumber,
-      },
-      tenantId: cityCode,
-      sanitationtype: sanitationtype,
-      source: applicationChannel,
-      additionalDetails: {
+    (applicationData.fsm[0].citizen = {
+      name: applicantName,
+      mobileNumber,
+    }),
+      (applicationData.fsm[0].tenantId = cityCode),
+      (applicationData.fsm[0].sanitationtype = sanitationtype),
+      (applicationData.fsm[0].source = applicationChannel),
+      (applicationData.fsm[0].additionalDetails = {
         tripAmount: amount,
-      },
-      propertyUsage: subType.code,
-      vehicleType: vehicle.code,
-      pitDetail: {
+      }),
+      (applicationData.fsm[0].propertyUsage = subType.code),
+      (applicationData.fsm[0].vehicleType = vehicle.code),
+      (applicationData.fsm[0].pitDetail = {
         distanceFromRoad: data.distanceFromRoad,
         height,
         length,
         width,
-      },
-      address: {
+      }),
+      (applicationData.fsm[0].address = {
         tenantId: cityCode,
         landmark,
         doorNo,
@@ -246,13 +245,11 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           latitude: selectedLocality.latitude,
           longitude: selectedLocality.longitude,
         },
-      },
-      noOfTrips,
-    };
-
-    (applicationData.workflow = {
-      action: "SUBMIT",
-    }),
+      }),
+      (applicationData.fsm[0].noOfTrips = noOfTrips),
+      (applicationData.workflow = {
+        action: "SUBMIT",
+      }),
       delete applicationData["responseInfo"];
     console.log(
       "%c: onSubmit -> formData ",
@@ -283,7 +280,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
           type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} />,
+          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
         },
         // {
         //   label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
@@ -330,7 +327,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />
+            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />
           ),
         },
         {
@@ -338,7 +335,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} />,
+          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} t={t} />,
         },
       ],
     },
@@ -396,7 +393,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
           type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
+          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),

@@ -11,8 +11,8 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
 
   const onSubmitInput = (data) => {
     console.log("data", data);
-    if (data.serviceRequestId) {
-      onSearch({ serviceRequestId: data.serviceRequestId });
+    if (data.applicationNo) {
+      onSearch({ applicationNo: data.applicationNo });
     } else {
       onSearch({ mobileNumber: data.mobileNumber });
     }
@@ -66,7 +66,7 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
               <span className="complaint-input">
                 <Label>{t("ES_SEARCH_APPLICATION_APPLICATION_NO")}</Label>
                 <TextInput
-                  name="serviceRequestId"
+                  name="applicationNo"
                   value={applicationNo}
                   onChange={setComplaint}
                   inputRef={register}

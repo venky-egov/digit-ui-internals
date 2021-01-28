@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-libraries",
-  "version": "1.0.85",
+  "version": "1.0.88",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
@@ -28,6 +28,7 @@
     "date-fns": "^2.16.1",
     "i18next": "^19.8.4",
     "i18next-react-postprocessor": "^3.0.5",
+    "image-to-base64": "^2.1.1",
     "pdfmake": "^0.1.69",
     "react": "^17.0.0",
     "react-i18next": "^11.7.3",

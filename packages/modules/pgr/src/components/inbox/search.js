@@ -33,11 +33,7 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
   }
 
   const clearAll = () => {
-    return (
-      <LinkLabel style={{ color: "#F47738", cursor: "pointer" }} onClick={clearSearch}>
-        {t("CS_COMMON_CLEAR_SEARCH")}
-      </LinkLabel>
-    );
+    return <LinkLabel onClick={clearSearch}>{t("CS_COMMON_CLEAR_SEARCH")}</LinkLabel>;
   };
 
   function setComplaint(e) {

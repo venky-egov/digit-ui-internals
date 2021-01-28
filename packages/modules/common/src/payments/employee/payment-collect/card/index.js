@@ -16,6 +16,8 @@ export const useCardPaymentDetails = (props) => {
               pattern: /^\d{4}$/,
             },
             error: "a valid mobile no. required",
+            minlength: "4",
+            maxlength: "4",
           },
         },
         {
@@ -28,6 +30,8 @@ export const useCardPaymentDetails = (props) => {
               pattern: /^\d{5,}$/,
             },
             error: "a valid mobile no. required",
+            minlength: "12",
+            maxlength: "20",
           },
         },
         {
@@ -40,6 +44,8 @@ export const useCardPaymentDetails = (props) => {
               pattern: /^\d{5,}$/,
             },
             error: "a valid mobile no. required",
+            minlength: "12",
+            maxlength: "20",
           },
         },
       ],

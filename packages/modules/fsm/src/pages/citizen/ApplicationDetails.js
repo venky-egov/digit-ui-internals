@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Header, Card, KeyNote, SubmitBar, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
 import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
-import { getPropertySubtypeLocale } from "../../utils";
+import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
 
 const ApplicationDetails = () => {
   const { t } = useTranslation();
@@ -50,24 +50,30 @@ const ApplicationDetails = () => {
         <KeyNote keyValue={t("CS_MY_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory || t("ES_TITLE_FSM")} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType || t("CS_APPLICATION_TYPE_DESLUDGING")} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={application.applicationStatus} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={"CS_COMMON_" + application.applicationStatus} />
         <KeyNote
           keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_DATE")}
           note={Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime)}
         />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")} note={t(getPropertySubtypeLocale(application.propertyUsage))} />
+        <KeyNote
+          keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")}
+          note={t(getPropertyTypeLocale(application.propertyUsage)) + " / " + t(getPropertySubtypeLocale(application.propertyUsage))}
+        />
         <KeyNote keyValue={t("MYCITY_CODE_LABEL")} note={application.address.city} />
-        <KeyNote keyValue={t("CS_CREATECOMPLAINT_MOHALLA")} note={application.address.locality.code} />
-        <KeyNote keyValue={t("CORE_COMMON_PINCODE")} note={application.address.pincode} />
-        <KeyNote keyValue={t("ES_NEW_APPLICATION_STREET_NAME")} note={application.address.street} />
-        <KeyNote keyValue={t("ES_NEW_APPLICATION_DOOR_NO")} note={application.address.door} />
-        <KeyNote keyValue={t("CS_ADDCOMPLAINT_PROPERTY_LANDMARK")} note={application.address.landmark} />
-        <KeyNote keyValue={t("CS_CHECK_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : ""} />
+        <KeyNote
+          keyValue={t("CS_CREATECOMPLAINT_MOHALLA")}
+          note={t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`)}
+        />
+        <KeyNote keyValue={t("CORE_COMMON_PINCODE")} note={application.address.pincode ? application.address.pincode : "NA"} />
+        <KeyNote keyValue={t("ES_NEW_APPLICATION_STREET_NAME")} note={application.address.street ? application.address.street : "NA"} />
+        <KeyNote keyValue={t("ES_NEW_APPLICATION_DOOR_NO")} note={application.address.door ? application.address.door : "NA"} />
+        <KeyNote keyValue={t("CS_ADDCOMPLAINT_PROPERTY_LANDMARK")} note={application.address.landmark ? application.address.landmark : "NA"} />
+        <KeyNote keyValue={t("CS_CHECK_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
         <KeyNote
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
           note={`${!!application.pitDetail.length ? application.pitDetail.length + "m " : ""}${
-            !!application.pitDetail.width ? "x " + application.pitDetail.width + "m " : ""
-          }${!!application.pitDetail.height ? "x " + application.pitDetail.height + "m " : ""}${
+            !!application.pitDetail.width ? "x " + application.pitDetail.width + "m x " : ""
+          }${!!application.pitDetail.height ? application.pitDetail.height + "m " : ""}${
             !!application.pitDetail.diameter ? "x" + application.pitDetail.diameter + "m" : ""
           }`}
         />

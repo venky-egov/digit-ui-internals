@@ -1,3 +1,5 @@
+import { getPropertyTypeLocale, getPropertySubtypeLocale } from "./utils";
+
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
 
@@ -13,52 +15,66 @@ const getPDFData = (application, tenantInfo, t, logoUrl) => {
     heading: "Desludging request - Acknowledgement",
     details: [
       {
-        title: "Application Details",
+        title: t("CS_TITLE_APPLICATION_DETAILS"),
         values: [
-          { title: "Application No.", value: application.applicationNo },
-          { title: "Application Date", value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime, "dd/MM/yyyy") },
-          { title: "Application Channel", value: application.source || "NA" },
+          { title: t("CS_MY_APPLICATION_APPLICATION_NO"), value: application.applicationNo },
+          {
+            title: t("CS_APPLICATION_DETAILS_APPLICATION_DATE"),
+            value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime, "dd/MM/yyyy"),
+          },
+          { title: t("CS_APPLICATION_DETAILS_APPLICATION_CHANNEL"), value: application.source || "NA" },
         ],
       },
       {
-        title: "Applicant Details",
+        title: t("CS_APPLICATION_DETAILS_APPLICANT_DETAILS"),
         values: [
-          { title: "Applicant Name", value: application.citizen.name || "NA" },
-          { title: "Mobile No.", value: application.citizen.mobileNumber || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_APPLICANT_NAME"), value: application.citizen.name || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_APPLICANT_MOBILE"), value: application.citizen.mobileNumber || "NA" },
         ],
       },
       {
-        title: "Property Details",
+        title: t("CS_APPLICATION_DETAILS_PROPERTY_DETAILS"),
         values: [
-          { title: "Property Type", value: t(`PROPERTYTYPE_MASTERS_${application.propertyUsage}`) || "NA" },
-          { title: "Property Sub Type", value: t(`PROPERTYTYPE_MASTERS_${application.propertyUsage}`) || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(application.propertyUsage)) || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_PROPERTY_SUB_TYPE"), value: t(getPropertySubtypeLocale(application.propertyUsage)) || "NA" },
         ],
       },
       {
-        title: "Property Location Details",
+        title: t("CS_APPLICATION_DETAILS_PROPERTY_LOCATION_DETAILS"),
         values: [
-          { title: "Pincode", value: application.address.pincode || "NA" },
-          { title: "City", value: application.address.city || "NA" },
-          { title: "Mohalla", value: application.address.locality.name || "NA" },
-          { title: "Street", value: application.address.street || "NA" },
-          { title: "Building No.", value: application.address.buildingName || "NA" },
-          { title: "Landmark", value: application.address.landmark || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_PINCODE"), value: application.address.pincode || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_CITY"), value: application.address.city || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_MOHALLA"), value: application.address.locality.name || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_STREET"), value: application.address.street || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_BUILDING"), value: application.address.buildingName || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application.address.landmark || "NA" },
         ],
       },
       {
-        title: "Pit/Septic Tank Details",
+        title: t("CS_APPLICATION_DETAILS_PIT_DETAILS"),
         values: [
           {
-            title: "Dimension",
-            value: `${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m` || "NA",
+            title: t("CS_APPLICATION_DETAILS_PIT_TYPE"),
+            value: application.sanitationtype ? t("PITTYPE_MASTERS_" + application.sanitationtype) : "NA",
           },
           {
-            title: "Distance from Road",
+            title: t("CS_APPLICATION_DETAILS_DIMENSION"),
+            value: application.pitDetail.height
+              ? application.pitDetail.length
+                ? `${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m`
+                : `${application.pitDetail.diameter}m * ${application.pitDetail.height}m`
+              : "NA",
+          },
+          {
+            title: t("CS_APPLICATION_DETAILS_DISTANCE_FROM_ROAD"),
             value: application?.pitDetail?.distanceFromRoad !== 0 ? `${application.pitDetail.distanceFromRoad}m` : "NA",
           },
-          { title: "No. of Trips", value: application?.noOfTrips || "NA" },
-          { title: "Amount per Trip", value: application?.noOfTrips === 0 ? "NA" : `₹ ${application.noOfTrips}` },
-          { title: "Total Amount Due", value: application?.amountDue && application?.amountDue !== 0 ? `₹ ${application.amountDue}` : "NA" },
+          { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_AMOUNT_PER_TRIP"), value: application?.noOfTrips === 0 ? "NA" : `₹ ${application.noOfTrips}` },
+          {
+            title: t("CS_APPLICATION_DETAILS_AMOUNT_DUE"),
+            value: application?.amountDue && application?.amountDue !== 0 ? `₹ ${application.amountDue}` : "NA",
+          },
         ],
       },
     ],

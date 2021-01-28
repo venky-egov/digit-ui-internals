@@ -11,6 +11,8 @@ const GetActionMessage = ({ action }) => {
       return t(`CS_COMMON_COMPLAINT_REOPENED`);
     case "RATE":
       return t("CS_COMMON_THANK_YOU");
+    case "PENDING_APPL_FEE_PAYMENT":
+      return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
     default:
       return t(`ES_PAYMENT_COLLECTED`);
   }
@@ -20,7 +22,7 @@ const BannerPicker = (props) => {
   const { t } = useTranslation();
   return (
     <Banner
-      message={GetActionMessage("SUCCESS")}
+      message={GetActionMessage(props.data?.fsm[0].applicationStatus)}
       complaintNumber={props.data?.fsm[0].applicationNo}
       info={t("ES_RECEIPT_NO")}
       successful={props.isSuccess}
@@ -56,13 +58,18 @@ const Response = (props) => {
   ) : (
     <Card>
       {(!mutation.isIdle || !mutation.isLoading) && (
-        <BannerPicker data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+        <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
       )}
       {(!updateMutation.isIdle || !updateMutation.isLoading) && (
-        <BannerPicker data={updateMutation.data} isSuccess={updateMutation.isSuccess} isLoading={updateMutation.isIdle || updateMutation.isLoading} />
+        <BannerPicker
+          t={t}
+          data={updateMutation.data}
+          isSuccess={updateMutation.isSuccess}
+          isLoading={updateMutation.isIdle || updateMutation.isLoading}
+        />
       )}
 
-      <CardText>{t("CS_COMMON_TRACK_APPLICATION_TEXT")}</CardText>
+      <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
       <Link to={`/digit-ui/employee`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

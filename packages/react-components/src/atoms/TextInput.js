@@ -15,8 +15,8 @@ const TextInput = (props) => {
           ref={props.inputRef}
           value={props.value}
           defaultValue={props.defaultValue}
-          minlength={props.minlength}
-          maxlength={props.maxlength}
+          minLength={props.minlength}
+          maxLength={props.maxlength}
         />
       ) : (
         <input
@@ -29,8 +29,8 @@ const TextInput = (props) => {
           value={props.value}
           style={{ ...props.style }}
           defaultValue={props.defaultValue}
-          minlength={props.minlength}
-          maxlength={props.maxlength}
+          minLength={props.minlength}
+          maxLength={props.maxlength}
         />
       )}
     </React.Fragment>

@@ -78,6 +78,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
+
     if (city?.code === getCities()[0]?.code) {
       setPincodeNotValid(false);
       setSelectedCity(city);

@@ -18,7 +18,7 @@ const getPDFData = (application, tenantInfo, t) => ({
       title: "Application Details",
       values: [
         { title: "Application No.", value: application.applicationNo },
-        { title: "Application Date", value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime) },
+        { title: "Application Date", value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime, "dd/MM/yyyy") },
         { title: "Application Channel", value: application.source },
       ],
     },
@@ -112,7 +112,7 @@ const ApplicationDetails = () => {
         />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
-        {application.status === "PENDING_APPL_FEE_PAYMENT" && (
+        {application.applicationStatus === "PENDING_APPL_FEE_PAYMENT" && (
           <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
             <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
           </Link>

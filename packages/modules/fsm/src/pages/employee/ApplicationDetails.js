@@ -81,10 +81,13 @@ const ApplicationDetails = (props) => {
     console.log("action selected", selectedAction);
     switch (selectedAction) {
       case "GENERATE_DEMAND":
+      case "FSM_GENERATE_DEMAND":
         return setShowModal(true);
       case "SUBMIT":
+      case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "PAY":
+      case "FSM_PAY":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
         console.log("default case");

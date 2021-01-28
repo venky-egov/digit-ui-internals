@@ -398,7 +398,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
-          populators: <PitDimension t={t} size={pitDimension} handleChange={handlePitDimension} />,
+          populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DISTANCE_FROM_ROAD"),

@@ -4,7 +4,7 @@ import CardText from "../atoms/CardText";
 
 const PitDimension = ({ sanitationType, t, size = {}, handleChange }) => {
   // console.log("find sanitationType in pitDimensions here",sanitationType.dimension)
-  return sanitationType.dimension === "dd" ? (
+  return sanitationType?.dimension === "dd" ? (
     <div className="inputWrapper">
       <div>
         <TextInput name="diameter" value={size["diameter"] || ""} onChange={handleChange} />

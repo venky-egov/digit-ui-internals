@@ -1,6 +1,7 @@
 import SelectPropertySubtype from "./SelectPropertySubtype";
 import SelectPropertyType from "./SelectPropertyType";
 import SelectAddress from "./SelectAddress";
+import SelectStreet from "./SelectStreet";
 import SelectLandmark from "./SelectLandmark";
 import SelectPincode from "./SelectPincode";
 import SelectTankSize from "./SelectTankSize";
@@ -59,6 +60,29 @@ export const config = {
         cardText: "CS_ADDCOMPLAINT_PROPERTY_CITY_MOHALLA_TEXT",
         nextText: "PT_COMMONS_NEXT",
       },
+      nextStep: "street",
+    },
+    street: {
+      component: SelectStreet,
+      texts: {
+        headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
+        header: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_ADDRESS",
+        cardText: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_STREET_DOOR_NO",
+        nextText: "PT_COMMONS_NEXT",
+        skipText: "CORE_COMMON_SKIP_CONTINUE",
+      },
+      inputs: [
+        {
+          label: "CS_ADDCOMPLAINT_PROPERTY_STREET",
+          type: "text",
+          name: "street",
+        },
+        {
+          label: "CS_ADDCOMPLAINT_PROPERTY_DOOR_NO",
+          type: "text",
+          name: "doorNo",
+        },
+      ],
       nextStep: "landmark",
     },
     landmark: {

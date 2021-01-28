@@ -71,7 +71,7 @@ const CheckPage = ({ onSubmit, value }) => {
         {pitType && (
           <Row
             label={t("CS_CHECK_PIT_TYPE")}
-            text={pitType.i18nKey}
+            text={t(pitType.i18nKey)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pit-type" />}
           />
         )}

@@ -27,7 +27,7 @@ const Response = ({ data, onSuccess }) => {
   const mutation = Digit.Hooks.fsm.useDesludging(data.city_complaint ? data.city_complaint.code : tenantId);
   useEffect(() => {
     try {
-      const { subtype, landmark, pincode, pitDetail, city_complaint, locality_complaint } = data;
+      const { subtype, landmark, pincode, pitDetail, city_complaint, locality_complaint, pitType } = data;
 
       const formdata = {
         fsm: {
@@ -51,6 +51,7 @@ const Response = ({ data, onSuccess }) => {
             },
           },
           pitDetail,
+          sanitationtype: pitType?.code,
         },
         workflow: null,
       };
@@ -77,7 +78,12 @@ const Response = ({ data, onSuccess }) => {
           title: "Application Details",
           values: [
             { title: "Application No.", value: applicationDetails.applicationNo },
-            { title: "Application Date", value: "12/08/2020" },
+            {
+              title: "Application Date",
+              value: applicationDetails?.auditDetails?.createdTime
+                ? Digit.DateUtils.ConvertTimestampToDate(applicationDetails?.auditDetails?.createdTime, "dd/MM/yyyy")
+                : "",
+            },
             { title: "Application Channel", value: "Counter" },
           ],
         },

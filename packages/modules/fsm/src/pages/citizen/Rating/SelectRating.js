@@ -9,7 +9,7 @@ const SelectRating = ({ parentRoute }) => {
   console.log("parent route", parentRoute);
 
   function log(data) {
-    history.push(`${parentRoute}/response`);
+    // history.push(`${parentRoute}/response`);
   }
 
   const config = {

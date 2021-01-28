@@ -93,6 +93,24 @@ const getSanitationTypeCriteria = (tenantId, moduleCode) => ({
   },
 });
 
+const getPitTypeCriteria = (tenantId, moduleCode) => ({
+  type: "PitType",
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PitType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getApplicationChannelCriteria = (tenantId, moduleCode) => ({
   type: "ApplicationChannel",
   details: {
@@ -129,6 +147,42 @@ const getPropertyTypeCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getPropertyUsageCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PropertyType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "VehicleType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -140,21 +194,31 @@ const GetServiceDefs = (MdmsRes, moduleCode) => MdmsRes[`RAINMAKER-${moduleCode}
 
 const GetSanitationType = (MdmsRes) => MdmsRes["FSM"].SanitationType.filter((type) => type.active);
 
+const GetPitType = (MdmsRes) => MdmsRes["FSM"].PitType.filter((item) => item.active);
+
 const GetApplicationChannel = (MdmsRes) => MdmsRes["FSM"].ApplicationChannel.filter((type) => type.active);
 
 const GetPropertyType = (MdmsRes) =>
-  MdmsRes["PropertyTax"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({
+  MdmsRes["FSM"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({
     ...item,
-    i18nKey: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
+    i18nKey: `PROPERTYTYPE_MASTERS_${item.code}`,
     code: item.code,
   }));
 
 const GetPropertySubtype = (MdmsRes) =>
-  MdmsRes["PropertyTax"].PropertyType.filter((property) => property.active && property.propertyType).map((item) => ({
+  MdmsRes["FSM"].PropertyType.filter((property) => property.active && property.propertyType).map((item) => ({
     ...item,
-    i18nKey: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
+    i18nKey: `PROPERTYTYPE_MASTERS_${item.code}`,
     code: item.code,
   }));
+
+const GetVehicleType = (MdmsRes) =>
+  MdmsRes["FSM"].VehicleType.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
+    return {
+      ...vehicleDetails,
+      i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code.split(/\.|\//).join("_")}`,
+    };
+  });
 
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
@@ -172,6 +236,10 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetPropertyType(MdmsRes);
     case "PropertySubtype":
       return GetPropertySubtype(MdmsRes);
+    case "PitType":
+      return GetPitType(MdmsRes);
+    case "VehicleType":
+      return GetVehicleType(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -211,7 +279,16 @@ export const MdmsService = {
   getPropertyType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
   },
+  getPropertyUsage: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getPropertyUsageCriteria(tenantId, moduleCode, type), moduleCode);
+  },
   getPropertySubtype: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getPitType: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getPitTypeCriteria(tenantId, moduleCode), moduleCode);
+  },
+  getVehicleType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getVehicleTypeCriteria(tenantId, moduleCode, type), moduleCode);
   },
 };

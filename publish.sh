@@ -33,6 +33,8 @@ cd "$BASEDIR/packages/modules/pgr" && yarn publish --access public
 msg "Building and publishing FSM module"
 cd "$BASEDIR/packages/modules/fsm" && yarn publish --access public
 
+msg "Building and publishing Common module"
+cd "$BASEDIR/packages/modules/common" && yarn publish --access public
 
 msg "Building and publishing Core module"
 cd "$BASEDIR/packages/modules/core" && yarn publish --access public

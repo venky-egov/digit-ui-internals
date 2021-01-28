@@ -33,8 +33,8 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
         <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
-        <PrivateRoute path={`${path}/modify-application`} component={() => <EditApplication />} />
-        <PrivateRoute path={`${path}/application-details`} component={EmployeeApplicationDetails} />
+        <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
+        <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails />} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
@@ -64,9 +64,9 @@ export const FSMModule = ({ stateCode, userType }) => {
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;
-  const store = Digit.Services.useStore({ stateCode, moduleCode, language });
+  const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
-  if (Object.keys(store).length === 0) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -90,9 +90,9 @@ export const FSMLinks = ({ matchPath, userType }) => {
   if (userType === "citizen") {
     return (
       <React.Fragment>
-        <Header>{t("CS_HOME_PROPERTIES")}</Header>
-        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+        {/* TODO: change */}
         <Header>{t("CS_HOME_OTHER_SERVICES")}</Header>
+        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
         <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
       </React.Fragment>
     );

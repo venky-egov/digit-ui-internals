@@ -5,7 +5,7 @@ export const Search = {
     return FSMService.search(tenantId, { applicationNumber: "" });
   },
 
-  application: (tenantId, applicationNumber, uuid, limit) => {
-    return FSMService.search(tenantId, { applicationNumber, uuid, limit });
+  application: (tenantId, filters = {}) => {
+    return FSMService.search(tenantId, { ...filters, limit: 1000 });
   },
 };

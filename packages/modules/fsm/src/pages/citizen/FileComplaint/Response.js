@@ -3,6 +3,7 @@ import { Card, Banner, CardText, SubmitBar, LinkButton } from "@egovernments/dig
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Loader } from "@egovernments/digit-ui-react-components";
+import getPDFData from "../../../getPDFData";
 
 const GetActionMessage = () => {
   const { t } = useTranslation();

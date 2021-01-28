@@ -39,7 +39,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
   const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
   const history = useHistory();
-  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
+  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
@@ -373,7 +373,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     <FormComposer
       heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
-      label={t("ES_COMMON_APPLICATION_SUBMITTED")}
+      label={t("ES_COMMON_APPLICATION_SUBMIT")}
       config={config}
       onSubmit={onSubmit}
     />

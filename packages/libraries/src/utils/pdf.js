@@ -7,8 +7,6 @@ import { toDataURL } from "./toDataURL";
 const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
   const base64Image = await toDataURL(logo);
 
-  const translate = window?.i18next?.t || t;
-
   const dd = {
     pageMargins: [40, 80, 40, 30],
     header: {
@@ -56,7 +54,7 @@ const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details
       },
       ...createContent(details, phoneNumber),
       {
-        text: translate("PDF_SYSTEM_GENERATED_ACKNOWLEDGEMENT"),
+        text: t("PDF_SYSTEM_GENERATED_ACKNOWLEDGEMENT"),
         fontSize: 11,
         color: "#6f777c",
         margin: [-25, 32],

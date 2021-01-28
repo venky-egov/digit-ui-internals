@@ -16,12 +16,14 @@ export const SuccessfulPayment = (props) => {
   }
 
   if (isError || !payments || !payments.Payments || payments.Payments.length === 0) {
-    <Card>
-      <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
-      <Link to="/digit-ui/citizen">
-        <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
-      </Link>
-    </Card>;
+    return (
+      <Card>
+        <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
+        <Link to="/digit-ui/citizen">
+          <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+        </Link>
+      </Card>
+    );
   }
 
   const paymentData = payments?.Payments[0];

@@ -59,6 +59,7 @@ import { GetApp, ArrowLeft, HomeIcon, LanguageIcon, LogoutIcon } from "./atoms/s
 import CustomButton from "./atoms/CustomButton";
 import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
 import RoundedLabel from "./atoms/RoundedLabel";
+import BreadCrumb from "./atoms/BreadCrumb";
 
 import { SearchIconSvg } from "./atoms/svgindex";
 
@@ -143,6 +144,7 @@ export {
   SectionalDropdown,
   RoundedLabel,
   LabelFieldPair,
+  BreadCrumb,
   // Icons
   GetApp,
   ArrowLeft,

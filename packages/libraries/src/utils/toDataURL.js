@@ -1,16 +1,22 @@
-function toDataURL(url) {
+function toDataURL(src, outputFormat = "image/png") {
   return new Promise((resolve, reject) => {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      var reader = new FileReader();
-      reader.onloadend = function () {
-        resolve(reader.result);
-      };
-      reader.readAsDataURL(xhr.response);
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = function () {
+      const canvas = document.createElement("CANVAS");
+      const ctx = canvas.getContext("2d");
+      let dataURL;
+      canvas.height = this.naturalHeight;
+      canvas.width = this.naturalWidth;
+      ctx.drawImage(this, 0, 0);
+      dataURL = canvas.toDataURL(outputFormat);
+      resolve(dataURL);
     };
-    xhr.open("GET", url);
-    xhr.responseType = "blob";
-    xhr.send();
+    img.src = src;
+    if (img.complete || img.complete === undefined) {
+      img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+      img.src = src;
+    }
   });
 }
 

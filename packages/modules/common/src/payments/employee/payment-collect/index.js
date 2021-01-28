@@ -71,6 +71,9 @@ export const CollectPayment = (props) => {
     recieptRequest.Payment.paymentMode = data?.paymentMode?.code;
     if (data.chequeDetails) {
       recieptRequest.Payment = { ...recieptRequest.Payment, ...data.chequeDetails };
+      delete recieptRequest.Payment.chequeDetails;
+      recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime()
+      recieptRequest.Payment.transactionNumber = "12345678"
     }
     const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
     console.log(resposne);

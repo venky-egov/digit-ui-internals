@@ -9,5 +9,15 @@
     .text {
       padding-right: 5px;
     }
+
+    &:hover{
+
+      @apply cursor-pointer;
+
+      .close{
+        fill: black;
+      }
+        
+    }
   }
 }

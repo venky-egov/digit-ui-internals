@@ -70,7 +70,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         mobileNumber: applicationDetails.citizen?.mobileNumber,
         pincode: applicationDetails.address?.pincode,
         streetName: applicationDetails.address?.street,
-        doorNo: applicationDetails.address?.plotNo,
+        doorNo: applicationDetails.address?.doorNo,
         landmark: applicationDetails.address?.landmark,
         noOfTrips: applicationDetails.noOfTrips,
         distanceFromRoad: applicationDetails?.pitDetail?.distanceFromRoad,

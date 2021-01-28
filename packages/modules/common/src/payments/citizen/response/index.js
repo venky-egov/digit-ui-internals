@@ -15,7 +15,7 @@ export const SuccessfulPayment = (props) => {
     return <Loader />;
   }
 
-  if (isError) {
+  if (isError || !payments || !payments.Payments || payments.Payments.length === 0) {
     <Card>
       <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
       <Link to="/digit-ui/citizen">

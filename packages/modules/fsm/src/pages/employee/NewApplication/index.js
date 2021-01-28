@@ -334,7 +334,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
-          populators: <PitDimension t={t} size={pitDimension} handleChange={handlePitDimension} />,
+          populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),

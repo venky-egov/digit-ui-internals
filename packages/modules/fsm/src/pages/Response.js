@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 
-const GetActionMessage = ({ action }) => {
+const GetActionMessage = (action) => {
   const { t } = useTranslation();
   switch (action) {
     case "REOPEN":
@@ -34,16 +34,17 @@ const Response = (props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const mutation = Digit.Hooks.fsm.useDesludging(tenantId);
-  const updateMutation = Digit.Hooks.fsm.useApplicationUpdate(tenantId);
+  const { state } = props.location;
+
+  const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationUpdate(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
+
   useEffect(() => {
     const onSuccess = () => {
       queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
     };
-    const { state } = props.location;
     console.log("state -------->", state);
     if (state.key === "update") {
-      updateMutation.mutate(state.formData, {
+      mutation.mutate(state.applicationData, {
         onSuccess,
       });
     } else {
@@ -53,22 +54,13 @@ const Response = (props) => {
     }
   }, []);
 
-  return mutation.isLoading || mutation.isIdle || updateMutation.isLoading || updateMutation.isIdle ? (
+  return mutation.isLoading || mutation.isIdle ? (
     <Loader />
   ) : (
     <Card>
       {(!mutation.isIdle || !mutation.isLoading) && (
         <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
       )}
-      {(!updateMutation.isIdle || !updateMutation.isLoading) && (
-        <BannerPicker
-          t={t}
-          data={updateMutation.data}
-          isSuccess={updateMutation.isSuccess}
-          isLoading={updateMutation.isIdle || updateMutation.isLoading}
-        />
-      )}
-
       <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
       <Link to={`/digit-ui/employee`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />

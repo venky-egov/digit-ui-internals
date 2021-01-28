@@ -34,6 +34,8 @@ const Urls = {
     print_reciept: "/collection-services/payments",
     file_store: "/filestore/v1/files/url",
     generate_pdf: "/pdf-service/v1/_create",
+    create_citizen_reciept: "/pg-service/transaction/v1/_create",
+    update_citizen_reciept:"/pg-service/transaction/v1/_update"
   },
 };
 

@@ -62,7 +62,7 @@ const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details
     ],
   };
 
-  pdfMake.createPdf(dd).download();
+  pdfMake.createPdf(dd).open();
 };
 
 export default { generate: jsPdfGenerator };

@@ -2,64 +2,8 @@ import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Header, Card, KeyNote, SubmitBar, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
 import { Link, useHistory, useParams } from "react-router-dom";
+import getPDFData from "../../getPDFData";
 
-const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
-const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
-
-const getPDFData = (application, tenantInfo, t, logoUrl) => {
-  return {
-    logo: tenantInfo.logoId ? tenantInfo.logoId : logoUrl,
-    name: `${t(tenantInfo.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`,
-    email: tenantInfo.emailId,
-    phoneNumber: tenantInfo.contactNumber,
-    heading: "Desludging request - Acknowledgement",
-    details: [
-      {
-        title: "Application Details",
-        values: [
-          { title: "Application No.", value: application.applicationNo },
-          { title: "Application Date", value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime, "dd/MM/yyyy") },
-          { title: "Application Channel", value: application.source },
-        ],
-      },
-      {
-        title: "Applicant Details",
-        values: [
-          { title: "Applicant Name", value: application.citizen.name },
-          { title: "Mobile No.", value: application.citizen.mobileNumber },
-        ],
-      },
-      {
-        title: "Property Details",
-        values: [
-          { title: "Property Type", value: t(`PROPERTYTYPE_MASTERS_${application.propertyUsage}`) },
-          { title: "Property Sub Type", value: t(`PROPERTYTYPE_MASTERS_${application.propertyUsage}`) },
-        ],
-      },
-      {
-        title: "Property Location Details",
-        values: [
-          { title: "Pincode", value: application.address.pincode },
-          { title: "City", value: application.address.city },
-          { title: "Mohalla", value: application.address.locality.name },
-          { title: "Street", value: application.address.street },
-          { title: "Building No.", value: application.address.buildingName },
-          { title: "Landmark", value: application.address.landmark },
-        ],
-      },
-      {
-        title: "Pit/Septic Tank Details",
-        values: [
-          { title: "Dimension", value: `${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m` },
-          { title: "Distance from Road", value: application.pitDetail.distanceFromRoad },
-          { title: "No. of Trips", value: application.noOfTrips },
-          { title: "Amount per Trip", value: "₹ NA" },
-          { title: "Total Amount Due", value: "₹ NA" },
-        ],
-      },
-    ],
-  };
-};
 const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -79,6 +23,11 @@ const ApplicationDetails = () => {
   const application = applications[0];
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
+  const handleDownloadPdf = async () => {
+    const data = getPDFData(application, tenantInfo, t, coreData?.stateInfo?.logoUrl);
+    Digit.Utils.pdf.generate(data);
+  };
+
   return (
     <React.Fragment>
       <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
@@ -95,7 +44,7 @@ const ApplicationDetails = () => {
             </div>
           }
           style={{ position: "absolute", top: 0, right: 20 }}
-          onClick={() => Digit.Utils.pdf.generate(getPDFData(application, tenantInfo, t, coreData?.stateInfo?.logoUrl))}
+          onClick={handleDownloadPdf}
         />
         <KeyNote keyValue={t("CS_MY_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory || "FSM"} />

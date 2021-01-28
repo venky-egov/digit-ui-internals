@@ -24,7 +24,7 @@ const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details
         },
         {
           text: email,
-          margin: [145, 25, 0, 25],
+          margin: [165, 25, 0, 25],
           fontSize: 11,
           color: "#464747",
         },
@@ -32,7 +32,7 @@ const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details
           text: phoneNumber,
           color: "#6f777c",
           fontSize: 11,
-          margin: [-58, 45, 0, 25],
+          margin: [-70, 45, 0, 25],
         },
       ],
     },

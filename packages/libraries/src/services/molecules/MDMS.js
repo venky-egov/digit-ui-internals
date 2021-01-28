@@ -216,7 +216,7 @@ const GetVehicleType = (MdmsRes) =>
   MdmsRes["FSM"].VehicleType.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
     return {
       ...vehicleDetails,
-      i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code.split(/\.|\//).join("_")}`,
+      i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
     };
   });
 

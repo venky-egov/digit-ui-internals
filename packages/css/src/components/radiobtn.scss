@@ -7,6 +7,11 @@
 
   .radio-btn-wrap {
     @apply block float-left relative;
+    &:hover {
+      .radio-btn-checkmark {
+        @apply border-primary-main;
+      }
+    }
   }
 
   .radio-btn {

@@ -2,7 +2,7 @@ import React from "react";
 import { FormStep } from "@egovernments/digit-ui-react-components";
 
 const SelectMobileNumber = ({ t, onSelect, config }) => {
-  return <FormStep onSelect={onSelect} config={config} t={t}></FormStep>;
+  return <FormStep onSelect={onSelect} config={config} t={t} componentInFront="+91"></FormStep>;
 };
 
 export default SelectMobileNumber;

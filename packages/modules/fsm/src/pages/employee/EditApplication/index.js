@@ -61,7 +61,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [selectedLocality, setSelectedLocality] = useState();
   const [canSubmit, setSubmitValve] = useState(false);
 
-  console.log("find channel state here", channel);
+  // console.log("find channel state here", channel);
   useEffect(() => {
     const applicationDetails = applicationData?.fsm[0];
     if (applicationDetails) {

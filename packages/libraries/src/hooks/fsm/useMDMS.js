@@ -14,6 +14,14 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
     return useQuery("FSM_APPLICATION_CHANNEL", () => MdmsService.getApplicationChannel(tenantId, moduleCode, type), config);
   };
 
+  const useEmployeeApplicationChannel = () => {
+    async function onlyEmployeeChannels() {
+      const allApplicationChannels = await MdmsService.getApplicationChannel(tenantId, moduleCode, type);
+      return allApplicationChannels.filter((type) => !type.citizenOnly);
+    }
+    return useQuery("FSM_APPLICATION_CHANNEL", () => onlyEmployeeChannels(), config);
+  };
+
   const usePropertyType = () => {
     return useQuery("FSM_PROPERTY_TYPE", () => MdmsService.getPropertyType(tenantId, moduleCode, type), config);
   };
@@ -32,6 +40,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
 
     case "ApplicationChannel":
       return useApplicationChannel();
+
+    case "EmployeeApplicationChannel":
+      return useEmployeeApplicationChannel();
 
     case "PropertyType":
       return usePropertyType();

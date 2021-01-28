@@ -1,32 +1,37 @@
 import React from "react";
-import { Banner, Card, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export const SuccessfulPayment = (props) => {
-  const { addParams, clearParams } = props;
-  const { t } = useTranslation();
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const egId = urlParams.get('eg_pg_txnid')
-  let  payments = {}
+  const egId = urlParams.get("eg_pg_txnid");
+  const { isLoading, data: paymentData } = Digit.Hooks.usePaymentUpdate({ egId });
+  const [printing, setPrinting] = useState(false);
+
   const getMessage = () => "PAYMENT COLLECTED";
-  const getDetails = async () => {
-     payments = await Digit.PaymentService.updateCitizenReciept(egId);
-  }
-  getDetails()
   const printReciept = async () => {
+    if (printing) return;
+    setPrinting(true);
     const tenantId = Digit.ULBService.getCurrentTenantId();
-   
-    console.log('--------', {payments})
-    // let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
-    // if (!payments.Payments[0]?.fileStoreId) {
-    //   response = await Digit.PaymentService.generatePdf(tenantId, { Payments: payments.Payments });
-    //   console.log({ response });
-    // }
-    // const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
-    // window.open(fileStore[response.filestoreIds[0]], "_blank");
+
+    console.log("--------", { paymentData });
+    let response = { filestoreIds: [paymentData.Payments[0]?.fileStoreId] };
+    if (!paymentData.Payments[0]?.fileStoreId) {
+      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: paymentData.Payments });
+      console.log({ response });
+    }
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    if (fileStore && fileStore[response.filestoreIds[0]]) {
+      window.open(fileStore[response.filestoreIds[0]], "_blank");
+    }
+    setPrinting(false);
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <Card>

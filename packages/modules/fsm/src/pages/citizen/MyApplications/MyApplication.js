@@ -8,8 +8,8 @@ const MyApplication = ({ application }) => {
   return (
     <Card>
       <KeyNote keyValue={t("CS_MY_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
-      <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory || "FSM"} />
-      <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType || "Desludging Request"} />
+      <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory || t("ES_TITLE_FSM")} />
+      <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType || t("CS_APPLICATION_TYPE_DESLUDGING")} />
       <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={t(application.applicationStatus)} />
       <Link to={`/digit-ui/citizen/fsm/application-details/${application.applicationNo}`}>
         <SubmitBar label={t("CS_MY_APPLICATION_VIEW")} />

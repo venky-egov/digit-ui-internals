@@ -4,6 +4,7 @@ import { useHistory, useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export const SuccessfulPayment = (props) => {
+  const { t } = useTranslation();
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const egId = urlParams.get("eg_pg_txnid");

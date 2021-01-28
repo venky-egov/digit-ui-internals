@@ -91,7 +91,6 @@ function createContent(details, phoneNumber) {
     const newArray = [];
     let count = 0;
     let arrayNumber = 0;
-    const imageToBase64 = require("image-to-base64");
 
     detail.values.forEach((value, index) => {
       if (count <= 3) {

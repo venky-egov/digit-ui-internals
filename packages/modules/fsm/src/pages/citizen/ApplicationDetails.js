@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Header, Card, KeyNote, SubmitBar, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
 import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
+import { getPropertySubtypeLocale } from "../../utils";
 
 const ApplicationDetails = () => {
   const { t } = useTranslation();

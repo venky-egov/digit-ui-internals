@@ -64,3 +64,27 @@ const FSM_UTILS = {
 };
 
 export default FSM_UTILS;
+
+// How to use above function
+// let config = [];
+
+// const defaultConfig = ["applicationDetails", "propertyDetails", "locationDetails", "paymentDetails"];
+
+// const { Customizations } = window.Digit;
+// let employeeCustomizations = false;
+
+// if (Customizations?.FSM?.getEmployeeApplicationCustomization) {
+//   employeeCustomizations = Customizations?.FSM?.getEmployeeApplicationCustomization(defaultConfig, t);
+// }
+
+// if (employeeCustomizations?.config?.length > 0) {
+//   FSM_UTILS.updateConfiguration({
+//     config,
+//     defaultConfig,
+//     detailsConfig,
+//     customConfiguration: employeeCustomizations?.config,
+//     isDefaultConfig: employeeCustomizations?.defaultConfig,
+//   });
+// } else {
+//   defaultConfig.forEach((fieldSectionName) => config.push(detailsConfig[fieldSectionName]));
+// }

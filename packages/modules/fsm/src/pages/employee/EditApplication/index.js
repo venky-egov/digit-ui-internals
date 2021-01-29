@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown, Loader, PitDimension } from "@egovernments/digit-ui-react-components";
+import { Dropdown, Loader, PitDimension, FormComposer } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import { FormComposer } from "../../../components/FormComposer";
 
 const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();

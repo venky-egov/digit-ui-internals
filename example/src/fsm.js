@@ -1,42 +1,4 @@
 const fsmCustomizations = {
-  // DSO Edit Application Customizations
-  getDsoEditApplicationCustomization: (config, t) => {
-    // Below code is copied from docs or you can console.log config and copy and paste here
-    const dsoConfig = [
-      {
-        name: "propertyDetails",
-        fieldsOrder: ["propertyType", "propertySubType"],
-        addFields: [
-          // {
-          //   name: "example",
-          //   label: t("Example"),
-          //   isMandatory: true,
-          //   type: "text",
-          //   populators: {
-          //     name: "example",
-          //     validation: { pattern: /[0-9]+/ },
-          //   },
-          //   disable: true,
-          // },
-        ],
-      },
-      {
-        name: "paymentDetails",
-        fieldsOrder: ["noOfTrips", "amount"],
-        addFields: [],
-      },
-      {
-        name: "dsoDetails",
-        fieldsOrder: ["assignedDso", "vehicleNo", "vehicleCapacity", "possibleServiceDate"],
-        addFields: [],
-      },
-    ];
-
-    return {
-      disable: ["propertyDetails", "locationDetails", "paymentDetails"],
-      config: dsoConfig,
-    };
-  },
   getEmployeeApplicationCustomization: (config, t) => {
     const employeeConfig = [
       {
@@ -68,7 +30,6 @@ const fsmCustomizations = {
       config: employeeConfig,
       defaultConfig: true, // You want to use defaultConfig and you only want to update one field section. The above employeeConfig is also an order for all the field section. So if defaultConfig is false then on browser you will only see those field section who are inside employeeConfig
     };
-    // TODO: BUG: for example: In employeeConfig you only update propertyDetails and you make "defaultConfig: true", so the bug is now propertyDetails order will be 1 and then other will come at bottom
   },
 };
 

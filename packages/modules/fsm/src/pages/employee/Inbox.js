@@ -29,7 +29,7 @@ const Inbox = () => {
   };
 
   let isMobile = window.Digit.Utils.browser.isMobile;
-  if (applications.length !== null) {
+  if (applications?.length !== null) {
     if (DSO || isMobile) {
       return <MobileInbox data={applications} isLoading={isLoading || isIdle} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     } else {

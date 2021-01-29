@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
-import { TopBar, Dropdown, LogoutIcon } from "@egovernments/digit-ui-react-components";
+import { TopBar, Dropdown, LogoutIcon, HomeIcon } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "./ChangeLanguage";
+import { useSelector } from "react-redux";
 
 import { AppModules } from "./AppModules";
 import { CitizenSidebar } from "./Sidebar";
@@ -22,6 +23,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const innerWidth = window.innerWidth;
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
+  const { stateInfo } = useSelector((state) => state.common);
 
   const handleLogout = () => {
     toggleSidebar(false);
@@ -114,7 +116,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         {mobileView && (
           <TopBar
             img={cityDetails?.logoId}
-            ulb={`${t(cityDetails?.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
+            ulb={`${t(stateInfo?.name)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
             isMobile={true}
             toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
             logoUrl={logoUrl}
@@ -123,21 +125,23 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           />
         )}
         {!mobileView && (
-          <div className="topbar">
-            <img
-              className="city"
-              style={cityDetails ? null : { marginTop: "8px", height: "30px", width: "auto" }}
-              src={
-                cityDetails
-                  ? cityDetails.logoId
-                  : "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png"
-              }
-            />
-            {cityDetails ? (
-              <span className="ulb">
-                {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
-              </span>
-            ) : null}
+          <div className="topbar flex-between">
+            <div>
+              <img
+                className="state"
+                style={stateInfo ? { height: "30px", width: "auto", marginRight: "10px" } : { marginTop: "8px", height: "30px", width: "auto" }}
+                src={
+                  stateInfo
+                    ? stateInfo.logoUrl
+                    : "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png"
+                }
+              />
+              {stateInfo ? (
+                <span className="ulb">
+                  {t(stateInfo?.name)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
+                </span>
+              ) : null}
+            </div>
             <div className="right width-20 flex-right column-gap-15">
               <div className="left">
                 <ChangeLanguage dropdown={true} />
@@ -164,6 +168,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
                   <path d="M0 0h24v24H0z" fill="none" />
                   <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="white" />
                 </svg>
+                {t("COMMON_BOTTOM_NAVIGATION_HOME")}
               </div>
             </Link>
           </div>

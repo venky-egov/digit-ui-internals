@@ -18,7 +18,7 @@ const getPDFData = (application, tenantInfo, t) => ({
       title: "Application Details",
       values: [
         { title: "Application No.", value: application.applicationNo },
-        { title: "Application Date", value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime) },
+        { title: "Application Date", value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime, "dd/MM/yyyy") },
         { title: "Application Channel", value: application.source },
       ],
     },
@@ -64,22 +64,20 @@ const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const history = useHistory();
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch({ tenantId: "pb", applicationNumber: id });
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
   const coreData = Digit.Hooks.useCoreData();
 
   if (isLoading) {
     return <Loader />;
   }
-  console.log("data-coreData", data, coreData);
   const { fsm: applications } = data;
   if (applications.length === 0) {
-    console.log("invalid application", id);
     history.goBack();
   }
 
   const application = applications[0];
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
-  console.log("tenantInfo", tenantInfo);
 
   return (
     <React.Fragment>
@@ -114,9 +112,11 @@ const ApplicationDetails = () => {
         />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
-        <Link to={`/digit-ui/citizen/fsm/rate/${application.complaintNo}`}>
-          <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE_US")} />
-        </Link>
+        {application.status === "PENDING_APPL_FEE_PAYMENT" && (
+          <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
+            <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
+          </Link>
+        )}
       </Card>
     </React.Fragment>
   );

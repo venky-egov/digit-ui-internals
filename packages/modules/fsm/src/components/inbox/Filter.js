@@ -18,126 +18,83 @@ const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
-  const { fsm } = useSelector((state) => state);
-
-  const [selectAssigned, setSelectedAssigned] = useState("");
-  const [selectedApplicationType, setSelectedApplicationType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-  const [pendingApplicationCount, setPendingApplicationCount] = useState([]);
   const DSO = Digit.UserService.hasAccess("DSO");
 
-  const [fsmFilters, setFsmFilter] = useState({
+  const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
-    locality: ["ALakapuri", "Railway medical Colony"],
+    locality: [],
     applicationStatus: [],
   });
 
   const [wfFilters, setWfFilters] = useState({
-    assignee: [],
+    applicationStatus: [],
+    locality: [],
+    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
   });
 
-  //TODO change city fetch from user tenantid
-  // let localities = Digit.Hooks.fsm.useLocalities({ city: "Amritsar" });
-  let localities = ["Alakapuri", "Railway medical Colony"];
-  // let applicationStatus = Digit.Hooks.fsm.useApplicationStatus();
-  // let serviceDefs = Digit.Hooks.fsm.useServiceDefs();
-
-  const onRadioChange = (value) => {
-    setSelectedAssigned(value);
-    uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
-    setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
-  };
-
-  let pgrQuery = {};
-  let wfQuery = {};
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const localities = useSelector((state) => state.common.localities[tenantId]);
 
   useEffect(() => {
-    for (const property in fsmFilters) {
-      if (Array.isArray(fsmFilters[property])) {
-        let params = fsmFilters[property].map((prop) => prop.code).join();
-        if (params) {
-          pgrQuery[property] = params;
-        }
-      }
+    let filters = {};
+    filters.applicationStatus = wfFilters.applicationStatus.map((status) => status.code).join(",");
+    filters.locality = wfFilters.locality.map((item) => item.code.split("_").pop()).join(",");
+    if (wfFilters.uuid && Object.keys(wfFilters.uuid).length > 0) {
+      filters.uuid = wfFilters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
     }
-    for (const property in wfFilters) {
-      if (Array.isArray(wfFilters[property])) {
-        let params = wfFilters[property].map((prop) => prop.code).join();
-        if (params) {
-          wfQuery[property] = params;
-        }
-      }
-    }
-    //queryString = queryString.substring(0, queryString.length - 1);
-    handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-  }, [fsmFilters, wfFilters]);
+    props.onFilterChange(filters);
+    //props.onClose();
+  }, [wfFilters]);
+
+  const onRadioChange = (value) => {
+    setWfFilters({ ...wfFilters, uuid: value });
+  };
 
   const ifExists = (list, key) => {
     return list.filter((object) => object.code === key.code).length;
   };
 
-  function applicationType(_type) {
-    const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
-    if (!ifExists(fsmFilters.serviceCode, type)) {
-      setFsmFilter({ ...fsmFilters, serviceCode: [...fsmFilters.serviceCode, type] });
-    }
-  }
-
-  function onSelectLocality(value, type) {
-    // if (!ifExists(fsmFilters.locality, value)) {
-    //   setFsmFilter({ ...fsmFilters, locality: [...fsmFilters.locality, value] });
-    // }
-    setFsmFilter((prevState) => {
-      return { ...prevState, locality: [...prevState.locality.filter((item) => item !== value), value] };
+  function onSelectLocality(value) {
+    setWfFilters((prevState) => {
+      return { ...prevState, locality: [...prevState.locality.filter((item) => item.code !== value.code), value] };
     });
   }
 
   useEffect(() => {
-    if (fsmFilters.serviceCode.length > 1) {
-      setSelectedApplicationType(`${fsmFilters.serviceCode.length} selected`);
+    if (wfFilters.locality.length > 1) {
+      setSelectedLocality({ code: `${wfFilters.locality.length} selected` });
     } else {
-      setSelectedApplicationType(fsmFilters.serviceCode[0]);
+      setSelectedLocality(wfFilters.locality[0]);
     }
-  }, [fsmFilters.serviceCode]);
-
-  useEffect(() => {
-    if (fsmFilters.locality.length > 1) {
-      setSelectedLocality(`${fsmFilters.locality.length} selected`);
-    } else {
-      setSelectedLocality(fsmFilters.locality[0]);
-    }
-  }, [fsmFilters.locality]);
+  }, [wfFilters.locality]);
 
   const onRemove = (index, key) => {
-    let afterRemove = fsmFilters[key].filter((value, i) => {
+    let afterRemove = wfFilters[key].filter((value, i) => {
       return i !== index;
     });
-    setFsmFilter({ ...fsmFilters, [key]: afterRemove });
+    setWfFilters({ ...pgrfilters, [key]: afterRemove });
   };
 
   const handleAssignmentChange = (e, type) => {
     if (e.target.checked) {
-      setFsmFilter({ ...fsmFilters, applicationStatus: [...fsmFilters.applicationStatus, { code: type.code }] });
+      setWfFilters({ ...wfFilters, applicationStatus: [...wfFilters.applicationStatus, type] });
     } else {
-      const filteredStatus = fsmFilters.applicationStatus.filter((value) => {
+      const filteredStatus = wfFilters.applicationStatus.filter((value) => {
         return value.code !== type.code;
-      })[0];
-      setFsmFilter({ ...fsmFilters, applicationStatus: [{ code: filteredStatus }] });
+      });
+      setWfFilters({ ...wfFilters, applicationStatus: filteredStatus });
     }
   };
 
   function clearAll() {
-    setFsmFilter({ serviceCode: [], locality: [], applicationStatus: [] });
-    setWfFilters({ assigned: [{ code: [] }] });
-    setSelectedAssigned("");
-    setSelectedApplicationType(null);
+    setWfFilters({
+      applicationStatus: [],
+      locality: [],
+      uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+    });
     setSelectedLocality(null);
   }
-
-  const handleFilterSubmit = () => {
-    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-    //props.onClose();
-  };
 
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
@@ -148,10 +105,12 @@ const Filter = (props) => {
         select={(value) => {
           select(value, key);
         }}
+        optionKey={optionKey}
+        t={t}
       />
       <div className="tag-container">
-        {fsmFilters[key].length > 0 &&
-          fsmFilters[key].map((value, index) => {
+        {wfFilters[key].length > 0 &&
+          wfFilters[key].map((value, index) => {
             if (value[displayKey]) {
               return <RemoveableTag key={index} text={`${value[displayKey].slice(0, 22)} ...`} onClick={() => onRemove(index, key)} />;
             } else {
@@ -164,7 +123,7 @@ const Filter = (props) => {
 
   return (
     <React.Fragment>
-      <div className="filter" style={{ marginTop: "100px" }}>
+      <div className="filter">
         <div className="filter-card">
           <div className="heading">
             <div className="filter-label">{t("ES_INBOX_FILTER_BY")}:</div>
@@ -182,7 +141,7 @@ const Filter = (props) => {
             {!DSO && (
               <RadioButtons
                 onSelect={onRadioChange}
-                selectedOption={selectAssigned}
+                selectedOption={wfFilters.uuid}
                 optionsKey="name"
                 options={[
                   { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
@@ -191,9 +150,9 @@ const Filter = (props) => {
               />
             )}
             <div>
-              {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}
+              {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")}
             </div>
-            <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmFilters={fsmFilters} />
+            <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={wfFilters} />
           </div>
         </div>
       </div>

@@ -62,3 +62,13 @@
     color: #1d70b8;
   }
 }
+
+.primary-label-btn {
+  color: #f47738;
+  &:hover {
+    color: #000;
+  }
+  cursor: pointer;
+  font-weight: 500;
+  width: fit-content;
+}

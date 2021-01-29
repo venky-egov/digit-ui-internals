@@ -60,6 +60,8 @@ import CustomButton from "./atoms/CustomButton";
 import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
 import RoundedLabel from "./atoms/RoundedLabel";
 
+import { SearchIconSvg } from "./atoms/svgindex";
+
 import RemoveableTag from "./molecules/RemoveableTag";
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -71,6 +73,7 @@ import FormStep from "./molecules/FormStep";
 import RatingCard from "./molecules/RatingCard";
 import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
+import PitDimension from "./molecules/PitDimension";
 
 import { FormComposer } from "./hoc/FormComposer";
 
@@ -138,6 +141,7 @@ export {
   ActionLinks,
   PrivateRoute,
   SectionalDropdown,
+  RoundedLabel,
   LabelFieldPair,
   // Icons
   GetApp,
@@ -149,6 +153,7 @@ export {
   Hamburger,
   CustomButton,
   CitizenInfoLabel,
+  SearchIconSvg,
   // Molecule
   InputCard,
   FormStep,
@@ -159,5 +164,5 @@ export {
   RemoveableTag,
   // hoc
   FormComposer,
-  RoundedLabel,
+  PitDimension,
 };

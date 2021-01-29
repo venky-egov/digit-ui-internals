@@ -16,6 +16,7 @@ const TextInput = (props) => {
           value={props.value}
           disabled={props.disable}
           style={{ borderColor: props.disable ? "#ccc" : "black", color: props.disable ? "#ccc" : "revert" }}
+          defaultValue={props.defaultValue}
         />
       ) : (
         <input
@@ -28,6 +29,7 @@ const TextInput = (props) => {
           value={props.value}
           style={{ ...props.style, borderColor: props.disable ? "#ccc" : "black", color: props.disable ? "#ccc" : "revert" }}
           disabled={props.disable}
+          defaultValue={props.defaultValue}
         />
       )}
     </React.Fragment>

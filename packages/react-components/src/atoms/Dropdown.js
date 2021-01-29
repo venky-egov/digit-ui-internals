@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
 
@@ -45,14 +45,25 @@ const Dropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
   const [forceSet, setforceSet] = useState(0);
-
+  const optionRef = useRef(null);
+  const hasCustomSelector = props.customSelector ? true : false;
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
 
   function dropdownSwitch() {
     var current = dropdownStatus;
+    if (!current) {
+      document.addEventListener("mousedown", handleClick, false);
+    }
     setDropdownStatus(!current);
+  }
+
+  function handleClick(e) {
+    if (!optionRef.current || !optionRef.current.contains(e.target)) {
+      document.removeEventListener("mousedown", handleClick, false);
+      setDropdownStatus(false);
+    }
   }
 
   function dropdownOn(val) {
@@ -84,31 +95,39 @@ const Dropdown = (props) => {
   return (
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
-      <div className={dropdownStatus ? "select-active" : "select"} style={{ borderColor: props.disable ? "#ccc" : "revert" }}>
-        <TextField
-          setFilter={setFilter}
-          forceSet={forceSet}
-          selectedVal={
-            selectedOption
-              ? props.t
-                ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
-                : props.optionKey
-                ? selectedOption[props.optionKey]
-                : selectedOption
-              : null
-          }
-          filterVal={filterVal}
-          // onClick={dropdownOn}
-          dropdownDisplay={dropdownOn}
-          disable={props.disable}
-          freeze={props.freeze ? true : false}
-        />
-        <ArrowDown onClick={dropdownSwitch} disable={props.disable} />
-      </div>
+      {hasCustomSelector && (
+        <div className={props.showArrow ? "cp margin-top-6 flex-right column-gap-5" : "cp margin-top-6"} onClick={dropdownSwitch}>
+          {props.customSelector}
+          {props.showArrow && <ArrowDown onClick={dropdownSwitch} />}
+        </div>
+      )}
+      {!hasCustomSelector && (
+        <div className={dropdownStatus ? "select-active" : "select"} style={{ borderColor: props.disable ? "#ccc" : "revert" }}>
+          <TextField
+            setFilter={setFilter}
+            forceSet={forceSet}
+            selectedVal={
+              selectedOption
+                ? props.t
+                  ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
+                  : props.optionKey
+                  ? selectedOption[props.optionKey]
+                  : selectedOption
+                : null
+            }
+            filterVal={filterVal}
+            // onClick={dropdownOn}
+            dropdownDisplay={dropdownOn}
+            disable={props.disable}
+            freeze={props.freeze ? true : false}
+          />
+          <ArrowDown onClick={dropdownSwitch} disable={props.disable} />
+        </div>
+      )}
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
-          <div className="options-card">
+          <div className={`${hasCustomSelector ? "margin-top-10" : ""} options-card`} ref={optionRef}>
             {props.option &&
               props.option
                 .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
@@ -117,9 +136,10 @@ const Dropdown = (props) => {
                     // console.log(props.t(option[props.optionKey]));
                   }
                   return (
-                    <p key={index} onClick={() => onSelect(option)}>
-                      {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
-                    </p>
+                    <div className="cp profile-dropdown--item" key={index} onClick={() => onSelect(option)}>
+                      {option.icon && <span className="icon"> {option.icon} </span>}
+                      {<span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>}
+                    </div>
                   );
                 })}
           </div>
@@ -142,6 +162,8 @@ const Dropdown = (props) => {
 };
 
 Dropdown.propTypes = {
+  customSelector: PropTypes.any,
+  showArrow: PropTypes.bool,
   selected: PropTypes.any,
   style: PropTypes.object,
   option: PropTypes.array,
@@ -150,6 +172,9 @@ Dropdown.propTypes = {
   t: PropTypes.func,
 };
 
-Dropdown.defaultProps = {};
+Dropdown.defaultProps = {
+  customSelector: null,
+  showArrow: true,
+};
 
 export default Dropdown;

@@ -2,17 +2,17 @@ var pdfMake = require("pdfmake/build/pdfmake.js");
 var pdfFonts = require("pdfmake/build/vfs_fonts.js");
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-import { toDataURL } from "./toDataURL";
+// import { toDataURL } from "./toDataURL";
 
 const jsPdfGenerator = async ({ logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
-  const base64Image = await toDataURL(logo);
+  // const base64Image = await toDataURL(logo);
 
   const dd = {
     pageMargins: [40, 80, 40, 30],
     header: {
       columns: [
         {
-          image: base64Image,
+          image: logo,
           width: 50,
           margin: [10, 10],
         },

@@ -13,7 +13,7 @@ const getPDFData = (application, tenantInfo, t, logoUrl) => {
     name: `${t(tenantInfo.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`,
     email: tenantInfo.emailId,
     phoneNumber: tenantInfo.contactNumber,
-    heading: "Desludging request - Acknowledgement",
+    heading: "PDF_HEADER_DESLUDGING_REQUEST_ACKNOWLEDGEMENT",
     details: [
       {
         title: t("CS_TITLE_APPLICATION_DETAILS"),

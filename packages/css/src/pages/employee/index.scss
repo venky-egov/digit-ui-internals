@@ -62,8 +62,8 @@
   }
 }
 
-.citizen, .employee {
-  
+.citizen,
+.employee {
   .sidebar {
     position: fixed;
     left: 0;
@@ -96,7 +96,8 @@
 }
 
 @media (min-width: 640px) {
-  .employee, .citizen {
+  .employee,
+  .citizen {
     .main {
       padding-top: 80px;
       margin-left: 88px;
@@ -104,7 +105,7 @@
   }
 }
 
-.mark-for-disposal-container {
+.multi-select-container {
   .disposal-text {
     @apply font-bold;
   }

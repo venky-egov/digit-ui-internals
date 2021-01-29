@@ -91,7 +91,7 @@ const MarkForDisposal = () => {
   };
 
   return (
-    <div className="mark-for-disposal-container">
+    <div className="multi-select-container">
       <div className="inbox-container">
         <div className="filters-container">
           <div className="searchBox">

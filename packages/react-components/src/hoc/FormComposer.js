@@ -27,9 +27,10 @@ export const FormComposer = (props) => {
     props.onFormValueChange && props.onFormValueChange(formData, formState);
   }, [formData]);
 
-  const fieldSelector = (type, populators) => {
+  const fieldSelector = (type, populators, isMandatory) => {
     switch (type) {
       case "text":
+      case "password":
         // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (
           <div
@@ -51,7 +52,7 @@ export const FormComposer = (props) => {
                 {populators.componentInFront}
               </span>
             ) : null}
-            <TextInput className="field" {...populators} inputRef={register(populators.validation)} />
+            <TextInput className="field" {...populators} inputRef={register(populators.validation)} isRequired={isMandatory} type={type} />
           </div>
         );
       case "textarea":
@@ -87,7 +88,7 @@ export const FormComposer = (props) => {
                     </CardLabel>
                   )}
                   <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators)}
+                    {fieldSelector(field.type, field.populators, field.isMandatory)}
                   </div>
                 </React.Fragment>
               );
@@ -116,10 +117,12 @@ export const FormComposer = (props) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card style={getCardStyles()}>
         {!props.childrenAtTheBottom && props.children}
-        {props.heading && <CardSubHeader>{props.heading}</CardSubHeader>}
+        {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}
         {formFields}
         {props.childrenAtTheBottom && props.children}
-        {props.label && (
+        {props.submitInForm && <SubmitBar label={t(props.label)} submit="submit" style={{ width: "100%" }} />}
+        {props.secondaryLabel && props.secondaryLabel}
+        {!props.submitInForm && props.label && (
           <ActionBar>
             <SubmitBar label={t(props.label)} submit="submit" />
           </ActionBar>

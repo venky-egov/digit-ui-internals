@@ -3,6 +3,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 
 import { AppHome } from "./Home";
 import Login from "../pages/citizen/Login";
+import EmployeeLogin from "../pages/employee/login/index";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -25,11 +26,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   return (
     <Switch>
       {appRoutes}
-      {userType === "citizen" && (
-        <Route path={`${path}/login`}>
-          <Login stateCode={stateCode} />
-        </Route>
-      )}
+      <Route path={`${path}/login`}>{userType === "citizen" ? <Login stateCode={stateCode} /> : <EmployeeLogin />}</Route>
       <Route>
         <AppHome userType={userType} modules={modules} />
       </Route>

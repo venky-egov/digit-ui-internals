@@ -48,21 +48,23 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
               <div className="left">
                 <ChangeLanguage dropdown={true} />
               </div>
-              <div className="left ">
-                <Dropdown
-                  option={userOptions}
-                  optionKey={"name"}
-                  select={handleUserDropdownSelection}
-                  showArrow={false}
-                  freeze={true}
-                  customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
-                />
-              </div>
+              {userDetails?.access_token && (
+                <div className="left ">
+                  <Dropdown
+                    option={userOptions}
+                    optionKey={"name"}
+                    select={handleUserDropdownSelection}
+                    showArrow={false}
+                    freeze={true}
+                    customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
+                  />
+                </div>
+              )}
               <img className="state" src={logoUrl} />
             </div>
           )}
         </div>
-        {!mobileView && (
+        {!mobileView && userDetails?.access_token && (
           <div className="sidebar">
             <Link to="/digit-ui/employee">
               <div className="actions active">

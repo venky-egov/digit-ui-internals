@@ -63,25 +63,19 @@
   }
 }
 
-<<<<<<< HEAD
 .primary-label-btn {
-  color: #f47738;
-=======
-.primary-label-btn{
-  
   display: flex;
   gap: 10px;
 
-  svg{
-    fill: #F47738;
+  svg {
+    fill: #f47738;
   }
 
-  color: #F47738;
->>>>>>> development
+  color: #f47738;
   &:hover {
     color: #000;
 
-    svg{
+    svg {
       fill: #000;
     }
   }

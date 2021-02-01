@@ -16,7 +16,7 @@ const Login = ({ stateCode }) => {
   const location = useLocation();
   const { path, url } = useRouteMatch();
   const history = useHistory();
-  const [isUserRegistered, setIsUserRegistered] = useState(null);
+  const [isUserRegistered, setIsUserRegistered] = useState(true);
   const [user, setUser] = useState(null);
   const [tokens, setTokens] = useState(null);
   const [params, setParmas] = useState({});
@@ -49,6 +49,11 @@ const Login = ({ stateCode }) => {
     setParmas({ ...params, otp });
   };
 
+  const handleRegisterClick = () => {
+    setIsUserRegistered(false);
+    history.push(`${path}/name`, { from: location.state?.from || "/digit-ui" });
+  };
+
   const selectMobileNumber = async (mobileNumber) => {
     setParmas({ ...params, ...mobileNumber });
     const data = {
@@ -56,14 +61,19 @@ const Login = ({ stateCode }) => {
       tenantId: stateCode,
       userType: getUserType(),
     };
-    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
-    if (!err) {
-      setIsUserRegistered(true);
-      history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
-      return;
+    if (isUserRegistered) {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+      if (!err) {
+        history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
+        return;
+      }
+    } else {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+      if (!err) {
+        history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
+        return;
+      }
     }
-    setIsUserRegistered(false);
-    history.push(`${path}/name`, { from: location.state?.from || "/digit-ui" });
   };
 
   const selectName = async (name) => {
@@ -73,8 +83,7 @@ const Login = ({ stateCode }) => {
       userType: getUserType(),
     };
     setParmas({ ...params, ...name });
-    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
-    history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
+    history.push(`${path}/r`, { from: location.state?.from || "/digit-ui" });
   };
 
   const selectOtp = async () => {
@@ -134,7 +143,23 @@ const Login = ({ stateCode }) => {
       <AppContainer>
         <BackButton />
         <Route path={`${path}`} exact>
-          <SelectMobileNumber onSelect={selectMobileNumber} config={stepItems[0]} t={t} />
+          <SelectMobileNumber
+            onSelect={selectMobileNumber}
+            onRegisterClick={handleRegisterClick}
+            config={stepItems[0]}
+            showRegisterLink={isUserRegistered}
+            t={t}
+          />
+        </Route>
+        <Route path={`${path}/r`}>
+          <SelectMobileNumber
+            onSelect={selectMobileNumber}
+            onRegisterClick={handleRegisterClick}
+            config={stepItems[0]}
+            mobileNumber={params.mobileNumber || ""}
+            showRegisterLink={isUserRegistered}
+            t={t}
+          />
         </Route>
         <Route path={`${path}/otp`}>
           <SelectOtp config={stepItems[1]} onOtpChange={handleOtpChange} onResend={resendOtp} onSelect={selectOtp} otp={params.otp} t={t} />

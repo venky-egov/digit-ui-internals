@@ -1,6 +1,16 @@
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Header, Card, KeyNote, SubmitBar, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
+import {
+  Header,
+  Card,
+  CardSectionHeader,
+  ConnectingCheckPoints,
+  CheckPoint,
+  KeyNote,
+  SubmitBar,
+  LinkButton,
+  Loader,
+} from "@egovernments/digit-ui-react-components";
 import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
 import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
@@ -11,6 +21,12 @@ const ApplicationDetails = () => {
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({
+    tenantId,
+    id,
+    moduleCode: "FSM",
+    serviceData: data,
+  });
   const coreData = Digit.Hooks.useCoreData();
 
   if (isLoading) {
@@ -77,6 +93,32 @@ const ApplicationDetails = () => {
             !!application.pitDetail.diameter ? "x" + application.pitDetail.diameter + "m" : ""
           }`}
         />
+        {!workflowDetails?.isLoading && (
+          <Fragment>
+            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+              {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+            </CardSectionHeader>
+            {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
+              <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
+            ) : (
+              <ConnectingCheckPoints>
+                {workflowDetails?.data?.timeline &&
+                  workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <CheckPoint
+                          keyValue={index}
+                          isCompleted={index === 0}
+                          label={t("CS_COMMON_" + checkpoint.status)}
+                          // customChild={getTimelineCaptions(checkpoint)}
+                        />
+                      </React.Fragment>
+                    );
+                  })}
+              </ConnectingCheckPoints>
+            )}
+          </Fragment>
+        )}
         {/* <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} /> */}
         {/* <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} /> */}
         {application.applicationStatus === "PENDING_APPL_FEE_PAYMENT" && (

@@ -26,7 +26,7 @@ const EmployeeApp = ({ path, url, userType }) => {
       <p style={{ marginBottom: "24px" }}>
         <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
           Home
-        </Link>
+        </Link>{" "}
         / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
       </p>
       <Switch>
@@ -46,16 +46,16 @@ const EmployeeApp = ({ path, url, userType }) => {
 const CitizenApp = ({ path }) => {
   const location = useLocation();
   return (
-    <Switch>
-      <div className="ground-container">
-        {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
+    <div className="ground-container">
+      {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
+      <Switch>
         <PrivateRoute path={`${path}/new-application`} component={() => <FileComplaint parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
         <PrivateRoute path={`${path}/application-details/:id`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
-      </div>
-    </Switch>
+      </Switch>
+    </div>
   );
 };
 

@@ -107,7 +107,7 @@ export const CollectPayment = (props) => {
         ...additionalCharges,
         {
           label: "Total Amount",
-          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {bill.totalAmount} </CardSectionHeader>,
+          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill.totalAmount}`} </CardSectionHeader>,
         },
       ],
     },

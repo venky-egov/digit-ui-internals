@@ -68,7 +68,7 @@ export const SelectPaymentType = (props) => {
               <h2>Total Amount Due</h2>
             </span>
             <span style={{ fontSize: "20px" }} className="name">
-              {billDetails.totalAmount}
+              ₹ {billDetails.totalAmount}
             </span>
           </div>
 

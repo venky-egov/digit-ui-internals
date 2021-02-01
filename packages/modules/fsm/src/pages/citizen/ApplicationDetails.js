@@ -25,12 +25,19 @@ const ApplicationDetails = () => {
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
   const handleDownloadPdf = async () => {
-    const data = getPDFData(application, tenantInfo, t, coreData?.stateInfo?.logoUrl);
+    const data = getPDFData(application, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 
   return (
     <React.Fragment>
+      <img
+        style={{ opacity: 0, position: "absolute" }}
+        id="pdf-logo"
+        crossOrigin="anonymous"
+        src={`https://egov-micro-qa.egovernments.org${tenantInfo?.logoId.split(".com")[1]}` || coreData?.stateInfo?.logoUrl}
+        alt="mSeva"
+      />
       <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
       <Card style={{ position: "relative" }}>
         <LinkButton

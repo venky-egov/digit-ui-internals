@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Header, Card, RadioButtons, CardSubHeader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useParams, useRouteMatch, useHistory } from "react-router-dom";
 
 export const SelectPaymentType = (props) => {
   const { t } = useTranslation();
-
-  const menu = ["Online Payment"];
+  const history = useHistory();
+  const { path: currentPath } = useRouteMatch();
+  const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
@@ -15,47 +16,36 @@ export const SelectPaymentType = (props) => {
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
   console.log({ billDetails, payment: paymentdetails?.Bill });
 
-  const onSubmit = (d) => {
-    console.log(d);
-    // Req details
-    const url = "/pg-service/transaction/v1/_create";
-    const method = "POST";
-    const reqData = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: ".01",
-        action: "_create",
-        did: "1",
-        key: "",
-        msgId: "20170310130900|en_IN",
-        requesterId: "",
-        authToken: "87330839-8797-4ad4-96b6-8d33f5b76ebe",
-      },
+  const onSubmit = async (d) => {
+    const filterData = {
       Transaction: {
-        tenantId: "pb.amritsar",
-        txnAmount: 0,
-        module: "TL",
-        billId: "9e754ee2-b76f-4a90-8a48-552ad943e16f",
-        consumerCode: "PB-TL-2020-03-27-005274",
+        tenantId: tenantId,
+        txnAmount: billDetails.totalAmount,
+        module: "FSM.TRIP_CHARGES",
+        billId: billDetails.id,
+        consumerCode: consumerCode,
         productInfo: "Common Payment",
         gateway: "AXIS",
         taxAndPayments: [
           {
-            billId: "9e754ee2-b76f-4a90-8a48-552ad943e16f",
-            amountPaid: 0,
+            billId: billDetails.id,
+            amountPaid: billDetails.totalAmount,
           },
         ],
         user: {
-          name: "Shreya B",
-          mobileNumber: "9686987977",
-          tenantId: "pb.amritsar",
+          name: billDetails.payerName,
+          mobileNumber: billDetails.mobileNumber,
+          tenantId: tenantId,
         },
-        callbackUrl: "https://egov-micro-dev.egovernments.org/citizen/egov-common/paymentRedirectPage",
+        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success`,
         additionalDetails: {
           isWhatsapp: false,
         },
       },
     };
+    const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
+    const redirectUrl = data?.Transaction?.redirectUrl;
+    window.location = redirectUrl;
   };
 
   return (
@@ -78,7 +68,7 @@ export const SelectPaymentType = (props) => {
               <h2>Total Amount Due</h2>
             </span>
             <span style={{ fontSize: "20px" }} className="name">
-              {billDetails.totalAmount}
+              ₹ {billDetails.totalAmount}
             </span>
           </div>
 

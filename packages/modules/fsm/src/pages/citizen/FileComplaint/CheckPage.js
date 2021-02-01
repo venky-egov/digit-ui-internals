@@ -10,7 +10,6 @@ import {
   ActionLinks,
   LinkButton,
   SubmitBar,
-  CitizenInfoLabel,
   CardText,
 } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
@@ -72,7 +71,7 @@ const CheckPage = ({ onSubmit, value }) => {
         {pitType && (
           <Row
             label={t("CS_CHECK_PIT_TYPE")}
-            text={pitType.i18nKey}
+            text={t(pitType.i18nKey)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pit-type" />}
           />
         )}
@@ -82,7 +81,7 @@ const CheckPage = ({ onSubmit, value }) => {
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>
-      <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_TEXT")} />
+      {/* <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_TEXT")} /> */}
       <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );

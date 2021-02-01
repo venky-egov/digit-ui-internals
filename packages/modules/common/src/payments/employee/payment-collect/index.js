@@ -30,10 +30,10 @@ export const CollectPayment = (props) => {
     { code: "CASH", label: "Cash" },
     { code: "CHEQUE", label: "Cheque" },
     { code: "CARD", label: "Debit/Credit Card" },
-    { code: "DD", label: "Demand Draft" },
-    { code: "OFFLINE_NEFT", label: "Offline NEFT" },
-    { code: "OFFLINE_RTGS", label: "Offline RTGS" },
-    { code: "POSTAL_ORDER", label: "Postal Order" },
+    // { code: "DD", label: "Demand Draft" },
+    // { code: "OFFLINE_NEFT", label: "Offline NEFT" },
+    // { code: "OFFLINE_RTGS", label: "Offline RTGS" },
+    // { code: "POSTAL_ORDER", label: "Postal Order" },
   ];
 
   const formConfigMap = {
@@ -71,6 +71,9 @@ export const CollectPayment = (props) => {
     recieptRequest.Payment.paymentMode = data?.paymentMode?.code;
     if (data.chequeDetails) {
       recieptRequest.Payment = { ...recieptRequest.Payment, ...data.chequeDetails };
+      delete recieptRequest.Payment.chequeDetails;
+      recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime();
+      recieptRequest.Payment.transactionNumber = "12345678";
     }
     const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
     console.log(resposne);
@@ -104,7 +107,7 @@ export const CollectPayment = (props) => {
         ...additionalCharges,
         {
           label: "Total Amount",
-          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {bill.totalAmount} </CardSectionHeader>,
+          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill.totalAmount}`} </CardSectionHeader>,
         },
       ],
     },

@@ -20,6 +20,7 @@ import {
 
 import { useHistory, useParams } from "react-router-dom";
 import Modal from "../../components/Modal";
+import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -82,9 +83,14 @@ const ApplicationDetails = (props) => {
     console.log("action selected", selectedAction);
     switch (selectedAction) {
       case "GENERATE_DEMAND":
+      case "FSM_GENERATE_DEMAND":
         return setShowModal(true);
       case "SUBMIT":
+      case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+      case "PAY":
+      case "FSM_PAY":
+        return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
         console.log("default case");
         break;
@@ -137,14 +143,14 @@ const ApplicationDetails = (props) => {
         values: [
           { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: application.citizen.name },
           { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: application.citizen.mobileNumber },
-          { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
+          // { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
         ],
       },
       {
         title: t("ES_APPLICATION_DETAILS_PROPERTY_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: application.propertyUsage },
-          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: "Shopping Mail" },
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(application.propertyUsage)) },
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: t(getPropertySubtypeLocale(application.propertyUsage)) },
         ],
       },
       {
@@ -157,6 +163,21 @@ const ApplicationDetails = (props) => {
           { title: t("ES_APPLICATION_DETAILS_LOCATION_DOOR"), value: application.address.doorNo },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_LANDMARK"), value: application.address.landmark },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
+        ],
+      },
+      {
+        title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
+        values: [
+          { title: t("ES_NEW_APPLICATION_PIT_TYPE"), value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "" },
+          {
+            title: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
+            value: `${!!application.pitDetail.length ? application.pitDetail.length + "m " : ""}${
+              !!application.pitDetail.width ? "x " + application.pitDetail.width + "m x " : ""
+            }${application.pitDetail.height + "m "}${!!application.pitDetail.diameter ? "x" + application.pitDetail.diameter + "m" : ""}`,
+          },
+          { title: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"), value: application.noOfTrips === 0 ? "N/A" : application.noOfTrips },
+          { title: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"), value: "N/A" },
+          { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: "N/A" },
         ],
       },
     ],

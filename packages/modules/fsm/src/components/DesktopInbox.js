@@ -69,9 +69,9 @@ const DesktopInbox = (props) => {
       {
         Header: t("ES_INBOX_STATUS"),
         accessor: "status",
-        // Cell: (row) => {
-        //   return GetCell(row.row.original["taskOwner"]);
-        // },
+        Cell: (row) => {
+          return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
+        },
       },
       {
         Header: t("ES_INBOX_SLA_DAYS_REMAINING"),

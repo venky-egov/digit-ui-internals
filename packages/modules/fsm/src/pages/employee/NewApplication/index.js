@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown, PitDimension, FormComposer } from "@egovernments/digit-ui-react-components";
-import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
@@ -39,8 +39,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
   const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
   const history = useHistory();
-  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
-  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
+  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
@@ -60,7 +60,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
 
       setSanitationMenu(data);
     }
@@ -218,7 +218,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
           type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} />,
+          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
         },
         {
           label: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"),
@@ -260,7 +260,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />
+            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />
           ),
         },
         {
@@ -268,7 +268,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} />,
+          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} t={t} />,
         },
       ],
     },
@@ -325,16 +325,16 @@ export const NewApplication = ({ parentUrl, heading }) => {
       ],
     },
     {
-      head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
+      head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
       body: [
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
           type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
+          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
-          populators: <PitDimension t={t} size={pitDimension} handleChange={handlePitDimension} />,
+          populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
@@ -351,17 +351,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
-            componentInFront: (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                ₹
-              </span>
-            ),
+            componentInFront: "₹",
           },
         },
       ],
@@ -379,5 +369,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
     },
   ];
 
-  return <FormComposer heading={heading} isDisabled={!canSubmit} label={t("ES_COMMON_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit} />;
+  return (
+    <FormComposer
+      heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
+      isDisabled={!canSubmit}
+      label={t("ES_COMMON_APPLICATION_SUBMIT")}
+      config={config}
+      onSubmit={onSubmit}
+    />
+  );
 };

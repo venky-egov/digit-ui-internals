@@ -17,6 +17,8 @@ const TextInput = (props) => {
           disabled={props.disable}
           style={{ borderColor: props.disable ? "#ccc" : "black", color: props.disable ? "#ccc" : "revert" }}
           defaultValue={props.defaultValue}
+          minLength={props.minlength}
+          maxLength={props.maxlength}
         />
       ) : (
         <input
@@ -30,6 +32,8 @@ const TextInput = (props) => {
           style={{ ...props.style, borderColor: props.disable ? "#ccc" : "black", color: props.disable ? "#ccc" : "revert" }}
           disabled={props.disable}
           defaultValue={props.defaultValue}
+          minLength={props.minlength}
+          maxLength={props.maxlength}
         />
       )}
     </React.Fragment>

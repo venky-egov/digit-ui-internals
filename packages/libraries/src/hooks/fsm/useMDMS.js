@@ -6,8 +6,20 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
     return useQuery("FSM_SANITATION_TYPE", () => MdmsService.getSanitationType(tenantId, moduleCode), config);
   };
 
+  const usePitType = () => {
+    return useQuery("FSM_PIT_TYPE", () => MdmsService.getPitType(tenantId, moduleCode, config));
+  };
+
   const useApplicationChannel = () => {
     return useQuery("FSM_APPLICATION_CHANNEL", () => MdmsService.getApplicationChannel(tenantId, moduleCode, type), config);
+  };
+
+  const useEmployeeApplicationChannel = () => {
+    async function onlyEmployeeChannels() {
+      const allApplicationChannels = await MdmsService.getApplicationChannel(tenantId, moduleCode, type);
+      return allApplicationChannels.filter((type) => !type.citizenOnly);
+    }
+    return useQuery("FSM_APPLICATION_CHANNEL", () => onlyEmployeeChannels(), config);
   };
 
   const usePropertyType = () => {
@@ -29,11 +41,17 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
     case "ApplicationChannel":
       return useApplicationChannel();
 
+    case "EmployeeApplicationChannel":
+      return useEmployeeApplicationChannel();
+
     case "PropertyType":
       return usePropertyType();
 
     case "PropertySubtype":
       return usePropertySubType();
+
+    case "PitType":
+      return usePitType();
 
     case "VehicleType":
       return useVehicleType();

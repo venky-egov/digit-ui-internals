@@ -3,16 +3,18 @@ import { FormStep, Dropdown, Loader, CardLabel } from "@egovernments/digit-ui-re
 
 const SelectPitType = ({ t, config, onSelect, value }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
+
   const [sanitationMenu, setSanitationMenu] = useState([]);
   const [pitType, setPitType] = useState(() => {
     const { pitType } = value;
     return pitType !== undefined ? pitType : null;
   });
-  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PitType");
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
 
       setSanitationMenu(data);
     }
@@ -37,7 +39,7 @@ const SelectPitType = ({ t, config, onSelect, value }) => {
   return (
     <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} t={t}>
       <CardLabel>{t("CS_FILE_COMPLAINT_PIT_TYPE_LABEL")}</CardLabel>
-      <Dropdown isMandatory option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} />
+      <Dropdown isMandatory option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} t={t} />
     </FormStep>
   );
 };

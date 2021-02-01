@@ -113,6 +113,7 @@ const Table = ({ data, columns, getCellProps }) => {
       <div className="pagination">
         Rows Per Page{":"}
         <select
+          className="cp"
           value={pageSize}
           style={{ marginRight: "15px" }}
           onChange={(e) => {
@@ -137,8 +138,8 @@ const Table = ({ data, columns, getCellProps }) => {
 
           </span>
         </button> */}
-        {canPreviousPage && <ArrowBack onClick={() => previousPage()} />}
-        {canNextPage && <ArrowForward onClick={() => nextPage()} />}
+        {canPreviousPage && <ArrowBack onClick={() => previousPage()} className={"cp"} />}
+        {canNextPage && <ArrowForward onClick={() => nextPage()} className={"cp"} />}
       </div>
     </React.Fragment>
   );

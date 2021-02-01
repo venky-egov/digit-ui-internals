@@ -28,6 +28,7 @@ const TextField = (props) => {
 
   return (
     <input
+      className="employee-select-wrap--elipses"
       type="text"
       value={value}
       onChange={inputChange}
@@ -121,7 +122,7 @@ const Dropdown = (props) => {
             disable={props.disable}
             freeze={props.freeze ? true : false}
           />
-          <ArrowDown onClick={dropdownSwitch} disable={props.disable} />
+          <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
       )}
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}

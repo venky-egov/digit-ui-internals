@@ -1,15 +1,16 @@
 import React from "react";
 import { CardText, FormStep } from "@egovernments/digit-ui-react-components";
+import { Link } from "react-router-dom";
 
-const SelectMobileNumber = ({ t, onSelect, onRegisterClick, showRegisterLink, mobileNumber, config }) => {
+const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMobileChange, config }) => {
   return (
-    <FormStep onSelect={onSelect} config={config} t={t} componentInFront="+91" value={mobileNumber}>
+    <FormStep onSelect={onSelect} config={config} t={t} componentInFront="+91" onChange={onMobileChange} value={mobileNumber}>
       {showRegisterLink && (
         <CardText>
           {t("CS_LOGIN_NO_ACCOUNT")}
-          <span className="card-text-button" onClick={onRegisterClick}>
+          <Link className="card-text-button" to={"/digit-ui/citizen/register/name"}>
             Register
-          </span>
+          </Link>
         </CardText>
       )}
     </FormStep>

@@ -16,7 +16,7 @@ export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCod
     return <Loader />;
   }
 
-  console.log("payment", userType, state, store);
+  // console.log("payment", userType, state, store);
 
   const getPaymentHome = () => {
     if (userType === "citizen") return <CitizenPayment {...{ stateCode, moduleCode, cityCode, path, url }} />;

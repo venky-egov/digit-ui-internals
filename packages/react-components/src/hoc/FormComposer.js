@@ -14,7 +14,7 @@ import LabelFieldPair from "../atoms/LabelFieldPair";
 import { useTranslation } from "react-i18next";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, watch, control, formState } = useForm();
+  const { register, handleSubmit, setValue, watch, control, formState } = useForm({ defaultValues: props.defaultValues });
   const { t } = useTranslation();
 
   const formData = watch();
@@ -112,6 +112,8 @@ export const FormComposer = (props) => {
     return styles;
   };
 
+  const isDisabled = props.isDisabled || false;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card style={getCardStyles()}>
@@ -121,7 +123,7 @@ export const FormComposer = (props) => {
         {props.childrenAtTheBottom && props.children}
         {props.label && (
           <ActionBar>
-            <SubmitBar label={t(props.label)} submit="submit" />
+            <SubmitBar label={t(props.label)} submit="submit" disabled={isDisabled} />
           </ActionBar>
         )}
       </Card>

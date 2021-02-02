@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AppContainer, BackButton } from "@egovernments/digit-ui-react-components";
+import { AppContainer, BackButton, Toast } from "@egovernments/digit-ui-react-components";
 import { Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { loginSteps } from "./config";
 import SelectMobileNumber from "./SelectMobileNumber";
@@ -11,13 +11,13 @@ const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 
-const Login = ({ stateCode }) => {
+const Login = ({ stateCode, isUserRegistered = true }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const { path, url } = useRouteMatch();
   const history = useHistory();
-  const [isUserRegistered, setIsUserRegistered] = useState(null);
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
   const [tokens, setTokens] = useState(null);
   const [params, setParmas] = useState({});
 
@@ -49,6 +49,11 @@ const Login = ({ stateCode }) => {
     setParmas({ ...params, otp });
   };
 
+  const handleMobileChange = (event) => {
+    const { value } = event.target;
+    setParmas({ ...params, mobileNumber: value });
+  };
+
   const selectMobileNumber = async (mobileNumber) => {
     setParmas({ ...params, ...mobileNumber });
     const data = {
@@ -56,14 +61,19 @@ const Login = ({ stateCode }) => {
       tenantId: stateCode,
       userType: getUserType(),
     };
-    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
-    if (!err) {
-      setIsUserRegistered(true);
-      history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
-      return;
+    if (isUserRegistered) {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+      if (!err) {
+        history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
+        return;
+      }
+    } else {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+      if (!err) {
+        history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
+        return;
+      }
     }
-    setIsUserRegistered(false);
-    history.push(`${path}/name`, { from: location.state?.from || "/digit-ui" });
   };
 
   const selectName = async (name) => {
@@ -73,8 +83,7 @@ const Login = ({ stateCode }) => {
       userType: getUserType(),
     };
     setParmas({ ...params, ...name });
-    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
-    history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
+    history.push(`${path}`, { from: location.state?.from || "/digit-ui" });
   };
 
   const selectOtp = async () => {
@@ -134,7 +143,14 @@ const Login = ({ stateCode }) => {
       <AppContainer>
         <BackButton />
         <Route path={`${path}`} exact>
-          <SelectMobileNumber onSelect={selectMobileNumber} config={stepItems[0]} t={t} />
+          <SelectMobileNumber
+            onSelect={selectMobileNumber}
+            config={stepItems[0]}
+            mobileNumber={params.mobileNumber || ""}
+            onMobileChange={handleMobileChange}
+            showRegisterLink={isUserRegistered}
+            t={t}
+          />
         </Route>
         <Route path={`${path}/otp`}>
           <SelectOtp config={stepItems[1]} onOtpChange={handleOtpChange} onResend={resendOtp} onSelect={selectOtp} otp={params.otp} t={t} />
@@ -142,6 +158,7 @@ const Login = ({ stateCode }) => {
         <Route path={`${path}/name`}>
           <SelectName config={stepItems[2]} onSelect={selectName} t={t} />
         </Route>
+        {error && <Toast error={true} label={error} onClose={() => setError(null)} />}
       </AppContainer>
     </Switch>
   );

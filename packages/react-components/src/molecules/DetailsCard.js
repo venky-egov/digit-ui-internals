@@ -17,14 +17,23 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix }) => {
   return (
     <div>
       {data.map((object, itemIndex) => {
+        if (serviceRequestIdKey && linkPrefix) {
+          return (
+            <Link key={itemIndex} to={`${linkPrefix}${object[serviceRequestIdKey]}`}>
+              <div className="details-container">
+                {Object.keys(object).map((name, index) => {
+                  return <Details label={name} name={object[name]} key={index} />;
+                })}
+              </div>
+            </Link>
+          );
+        }
         return (
-          <Link key={itemIndex} to={`${linkPrefix}${object[serviceRequestIdKey]}`}>
-            <div className="details-container">
-              {Object.keys(object).map((name, index) => {
-                return <Details label={name} name={object[name]} key={index} />;
-              })}
-            </div>
-          </Link>
+          <div className="details-container">
+            {Object.keys(object).map((name, index) => {
+              return <Details label={name} name={object[name]} key={index} />;
+            })}
+          </div>
         );
       })}
     </div>

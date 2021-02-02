@@ -3,7 +3,7 @@ import { FormComposer, Dropdown } from "@egovernments/digit-ui-react-components"
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
-const Login = ({ config: propsConfig, t }) => {
+const ForgotPassword = ({ config: propsConfig, t }) => {
   const cities = Digit.Hooks.fsm.useTenants();
   const [user, setUser] = useState(null);
   const history = useHistory();
@@ -18,7 +18,7 @@ const Login = ({ config: propsConfig, t }) => {
     history.replace(redirectPath);
   }, [user]);
 
-  const onLogin = async (data) => {
+  const onForgotPassword = async (data) => {
     if (!data.city) {
       alert("Please Select City!");
       return;
@@ -38,12 +38,12 @@ const Login = ({ config: propsConfig, t }) => {
     }
   };
 
-  const onForgotPassword = () => {
-    history.push("/digit-ui/employee/forgot-password");
+  const navigateToLogin = () => {
+    history.push("/digit-ui/employee/login");
   };
 
   console.log({ propsConfig });
-  const [userId, password, city] = propsConfig.inputs;
+  const [userId, city] = propsConfig.inputs;
   const config = [
     {
       body: [
@@ -52,14 +52,6 @@ const Login = ({ config: propsConfig, t }) => {
           type: userId.type,
           populators: {
             name: "username",
-          },
-          isMandatory: true,
-        },
-        {
-          label: t(password.label),
-          type: password.type,
-          populators: {
-            name: "password",
           },
           isMandatory: true,
         },
@@ -89,14 +81,14 @@ const Login = ({ config: propsConfig, t }) => {
 
   return (
     <FormComposer
-      onSubmit={onLogin}
+      onSubmit={onForgotPassword}
       noBoxShadow
       inline
       submitInForm
       config={config}
       label={propsConfig.texts.submitButtonLabel}
       secondaryActionLabel={propsConfig.texts.secondaryButtonLabel}
-      onSecondayActionClick={onForgotPassword}
+      onSecondayActionClick={navigateToLogin}
       heading={propsConfig.texts.header}
       headingStyle={{ textAlign: "center" }}
       cardStyle={{ maxWidth: "400px", margin: "auto" }}
@@ -104,12 +96,12 @@ const Login = ({ config: propsConfig, t }) => {
   );
 };
 
-Login.propTypes = {
+ForgotPassword.propTypes = {
   loginParams: PropTypes.any,
 };
 
-Login.defaultProps = {
+ForgotPassword.defaultProps = {
   loginParams: null,
 };
 
-export default Login;
+export default ForgotPassword;

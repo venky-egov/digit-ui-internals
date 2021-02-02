@@ -23,6 +23,10 @@ export const FormComposer = (props) => {
     props.onSubmit(data);
   }
 
+  function onSecondayActionClick(data) {
+    props.onSecondayActionClick();
+  }
+
   useEffect(() => {
     props.onFormValueChange && props.onFormValueChange(formData, formState);
   }, [formData]);
@@ -121,7 +125,11 @@ export const FormComposer = (props) => {
         {formFields}
         {props.childrenAtTheBottom && props.children}
         {props.submitInForm && <SubmitBar label={t(props.label)} submit="submit" style={{ width: "100%" }} />}
-        {props.secondaryLabel && props.secondaryLabel}
+        {props.secondaryActionLabel && (
+          <div className="primary-label-btn" style={{ margin: "20px auto 0 auto" }} onClick={onSecondayActionClick}>
+            {props.secondaryActionLabel}
+          </div>
+        )}
         {!props.submitInForm && props.label && (
           <ActionBar>
             <SubmitBar label={t(props.label)} submit="submit" />

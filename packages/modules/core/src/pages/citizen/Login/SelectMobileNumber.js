@@ -9,7 +9,7 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
         <CardText>
           {t("CS_LOGIN_NO_ACCOUNT")}
           <Link className="card-text-button" to={"/digit-ui/citizen/register/name"}>
-            Register
+            {t("CS_LOGIN_REGISTER_LINK")}
           </Link>
         </CardText>
       )}

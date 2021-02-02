@@ -52,6 +52,7 @@ import HomeLink from "./atoms/HomeLink";
 import SectionalDropdown from "./atoms/SectionalDropdown";
 import LabelFieldPair from "./atoms/LabelFieldPair";
 import ApplyFilterBar from "./atoms/ApplyFilterBar";
+import CustomCard from "./atoms/CustomCard";
 import RemoveableTag from "./molecules/RemoveableTag";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
@@ -140,4 +141,5 @@ export {
   FilterAction,
   ApplyFilterBar,
   RemoveableTag,
+  CustomCard,
 };

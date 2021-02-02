@@ -19,9 +19,9 @@ initLibraries();
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
-const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
+const userType = "EMPLOYEE";
 
-const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+const token = "78fcbf97-d542-4e64-8b8b-7938d4f18fc3";
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";

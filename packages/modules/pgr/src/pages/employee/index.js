@@ -4,6 +4,7 @@ import { Switch, Route, useRouteMatch } from "react-router-dom";
 import { BackButton, ActionBar, Menu, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { ComplaintDetails } from "./ComplaintDetails";
 import { CreateComplaint } from "./CreateComplaint";
+import PlayGround from "./PlayGround";
 import Inbox from "./Inbox";
 import { Employee } from "../../constants/Routes";
 import Response from "./Response";
@@ -27,6 +28,7 @@ const Complaint = () => {
           <Route path={match.url + Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails />} />
           <Route path={match.url + Employee.Inbox} component={Inbox} />
           <Route path={match.url + Employee.Response} component={Response} />
+          <Route path={match.url + "/playground"} component={PlayGround} />
         </Switch>
       </div>
       {/* <ActionBar>

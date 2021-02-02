@@ -15,6 +15,7 @@ import useTenants from "./pgr/useTenants";
 import useComplaintSubType from "./pgr/useComplaintSubType";
 
 import useTenantsFSM from "./fsm/useTenants";
+// import search from "./tl/search"
 
 const pgr = {
   useComplaintDetails,
@@ -31,10 +32,13 @@ const pgr = {
   useComplaintSubType,
 };
 
-const fsm = {
-  useTenantsFSM,
-};
+// const fsm = {
+//   useTenantsFSM,
+// };
 
-const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, pgr, fsm };
+const tl = {
+  search,
+};
+const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, pgr, fsm, tl };
 
 export default Hooks;

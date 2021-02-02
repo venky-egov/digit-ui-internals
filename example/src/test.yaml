@@ -1,0 +1,54 @@
+serviceMaps:
+  serviceName: vehicle
+  mappings:
+    - version: 1.0
+      description: Persists Vehicle Application details in eg_vehicle table
+      fromTopic: save-vehicle-application
+      isTransaction: true
+      queryMaps:        
+       - query : INSERT INTO public.eg_vehicle( id, tenantid, registrationNumber, model, type, tankcapacity, suctionType, pollutionCertiValidTill, InsuranceCertValidTill, fitnessValidTill, roadTaxPaidTill, gpsEnabled, source, status, owner_id, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: vehicle
+         jsonMaps:
+              - jsonPath: $.vehicle.id
+              - jsonPath: $.vehicle.tenantId
+              - jsonPath: $.vehicle.registrationNumber
+              - jsonPath: $.vehicle.model
+              - jsonPath: $.vehicle.type
+              - jsonPath: $.vehicle.tankcapicity
+              - jsonPath: $.vehicle.suctionType
+              - jsonPath: $.vehicle.pollutionCertiValidTill
+              - jsonPath: $.vehicle.InsuranceCertValidTill
+              - jsonPath: $.vehicle.fitnessValidTill
+              - jsonPath: $.vehicle.roadTaxPaidTill
+              - jsonPath: $.vehicle.gpsEnabled
+              - jsonPath: $.vehicle.source
+              - jsonPath: $.vehicle.status
+              - jsonPath: $.vehicle.owner_id
+              - jsonPath: $.vehicle.additionalDetails
+              - jsonPath: $.vehicle.createdBy
+              - jsonPath: $.vehicle.lastmodifiedBy
+              - jsonPath: $.vehicle.createdTime
+              - jsonPath: $.vehicle.lastModifiedTime       
+       - query: INSERT INTO public.eg_vehicle_auditlog( id, tenantid, registrationNumber, model, type, tankcapacity, suctionType, pollutionCertiValidTill, InsuranceCertValidTill, fitnessValidTill, roadTaxPaidTill, gpsEnabled, source, status, owner_id, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: vehicle
+         jsonMaps: 
+              - jsonPath: $.vehicle.id
+              - jsonPath: $.vehicle.tenantId
+              - jsonPath: $.vehicle.registrationNumber
+              - jsonPath: $.vehicle.model
+              - jsonPath: $.vehicle.type
+              - jsonPath: $.vehicle.tankcapicity
+              - jsonPath: $.vehicle.suctionType
+              - jsonPath: $.vehicle.pollutionCertiValidTill
+              - jsonPath: $.vehicle.InsuranceCertValidTill
+              - jsonPath: $.vehicle.fitnessValidTill
+              - jsonPath: $.vehicle.roadTaxPaidTill
+              - jsonPath: $.vehicle.gpsEnabled
+              - jsonPath: $.vehicle.source
+              - jsonPath: $.vehicle.status
+              - jsonPath: $.vehicle.owner_id
+              - jsonPath: $.vehicle.additionalDetails
+              - jsonPath: $.vehicle.createdby
+              - jsonPath: $.vehicle.lastmodifiedby
+              - jsonPath: $.vehicle.createdtime
+              - jsonPath: $.vehicle.lastmodifiedtime

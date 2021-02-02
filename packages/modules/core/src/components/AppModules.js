@@ -17,7 +17,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
     const Module = registry.getComponent(`${code}Module`);
     return (
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
-        <Module stateCode={stateCode} cityCode="pb.amritsar" moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
+        <Module stateCode={stateCode} moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
       </Route>
     );
   });
@@ -26,8 +26,13 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
     <Switch>
       {appRoutes}
       {userType === "citizen" && (
+        <Route path={`${path}/register`}>
+          <Login stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+      )}
+      {userType === "citizen" && (
         <Route path={`${path}/login`}>
-          <Login stateCode={stateCode} cityCode="pb.amritsar" />
+          <Login stateCode={stateCode} isUserRegistered={true} />
         </Route>
       )}
       <Route>

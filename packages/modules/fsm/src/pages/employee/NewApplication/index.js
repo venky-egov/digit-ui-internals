@@ -1,32 +1,24 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { Dropdown, PitDimension } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { FormComposer } from "../../../components/FormComposer";
-
-// TODO: fetch data instead of hard coded
-import data from "../../../propertyType.json";
-// const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
-const propertySubTypeRes = data.PropertyType.filter((item) => item.propertyType !== undefined);
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = tenantId.split(".")[0];
   const [menu, setMenu] = useState([]);
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
   const [subType, setSubType] = useState({});
-  const [vehicleMenu, setVehicleMenu] = useState([
-    { key: "Tracker (500 ltrs)", name: "Tracker (500 ltrs)" },
-    { key: "Tracker (1000 ltrs)", name: "Tracker (1000 ltrs)" },
-  ]);
   const [channel, setChannel] = useState(null);
   const [channelMenu, setChannelMenu] = useState([]);
   const [sanitation, setSanitation] = useState([]);
   const [sanitationMenu, setSanitationMenu] = useState([]);
+  const [pitDimension, setPitDimension] = useState({});
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
@@ -37,19 +29,31 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const selectedLocalities = Digit.SessionStorage.get("selected_localities");
   const localityProperty = Digit.SessionStorage.get("locality_property");
 
-  const [selectedCity, setSelectedCity] = useState(cityProperty ? cityProperty : null);
   const [localities, setLocalities] = useState(selectedLocalities ? selectedLocalities : null);
+  const [pincode, setPincode] = useState("");
+  const [pincodeNotValid, setPincodeNotValid] = useState(false);
   const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
 
   const { t } = useTranslation();
+  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const cities = Digit.Hooks.fsm.useTenants();
+  const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
+  const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
   const history = useHistory();
-  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
-  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
+  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
+  const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
+  // console.log("find vehicle menu", vehicleMenu);
+  const [canSubmit, setSubmitValve] = useState(false);
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
-      const data = applicationChannelData.data?.map((channel) => ({ i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}` }));
+      const data = applicationChannelData.data?.map((channel) => ({
+        ...channel,
+        i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}`,
+      }));
 
       setChannelMenu(data);
     }
@@ -57,27 +61,40 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      const data = sanitationTypeData.data?.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+      const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
 
       setSanitationMenu(data);
     }
   }, [sanitationTypeData]);
 
   useEffect(() => {
-    setMenu(() => {
-      return Object.values(
-        data.PropertyType.reduce((acc, item) => {
-          if (item.propertyType !== undefined) return acc;
-          return Object.assign(acc, { [item.code]: { key: item.code, name: item.name } });
-        }, {})
-      );
-    });
-    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === propertyType));
-  }, []);
+    if (propertyType?.code && subType?.code && selectedCity?.code && selectedLocality?.code) {
+      setSubmitValve(true);
+    } else {
+      setSubmitValve(false);
+    }
+  }, [propertyType, subType, selectedCity, selectedLocality]);
+
+  useEffect(() => {
+    const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
+    if (city?.code === getCities()[0]?.code) {
+      setPincodeNotValid(false);
+      setSelectedCity(city);
+      setSelectedLocality(null);
+      const __localityList = localitiesObj[city.code];
+      const __filteredLocalities = __localityList.filter((city) => city["pincode"] == pincode);
+      setLocalities(__filteredLocalities);
+    } else if (pincode === "" || pincode === null) {
+      setPincodeNotValid(false);
+      setLocalities(localitiesObj[getCities()[0]?.code]);
+    } else {
+      setPincodeNotValid(true);
+    }
+  }, [pincode]);
 
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === value.key).map((item) => ({ key: item.code, name: item.name })));
+    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code));
   }
 
   function selectSlum(value) {
@@ -107,16 +124,35 @@ export const NewApplication = ({ parentUrl, heading }) => {
     setLocalities(__localityList);
   };
 
+  const handlePitDimension = (event) => {
+    const { name, value } = event.target;
+    if (!isNaN(value)) {
+      setPitDimension({ ...pitDimension, [name]: value });
+    }
+  };
+
+  const handlePincode = (event) => {
+    const { value } = event.target;
+    setPincode(value);
+    if (!value) {
+      setPincodeNotValid(false);
+    }
+  };
+
+  const isPincodeValid = () => !pincodeNotValid;
+
   function selectLocality(locality) {
     setSelectedLocality(locality);
   }
 
   const onSubmit = (data) => {
-    const applicationChannel = channel.code;
+    const applicationChannel = channel?.code;
     const sanitationtype = sanitation.code;
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;
     const pincode = data.pincode;
+    const street = data.streetName;
+    const doorNo = data.doorNo;
     const landmark = data.landmark;
     const noOfTrips = data.noOfTrips;
     const amount = data.amount;
@@ -141,10 +177,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
         additionalDetails: {
           tripAmount: amount,
         },
-        propertyUsage: propertyType,
+        propertyUsage: subType.code,
+        vehicleType: vehicle.code,
+        pitDetail: pitDimension,
         address: {
           tenantId: cityCode,
           landmark,
+          doorNo,
+          street,
           city,
           state,
           pincode,
@@ -179,15 +219,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
           type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} />,
+          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
         },
         {
-          label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
-          type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
+          label: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -199,7 +234,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           },
         },
         {
-          label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
+          label: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -210,12 +245,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
             },
           },
         },
-        {
-          label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-          type: "radio",
-          isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
-        },
+        // {
+        //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
+        //   type: "radio",
+        //   isMandatory: true,
+        //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+        // },
       ],
     },
     {
@@ -225,14 +260,16 @@ export const NewApplication = ({ parentUrl, heading }) => {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={menu} optionKey="name" id="propertyType" selected={propertyType} select={selectedType} />,
+          populators: (
+            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="name" id="propertySubType" selected={subType} select={selectedSubType} />,
+          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} t={t} />,
         },
       ],
     },
@@ -244,14 +281,18 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "pincode",
-            validation: { pattern: /^[1-9][0-9]{5}$/ },
+            error: t("CORE_COMMON_PINCODE_INVALID"),
+            onChange: handlePincode,
+            validation: { pattern: /^[1-9][0-9]{5}$/, validate: isPincodeValid },
           },
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
+          populators: (
+            <Dropdown isMandatory freeze={true} selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
@@ -260,6 +301,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: (
             <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
           ),
+        },
+        {
+          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
+          type: "text",
+          populators: {
+            name: "streetName",
+          },
+        },
+        {
+          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
+          type: "text",
+          populators: {
+            name: "doorNo",
+          },
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
@@ -271,8 +326,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
       ],
     },
     {
-      head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
+      head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
       body: [
+        {
+          label: t("ES_NEW_APPLICATION_PIT_TYPE"),
+          type: "dropdown",
+          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
+        },
+        {
+          label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
+          populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
+        },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
           type: "text",
@@ -288,17 +352,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
-            componentInFront: (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                ₹
-              </span>
-            ),
+            componentInFront: "₹",
           },
         },
       ],
@@ -310,11 +364,19 @@ export const NewApplication = ({ parentUrl, heading }) => {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
+          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
         },
       ],
     },
   ];
 
-  return <FormComposer heading={heading} label={t("ES_COMMON_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit}></FormComposer>;
+  return (
+    <FormComposer
+      heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
+      isDisabled={!canSubmit}
+      label={t("ES_COMMON_APPLICATION_SUBMIT")}
+      config={config}
+      onSubmit={onSubmit}
+    />
+  );
 };

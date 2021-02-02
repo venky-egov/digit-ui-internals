@@ -24,6 +24,7 @@
 @import "./components/checkbox.scss";
 @import "./components/inputotp.scss";
 @import "./components/map.scss";
+@import "./components/menu.scss";
 @import "./components/submiterrors.scss";
 @import "./components/ratingstar.scss";
 @import "./components/keynote.scss";
@@ -42,7 +43,11 @@
 @import "./components/detailscard.scss";
 @import "./components/searchAction.scss";
 @import "./components/tag.scss";
+@import "./components/topbar.scss";
+@import "./components/languageSelector.scss";
+@import "./components/custombtn.scss";
 @import "./components/citizenInfoLabel.scss";
+@import "./components//roundedLabel.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/popupmodule.scss";
@@ -56,4 +61,27 @@
   a {
     color: #1d70b8;
   }
+}
+
+.primary-label-btn{
+  
+  display: flex;
+  gap: 10px;
+
+  svg{
+    fill: #F47738;
+  }
+
+  color: #F47738;
+  &:hover {
+    color: #000;
+
+    svg{
+      fill: #000;
+    }
+  }
+
+  cursor: pointer;
+  font-weight: 500;
+  width: fit-content;
 }

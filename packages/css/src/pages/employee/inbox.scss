@@ -27,8 +27,6 @@
 }
 
 .inbox-container {
-  @apply justify-center;
-
   .filters-container {
     .filter {
       .filter-card {
@@ -58,12 +56,17 @@
           @apply flex flex-col;
 
           .clear-search {
+            @apply text-focus;
             display: none;
+            &:hover {
+              color: #003078;
+              cursor: pointer;
+            }
           }
         }
 
         .mobile-input {
-          @apply ml-sm;
+          
         }
       }
     }
@@ -72,6 +75,18 @@
   .status-container {
     margin-bottom: 50px;
   }
+}
+
+.clear-search, .clear-search .link-label {
+  @apply text-focus;
+  @apply block;
+  cursor: pointer;
+  &:hover {
+    color: #000;
+  }
+}
+.button-clear{
+  @apply text-focus text-body-s-dt;
 }
 
 @screen dt {
@@ -104,7 +119,7 @@
   }
 
   .inbox-container {
-    @apply flex justify-center;
+    @apply flex;
 
     .filters-container {
       width: 270px;
@@ -145,7 +160,13 @@
             @apply flex flex-col;
 
             .clear-search {
+              @apply text-focus;
               @apply block;
+              cursor: pointer;
+              &:hover {
+                color: #003078;
+                cursor: pointer;
+              }
             }
           }
 

@@ -27,7 +27,6 @@
       }
 
       &.state {
-        margin-left: 40px;
         height: 20px;
         max-height: 20px;
         width: auto;
@@ -52,6 +51,19 @@
     }
   }
 
+  .main {
+    padding-top: 88px;
+  }
+}
+
+.citizen {
+  .main {
+    padding-top: 82px;
+  }
+}
+
+.citizen, .employee {
+  
   .sidebar {
     position: fixed;
     left: 0;
@@ -60,7 +72,7 @@
     height: 100%;
     color: white;
     margin-top: 80px;
-    z-index: 9999;
+    z-index: 1000;
 
     .actions {
       cursor: pointer;
@@ -73,24 +85,18 @@
       }
     }
   }
-
-  .main {
-    padding-top: 88px;
-  }
-}
-
-.citizen {
-  .main {
-    padding-top: 72px;
-  }
 }
 
 .link {
   @apply text-link-normal;
+
+  :hover {
+    color: #003078;
+  }
 }
 
 @media (min-width: 640px) {
-  .employee {
+  .employee, .citizen {
     .main {
       padding-top: 80px;
       margin-left: 88px;

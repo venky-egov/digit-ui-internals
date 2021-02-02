@@ -10,7 +10,7 @@ import {
   ActionLinks,
   LinkButton,
   SubmitBar,
-  CitizenInfoLabel,
+  CardText,
 } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -30,38 +30,58 @@ const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { city_complaint, propertyType, subtype, pitDetail } = value;
+  const { city_complaint, locality_complaint, landmark, propertyType, subtype, pitType, pitDetail } = value;
+
+  const pitMeasurement = Object.values(pitDetail).reduce((previous, current, index, array) => {
+    if (index === array.length - 1) {
+      return previous + current + "m";
+    } else {
+      return previous + current + "m X ";
+    }
+  }, "");
 
   return (
     <Card>
       <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
+      <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
       <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
       <StatusTable>
         <Row
           label={t("CS_CHECK_PROPERTY_TYPE")}
-          text={propertyType.name}
+          text={t(propertyType.i18nKey)}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-type" />}
         />
         <Row
           label={t("CS_CHECK_PROPERTY_SUB_TYPE")}
-          text={subtype.name}
+          text={t(subtype.i18nKey)}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-subtype" />}
         />
         <Row
           label={t("CS_CHECK_ADDRESS")}
-          text={city_complaint.address}
+          text={`${t(locality_complaint.code)} ${t(city_complaint.code)}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />}
         />
-      </StatusTable>
-      <CardSubHeader>{t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS")}</CardSubHeader>
-      <StatusTable>
+        {landmark && (
+          <Row
+            label={t("CS_CHECK_LANDMARK")}
+            text={landmark}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/landmark" />}
+          />
+        )}
+        {pitType && (
+          <Row
+            label={t("CS_CHECK_PIT_TYPE")}
+            text={t(pitType.i18nKey)}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pit-type" />}
+          />
+        )}
         <Row
           label={t("CS_CHECK_SIZE")}
-          text={Object.values(pitDetail).join(" x ")}
+          text={pitMeasurement}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>
-      <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_TEXT")} />
+      {/* <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_TEXT")} /> */}
       <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );

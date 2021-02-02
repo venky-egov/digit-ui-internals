@@ -11,8 +11,8 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator }) => {
 
   const onSubmitInput = (data) => {
     console.log("data", data);
-    if (data.serviceRequestId) {
-      onSearch({ serviceRequestId: data.serviceRequestId });
+    if (data.applicationNo) {
+      onSearch({ applicationNo: data.applicationNo });
     } else {
       onSearch({ mobileNumber: data.mobileNumber });
     }
@@ -46,8 +46,8 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator }) => {
   return (
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
-        <div className="search-container">
-          <div className="search-complaint-container" style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
+        <div className="search-container" style={{ width: "auto" }}>
+          <div className="search-complaint-container" style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
             {type === "mobile" && (
               <div
                 className="complaint-header"
@@ -62,11 +62,11 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator }) => {
                 <span onClick={onClose}>x</span>
               </div>
             )}
-            <div className="complaint-input-container">
+            <div className="complaint-input-container" style={{ width: "100%" }}>
               <span className="complaint-input">
                 <Label>{isFstpOperator ? t("ES_FSTP_OPERATOR_VEHICLE_NO") : t("ES_SEARCH_APPLICATION_APPLICATION_NO")}</Label>
                 <TextInput
-                  name="serviceRequestId"
+                  name="applicationNo"
                   value={applicationNo}
                   onChange={setComplaint}
                   inputRef={register}
@@ -77,7 +77,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator }) => {
                 <Label>{isFstpOperator ? t("ES_FSTP_DSO_NAME") : t("ES_SEARCH_APPLICATION_MOBILE_NO")}</Label>
                 <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
               </span>
-              {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label={t("ES_COMMON_SEARCH")} submit />}
+              {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: "auto" }} label={t("ES_COMMON_SEARCH")} submit />}
             </div>
             {type === "desktop" && <span className="clear-search">{clearAll()}</span>}
           </div>

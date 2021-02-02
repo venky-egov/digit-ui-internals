@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
+  BreakLine,
   Card,
   CardSubHeader,
   StatusTable,
@@ -17,22 +18,26 @@ import {
   Dropdown,
 } from "@egovernments/digit-ui-react-components";
 
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Modal from "../../components/Modal";
-
-const workflowDetails = {
-  data: {
-    nextActions: [{ action: "GENERATE_DEMAND" }, { action: "MODIFY_APPLICATION" }, { action: "REJECT_APPLICATION" }],
-  },
-};
+import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
 
 const ApplicationDetails = (props) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const history = useHistory();
+  let { id: applicationNumber } = useParams();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+  const { isLoading, isError, data, error } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber, uuid: Digit.UserService.getUser().uuid });
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({
+    tenantId,
+    id: applicationNumber,
+    moduleCode: "FSM",
+    role: "FSM_EMPLOYEE",
+    serviceData: data,
+  });
   const [vehicle, setVehicle] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([
     { key: "Type A", name: "Type A" },
@@ -76,9 +81,14 @@ const ApplicationDetails = (props) => {
     console.log("action selected", selectedAction);
     switch (selectedAction) {
       case "GENERATE_DEMAND":
+      case "FSM_GENERATE_DEMAND":
         return setShowModal(true);
-      case "MODIFY_APPLICATION":
-        return history.push("/digit-ui/employee/fsm/modify-application");
+      case "SUBMIT":
+      case "FSM_SUBMIT":
+        return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+      case "PAY":
+      case "FSM_PAY":
+        return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
         console.log("default case");
         break;
@@ -112,35 +122,60 @@ const ApplicationDetails = (props) => {
     setVehicle(null);
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  const application = data?.fsm[0];
   const applicationDetails = {
     details: [
       {
         title: t("ES_TITLE_APPLICATION_DETAILS"),
-        values: [{ title: t("ES_APPLICATION_NO"), value: "FSM-277373" }],
+        values: [
+          { title: t("ES_APPLICATION_NO"), value: application.applicationNo },
+          { title: t("ES_APPLICATION_CHANNEL"), value: application.source },
+        ],
       },
       {
         title: t("ES_TITLE_APPLICATION_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: "Nawal Kishore" },
-          { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: "+91 9645234533" },
-          { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
+          { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: application.citizen.name },
+          { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: application.citizen.mobileNumber },
+          // { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
         ],
       },
       {
         title: t("ES_APPLICATION_DETAILS_PROPERTY_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: "Commercial" },
-          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: "Shopping Mail" },
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(application.propertyUsage)) },
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: t(getPropertySubtypeLocale(application.propertyUsage)) },
         ],
       },
       {
         title: t("ES_APPLICATION_DETAILS_LOCATION_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"), value: "Alakapuri" },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: "Berhampur" },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: "345123" },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_LANDMARK"), value: "SBI Bank" },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"), value: t(application.address.locality.code) },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: application.address.city },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: application.address.pincode },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_STREET"), value: application.address.street },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_DOOR"), value: application.address.doorNo },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_LANDMARK"), value: application.address.landmark },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
+        ],
+      },
+      {
+        title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
+        values: [
+          { title: t("ES_NEW_APPLICATION_PIT_TYPE"), value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "" },
+          {
+            title: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
+            value: `${!!application.pitDetail.length ? application.pitDetail.length + "m " : ""}${
+              !!application.pitDetail.width ? "x " + application.pitDetail.width + "m x " : ""
+            }${application.pitDetail.height + "m "}${!!application.pitDetail.diameter ? "x" + application.pitDetail.diameter + "m" : ""}`,
+          },
+          { title: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"), value: application.noOfTrips === 0 ? "N/A" : application.noOfTrips },
+          { title: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"), value: "N/A" },
+          { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: "N/A" },
         ],
       },
     ],
@@ -189,35 +224,44 @@ const ApplicationDetails = (props) => {
               </React.Fragment>
             ))}
 
-            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
-              {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
-            </CardSectionHeader>
-            {timeline && timeline.length > 0 ? (
-              <ConnectingCheckPoints>
-                {timeline.map((value, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <CheckPoint
-                        keyValue={index}
-                        isCompleted={index === 0 ? true : false}
-                        label={value.label}
-                        customChild={getTimelineCaptions(value)}
-                      />
-                    </React.Fragment>
-                  );
-                })}
-              </ConnectingCheckPoints>
-            ) : (
-              <Loader />
+            <BreakLine />
+            {workflowDetails?.isLoading && <Loader />}
+            {!workflowDetails?.isLoading && (
+              <Fragment>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+                  {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+                </CardSectionHeader>
+                {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
+                  <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
+                ) : (
+                  <ConnectingCheckPoints>
+                    {workflowDetails?.data?.timeline &&
+                      workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
+                        return (
+                          <React.Fragment key={index}>
+                            <CheckPoint
+                              keyValue={index}
+                              isCompleted={index === 0}
+                              label={t("CS_COMMON_" + checkpoint.status)}
+                              // customChild={getTimelineCaptions(checkpoint)}
+                            />
+                          </React.Fragment>
+                        );
+                      })}
+                  </ConnectingCheckPoints>
+                )}
+              </Fragment>
             )}
           </Card>
           {showModal ? <Modal closeModal={closeModal} onSubmit={handleGenerateDemand} config={config} /> : null}
-          <ActionBar>
-            {displayMenu && workflowDetails?.data?.nextActions ? (
-              <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
-            ) : null}
-            <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-          </ActionBar>
+          {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+            <ActionBar>
+              {displayMenu && workflowDetails?.data?.nextActions ? (
+                <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
+              ) : null}
+              <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+            </ActionBar>
+          )}
         </React.Fragment>
       ) : (
         <Loader />

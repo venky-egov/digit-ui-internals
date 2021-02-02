@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 import { useTranslation } from "react-i18next";
 
-const SearchApplication = ({ onSearch, type, onClose }) => {
+const SearchApplication = ({ onSearch, type, onClose, isFstpOperator }) => {
   const { t } = useTranslation();
   const [applicationNo, setApplicationNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
@@ -64,7 +64,7 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
             )}
             <div className="complaint-input-container" style={{ width: "100%" }}>
               <span className="complaint-input">
-                <Label>{t("ES_SEARCH_APPLICATION_APPLICATION_NO")}</Label>
+                <Label>{isFstpOperator ? t("ES_FSTP_OPERATOR_VEHICLE_NO") : t("ES_SEARCH_APPLICATION_APPLICATION_NO")}</Label>
                 <TextInput
                   name="applicationNo"
                   value={applicationNo}
@@ -74,7 +74,7 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
                 ></TextInput>
               </span>
               <span className="mobile-input">
-                <Label>{t("ES_SEARCH_APPLICATION_MOBILE_NO")}</Label>
+                <Label>{isFstpOperator ? t("ES_FSTP_DSO_NAME") : t("ES_SEARCH_APPLICATION_MOBILE_NO")}</Label>
                 <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
               </span>
               {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: "auto" }} label={t("ES_COMMON_SEARCH")} submit />}

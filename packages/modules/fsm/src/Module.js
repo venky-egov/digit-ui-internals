@@ -16,6 +16,7 @@ import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
+import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 
 import { useTranslation } from "react-i18next";
 
@@ -35,6 +36,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
         <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails />} />
+        <PrivateRoute path={`${path}/fstp-operator-details`} component={FstpOperatorDetails} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />

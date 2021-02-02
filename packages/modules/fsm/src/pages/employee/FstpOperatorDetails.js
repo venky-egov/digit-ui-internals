@@ -36,7 +36,7 @@ const FstpOperatorDetails = () => {
   return (
     <div>
       <DetailsCard data={data} />
-      <h2 style={{ fontWeight: "bold", fontSize: "16px", marginLeft: "8px", marginTop: "16px" }}>Waste Generators</h2>
+      <h2 style={{ fontWeight: "bold", fontSize: "16px", marginLeft: "8px", marginTop: "16px" }}>{t("ES_FSTP_OPERATOR_DETAILS_WASTE_GENERATORS")}</h2>
       <DetailsCard data={wasteGeneratorsData} />
       <ActionBar>
         <SubmitBar label={t("ES_COMMON_SUBMIT")} submit />

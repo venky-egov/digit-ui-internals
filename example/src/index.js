@@ -7,6 +7,7 @@ import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
+import { TLModule, TLLinks } from "@egovernments/digit-ui-module-tl";
 import "@egovernments/digit-ui-css/example/index.css";
 
 import CITIZEN from "./userInfo/citizen.json";
@@ -22,13 +23,15 @@ initLibraries();
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
 
-const enabledModules = ["PGR", "FSM"];
+const enabledModules = ["PGR", "FSM", "TL"];
 const registry = new Registry({
   ...pgrComponents,
   PGRLinks,
   PGRModule,
   FSMModule,
   FSMLinks,
+  TLModule,
+  TLLinks,
 });
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
@@ -36,9 +39,11 @@ const moduleReducers = (initData) => ({
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
-const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
+const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "EMPLOYEE";
 
-const token = process.env[`REACT_APP_${userType}_TOKEN`];
+//const token = process.env[`REACT_APP_${userType}_TOKEN`];
+//const token ="bfd70d56-56ff-44c0-9ce6-bf5b4afd0822";
+const token = "7e976a85-5656-4d0a-8ea6-45004ae25c2e";
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";

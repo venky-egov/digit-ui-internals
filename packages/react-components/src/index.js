@@ -53,6 +53,8 @@ import SectionalDropdown from "./atoms/SectionalDropdown";
 import LabelFieldPair from "./atoms/LabelFieldPair";
 import ApplyFilterBar from "./atoms/ApplyFilterBar";
 import RemoveableTag from "./molecules/RemoveableTag";
+import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
+import { CustomCard } from "./atoms/CustomCard";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -134,6 +136,8 @@ export {
   SectionalDropdown,
   LabelFieldPair,
   GetApp,
+  CitizenInfoLabel,
+  CustomCard,
   // Molecule
   InputCard,
   FormStep,

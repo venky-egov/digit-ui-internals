@@ -11,6 +11,7 @@ const Urls = {
   pgr_update: `/pgr-services/v2/request/_update`,
   filter_data: `https://run.mocky.io/v3/597a50a0-90e5-4a45-b82e-8a2186b760bd`,
   FileStore: "/filestore/v1/files",
+  tl_search: `/tl-services/v1/_search`,
 
   FileFetch: "/filestore/v1/files/url",
   PGR_Create: `/pgr-services/v2/request/_create`,

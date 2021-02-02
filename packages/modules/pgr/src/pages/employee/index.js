@@ -7,6 +7,7 @@ import { CreateComplaint } from "./CreateComplaint";
 import Inbox from "./Inbox";
 import { Employee } from "../../constants/Routes";
 import Response from "./Response";
+import Playground from "./Playground";
 
 const Complaint = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
@@ -27,6 +28,7 @@ const Complaint = () => {
           <Route path={match.url + Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails />} />
           <Route path={match.url + Employee.Inbox} component={Inbox} />
           <Route path={match.url + Employee.Response} component={Response} />
+          <Route path={match.url + "/Playground"} component={Playground} />
         </Switch>
       </div>
       {/* <ActionBar>

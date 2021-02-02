@@ -266,3 +266,13 @@
     }
   }
 }
+
+.custom-card-class{
+  h1{
+    @apply font-bold text-heading-m-dt text-error;
+  }
+  input{
+    @apply border-input-border;
+  }
+
+}

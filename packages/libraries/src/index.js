@@ -17,6 +17,7 @@ import { GetServiceDefinitions } from "./services/elements/ServiceDefinitions";
 import { Complaint } from "./services/elements/Complaint";
 import { UserService } from "./services/molecules/User";
 import { ULBService } from "./services/molecules/Ulb";
+import { TLService } from "./services/molecules/TLSearch";
 
 import Contexts from "./contexts";
 import Hooks from "./hooks";
@@ -66,6 +67,7 @@ const initLibraries = () => {
   setupLibraries("UploadServices", UploadServices);
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
+  setupLibraries("TLService", TLService);
 
   setupLibraries("Contexts", Contexts);
   setupLibraries("Hooks", Hooks);

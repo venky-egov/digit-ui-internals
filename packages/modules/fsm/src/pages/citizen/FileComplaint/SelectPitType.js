@@ -38,7 +38,7 @@ const SelectPitType = ({ t, config, onSelect, value }) => {
 
   return (
     <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} t={t}>
-      <CardLabel>{t("CS_FILE_COMPLAINT_PIT_TYPE_LABEL")}</CardLabel>
+      <CardLabel>{t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")}</CardLabel>
       <Dropdown isMandatory option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} t={t} />
     </FormStep>
   );

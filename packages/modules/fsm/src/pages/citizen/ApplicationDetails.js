@@ -41,12 +41,21 @@ const ApplicationDetails = () => {
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
   const handleDownloadPdf = async () => {
-    const data = getPDFData(application, tenantInfo, t, coreData?.stateInfo?.logoUrl);
+    const data = getPDFData(application, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 
+  const baseUrl = window?.location?.origin?.includes("localhost") ? "https://egov-micro-qa.egovernments.org" : window?.location?.origin;
+
   return (
     <React.Fragment>
+      <img
+        style={{ opacity: 0, position: "absolute" }}
+        id="pdf-logo"
+        crossOrigin="anonymous"
+        src={`${baseUrl}${tenantInfo?.logoId.split(".com")[1]}` || coreData?.stateInfo?.logoUrl}
+        alt="mSeva"
+      />
       <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
       <Card style={{ position: "relative" }}>
         <LinkButton
@@ -81,9 +90,18 @@ const ApplicationDetails = () => {
           note={t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`)}
         />
         <KeyNote keyValue={t("CORE_COMMON_PINCODE")} note={application.address.pincode ? application.address.pincode : "NA"} />
-        <KeyNote keyValue={t("ES_NEW_APPLICATION_STREET_NAME")} note={application.address.street ? application.address.street : "NA"} />
-        <KeyNote keyValue={t("ES_NEW_APPLICATION_DOOR_NO")} note={application.address.door ? application.address.door : "NA"} />
-        <KeyNote keyValue={t("CS_ADDCOMPLAINT_PROPERTY_LANDMARK")} note={application.address.landmark ? application.address.landmark : "NA"} />
+        <KeyNote
+          keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL")}
+          note={application.address.street ? application.address.street : "NA"}
+        />
+        <KeyNote
+          keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL")}
+          note={application.address.door ? application.address.door : "NA"}
+        />
+        <KeyNote
+          keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL")}
+          note={application.address.landmark ? application.address.landmark : "NA"}
+        />
         <KeyNote keyValue={t("CS_CHECK_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
         <KeyNote
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}

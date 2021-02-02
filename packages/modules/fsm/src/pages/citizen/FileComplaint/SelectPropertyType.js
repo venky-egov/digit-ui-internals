@@ -36,7 +36,7 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
         onSave={goNext}
         t={t}
       />
-      <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_APPLICATION")} />
+      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT")} />
     </Fragment>
   );
 };

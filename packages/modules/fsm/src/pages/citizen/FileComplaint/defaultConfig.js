@@ -13,9 +13,9 @@ export const config = {
       component: SelectPropertyType,
       texts: {
         headerCaption: "",
-        header: "CS_FILE_PROPERTY_PLACEHOLDER",
-        cardText: "CS_FILE_PROPERTY_TEXT",
-        submitBarLabel: "PT_COMMONS_NEXT",
+        header: "CS_FILE_APPLICATION_PROPERTY_LABEL",
+        cardText: "CS_FILE_APPLICATION_PROPERTY_TEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
       },
       nextStep: "property-subtype",
     },
@@ -23,9 +23,9 @@ export const config = {
       component: SelectPropertySubtype,
       texts: {
         headerCaption: "",
-        header: "CS_FILE_PROPERTY_SUBTYPE_PLACEHOLDER",
-        cardText: "CS_FILE_PROPERTY_SUBTYPE_TEXT",
-        submitBarLabel: "PT_COMMONS_NEXT",
+        header: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL",
+        cardText: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_TEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
       },
       nextStep: "pincode",
     },
@@ -33,9 +33,9 @@ export const config = {
       component: SelectPincode,
       texts: {
         headerCaption: "",
-        header: "CS_ADDCOMPLAINT_PINCODE",
-        cardText: "CS_FILE_PROPERTY_PINCODE_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        header: "CS_FILE_APPLICATION_PINCODE_LABEL",
+        cardText: "CS_FILE_APPLICATION_PINCODE_TEXT",
+        nextText: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
@@ -55,30 +55,30 @@ export const config = {
     address: {
       component: SelectAddress,
       texts: {
-        headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
-        header: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_ADDRESS",
-        cardText: "CS_ADDCOMPLAINT_PROPERTY_CITY_MOHALLA_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
+        header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_ADDRESS_TEXT",
+        cardText: "CS_FILE_APPLICATION_PROPERTY_LOCATION_CITY_MOHALLA_TEXT",
+        nextText: "CS_COMMON_NEXT",
       },
       nextStep: "street",
     },
     street: {
       component: SelectStreet,
       texts: {
-        headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
-        header: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_ADDRESS",
-        cardText: "ES_NEW_APPLICATION_PROVIDE_PROPERTY_STREET_DOOR_NO",
-        nextText: "PT_COMMONS_NEXT",
+        headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
+        header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_ADDRESS_TEXT",
+        cardText: "CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_DOOR_NO_LABEL",
+        nextText: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
         {
-          label: "ES_NEW_APPLICATION_STREET_NAME",
+          label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL",
           type: "text",
           name: "street",
         },
         {
-          label: "ES_NEW_APPLICATION_DOOR_NO",
+          label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL",
           type: "text",
           name: "doorNo",
         },
@@ -88,15 +88,15 @@ export const config = {
     landmark: {
       component: SelectLandmark,
       texts: {
-        headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
-        header: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK",
-        cardText: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_LANDMARK_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
+        header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE",
+        cardText: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TEXT",
+        nextText: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
         {
-          label: "CS_ADDCOMPLAINT_PROPERTY_LANDMARK",
+          label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL",
           type: "textarea",
           name: "landmark",
         },
@@ -108,7 +108,7 @@ export const config = {
       texts: {
         header: "CS_FILE_PROPERTY_PIT_TYPE",
         cardText: "CS_FILE_PROPERTY_PIT_TYPE_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        nextText: "CS_COMMON_NEXT",
       },
       nextStep: "tank-size",
     },
@@ -116,9 +116,9 @@ export const config = {
       component: SelectTankSize,
       texts: {
         headerCaption: "",
-        header: "CS_FILE_PROPERTY_TANKSIZE_PLACEHOLDER",
-        cardText: "CS_FILE_PROPERTY_TANKSIZE_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",
+        cardText: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TEXT",
+        nextText: "CS_COMMON_NEXT",
       },
       nextStep: null,
     },

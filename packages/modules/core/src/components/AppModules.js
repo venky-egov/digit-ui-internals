@@ -26,8 +26,13 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
     <Switch>
       {appRoutes}
       {userType === "citizen" && (
+        <Route path={`${path}/register`}>
+          <Login stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+      )}
+      {userType === "citizen" && (
         <Route path={`${path}/login`}>
-          <Login stateCode={stateCode} />
+          <Login stateCode={stateCode} isUserRegistered={true} />
         </Route>
       )}
       <Route>

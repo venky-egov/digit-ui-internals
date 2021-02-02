@@ -12,16 +12,17 @@ const GetSlaCell = (value) => {
   );
 };
 
+const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
+
 const MobileInbox = ({ data, onFilterChange, onSearch }) => {
   const { t } = useTranslation();
-  // const localizedData = data?.map(({ locality, serviceRequestId, sla, status, taskOwner }) => ({
-  //   [t("CS_COMMON_COMPLAINT_NO")]: serviceRequestId,
-  //   [t("WF_INBOX_HEADER_LOCALITY")]: t(locality),
-  //   [t("CS_COMPLAINT_DETAILS_CURRENT_STATUS")]: t(`CS_COMMON_${status}`),
-  //   [t("WF_INBOX_HEADER_CURRENT_OWNER")]: taskOwner,
-  //   [t("WF_INBOX_HEADER_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
-  // }));
-  const localizedData = data;
+  const localizedData = data?.map(({ locality, applicationNo, createdTime, tenantId, status, sla }) => ({
+    [t("ES_INBOX_APPLICATION_NO")]: applicationNo,
+    [t("ES_INBOX_APPLICATION_DATE")]: `${createdTime.getDate()}/${createdTime.getMonth() + 1}/${createdTime.getFullYear()}`,
+    [t("ES_INBOX_LOCALITY")]: GetCell(t(Digit.Utils.locale.getLocalityCode(locality, tenantId))),
+    [t("ES_INBOX_STATUS")]: GetCell(t(`CS_COMMON_${status}`)),
+    [t("ES_INBOX_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
+  }));
 
   const DSO = Digit.UserService.hasAccess("DSO");
 

@@ -302,14 +302,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
           ),
         },
         {
-          label: t("ES_NEW_APPLICATION_STREET_NAME"),
+          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
           type: "text",
           populators: {
             name: "streetName",
           },
         },
         {
-          label: t("ES_NEW_APPLICATION_DOOR_NO"),
+          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
           type: "text",
           populators: {
             name: "doorNo",

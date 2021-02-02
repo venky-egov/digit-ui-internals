@@ -91,9 +91,11 @@ export const FSMLinks = ({ matchPath, userType }) => {
     return (
       <React.Fragment>
         {/* TODO: change */}
-        <Header>{t("CS_HOME_FSM_SERVICES")}</Header>
-        <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
-        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+        <div>
+          <Header>{t("CS_HOME_FSM_SERVICES")}</Header>
+          <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
+          <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+        </div>
       </React.Fragment>
     );
   } else {

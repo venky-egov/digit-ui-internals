@@ -62,8 +62,8 @@
   }
 }
 
-.citizen, .employee {
-  
+.citizen,
+.employee {
   .sidebar {
     position: fixed;
     left: 0;
@@ -96,10 +96,18 @@
 }
 
 @media (min-width: 640px) {
-  .employee, .citizen {
+  .employee,
+  .citizen {
     .main {
       padding-top: 80px;
       margin-left: 88px;
+    }
+  }
+
+  .citizen {
+    .main {
+      @apply flex gap-1.5;
+      width: 100vw;
     }
   }
 }

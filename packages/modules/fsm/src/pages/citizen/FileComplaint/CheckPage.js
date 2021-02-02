@@ -81,7 +81,7 @@ const CheckPage = ({ onSubmit, value }) => {
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>
-      {/* <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_TEXT")} /> */}
+      {/* <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_TEXT")} /> */}
       <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );

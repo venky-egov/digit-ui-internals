@@ -29,6 +29,11 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       {appRoutes}
       <Route path={`${path}/login`}>{userType === "citizen" ? <Login stateCode={stateCode} /> : <EmployeeLogin />}</Route>
       <Route path={`${path}/forgot-password`}>{userType === "citizen" ? null : <ForgotPassword />}</Route>
+      {userType === "citizen" && (
+        <Route path={`${path}/register`}>
+          <Login stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+      )}
       <Route>
         <AppHome userType={userType} modules={modules} />
       </Route>

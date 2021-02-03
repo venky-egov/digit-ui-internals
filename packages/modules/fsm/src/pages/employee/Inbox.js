@@ -27,6 +27,52 @@ const Inbox = () => {
     setSearchParams({ ...searchParams, ...params });
   };
 
+  const getSearchFields = (userRole) => {
+    switch (userRole) {
+      case "FSTP_OPERATOR":
+        return [
+          {
+            label: t("ES_FSTP_OPERATOR_VEHICLE_NO"),
+            name: "vehicleNo",
+          },
+          {
+            label: t("ES_FSTP_DSO_NAME"),
+            name: "name",
+          },
+        ];
+      case "DSO":
+        return [
+          {
+            label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
+            name: "applicationNo",
+          },
+          {
+            label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
+            name: "mobileNumber",
+          },
+          {
+            label: t("ES_SEARCH_FROM_DATE"),
+            name: "fromDate",
+          },
+          {
+            label: t("ES_SEARCH_TO_DATE"),
+            name: "toDate",
+          },
+        ];
+      default:
+        return [
+          {
+            label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
+            name: "applicationNo",
+          },
+          {
+            label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
+            name: "mobileNumber",
+          },
+        ];
+    }
+  };
+
   let isMobile = window.Digit.Utils.browser.isMobile;
 
   if (isMobile) {
@@ -35,7 +81,13 @@ const Inbox = () => {
     return (
       <div>
         <Header>{t("ES_COMMON_INBOX")}</Header>
-        <DesktopInbox data={applications} isLoading={isLoading || isIdle} onFilterChange={handleFilterChange} onSearch={onSearch} />
+        <DesktopInbox
+          data={applications}
+          isLoading={isLoading || isIdle}
+          searchFields={getSearchFields()}
+          onFilterChange={handleFilterChange}
+          onSearch={onSearch}
+        />
       </div>
     );
   }

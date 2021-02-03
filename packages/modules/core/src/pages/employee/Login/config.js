@@ -9,7 +9,7 @@ export const loginConfig = [
       {
         label: "CORE_COMMON_USER_ID",
         type: "text",
-        name: "userId",
+        name: "username",
         error: "ERR_HRMS_INVALID_USER_ID",
       },
       {

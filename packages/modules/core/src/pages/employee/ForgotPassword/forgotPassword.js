@@ -24,14 +24,16 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
       return;
     }
     const requestData = {
-      ...data,
-      userType: getUserType(),
+      otp: {
+        ...data,
+        userType: getUserType().toUpperCase(),
+        type: "passwordreset",
+        tenantId: data.city.code,
+      },
     };
-    requestData.tenantId = data.city.code;
-    delete requestData.city;
     try {
-      const { UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
-      setUser({ info, ...tokens });
+      await Digit.UserService.sendOtp(requestData, data.city.code);
+      history.push(`/digit-ui/employee/change-password?mobile_number=${data.mobileNumber}&tenantId=${data.city.code}`);
     } catch (err) {
       console.log({ err });
       alert(err?.response?.data?.error_description || "Invalid login credentials!");
@@ -51,7 +53,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
           label: t(userId.label),
           type: userId.type,
           populators: {
-            name: "username",
+            name: userId.name,
           },
           isMandatory: true,
         },
@@ -59,13 +61,13 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
           label: t(city.label),
           type: city.type,
           populators: {
-            name: "city",
+            name: city.name,
             customProps: {},
             component: (props, customProps) => (
               <Dropdown
                 option={cities}
                 optionKey="name"
-                id="city"
+                id={city.name}
                 select={(d) => {
                   props.onChange(d);
                 }}

@@ -4,6 +4,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { AppHome } from "./Home";
 import Login from "../pages/citizen/Login";
 import EmployeeLogin from "../pages/employee/login/index";
+import ChangePassword from "../pages/employee/ChangePassword/index";
 import ForgotPassword from "../pages/employee/ForgotPassword/index";
 
 const getTenants = (codes, tenants) => {
@@ -29,6 +30,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       {appRoutes}
       <Route path={`${path}/login`}>{userType === "citizen" ? <Login stateCode={stateCode} /> : <EmployeeLogin />}</Route>
       <Route path={`${path}/forgot-password`}>{userType === "citizen" ? null : <ForgotPassword />}</Route>
+      <Route path={`${path}/change-password`}>{userType === "citizen" ? null : <ChangePassword />}</Route>
       {userType === "citizen" && (
         <Route path={`${path}/register`}>
           <Login stateCode={stateCode} isUserRegistered={false} />

@@ -51,7 +51,7 @@ const Login = ({ config: propsConfig, t }) => {
           label: t(userId.label),
           type: userId.type,
           populators: {
-            name: "username",
+            name: userId.name,
           },
           isMandatory: true,
         },
@@ -59,7 +59,7 @@ const Login = ({ config: propsConfig, t }) => {
           label: t(password.label),
           type: password.type,
           populators: {
-            name: "password",
+            name: password.name,
           },
           isMandatory: true,
         },
@@ -67,13 +67,13 @@ const Login = ({ config: propsConfig, t }) => {
           label: t(city.label),
           type: city.type,
           populators: {
-            name: "city",
+            name: city.name,
             customProps: {},
             component: (props, customProps) => (
               <Dropdown
                 option={cities}
                 optionKey="name"
-                id="city"
+                id={city.name}
                 select={(d) => {
                   props.onChange(d);
                 }}

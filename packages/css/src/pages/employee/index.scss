@@ -87,6 +87,18 @@
   }
 }
 
+.citizen {
+  .sidebar {
+    margin-top: 54px;
+    min-width: 200px;
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
+
 .link {
   @apply text-link-normal;
 
@@ -96,8 +108,7 @@
 }
 
 @media (min-width: 640px) {
-  .employee,
-  .citizen {
+  .employee {
     .main {
       padding-top: 80px;
       margin-left: 88px;
@@ -108,6 +119,8 @@
     .main {
       @apply flex gap-1.5;
       width: 100vw;
+      padding-top: 80px;
+      margin-left: 210px;
     }
   }
 }

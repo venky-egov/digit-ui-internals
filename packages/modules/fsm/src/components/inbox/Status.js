@@ -12,7 +12,7 @@ const Status = ({ applications, onAssignmentChange, fsmfilters }) => {
   return (
     <div className="status-container">
       <div className="filter-label">{t("ES_INBOX_STATUS")}</div>
-      {applicationsWithCount.map((option, index) => (
+      {applicationsWithCount?.map((option, index) => (
         <CheckBox
           key={index}
           onChange={(e) => onAssignmentChange(e, option)}

@@ -1,7 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { FormComposer, PopUp, HeaderBar, ButtonSelector } from "@egovernments/digit-ui-react-components";
+import { FormComposer } from "./FormComposer";
+import PopUp from "../atoms/PopUp";
+import HeaderBar from "../atoms/HeaderBar";
+import ButtonSelector from "../atoms/ButtonSelector";
 
 const Close = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
@@ -22,13 +25,13 @@ const CloseBtn = (props) => {
   );
 };
 
-const Modal = ({ closeModal, onSubmit, config }) => {
+const Modal = ({ closeModal, onSubmit, config, heading }) => {
   const { t } = useTranslation();
 
   return (
     <PopUp>
       <div className="popup-module">
-        <HeaderBar main={<Heading label={t("ES_GENERATE_DEMAND")} />} end={<CloseBtn onClick={closeModal} />} />
+        <HeaderBar main={<Heading label={heading} />} end={<CloseBtn onClick={closeModal} />} />
         <div className="popup-module-main">
           <FormComposer config={config} noBoxShadow inline childrenAtTheBottom onSubmit={onSubmit}>
             <div className="popup-module-action-bar">

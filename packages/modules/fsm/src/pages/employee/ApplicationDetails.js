@@ -183,6 +183,7 @@ const ApplicationDetails = (props) => {
     ],
   };
 
+  // TODO: Below data is hard coded, It should come from apis.
   if (DSO) {
     applicationDetails?.details?.push({
       title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),

@@ -17,8 +17,6 @@ const Inbox = () => {
   //   revalidate();
   // }, [searchParams])
 
-  const DSO = Digit.UserService.hasAccess("DSO");
-
   const handleFilterChange = (filterParam) => {
     // console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     setSearchParams({ ...searchParams, ...filterParam });
@@ -30,7 +28,7 @@ const Inbox = () => {
 
   let isMobile = window.Digit.Utils.browser.isMobile;
   if (applications?.length !== null) {
-    if (DSO || isMobile) {
+    if (isMobile) {
       return <MobileInbox data={applications} isLoading={isLoading || isIdle} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     } else {
       return (

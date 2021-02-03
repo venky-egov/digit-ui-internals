@@ -41,6 +41,7 @@ const MarkForDisposal = () => {
     setSelectedComponent(null);
   };
 
+  // TODO: Below data is hard coded, It should come from apis.
   const applications = React.useMemo(
     () => [
       {
@@ -87,7 +88,6 @@ const MarkForDisposal = () => {
 
   const handleSubmit = () => {
     const data = applications.filter((application) => selectedApplicationNumbers.includes(application["Application No."]));
-    console.log("%c MarkForDisposal: handleSubmit -> data ", "font-size:16px;background-color:#d0601a;color:white;", data);
   };
 
   return (

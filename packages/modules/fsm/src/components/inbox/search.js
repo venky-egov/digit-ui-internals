@@ -58,7 +58,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator }) => {
                   marginBottom: "20px",
                 }}
               >
-                <h2>SEARCH BY:</h2>
+                <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
                 <span onClick={onClose}>x</span>
               </div>
             )}

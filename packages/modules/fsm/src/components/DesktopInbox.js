@@ -86,7 +86,7 @@ const DesktopInbox = (props) => {
   let result;
   if (props.isLoading) {
     result = <Loader />;
-  } else if (props.data.length === 0) {
+  } else if (props?.data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
         {/* TODO Change localization key */}
@@ -99,7 +99,7 @@ const DesktopInbox = (props) => {
           ))}
       </Card>
     );
-  } else if (props.data.length > 0) {
+  } else if (props?.data?.length > 0) {
     result = (
       <ApplicationTable
         data={props.data}

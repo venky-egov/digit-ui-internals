@@ -77,6 +77,7 @@ import FilterAction from "./molecules/FilterAction";
 import PitDimension from "./molecules/PitDimension";
 
 import { FormComposer } from "./hoc/FormComposer";
+import Modal from "./hoc/Modal";
 
 export {
   // Atoms
@@ -167,4 +168,5 @@ export {
   // hoc
   FormComposer,
   PitDimension,
+  Modal,
 };

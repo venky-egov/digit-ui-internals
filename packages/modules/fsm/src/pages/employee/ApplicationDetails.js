@@ -16,10 +16,10 @@ import {
   Menu,
   LinkButton,
   Dropdown,
+  Modal,
 } from "@egovernments/digit-ui-react-components";
 
 import { useHistory, useParams } from "react-router-dom";
-import Modal from "../../components/Modal";
 import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
 
 const ApplicationDetails = (props) => {
@@ -253,7 +253,7 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-          {showModal ? <Modal closeModal={closeModal} onSubmit={handleGenerateDemand} config={config} /> : null}
+          {showModal ? <Modal closeModal={closeModal} onSubmit={handleGenerateDemand} config={config} heading={t("ES_GENERATE_DEMAND")} /> : null}
           {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
             <ActionBar>
               {displayMenu && workflowDetails?.data?.nextActions ? (

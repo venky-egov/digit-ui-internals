@@ -14,6 +14,11 @@ const Inbox = () => {
     ...searchParams,
   });
 
+  // remove it from here ok
+  const resp = Digit.Hooks.fsm.useDsoSearch(tenantId);
+  const resp2 = Digit.Hooks.fsm.useVehicleSearch("TS 09 PA 2587", tenantId);
+  console.log("find dso search data here", resp, resp2);
+
   // useEffect(() => {
   //   revalidate();
   // }, [searchParams])

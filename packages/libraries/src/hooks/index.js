@@ -25,6 +25,8 @@ import useSearch from "./fsm/useSearch";
 import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
+import useDsoSearch from "./fsm/useDsoSearch";
+import useVehicleSearch from "./fsm/useVehicleSearch";
 
 const pgr = {
   useComplaintDetails,
@@ -50,6 +52,8 @@ const fsm = {
   useApplicationUpdate,
   useApplicationStatus,
   useWorkflowData,
+  useDsoSearch,
+  useVehicleSearch,
 };
 
 const Hooks = { useSessionStorage, useFetchPayment, usePaymentUpdate, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };

@@ -89,7 +89,10 @@
     column-gap: 5px;
   }
 
-
+  .select-wrap,
+  .employee-select-wrap {
+    margin-bottom: 0px;
+  }
   
 }
 
@@ -98,11 +101,16 @@
 }
 .citizen {
   .right {
-    margin-top: 7px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 
   .topbar-select-wrap{
     margin-bottom: 0;
+  }
+
+  .flex-between{
+    @apply flex items-center justify-between;
   }
 }
 

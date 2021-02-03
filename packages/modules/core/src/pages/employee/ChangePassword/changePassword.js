@@ -38,18 +38,23 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   };
 
   const onChangePassword = async (data) => {
-    if (data.newPassword !== data.confirmPassword) {
-      return alert(t("ERR_PASSWORD_DO_NOT_MATCH"));
-    }
+    try {
+      if (data.newPassword !== data.confirmPassword) {
+        return alert(t("ERR_PASSWORD_DO_NOT_MATCH"));
+      }
 
-    const requestData = {
-      ...data,
-      otpReference,
-      tenantId,
-      type: getUserType().toUpperCase(),
-    };
-    const response = await Digit.UserService.changePassword(requestData, tenantId);
-    console.log({ response });
+      const requestData = {
+        ...data,
+        otpReference,
+        tenantId,
+        type: getUserType().toUpperCase(),
+      };
+      const response = await Digit.UserService.changePassword(requestData, tenantId);
+      console.log({ response });
+      navigateToLogin();
+    } catch (error) {
+      alert(err?.response?.data?.error_description || "Something went wrong!");
+    }
   };
 
   const updateOtp = (data) => {

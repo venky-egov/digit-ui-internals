@@ -52,7 +52,7 @@ const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
 // console.clear();
 console.log(stateCode);
 
-const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "EMPLOYEE";
+const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
@@ -70,14 +70,13 @@ window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 
 if (userType !== "CITIZEN") {
-  // window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
+  window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
+} else {
+  window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
 }
-// else {
-//   window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
-// }
 
-// window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
-// window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
+window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
 
 window.mdmsInitPre = ({ params, data }) => {
   console.log("mdms init pre", params, data);

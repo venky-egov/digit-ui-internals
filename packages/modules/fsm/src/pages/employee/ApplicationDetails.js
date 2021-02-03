@@ -22,6 +22,19 @@ import { useHistory, useParams } from "react-router-dom";
 import Modal from "../../components/Modal";
 import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
 
+const displayPitDimension = (pitDeminsion) => {
+  return Object.values(pitDeminsion)
+    .reduce((acc, current) => {
+      if (!current) {
+        return acc;
+      } else {
+        acc.push(`${current}m`);
+        return acc;
+      }
+    }, [])
+    .join(" x ");
+};
+
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
@@ -115,10 +128,6 @@ const ApplicationDetails = (props) => {
 
   const handleGenerateDemand = (data) => {
     closeModal();
-    console.log("%c 🍓: handleGenerateDemand -> data ", "font-size:16px;background-color:#582dc7;color:white;", {
-      ...data,
-      vehicle,
-    });
     setVehicle(null);
   };
 
@@ -154,27 +163,36 @@ const ApplicationDetails = (props) => {
       {
         title: t("ES_APPLICATION_DETAILS_LOCATION_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"), value: t(application.address.locality.code) },
+          {
+            title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"),
+            value: t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`),
+          },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: application.address.city },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: application.address.pincode },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_STREET"), value: application.address.street },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_DOOR"), value: application.address.doorNo },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_LANDMARK"), value: application.address.landmark },
+          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"), value: application.address.street },
+          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: application.address.doorNo },
+          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: application.address.landmark },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
         ],
       },
       {
         title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
         values: [
-          { title: t("ES_NEW_APPLICATION_PIT_TYPE"), value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "" },
           {
-            title: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
-            value: `${!!application.pitDetail.length ? application.pitDetail.length + "m " : ""}${
-              !!application.pitDetail.width ? "x " + application.pitDetail.width + "m x " : ""
-            }${application.pitDetail.height + "m "}${!!application.pitDetail.diameter ? "x" + application.pitDetail.diameter + "m" : ""}`,
+            title: t("ES_APPLICATION_DETAILS_PIT_TYPE"),
+            value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "",
           },
-          { title: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"), value: application.noOfTrips === 0 ? "N/A" : application.noOfTrips },
-          { title: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"), value: "N/A" },
+          {
+            title: t("ES_APPLICATION_DETAILS_PIT_DIMENSION"),
+            value: displayPitDimension({
+              length: application.pitDetail.length,
+              width: application.pitDetail.width,
+              height: application.pitDetail.height,
+              diameter: application.pitDetail.diameter,
+            }),
+          },
+          { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: application.noOfTrips === 0 ? "N/A" : application.noOfTrips },
+          { title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"), value: "N/A" },
           { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: "N/A" },
         ],
       },
@@ -242,7 +260,7 @@ const ApplicationDetails = (props) => {
                             <CheckPoint
                               keyValue={index}
                               isCompleted={index === 0}
-                              label={t("CS_COMMON_" + checkpoint.status)}
+                              label={t("CS_COMMON_FSM_" + checkpoint.status)}
                               // customChild={getTimelineCaptions(checkpoint)}
                             />
                           </React.Fragment>
@@ -257,7 +275,12 @@ const ApplicationDetails = (props) => {
           {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
             <ActionBar>
               {displayMenu && workflowDetails?.data?.nextActions ? (
-                <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
+                <Menu
+                  localeKeyPrefix={"CS_COMMON_FSM"}
+                  options={workflowDetails?.data?.nextActions.map((action) => action.action)}
+                  t={t}
+                  onSelect={onActionSelect}
+                />
               ) : null}
               <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
             </ActionBar>

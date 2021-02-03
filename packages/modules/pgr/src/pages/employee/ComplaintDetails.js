@@ -112,6 +112,11 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
     }
   }, [file]);
 
+  const reopenReasonMenu = [t(`CS_REOPEN_OPTION_ONE`), t(`CS_REOPEN_OPTION_TWO`), t(`CS_REOPEN_OPTION_THREE`), t(`CS_REOPEN_OPTION_FOUR`)];
+  // const uploadFile = useCallback( () => {
+
+  //   }, [file]);
+
   function onSelectEmployee(employee) {
     setSelectedEmployee(employee);
   }
@@ -127,6 +132,7 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   function onSelectReopenReason(reason) {
     setSelectedReopenReason(reason);
   }
+
   return (
     <Modal
       headerBarMain={
@@ -331,11 +337,6 @@ export const ComplaintDetails = (props) => {
     }
     return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
   };
-
-  const reopenReasonMenu = [t(`CS_REOPEN_OPTION_ONE`), t(`CS_REOPEN_OPTION_TWO`), t(`CS_REOPEN_OPTION_THREE`), t(`CS_REOPEN_OPTION_FOUR`)];
-  // const uploadFile = useCallback( () => {
-
-  //   }, [file]);
 
   return (
     <React.Fragment>

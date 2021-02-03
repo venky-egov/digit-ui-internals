@@ -97,7 +97,7 @@ const Dropdown = (props) => {
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
       {hasCustomSelector && (
-        <div className={props.showArrow ? "cp margin-top-6 flex-right column-gap-5" : "cp margin-top-6"} onClick={dropdownSwitch}>
+        <div className={props.showArrow ? "cp flex-right column-gap-5" : "cp"} onClick={dropdownSwitch}>
           {props.customSelector}
           {props.showArrow && <ArrowDown onClick={dropdownSwitch} />}
         </div>
@@ -128,7 +128,7 @@ const Dropdown = (props) => {
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
-          <div className={`${hasCustomSelector ? "margin-top-10" : ""} options-card`} ref={optionRef}>
+          <div className={`${hasCustomSelector ? "margin-top-10" : ""} options-card`} style={{ ...props.style }} ref={optionRef}>
             {props.option &&
               props.option
                 .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))

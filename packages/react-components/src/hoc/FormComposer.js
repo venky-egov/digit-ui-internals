@@ -5,6 +5,7 @@ import Card from "../atoms/Card";
 import CardLabel from "../atoms/CardLabel";
 import CardSubHeader from "../atoms/CardSubHeader";
 import CardSectionHeader from "../atoms/CardSectionHeader";
+import CardLabelDesc from "../atoms/CardLabelDesc";
 import TextArea from "../atoms/TextArea";
 import TextInput from "../atoms/TextInput";
 import ActionBar from "../atoms/ActionBar";
@@ -131,6 +132,7 @@ export const FormComposer = (props) => {
       <Card style={getCardStyles()}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}
+        {props.description && <CardLabelDesc> {props.description} </CardLabelDesc>}
         {formFields}
         {props.childrenAtTheBottom && props.children}
         {props.submitInForm && <SubmitBar label={t(props.label)} submit="submit" style={{ width: "100%" }} />}

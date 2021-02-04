@@ -40,6 +40,7 @@ const CloseBtn = (props) => {
       <Close />
     </div>
   );
+}
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)

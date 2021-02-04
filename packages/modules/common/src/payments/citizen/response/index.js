@@ -5,9 +5,7 @@ import { useTranslation } from "react-i18next";
 
 export const SuccessfulPayment = (props) => {
   const { t } = useTranslation();
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const egId = urlParams.get("eg_pg_txnid");
+  const egId = Digit.Hooks.useQueryParams("eg_pg_txnid");
   const { isLoading, data: payments, isError } = Digit.Hooks.usePaymentUpdate({ egId });
   const [printing, setPrinting] = useState(false);
 

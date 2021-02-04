@@ -19,6 +19,7 @@ const Urls = {
   OTP_Send: "/user-otp/v1/_send",
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
+  ChangePassword: "/user/password/nologin/_update",
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 

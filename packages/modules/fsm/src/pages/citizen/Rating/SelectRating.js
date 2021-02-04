@@ -15,7 +15,7 @@ const SelectRating = ({ parentRoute }) => {
   const config = {
     texts: {
       header: "CS_FSM_APPLICATION_RATE_HELP_TEXT",
-      submitBarLabel: "SUBMIT",
+      submitBarLabel: "CS_COMMON_SUBMIT",
     },
     inputs: [
       {

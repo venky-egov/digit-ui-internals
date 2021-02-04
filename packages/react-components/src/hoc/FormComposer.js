@@ -90,8 +90,22 @@ export const FormComposer = (props) => {
           <React.Fragment key={index}>
             {section.head && <CardSectionHeader id={section.headId}>{section.head}</CardSectionHeader>}
             {section.body.map((field, index) => {
-              const FieldPair = () => (
-                <React.Fragment>
+              if (props.inline)
+                return (
+                  <React.Fragment>
+                    {!field.withoutLabel && (
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
+                        {field.label}
+                        {field.isMandatory ? " * " : null}
+                      </CardLabel>
+                    )}
+                    <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
+                      {fieldSelector(field.type, field.populators, field.isMandatory)}
+                    </div>
+                  </React.Fragment>
+                );
+              return (
+                <LabelFieldPair key={index}>
                   {!field.withoutLabel && (
                     <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
                       {field.label}
@@ -101,13 +115,6 @@ export const FormComposer = (props) => {
                   <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
                     {fieldSelector(field.type, field.populators, field.isMandatory)}
                   </div>
-                </React.Fragment>
-              );
-
-              if (props.inline) return <FieldPair key={index} />;
-              return (
-                <LabelFieldPair key={index}>
-                  <FieldPair />
                 </LabelFieldPair>
               );
             })}

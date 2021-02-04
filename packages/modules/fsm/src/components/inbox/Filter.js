@@ -19,7 +19,7 @@ const Filter = (props) => {
 
   const { t } = useTranslation();
   const [selectedLocality, setSelectedLocality] = useState(null);
-  const DSO = Digit.UserService.hasAccess("DSO");
+  const DSO = Digit.UserService.hasAccess("DSO") || true;
 
   const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],

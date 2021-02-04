@@ -22,7 +22,6 @@ import {
 import { useHistory, useParams } from "react-router-dom";
 import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
 
-
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
 };
@@ -40,7 +39,7 @@ const CloseBtn = (props) => {
       <Close />
     </div>
   );
-}
+};
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
@@ -77,7 +76,7 @@ const ApplicationDetails = (props) => {
     { key: "Type B", name: "Type B" },
   ]);
 
-  const DSO = Digit.UserService.hasAccess("DSO");
+  const DSO = Digit.UserService.hasAccess("DSO") || true;
 
   function selectVehicle(value) {
     setVehicle(value);
@@ -157,100 +156,130 @@ const ApplicationDetails = (props) => {
     return <Loader />;
   }
 
-  const application = data?.fsm[0];
-  const applicationDetails = {
-    details: [
-      {
-        title: t("ES_TITLE_APPLICATION_DETAILS"),
-        values: [
-          { title: t("CS_FILE_DESLUDGING_APPLICATION_NO"), value: application.applicationNo },
-          { title: t("ES_APPLICATION_CHANNEL"), value: application.source },
-        ],
-      },
-      {
-        title: t("ES_TITLE_APPLICATION_DETAILS"),
-        values: [
-          { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: application.citizen.name },
-          { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: application.citizen.mobileNumber },
-          // { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
-        ],
-      },
-      {
-        title: t("ES_APPLICATION_DETAILS_PROPERTY_DETAILS"),
-        values: [
-          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(application.propertyUsage)) },
-          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: t(getPropertySubtypeLocale(application.propertyUsage)) },
-        ],
-      },
-      {
-        title: t("ES_APPLICATION_DETAILS_LOCATION_DETAILS"),
-        values: [
-          {
-            title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"),
-            value: t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`),
-          },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: application.address.city },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: application.address.pincode },
-          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"), value: application.address.street },
-          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: application.address.doorNo },
-          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: application.address.landmark },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
-        ],
-      },
-      {
-        title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
-        values: [
-          {
-            title: t("ES_APPLICATION_DETAILS_PIT_TYPE"),
-            value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "",
-          },
-          {
-            title: t("ES_APPLICATION_DETAILS_PIT_DIMENSION"),
-            value: displayPitDimension({
-              length: application.pitDetail.length,
-              width: application.pitDetail.width,
-              height: application.pitDetail.height,
-              diameter: application.pitDetail.diameter,
-            }),
-          },
-          { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: application.noOfTrips === 0 ? "N/A" : application.noOfTrips },
-          { title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"), value: "N/A" },
-          { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: "N/A" },
-        ],
-      },
-    ],
+  let application = {};
+
+  // TODO: Below data is hard coded, it should come from apis
+  const dsoApplication = {
+    applicationNo: applicationNumber,
+    source: "Online",
+    propertyUsage: "COMMERCIAL",
+    tenantId: "pb.amritsar",
+    address: {
+      pincode: 232123,
+      locality: "Ajit Nagar",
+      city: "Amritsar",
+      landmark: "SBI bank",
+      geolocation: "View on Map",
+    },
+    sanitationtype: "Conventional Pit",
+    pitDetail: {
+      length: "2m",
+      width: "2m",
+      height: "2m",
+    },
+    disatncePitFromRoad: "500 mts",
+    vehicleType: "Tractor",
+    noOfTrips: 2,
+    amountPerTrip: 200.0,
+    totalAmount: 400.0,
+    assignedDso: "Jagdamba Cleaners",
+    vehicleNo: "KA8272722",
+    vehicleCapacity: "300 ltrs",
+    possibleServiceDate: "12/08/2020",
   };
 
-  // TODO: Below data is hard coded, It should come from apis.
   if (DSO) {
+    application = dsoApplication;
+  } else {
+    application = data?.fsm[0];
+  }
+
+  const details = {
+    applicationDetails: {
+      title: DSO ? t("ES_TITLE_APPLICATION_SUMMARY") : t("ES_TITLE_APPLICATION_DETAILS"),
+      values: [
+        { title: t("CS_FILE_DESLUDGING_APPLICATION_NO"), value: application?.applicationNo },
+        { title: t("ES_APPLICATION_CHANNEL"), value: application?.source },
+      ],
+    },
+    applicantDetails: {
+      title: t("ES_TITLE_APPLICATION_DETAILS"),
+      values: [
+        { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: application?.citizen?.name },
+        { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: application?.citizen?.mobileNumber },
+        // { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
+      ],
+    },
+    propertyDetails: {
+      title: t("ES_APPLICATION_DETAILS_PROPERTY_DETAILS"),
+      values: [
+        { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(application?.propertyUsage)) },
+        { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: t(getPropertySubtypeLocale(application?.propertyUsage)) },
+      ],
+    },
+    locationDetails: {
+      title: t("ES_APPLICATION_DETAILS_LOCATION_DETAILS"),
+      values: [
+        {
+          title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"),
+          value: t(`${application?.tenantId?.toUpperCase()?.split(".")?.join("_")}_ADMIN_${application?.address?.locality?.code}`),
+        },
+        { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: application?.address?.city },
+        { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: application?.address?.pincode },
+        { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"), value: application?.address?.street },
+        { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: application?.address?.doorNo },
+        { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: application?.address?.landmark },
+        { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
+      ],
+    },
+    pitSepticTankDetails: {
+      title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
+      values: [
+        {
+          title: t("ES_APPLICATION_DETAILS_PIT_TYPE"),
+          value: !!application?.sanitationtype ? t(`PITTYPE_MASTERS_${application?.sanitationtype}`) : "",
+        },
+        {
+          title: t("ES_APPLICATION_DETAILS_PIT_DIMENSION"),
+          value: displayPitDimension({
+            length: application?.pitDetail?.length,
+            width: application?.pitDetail?.width,
+            height: application?.pitDetail?.height,
+            diameter: application?.pitDetail?.diameter,
+          }),
+        },
+        { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: application?.noOfTrips === 0 ? "N/A" : application?.noOfTrips },
+        { title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"), value: application.amountPerTrip || "N/A" },
+        { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: application.totalAmount || "N/A" },
+      ],
+    },
+  };
+
+  let applicationDetails = {
+    details: [],
+  };
+
+  if (DSO) {
+    applicationDetails?.details?.push(details.applicationDetails);
+    applicationDetails?.details?.push(details?.propertyDetails);
+    applicationDetails?.details?.push(details?.locationDetails);
+    applicationDetails?.details?.push(details?.pitSepticTankDetails);
     applicationDetails?.details?.push({
       title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
       values: [
-        { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: "Jagdamba Cleaners" },
-        { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: "KA8272722" },
-        { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: "2280 ltrs" },
-        { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: "12/08/2020" },
+        { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: application.assignedDso },
+        { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: application.vehicleDso },
+        { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: application.vehicleCapacity },
+        { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: application.possibleServiceDate },
       ],
     });
+  } else {
+    applicationDetails?.details?.push(details?.applicationDetails);
+    applicationDetails?.details?.push(details?.applicantDetails);
+    applicationDetails?.details?.push(details?.propertyDetails);
+    applicationDetails?.details?.push(details?.locationDetails);
+    applicationDetails?.details?.push(details?.pitSepticTankDetails);
   }
-
-  const timeline = [
-    {
-      label: t("ES_TIMELINE_PENDING_FOR_DEMAND_GENERATION"),
-      caption: [""],
-    },
-    {
-      label: t("ES_COMMON_APPLICATION_SUBMITTED"),
-      caption: [
-        {
-          date: "12/08/2020",
-          name: "Nawal Kishore",
-          mobileNumber: "+91 4534234512",
-          source: "Filed Via Mobile App",
-        },
-      ],
-    },
-  ];
 
   return (
     <React.Fragment>
@@ -272,8 +301,8 @@ const ApplicationDetails = (props) => {
                   <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{detail.title}</CardSectionHeader>
                 )}
                 <StatusTable>
-                  {detail.values.map((value, index) => (
-                    <Row key={value.title} label={value.title} text={value.value} last={index === detail.values.length - 1} />
+                  {detail?.values?.map((value, index) => (
+                    <Row key={value.title} label={value.title} text={value.value} last={index === detail?.values?.length - 1} />
                   ))}
                 </StatusTable>
               </React.Fragment>

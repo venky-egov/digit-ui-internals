@@ -5,7 +5,11 @@ import { ApplicationCard } from "./inbox/ApplicationCard";
 import ApplicationLinks from "./inbox/ApplicationLinks";
 
 const GetSlaCell = (value) => {
-  return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
+  return value < 0 ? (
+    <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
+  ) : (
+    <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
+  );
 };
 
 const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
@@ -20,10 +24,10 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
     [t("ES_INBOX_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
   }));
 
+  const DSO = Digit.UserService.hasAccess("DSO");
   const userDetails = Digit.UserService.getUser();
 
-  // const isFstpOperator = !!userDetails.info.roles.find((role) => role.code === "FSTP_OPERATOR");
-  const isFstpOperator = true;
+  const isFstpOperator = Digit.UserService.hasAccess("FSTP");
 
   // TODO: below line is hard coded, it should come from server
   const fstpOperatorData = [
@@ -51,7 +55,7 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {!isFstpOperator && <ApplicationLinks isMobile={true} />}
+          {(!DSO || !isFstpOperator) && <ApplicationLinks isMobile={true} />}
           <ApplicationCard
             data={isFstpOperator ? fstpOperatorData : localizedData}
             onFilterChange={onFilterChange}

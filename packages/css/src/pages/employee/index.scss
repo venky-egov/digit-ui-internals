@@ -62,8 +62,8 @@
   }
 }
 
-.citizen, .employee {
-  
+.citizen,
+.employee {
   .sidebar {
     position: fixed;
     left: 0;
@@ -87,11 +87,11 @@
   }
 }
 
-.citizen{
-  .sidebar{
+.citizen {
+  .sidebar {
     margin-top: 54px;
     min-width: 200px;
-    .actions{
+    .actions {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -120,5 +120,19 @@
       padding-top: 80px;
       margin-left: 210px;
     }
+  }
+}
+
+.multi-select-container {
+  .disposal-text {
+    @apply font-bold;
+  }
+
+  .disposal-info {
+    @apply my-md ml-sm;
+  }
+
+  .disposal-action-bar {
+    @apply flex justify-between items-center;
   }
 }

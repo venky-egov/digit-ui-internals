@@ -14,7 +14,7 @@ import LabelFieldPair from "../atoms/LabelFieldPair";
 import { useTranslation } from "react-i18next";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, watch, control, formState } = useForm();
+  const { register, handleSubmit, setValue, watch, control, formState } = useForm({ defaultValues: props.defaultValues });
   const { t } = useTranslation();
 
   const formData = watch();
@@ -27,7 +27,7 @@ export const FormComposer = (props) => {
     props.onFormValueChange && props.onFormValueChange(formData, formState);
   }, [formData]);
 
-  const fieldSelector = (type, populators) => {
+  const fieldSelector = (type, populators, disable = false) => {
     switch (type) {
       case "text":
         // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
@@ -51,12 +51,12 @@ export const FormComposer = (props) => {
                 {populators.componentInFront}
               </span>
             ) : null}
-            <TextInput className="field" {...populators} inputRef={register(populators.validation)} />
+            <TextInput className="field" {...populators} inputRef={register(populators.validation)} disable={disable} />
           </div>
         );
       case "textarea":
         if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
-        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} />;
+        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} disable={disable} />;
       case "custom":
         return (
           <Controller
@@ -81,7 +81,7 @@ export const FormComposer = (props) => {
               const FieldPair = () => (
                 <React.Fragment>
                   {!field.withoutLabel && (
-                    <CardLabel style={props.inline && { marginBottom: "8px" }}>
+                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
                       {field.label}
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
@@ -99,7 +99,7 @@ export const FormComposer = (props) => {
                 </LabelFieldPair>
               );
             })}
-            {array.length - 1 === index ? null : <BreakLine />}
+            {!props.noBreakLine && (array.length - 1 === index ? null : <BreakLine />)}
           </React.Fragment>
         );
       }),
@@ -112,6 +112,8 @@ export const FormComposer = (props) => {
     return styles;
   };
 
+  const isDisabled = props.isDisabled || false;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card style={getCardStyles()}>
@@ -121,7 +123,7 @@ export const FormComposer = (props) => {
         {props.childrenAtTheBottom && props.children}
         {props.label && (
           <ActionBar>
-            <SubmitBar label={t(props.label)} submit="submit" />
+            <SubmitBar label={t(props.label)} submit="submit" disabled={isDisabled} />
           </ActionBar>
         )}
       </Card>

@@ -21,6 +21,7 @@
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
     "dev:common": "cd packages/modules/common && yarn start",
+    "dev:pt": "cd packages/modules/pt && yarn start",
     "dev:core": "cd packages/modules/core && yarn start",
     "dev:pgr": "cd packages/modules/pgr && yarn start",
     "dev:fsm": "cd packages/modules/fsm && yarn start",
@@ -29,6 +30,7 @@
     "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
     "build:common": "cd packages/modules/common && yarn build",
+    "build:pt": "cd packages/modules/pt && yarn build",
     "build:core": "cd packages/modules/core && yarn build",
     "build:pgr": "cd packages/modules/pgr && yarn build",
     "build:fsm": "cd packages/modules/fsm && yarn build"

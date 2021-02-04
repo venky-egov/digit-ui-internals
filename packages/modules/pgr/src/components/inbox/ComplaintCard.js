@@ -29,7 +29,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
   };
 
   let result;
-  if (data && data.length === 0) {
+  if (data && data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
         {t(LOCALE.NO_COMPLAINTS_EMPLOYEE)
@@ -41,7 +41,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
           ))}
       </Card>
     );
-  } else if (data && data.length > 0) {
+  } else if (data && data?.length > 0) {
     result = <DetailsCard data={data} serviceRequestIdKey={serviceRequestIdKey} linkPrefix={"/digit-ui/employee/pgr/complaint/details/"} />;
   } else {
     result = (

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 
 import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
+import { PTModule } from "@egovernments/digit-ui-module-pt";
 import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
@@ -31,7 +32,7 @@ initLibraries();
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, QAGRO, FSM_EMPLOYEE, NAWANSHAHR_QA_GRO };
 
-const enabledModules = ["PGR", "FSM", "Payment"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT"];
 const registry = new Registry({
   ...pgrComponents,
   PGRLinks,
@@ -40,7 +41,9 @@ const registry = new Registry({
   FSMLinks,
   PaymentModule,
   PaymentLinks,
+  PTModule,
 });
+
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
 });

@@ -30,7 +30,7 @@ const DesktopInbox = (props) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: t("ES_INBOX_APPLICATION_NO"),
+        Header: t("CS_FILE_DESLUDGING_APPLICATION_NO"),
         accessor: "applicationNo",
         Cell: ({ row }) => {
           return (

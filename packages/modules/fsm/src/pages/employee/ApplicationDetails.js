@@ -141,7 +141,7 @@ const ApplicationDetails = (props) => {
       {
         title: t("ES_TITLE_APPLICATION_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_NO"), value: application.applicationNo },
+          { title: t("CS_FILE_DESLUDGING_APPLICATION_NO"), value: application.applicationNo },
           { title: t("ES_APPLICATION_CHANNEL"), value: application.source },
         ],
       },

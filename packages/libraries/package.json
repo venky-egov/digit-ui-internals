@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-libraries",
-  "version": "1.0.103",
+  "version": "1.0.104",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",

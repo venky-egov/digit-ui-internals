@@ -18,13 +18,23 @@ const GetActionMessage = (action) => {
   }
 };
 
+const GetLabel = (action) => {
+  const { t } = useTranslation();
+  switch (action) {
+    case "PENDING_APPL_FEE_PAYMENT":
+      return t("CS_FILE_DESLUDGING_APPLICATION_NO");
+    default:
+      return t("ES_RECEIPT_NO");
+  }
+};
+
 const BannerPicker = (props) => {
   const { t } = useTranslation();
   return (
     <Banner
       message={GetActionMessage(props.data?.fsm[0].applicationStatus)}
       applicationNumber={props.data?.fsm[0].applicationNo}
-      info={t("CS_FILE_DESLUDGING_APPLICATION_NO")}
+      info={GetLabel(props.data?.fsm[0].applicationStatus)}
       successful={props.isSuccess}
     />
   );

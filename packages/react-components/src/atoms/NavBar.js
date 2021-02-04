@@ -44,7 +44,7 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
             display: "flex",
             flexDirection: "column",
             marginTop: "56px",
-            height: "100vh",
+            height: "calc(100vh - 56px)",
             position: "absolute",
             top: 0,
             left: 0,

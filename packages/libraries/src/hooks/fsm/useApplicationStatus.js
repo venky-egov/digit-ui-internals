@@ -10,7 +10,7 @@ const useApplicationStatus = () => {
     let applicationStatus = WorkflowService.BusinessServices[0].states
       .filter((state) => state.applicationStatus)
       .map((state) => ({
-        name: t(`CS_COMMON_${state.applicationStatus}`),
+        name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
         code: state.applicationStatus,
       }));
     return applicationStatus;

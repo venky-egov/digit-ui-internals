@@ -125,3 +125,17 @@
     }
   }
 }
+
+.multi-select-container {
+  .disposal-text {
+    @apply font-bold;
+  }
+
+  .disposal-info {
+    @apply my-md ml-sm;
+  }
+
+  .disposal-action-bar {
+    @apply flex justify-between items-center;
+  }
+}

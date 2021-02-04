@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { CardHeader, CardSectionHeader, CardSubHeader, CardText, Dropdown, RadioButtons } from "@egovernments/digit-ui-react-components";
+import {
+  CardHeader,
+  CardSectionHeader,
+  CardSubHeader,
+  CardText,
+  Dropdown,
+  RadioButtons,
+  FormComposer,
+} from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
-
-import { FormComposer } from "../../components/FormComposer";
 
 const CollectPayment = ({ parentRoute }) => {
   const { t } = useTranslation();
@@ -52,17 +58,7 @@ const CollectPayment = ({ parentRoute }) => {
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
-            componentInFront: (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                +91
-              </span>
-            ),
+            componentInFront: "+91",
           },
         },
       ],

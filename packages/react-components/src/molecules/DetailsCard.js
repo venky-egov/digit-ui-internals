@@ -13,7 +13,25 @@ const Details = ({ label, name }) => {
   );
 };
 
-const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix }) => {
+const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected }) => {
+  if (linkPrefix && serviceRequestIdKey) {
+    return (
+      <div>
+        {data.map((object, itemIndex) => {
+          return (
+            <Link key={itemIndex} to={`${linkPrefix}${object[serviceRequestIdKey]}`}>
+              <div className="details-container">
+                {Object.keys(object).map((name, index) => {
+                  return <Details label={name} name={object[name]} key={index} />;
+                })}
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div>
       {data.map((object, itemIndex) => {
@@ -29,7 +47,12 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix }) => {
           );
         }
         return (
-          <div className="details-container">
+          <div
+            key={itemIndex}
+            style={{ border: selectedItems.includes(object[keyForSelected]) ? "2px solid #f47738" : "2px solid #fff" }}
+            className="details-container"
+            onClick={() => handleSelect(object)}
+          >
             {Object.keys(object).map((name, index) => {
               return <Details label={name} name={object[name]} key={index} />;
             })}

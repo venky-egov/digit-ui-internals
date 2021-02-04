@@ -22,7 +22,6 @@ import {
 import { useHistory, useParams } from "react-router-dom";
 import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
 
-
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
 };
@@ -40,7 +39,7 @@ const CloseBtn = (props) => {
       <Close />
     </div>
   );
-}
+};
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)

@@ -69,4 +69,14 @@ export const UserService = {
     const { roles } = Digit.UserService.getUser().info;
     return roles.filter((role) => accessTo.includes(role.code)).length;
   },
+
+  changePassword: (details, stateCode) =>
+    ServiceRequest({
+      serviceName: "changePassword",
+      url: Urls.ChangePassword,
+      data: {
+        ...details,
+      },
+      params: { tenantId: stateCode },
+    }),
 };

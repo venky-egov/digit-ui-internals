@@ -40,6 +40,7 @@ const CloseBtn = (props) => {
     </div>
   );
 };
+
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
     .reduce((acc, current) => {
@@ -74,6 +75,8 @@ const ApplicationDetails = (props) => {
     { key: "Type A", name: "Type A" },
     { key: "Type B", name: "Type B" },
   ]);
+
+  const DSO = Digit.UserService.hasAccess("DSO");
 
   function selectVehicle(value) {
     setVehicle(value);
@@ -217,6 +220,19 @@ const ApplicationDetails = (props) => {
     ],
   };
 
+  // TODO: Below data is hard coded, It should come from apis.
+  if (DSO) {
+    applicationDetails?.details?.push({
+      title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
+      values: [
+        { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: "Jagdamba Cleaners" },
+        { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: "KA8272722" },
+        { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: "2280 ltrs" },
+        { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: "12/08/2020" },
+      ],
+    });
+  }
+
   const timeline = [
     {
       label: t("ES_TIMELINE_PENDING_FOR_DEMAND_GENERATION"),
@@ -240,11 +256,13 @@ const ApplicationDetails = (props) => {
       {Object.keys(applicationDetails).length > 0 ? (
         <React.Fragment>
           <Card style={{ position: "relative" }}>
-            <LinkButton
-              label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
-              style={{ position: "absolute", top: 0, right: 20 }}
-              onClick={() => {}}
-            />
+            {!DSO && (
+              <LinkButton
+                label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
+                style={{ position: "absolute", top: 0, right: 20 }}
+                onClick={() => {}}
+              />
+            )}
             {applicationDetails.details.map((detail, index) => (
               <React.Fragment key={index}>
                 {index === 0 ? (

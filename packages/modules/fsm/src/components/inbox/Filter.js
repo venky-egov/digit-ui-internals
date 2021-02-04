@@ -19,6 +19,7 @@ const Filter = (props) => {
 
   const { t } = useTranslation();
   const [selectedLocality, setSelectedLocality] = useState(null);
+  const DSO = Digit.UserService.hasAccess("DSO");
 
   const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
@@ -137,15 +138,17 @@ const Filter = (props) => {
             {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
           </div>
           <div>
-            <RadioButtons
-              onSelect={onRadioChange}
-              selectedOption={wfFilters.uuid}
-              optionsKey="name"
-              options={[
-                { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
-                { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
-              ]}
-            />
+            {!DSO && (
+              <RadioButtons
+                onSelect={onRadioChange}
+                selectedOption={wfFilters.uuid}
+                optionsKey="name"
+                options={[
+                  { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+                  { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
+                ]}
+              />
+            )}
             <div>
               {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")}
             </div>

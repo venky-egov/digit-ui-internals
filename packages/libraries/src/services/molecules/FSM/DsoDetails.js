@@ -8,7 +8,13 @@ const DsoDetails = async (tenantId) => {
     name: dso.name,
     vehicles: dso.vehicles
       .filter((vehicle) => vehicle.status === "ACTIVE")
-      .map((vehicle) => ({ type: vehicle.type, capacity: vehicle.tankCapicity })),
+      .map((vehicle) => ({
+        registrationNumber: vehicle.registrationNumber,
+        type: vehicle.type,
+        capacity: vehicle.tankCapicity,
+        suctionType: vehicle.suctionType,
+        model: vehicle.model,
+      })),
   }));
 
   return data;

@@ -17,6 +17,7 @@ import {
   LinkButton,
   Dropdown,
   Modal,
+  FormComposer,
 } from "@egovernments/digit-ui-react-components";
 
 import { useHistory, useParams } from "react-router-dom";
@@ -114,6 +115,8 @@ const ApplicationDetails = (props) => {
   useEffect(() => {
     console.log("action selected", selectedAction);
     switch (selectedAction) {
+      case "DSO_ACCEPT":
+        return setShowModal(true);
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
         return setShowModal(true);

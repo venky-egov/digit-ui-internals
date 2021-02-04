@@ -41,7 +41,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
   };
 
   const navigateToLogin = () => {
-    history.push("/digit-ui/employee/login");
+    history.replace("/digit-ui/employee/login");
   };
 
   console.log({ propsConfig });

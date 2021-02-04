@@ -7,11 +7,12 @@ const App = () => {
   const { path, url, ...match } = useRouteMatch();
   console.log("pt citizen", { path, url, ...match });
   const location = useLocation();
+  const mobileView = innerWidth <= 640;
   return (
     <Switch>
-      <AppContainer>
+      <AppContainer style={mobileView ? { width: "87%" } : null}>
         <BackButton>Back</BackButton>
-        <PrivateRoute path={`${path}/search-property`} component={SearchPropertyComponent} />
+        <PrivateRoute path={`${path}/property/search`} component={SearchPropertyComponent} />
       </AppContainer>
     </Switch>
   );

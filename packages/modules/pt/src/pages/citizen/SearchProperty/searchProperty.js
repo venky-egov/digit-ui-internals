@@ -8,7 +8,11 @@ const SearchProperty = ({ config: propsConfig, t }) => {
   const history = useHistory();
 
   const onPropertySearch = async (data) => {
-    console.log(data);
+    if (!data.mobileNumber && !data.propertyId && !data.oldPropertyId) {
+      return alert("Provide at least one parameter");
+    } else {
+      history.push("/digit-ui/citizen/pt/property/search-results");
+    }
   };
 
   const [mobileNumber, property, oldProperty] = propsConfig.inputs;

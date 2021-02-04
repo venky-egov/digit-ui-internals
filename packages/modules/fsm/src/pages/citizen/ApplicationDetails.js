@@ -60,13 +60,13 @@ const ApplicationDetails = () => {
       <Card style={{ position: "relative" }}>
         <LinkButton
           label={
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div className="application-details-link-button">
               <span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738">
                   <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                 </svg>
               </span>
-              <span style={{ color: "#f47738", marginLeft: "8px" }}>{t("CS_COMMON_DOWNLOAD")}</span>
+              <span className="download-button">{t("CS_COMMON_DOWNLOAD")}</span>
             </div>
           }
           style={{ position: "absolute", top: 0, right: 20 }}

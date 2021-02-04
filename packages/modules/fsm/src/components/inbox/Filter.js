@@ -125,7 +125,7 @@ const Filter = (props) => {
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">{t("ES_INBOX_FILTER_BY")}:</div>
+            <div className="filter-label">{t("FILTER_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
               {t("ES_COMMON_CLEAR_ALL")}
             </div>

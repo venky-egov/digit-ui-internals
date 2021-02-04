@@ -1,7 +1,6 @@
 import { LocalizationService } from "../molecules/Localization/service";
 
 const ADMIN_CODE = ({ tenantId, hierarchyType }) => {
-  console.log("object", tenantId);
   return tenantId.replace(".", "_").toUpperCase() + "_" + hierarchyType.code;
 };
 

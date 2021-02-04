@@ -15,6 +15,19 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
 import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
 
+const displayPitDimension = (pitDeminsion) => {
+  return Object.values(pitDeminsion)
+    .reduce((acc, current) => {
+      if (!current) {
+        return acc;
+      } else {
+        acc.push(`${current}m`);
+        return acc;
+      }
+    }, [])
+    .join(" x ");
+};
+
 const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -105,11 +118,12 @@ const ApplicationDetails = () => {
         <KeyNote keyValue={t("CS_CHECK_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
         <KeyNote
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
-          note={`${!!application.pitDetail.length ? application.pitDetail.length + "m " : ""}${
-            !!application.pitDetail.width ? "x " + application.pitDetail.width + "m x " : ""
-          }${!!application.pitDetail.height ? application.pitDetail.height + "m " : ""}${
-            !!application.pitDetail.diameter ? "x" + application.pitDetail.diameter + "m" : ""
-          }`}
+          note={displayPitDimension({
+            length: application.pitDetail.length,
+            width: application.pitDetail.width,
+            height: application.pitDetail.height,
+            diameter: application.pitDetail.diameter,
+          })}
         />
         {!workflowDetails?.isLoading && (
           <Fragment>

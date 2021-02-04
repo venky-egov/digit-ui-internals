@@ -28,7 +28,7 @@ const DesktopInbox = (props) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: t("ES_INBOX_APPLICATION_NO"),
+        Header: t("CS_FILE_DESLUDGING_APPLICATION_NO"),
         accessor: "applicationNo",
         Cell: ({ row }) => {
           return (
@@ -68,7 +68,7 @@ const DesktopInbox = (props) => {
         Header: t("ES_INBOX_STATUS"),
         accessor: "status",
         Cell: (row) => {
-          return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
+          return GetCell(t(`CS_COMMON_FSM_${row.row.original["status"]}`));
         },
       },
       {

@@ -31,7 +31,7 @@ initLibraries();
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, QAGRO, FSM_EMPLOYEE, NAWANSHAHR_QA_GRO };
 
-const enabledModules = ["PGR", "FSM", "Payment"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT"];
 const registry = new Registry({
   ...pgrComponents,
   PGRLinks,

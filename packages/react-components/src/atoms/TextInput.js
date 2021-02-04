@@ -7,7 +7,7 @@ const TextInput = (props) => {
     <React.Fragment>
       {props.isMandatory ? (
         <input
-          type="text"
+          type={props.type || "text"}
           name={props.name}
           className={user_type ? "employee-card-input-error" : "card-input-error"}
           placeholder={props.placeholder}
@@ -20,7 +20,7 @@ const TextInput = (props) => {
         />
       ) : (
         <input
-          type="text"
+          type={props.type || "text"}
           name={props.name}
           className={user_type ? "employee-card-input" : "card-input"}
           placeholder={props.placeholder}

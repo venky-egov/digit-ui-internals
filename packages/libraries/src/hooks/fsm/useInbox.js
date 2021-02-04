@@ -36,8 +36,6 @@ const combineResponses = (applicationDetails, workflowInstances) => {
   let wfMap = mapWfBybusinessId(workflowInstances.ProcessInstances);
   return applicationDetails.map((application) => ({
     applicationNo: application.applicationNo,
-    applicantName: application.citizen.name,
-    mobileNo: application.citizen.mobileNumber,
     createdTime: new Date(application.auditDetails.createdTime),
     locality: application.address.locality.code,
     status: application.applicationStatus,

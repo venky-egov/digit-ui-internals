@@ -27,101 +27,61 @@ const DesktopInbox = (props) => {
     // history.push("/digit-ui/employee/fsm/complaint/details/" + id);
   }
 
-  const columns = React.useMemo(() => {
-    switch (userRole) {
-      case "DSO":
-        return [
-          {
-            Header: t("ES_INBOX_APPLICATION_NO"),
-            accessor: "applicationNo",
-            Cell: ({ row }) => {
-              return (
-                <div>
-                  <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
-                  </span>
-                  {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
-                </div>
-              );
-            },
-          },
-          {
-            Header: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"),
-            accessor: "applicantName",
-          },
-          {
-            Header: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"),
-            accessor: "applicantNo",
-          },
-          {
-            Header: t("ES_INBOX_LOCALITY"),
-            Cell: ({ row }) => {
-              return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
-            },
-          },
-          {
-            Header: t("ES_INBOX_STATUS"),
-            accessor: "status",
-            Cell: (row) => {
-              return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
-            },
-          },
-        ];
-      default:
-        return [
-          {
-            Header: t("ES_INBOX_APPLICATION_NO"),
-            accessor: "applicationNo",
-            Cell: ({ row }) => {
-              return (
-                <div>
-                  <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
-                  </span>
-                  {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
-                </div>
-              );
-            },
-          },
-          {
-            Header: t("ES_INBOX_APPLICATION_DATE"),
-            accessor: "createdTime",
-            Cell: ({ row }) => {
-              return GetCell(
-                `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
-              );
-            },
-            // Cell: (row) => {
-            //   return GetCell(
-            //     t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
-            //   );
-            // },
-          },
-          {
-            Header: t("ES_INBOX_LOCALITY"),
-            Cell: ({ row }) => {
-              return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
-            },
-            // Cell: (row) => {
-            //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
-            // },
-          },
-          {
-            Header: t("ES_INBOX_STATUS"),
-            accessor: "status",
-            Cell: (row) => {
-              return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
-            },
-          },
-          {
-            Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
-            Cell: ({ row }) => {
-              return GetSlaCell(row.original["sla"]);
-            },
-          },
-        ];
-    }
-  }, []);
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: t("ES_INBOX_APPLICATION_NO"),
+        accessor: "applicationNo",
+        Cell: ({ row }) => {
+          return (
+            <div>
+              <span className="link">
+                <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+              </span>
+              {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
+            </div>
+          );
+        },
+      },
+      {
+        Header: t("ES_INBOX_APPLICATION_DATE"),
+        accessor: "createdTime",
+        Cell: ({ row }) => {
+          return GetCell(
+            `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
+          );
+        },
+        // Cell: (row) => {
+        //   return GetCell(
+        //     t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
+        //   );
+        // },
+      },
+      {
+        Header: t("ES_INBOX_LOCALITY"),
+        Cell: ({ row }) => {
+          return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
+        },
+        // Cell: (row) => {
+        //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
+        // },
+      },
+      {
+        Header: t("ES_INBOX_STATUS"),
+        accessor: "status",
+        Cell: (row) => {
+          return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
+        },
+      },
+      {
+        Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
+        Cell: ({ row }) => {
+          return GetSlaCell(row.original["sla"]);
+        },
+      },
+    ],
+    []
+  );
 
   let result;
   if (props.isLoading) {

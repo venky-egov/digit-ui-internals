@@ -19,6 +19,7 @@ import Inbox from "./pages/employee/Inbox";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 
 import { useTranslation } from "react-i18next";
+import SearchApplication from "./pages/employee/SearchApplication";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
@@ -40,6 +41,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
+        <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
       </div>
     </Switch>
   );

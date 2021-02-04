@@ -20,5 +20,7 @@ module.exports = function (app) {
     "/collection-services",
     "/pdf-service",
     "/pg-service",
+    "/vehicle",
+    "/vendor",
   ].forEach((location) => app.use(location, createProxy));
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown, PitDimension, FormComposer } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
@@ -24,14 +24,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
-  const cityProperty = Digit.SessionStorage.get("city_property");
-  const selectedLocalities = Digit.SessionStorage.get("selected_localities");
-  const localityProperty = Digit.SessionStorage.get("locality_property");
-
-  const [localities, setLocalities] = useState(selectedLocalities ? selectedLocalities : null);
+  const [localities, setLocalities] = useState(null);
   const [pincode, setPincode] = useState("");
   const [pincodeNotValid, setPincodeNotValid] = useState(false);
-  const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
+  const [selectedLocality, setSelectedLocality] = useState(null);
 
   const { t } = useTranslation();
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));

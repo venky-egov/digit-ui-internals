@@ -1,4 +1,4 @@
-import { MdmsService } from "../../services/molecules/MDMS";
+import { MdmsService } from "../../services/elements/MDMS";
 import { useQuery } from "react-query";
 
 const useMDMS = (tenantId, moduleCode, type, config = {}) => {

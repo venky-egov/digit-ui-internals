@@ -49,14 +49,13 @@ window.Digit.Customizations = { PGR: pgrCustomizations };
 
 const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
 
-// console.clear();
-console.log(stateCode);
+// console.log(stateCode);
 
 const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
-console.log(token);
+// console.log(token);
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 
@@ -80,12 +79,12 @@ window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
 
 window.mdmsInitPre = ({ params, data }) => {
-  console.log("mdms init pre", params, data);
+  // console.log("mdms init pre", params, data);
   return { params, data };
 };
 
 window.mdmsInitPost = (data) => {
-  console.log("mdms init post", data);
+  // console.log("mdms init post", data);
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(data);
@@ -99,7 +98,7 @@ subFormRegistry.changeConfig("testForm", async (config) => {
     ...config.fields[0],
     defaultValue: "j",
   };
-  console.log(config);
+  // console.log(config);
   return config;
 });
 

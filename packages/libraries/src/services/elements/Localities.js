@@ -1,4 +1,4 @@
-import { LocalizationService } from "../molecules/Localization/service";
+import { LocalizationService } from "./Localization/service";
 
 const ADMIN_CODE = ({ tenantId, hierarchyType }) => {
   return tenantId.replace(".", "_").toUpperCase() + "_" + hierarchyType.code;

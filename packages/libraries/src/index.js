@@ -1,24 +1,26 @@
 import i18next from "i18next";
+import Enums from "./enums/index";
 import mergeConfig from "./config/mergeConfig";
 import { useStore } from "./services/index";
 import { initI18n } from "./translations/index";
+
 import { Storage } from "./services/atoms/Utils/Storage";
-import Enums from "./enums/index";
-import { LocationService } from "./services/molecules/Location";
+import { UploadServices } from "./services/atoms/UploadServices";
+
+import { LocationService } from "./services/elements/Location";
 import { LocalityService } from "./services/elements/Localities";
-import { LocalizationService } from "./services/molecules/Localization/service";
-import { LoginService } from "./services/Login";
-import { PGRService } from "./services/molecules/PGR";
+import { LocalizationService } from "./services/elements/Localization/service";
+import { LoginService } from "./services/elements/Login";
+import { PGRService } from "./services/elements/PGR";
 import { FSMService } from "./services/elements/FSM";
 import { PaymentService } from "./services/elements/Payment";
 import * as dateUtils from "./services/atoms/Utils/Date";
-import { WorkflowService } from "./services/molecules/WorkFlow";
-import { MdmsService } from "./services/molecules/MDMS";
-import { UploadServices } from "./services/atoms/UploadServices";
-
-import { GetServiceDefinitions } from "./services/elements/ServiceDefinitions";
+import { WorkflowService } from "./services/elements/WorkFlow";
+import { MdmsService } from "./services/elements/MDMS";
 import { Complaint } from "./services/elements/Complaint";
-import { UserService } from "./services/molecules/User";
+import { UserService } from "./services/elements/User";
+
+import { GetServiceDefinitions } from "./services/molecules/ServiceDefinitions";
 import { ULBService } from "./services/molecules/Ulb";
 import { FileDesludging } from "./services/molecules/FSM/FileDesludging";
 

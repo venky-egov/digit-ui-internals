@@ -14,6 +14,7 @@ const ChangeLanguage = (prop) => {
     setselected(language.value);
     Digit.LocalizationService.changeLanguage(language.value, stateInfo.code);
   };
+
   if (isDropdown) {
     return (
       <div>

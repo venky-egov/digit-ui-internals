@@ -201,7 +201,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
       },
       workflow: null,
     };
-    console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData, subType);
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -222,7 +221,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
         },
         {
-          label: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"),
+          label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -234,7 +233,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           },
         },
         {
-          label: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"),
+          label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -277,7 +276,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
       body: [
         {
-          label: t("ES_NEW_APPLICATION_LOCATION_PINCODE"),
+          label: t("ES_NEW_APPLICATION_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",

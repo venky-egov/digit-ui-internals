@@ -1,6 +1,7 @@
 import { useInitStore } from "./store";
 import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
+import useQueryParams from "./useQueryParams";
 import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
 import { useFetchPayment, usePaymentUpdate } from "./payment";
@@ -52,6 +53,17 @@ const fsm = {
   useWorkflowData,
 };
 
-const Hooks = { useSessionStorage, useFetchPayment, usePaymentUpdate, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
+const Hooks = {
+  useSessionStorage,
+  useQueryParams,
+  useFetchPayment,
+  usePaymentUpdate,
+  useWorkflowDetails,
+  useInitStore,
+  useClickOutside,
+  useCoreData,
+  pgr,
+  fsm,
+};
 
 export default Hooks;

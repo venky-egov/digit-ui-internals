@@ -234,6 +234,9 @@
     }
 
     .field-container {
+      display: "flex";
+      justify-content: "center";
+      align-items: "center";
       span {
         border: 2px solid black;
         background: rgb(247, 247, 247);

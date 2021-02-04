@@ -17,7 +17,9 @@ const TextField = (props) => {
   }
 
   function broadcastToOpen() {
-    props.dropdownDisplay(true);
+    if (!props.disable) {
+      props.dropdownDisplay(true);
+    }
   }
 
   function broadcastToClose() {
@@ -33,6 +35,7 @@ const TextField = (props) => {
       onClick={props.onClick}
       onFocus={broadcastToOpen}
       onBlur={broadcastToClose}
+      disabled={props.disable}
     />
   );
 };
@@ -100,7 +103,7 @@ const Dropdown = (props) => {
         </div>
       )}
       {!hasCustomSelector && (
-        <div className={dropdownStatus ? "select-active" : "select"}>
+        <div className={dropdownStatus ? "select-active" : "select"} style={{ borderColor: props.disable ? "#ccc" : "revert" }}>
           <TextField
             setFilter={setFilter}
             forceSet={forceSet}
@@ -116,9 +119,10 @@ const Dropdown = (props) => {
             filterVal={filterVal}
             // onClick={dropdownOn}
             dropdownDisplay={dropdownOn}
+            disable={props.disable}
             freeze={props.freeze ? true : false}
           />
-          <ArrowDown onClick={dropdownSwitch} className="cp" />
+          <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
       )}
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}

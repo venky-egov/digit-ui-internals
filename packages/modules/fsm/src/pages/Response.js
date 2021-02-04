@@ -24,7 +24,7 @@ const BannerPicker = (props) => {
     <Banner
       message={GetActionMessage(props.data?.fsm[0].applicationStatus)}
       applicationNumber={props.data?.fsm[0].applicationNo}
-      info={t("ES_RECEIPT_NO")}
+      info={t("CS_FILE_DESLUDGING_APPLICATION_NO")}
       successful={props.isSuccess}
     />
   );

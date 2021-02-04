@@ -1,7 +1,6 @@
 import { LocalizationService } from "./Localization/service";
 
 const ADMIN_CODE = ({ tenantId, hierarchyType }) => {
-  // console.log("object", tenantId);
   return tenantId.replace(".", "_").toUpperCase() + "_" + hierarchyType.code;
 };
 

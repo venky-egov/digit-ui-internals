@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 const SelectRating = ({ parentRoute }) => {
   const { t } = useTranslation();
   const history = useHistory();
-  console.log("parent route", parentRoute);
+  // console.log("parent route", parentRoute);
 
   function log(data) {
     // history.push(`${parentRoute}/response`);
@@ -14,14 +14,14 @@ const SelectRating = ({ parentRoute }) => {
 
   const config = {
     texts: {
-      header: "CS_COMPLAINT_RATE_HELP_TEXT",
+      header: "CS_FSM_APPLICATION_RATE_HELP_TEXT",
       submitBarLabel: "SUBMIT",
     },
     inputs: [
       {
         type: "rate",
         maxRating: 5,
-        label: t("CS_COMPLAINT_RATE_TEXT"),
+        label: t("CS_FSM_APPLICATION_RATE_TEXT"),
       },
       {
         type: "checkbox",

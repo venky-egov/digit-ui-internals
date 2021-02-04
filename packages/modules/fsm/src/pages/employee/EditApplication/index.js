@@ -341,7 +341,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
       body: [
         {
-          label: t("ES_NEW_APPLICATION_LOCATION_PINCODE"),
+          label: t("ES_NEW_APPLICATION_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",

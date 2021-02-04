@@ -3,7 +3,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 
 import { AppHome } from "./Home";
 import Login from "../pages/citizen/Login";
-import EmployeeLogin from "../pages/employee/login/index";
+import EmployeeLogin from "../pages/employee/Login/index";
 import ChangePassword from "../pages/employee/ChangePassword/index";
 import ForgotPassword from "../pages/employee/ForgotPassword/index";
 

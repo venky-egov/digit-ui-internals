@@ -329,11 +329,18 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
           type: "dropdown",
+          isMandatory: true,
           populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
           populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
+        },
+        {
+          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+          isMandatory: true,
+          type: "dropdown",
+          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
@@ -355,17 +362,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
       ],
     },
-    {
-      head: t(),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-        },
-      ],
-    },
+    // {
+    //   head: t(),
+    //   body: [
+    //     {
+    //       label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+    //       isMandatory: true,
+    //       type: "dropdown",
+    //       populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
+    //     },
+    //   ],
+    // },
   ];
 
   return (

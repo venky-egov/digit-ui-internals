@@ -11,7 +11,7 @@ const App = () => {
   const mobileView = innerWidth <= 640;
   return (
     <Switch>
-      <AppContainer style={mobileView ? { width: "87%" } : null}>
+      <AppContainer>
         <BackButton>Back</BackButton>
         <PrivateRoute path={`${path}/property/search`} component={SearchPropertyComponent} />
         <PrivateRoute path={`${path}/property/search-results`} component={SearchResultsComponent} />

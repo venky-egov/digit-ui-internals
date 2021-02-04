@@ -13,16 +13,6 @@ const Inbox = () => {
     ...searchParams,
   });
 
-  // remove it from here ok
-  const resp = Digit.Hooks.fsm.useDsoSearch(tenantId);
-  {
-    !resp.isLoading && console.log("find dso search data here", resp.data);
-  }
-
-  // useEffect(() => {
-  //   revalidate();
-  // }, [searchParams])
-
   const handleFilterChange = (filterParam) => {
     // console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     setSearchParams({ ...searchParams, ...filterParam });

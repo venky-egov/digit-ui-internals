@@ -102,3 +102,25 @@
   margin-left: "24px";
   flex: 1;
 }
+
+.primary-label-btn {
+  display: flex;
+  gap: 10px;
+
+  svg {
+    fill: #f47738;
+  }
+
+  color: #f47738;
+  &:hover {
+    color: #000;
+
+    svg {
+      fill: #000;
+    }
+  }
+
+  cursor: pointer;
+  font-weight: 500;
+  width: fit-content;
+}

@@ -4,12 +4,13 @@ import { Loader, Card } from "@egovernments/digit-ui-react-components";
 import { ComplaintCard } from "./inbox/ComplaintCard";
 import ComplaintsLink from "./inbox/ComplaintLinks";
 import { LOCALE } from "../constants/Localization";
+import PropTypes from "prop-types";
 
 const GetSlaCell = (value) => {
   return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
 };
 
-const MobileInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
+const MobileInbox = ({ data, onFilterChange, onSearch, isLoading, searchParams }) => {
   const { t } = useTranslation();
   const localizedData = data?.map(({ locality, tenantId, serviceRequestId, complaintSubType, sla, status, taskOwner }) => ({
     [t("CS_COMMON_COMPLAINT_NO")]: serviceRequestId,
@@ -26,7 +27,13 @@ const MobileInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
     result = <Loader />;
   } else {
     result = (
-      <ComplaintCard data={localizedData} onFilterChange={onFilterChange} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} onSearch={onSearch} />
+      <ComplaintCard
+        data={localizedData}
+        onFilterChange={onFilterChange}
+        serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")}
+        onSearch={onSearch}
+        searchParams={searchParams}
+      />
     );
   }
 
@@ -40,6 +47,18 @@ const MobileInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
       </div>
     </div>
   );
+};
+MobileInbox.propTypes = {
+  data: PropTypes.any,
+  onFilterChange: PropTypes.func,
+  onSearch: PropTypes.func,
+  isLoading: PropTypes.bool,
+  searchParams: PropTypes.any,
+};
+
+MobileInbox.defaultProps = {
+  onFilterChange: () => {},
+  searchParams: {},
 };
 
 export default MobileInbox;

@@ -10,7 +10,6 @@ import {
   ActionLinks,
   LinkButton,
   SubmitBar,
-  CitizenInfoLabel,
   CardText,
 } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
@@ -31,7 +30,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { city_complaint, locality_complaint, landmark, propertyType, subtype, pitDetail } = value;
+  const { city_complaint, locality_complaint, landmark, propertyType, subtype, pitType, pitDetail } = value;
 
   const pitMeasurement = Object.values(pitDetail).reduce((previous, current, index, array) => {
     if (index === array.length - 1) {
@@ -69,16 +68,20 @@ const CheckPage = ({ onSubmit, value }) => {
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/landmark" />}
           />
         )}
-      </StatusTable>
-      <CardSubHeader>{t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS")}</CardSubHeader>
-      <StatusTable>
+        {pitType && (
+          <Row
+            label={t("CS_CHECK_PIT_TYPE")}
+            text={t(pitType.i18nKey)}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pit-type" />}
+          />
+        )}
         <Row
           label={t("CS_CHECK_SIZE")}
           text={pitMeasurement}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>
-      <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_TEXT")} />
+      {/* <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_TEXT")} /> */}
       <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );

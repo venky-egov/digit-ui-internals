@@ -26,6 +26,13 @@ export const StoreService = {
     };
     initData.selectedLanguage = initData.languages[0].value;
 
+    // TODO: remove the FSM & Payment temp data once added in mdms master
+    initData.modules.push({
+      module: "Payment",
+      code: "Payment",
+      tenants: [{ code: "pb.amritsar" }],
+    });
+
     const moduleTenants = initData.modules
       .map((module) => module.tenants)
       .flat()

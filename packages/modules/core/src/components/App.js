@@ -1,26 +1,41 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
-import { TopBar } from "@egovernments/digit-ui-react-components";
+import { TopBar, Dropdown, LogoutIcon, HomeIcon } from "@egovernments/digit-ui-react-components";
+import ChangeLanguage from "./ChangeLanguage";
+import { useSelector } from "react-redux";
 
 import { AppModules } from "./AppModules";
-import { NavBar, ArrowLeft } from "@egovernments/digit-ui-react-components";
 import { CitizenSidebar } from "./Sidebar";
 
-const TextToImg = ({ name }) => <span className="user-img-txt">{name[0].toUpperCase()}</span>;
+const TextToImg = (props) => (
+  <span className="user-img-txt" onClick={props.toggleMenu}>
+    {props.name[0].toUpperCase()}
+  </span>
+);
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
 
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
   const [isSidebarOpen, toggleSidebar] = useState(false);
+  const [displayMenu, toggleMenu] = useState(false);
   const innerWidth = window.innerWidth;
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
+  const { stateInfo } = useSelector((state) => state.common);
+
   const handleLogout = () => {
     toggleSidebar(false);
     Digit.UserService.logout();
   };
+
+  const handleUserDropdownSelection = (option) => {
+    option.func();
+  };
+
+  const userOptions = [{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
+
   const mobileView = innerWidth <= 640;
   return (
     <Switch>
@@ -31,8 +46,20 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
             {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
           </span>
           {!mobileView && (
-            <div className="right">
-              <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />
+            <div className="flex-right w-80 right column-gap-15">
+              <div className="left">
+                <ChangeLanguage dropdown={true} />
+              </div>
+              <div className="left ">
+                <Dropdown
+                  option={userOptions}
+                  optionKey={"name"}
+                  select={handleUserDropdownSelection}
+                  showArrow={false}
+                  freeze={true}
+                  customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
+                />
+              </div>
               <img className="state" src={logoUrl} />
             </div>
           )}
@@ -86,15 +113,61 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         </div>
       </Route>
       <Route path="/digit-ui/citizen">
-        <TopBar
-          img={cityDetails?.logoId}
-          ulb={`${t(cityDetails?.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
-          isMobile={true}
-          toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
-          logoUrl={logoUrl}
-          onLogout={handleLogout}
-          userDetails={userDetails}
-        />
+        {mobileView && (
+          <TopBar
+            img={cityDetails?.logoId}
+            ulb={`${t(stateInfo?.name)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
+            isMobile={true}
+            toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
+            logoUrl={logoUrl}
+            onLogout={handleLogout}
+            userDetails={userDetails}
+          />
+        )}
+        {!mobileView && (
+          <div className="topbar flex-between">
+            <div>
+              <img
+                className="state"
+                style={stateInfo ? { height: "30px", width: "auto", marginRight: "10px" } : { marginTop: "8px", height: "30px", width: "auto" }}
+                src={
+                  stateInfo
+                    ? stateInfo.logoUrl
+                    : "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png"
+                }
+              />
+            </div>
+            <div className="right width-20 flex-right column-gap-15">
+              <div className="left">
+                <ChangeLanguage dropdown={true} />
+              </div>
+              <div className="left">
+                <Dropdown
+                  option={userOptions}
+                  optionKey={"name"}
+                  select={handleUserDropdownSelection}
+                  showArrow={false}
+                  style={{ right: 0 }}
+                  customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} />}
+                />
+              </div>
+              {/* <img className="state" src={logoUrl} /> */}
+            </div>
+          </div>
+        )}
+        {!mobileView && (
+          <div className="sidebar">
+            <Link to="/digit-ui/citizen">
+              <div className="actions active">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="white" />
+                </svg>
+                {t("COMMON_BOTTOM_NAVIGATION_HOME")}
+              </div>
+            </Link>
+          </div>
+        )}
         <CitizenSidebar isOpen={isSidebarOpen} isMobile={mobileView} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />

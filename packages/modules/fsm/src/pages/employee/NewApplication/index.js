@@ -46,6 +46,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // console.log("find vehicle menu", vehicleMenu);
   const [canSubmit, setSubmitValve] = useState(false);
 
+  const FSM_CUSTOMIZATION = {
+    AmountPerTrip: false
+  }
+
   const onFormValueChange = (formData) => {
     setNoOfTrips(formData?.noOfTrips || 1);
   };
@@ -374,10 +378,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
           type: "text",
+          disable: !FSM_CUSTOMIZATION.AmountPerTrip,
           populators: {
             name: "amountPerTrip",
             onChange: handleAmountPerTrip,
             validation: { pattern: /^[1-9][0-9]{5}$/ },
+            disable: !FSM_CUSTOMIZATION.AmountPerTrip
           },
         },
         {

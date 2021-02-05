@@ -144,7 +144,7 @@ export const CollectPayment = (props) => {
               pattern: /^[A-Za-z]/,
             },
             error: "a valid name required",
-            defaultValue: formState?.payerName || "",
+            defaultValue: bill?.payerName || formState?.payerName || "",
           },
         },
         {
@@ -158,7 +158,7 @@ export const CollectPayment = (props) => {
               pattern: /^[6-9]\d{9}$/,
             },
             error: "a valid mobile no. required",
-            defaultValue: formState?.payerMobile || "",
+            defaultValue: bill?.mobileNumber || formState?.payerMobile || "",
           },
         },
       ],

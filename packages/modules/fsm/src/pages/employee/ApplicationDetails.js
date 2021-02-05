@@ -208,12 +208,15 @@ const ApplicationDetails = (props) => {
           },
           {
             title: t("ES_APPLICATION_DETAILS_PIT_DIMENSION"),
-            value: displayPitDimension({
-              length: application.pitDetail.length,
-              width: application.pitDetail.width,
-              height: application.pitDetail.height,
-              diameter: application.pitDetail.diameter,
-            }),
+            value: [
+              displayPitDimension({
+                length: application.pitDetail.length,
+                width: application.pitDetail.width,
+                height: application.pitDetail.height,
+                diameter: application.pitDetail.diameter,
+              }),
+              `(${t("CS_FILE_PROPERTY_LENGTH")} X ${t("CS_FILE_PROPERTY_WIDTH")} X ${t("CS_FILE_PROPERTY_HEIGHT")})`,
+            ],
           },
           { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: application.noOfTrips === 0 ? "N/A" : application.noOfTrips },
           { title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"), value: "N/A" },

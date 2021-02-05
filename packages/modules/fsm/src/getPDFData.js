@@ -70,11 +70,12 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_APPLICATION_DETAILS_DIMENSION"),
-            value: application.pitDetail.height
-              ? application.pitDetail.length
-                ? `${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m`
-                : `${application.pitDetail.diameter}m * ${application.pitDetail.height}m`
-              : "NA",
+            value:
+              application.pitDetail.height && application.pitDetail.height !== null
+                ? application.pitDetail.length
+                  ? `${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m`
+                  : `${application.pitDetail.diameter}m * ${application.pitDetail.height}m`
+                : "NA",
           },
           {
             title: t("CS_APPLICATION_DETAILS_DISTANCE_FROM_ROAD"),

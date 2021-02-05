@@ -106,7 +106,7 @@ const ApplicationDetails = () => {
         />
         <KeyNote
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL")}
-          note={application.address.door ? application.address.door : "NA"}
+          note={application.address.doorNo ? application.address.doorNo : "NA"}
         />
         <KeyNote
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL")}

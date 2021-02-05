@@ -21,6 +21,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [noOfTrips, setNoOfTrips] = useState(1);
+  const [amountPerTrip, setAmountPerTrip] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
@@ -42,6 +45,24 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
   // console.log("find vehicle menu", vehicleMenu);
   const [canSubmit, setSubmitValve] = useState(false);
+
+  const FSM_CUSTOMIZATION = {
+    AmountPerTrip: false
+  }
+
+  const onFormValueChange = (formData) => {
+    setNoOfTrips(formData?.noOfTrips || 1);
+  };
+
+  useEffect(() => {
+    if (amountPerTrip) {
+      setPaymentAmount(noOfTrips * amountPerTrip);
+    } else {
+      if (vehicle?.amount) {
+      setPaymentAmount(noOfTrips * vehicle?.amount);
+    }
+    }
+  }, [vehicle, noOfTrips, amountPerTrip]);
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
@@ -106,6 +127,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   function selectVehicle(value) {
     setVehicle(value);
+    setPaymentAmount(noOfTrips * value.amount);
   }
 
   function selectedSubType(value) {
@@ -132,6 +154,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
     if (!value) {
       setPincodeNotValid(false);
     }
+  };
+
+  const handleAmountPerTrip = (event) => {
+    const { value } = event.target;
+    setAmountPerTrip(value);
   };
 
   const isPincodeValid = () => !pincodeNotValid;
@@ -325,6 +352,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
           type: "dropdown",
+          isMandatory: true,
           populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
         },
         {
@@ -332,36 +360,56 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
         },
         {
-          label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
-          type: "text",
-          populators: {
-            name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
-          isMandatory: true,
-          type: "text",
-          populators: {
-            name: "amount",
-            validation: { pattern: /[0-9]+/ },
-            componentInFront: "₹",
-          },
-        },
-      ],
-    },
-    {
-      head: t(),
-      body: [
-        {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
         },
+        {
+          label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
+          isMandatory: true,
+          type: "text",
+          populators: {
+            name: "noOfTrips",
+            validation: { pattern: /[0-9]+/ },
+            defaultValue: noOfTrips,
+          },
+        },
+        {
+          label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
+          type: "text",
+          disable: !FSM_CUSTOMIZATION.AmountPerTrip,
+          populators: {
+            name: "amountPerTrip",
+            onChange: handleAmountPerTrip,
+            validation: { pattern: /^[1-9][0-9]{5}$/ },
+            disable: !FSM_CUSTOMIZATION.AmountPerTrip
+          },
+        },
+        {
+          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
+          type: "text",
+          disable: true,
+          populators: {
+            name: "amount",
+            validation: { pattern: /[0-9]+/ },
+            defaultValue: paymentAmount,
+            disable: true,
+          },
+        },
       ],
     },
+    // {
+    //   head: t(),
+    //   body: [
+    //     {
+    //       label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+    //       isMandatory: true,
+    //       type: "dropdown",
+    //       populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
+    //     },
+    //   ],
+    // },
   ];
 
   return (
@@ -371,6 +419,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
       config={config}
       onSubmit={onSubmit}
+      onFormValueChange={onFormValueChange}
     />
   );
 };

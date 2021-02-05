@@ -30,9 +30,11 @@ const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { city_complaint, locality_complaint, landmark, propertyType, subtype, pitType, pitDetail } = value;
+  const { city_complaint, locality_complaint, street, doorNo, landmark, propertyType, subtype, pitType, pitDetail } = value;
 
-  const pitMeasurement = Object.values(pitDetail).reduce((previous, current, index, array) => {
+  const pitDetailValues = Object.values(pitDetail)
+
+  const pitMeasurement = pitDetailValues.reduce((previous, current, index, array) => {
     if (index === array.length - 1) {
       return previous + current + "m";
     } else {
@@ -58,7 +60,7 @@ const CheckPage = ({ onSubmit, value }) => {
         />
         <Row
           label={t("CS_CHECK_ADDRESS")}
-          text={`${t(locality_complaint.code)} ${t(city_complaint.code)}`}
+          text={`${doorNo} ${street}, ${t(locality_complaint.code)}, ${t(city_complaint.code)}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />}
         />
         {landmark && (
@@ -77,7 +79,7 @@ const CheckPage = ({ onSubmit, value }) => {
         )}
         <Row
           label={t("CS_CHECK_SIZE")}
-          text={pitMeasurement}
+          text={[pitMeasurement, pitDetailValues?.length === 3 ? 'Length x Breadth x Depth' : 'Diameter x Depth']}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>

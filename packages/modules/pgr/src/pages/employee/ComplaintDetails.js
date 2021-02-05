@@ -26,11 +26,12 @@ import {
   SubmitBar,
   Dropdown,
   Loader,
+  Modal,
+  SectionalDropdown,
 } from "@egovernments/digit-ui-react-components";
 
 import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
-import Modal from "../../components/Modal";
 import { isError, useQueryClient } from "react-query";
 
 const MapView = (props) => {
@@ -68,6 +69,130 @@ const TLCaption = ({ data }) => {
       <p>{data.mobileNumber}</p>
       {data.source && <p>{t("ES_COMMON_FILED_VIA_" + data.source.toUpperCase())}</p>}
     </div>
+  );
+};
+
+const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup, selectedAction, onAssign, tenantId, t }) => {
+  const employeeRoles = workflowDetails?.data?.nextActions ? workflowDetails?.data?.nextActions : null;
+  const roles = employeeRoles.filter((role) => role.action === selectedAction);
+  const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(tenantId, roles[0]?.roles, complaintDetails);
+  const employeeData = useEmployeeData
+    ? useEmployeeData.map((departmentData) => {
+        return { heading: departmentData.department, options: departmentData.employees };
+      })
+    : null;
+
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [comments, setComments] = useState("");
+  const [file, setFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [error, setError] = useState(null);
+  const cityDetails = Digit.ULBService.getCurrentUlb();
+  const [selectedReopenReason, setSelectedReopenReason] = useState(null);
+
+  useEffect(async () => {
+    setError(null);
+    if (file) {
+      if (file.size >= 5242880) {
+        setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+      } else {
+        try {
+          // TODO: change module in file storage
+          const response = await Digit.UploadServices.Filestorage("property-upload", file, cityDetails.code);
+          if (response?.data?.files?.length > 0) {
+            setUploadedFile(response?.data?.files[0]?.fileStoreId);
+          } else {
+            setError(t("CS_FILE_UPLOAD_ERROR"));
+          }
+        } catch (err) {
+          console.error("Modal -> err ", err);
+          setError(t("CS_FILE_UPLOAD_ERROR"));
+        }
+      }
+    }
+  }, [file]);
+
+  const reopenReasonMenu = [t(`CS_REOPEN_OPTION_ONE`), t(`CS_REOPEN_OPTION_TWO`), t(`CS_REOPEN_OPTION_THREE`), t(`CS_REOPEN_OPTION_FOUR`)];
+  // const uploadFile = useCallback( () => {
+
+  //   }, [file]);
+
+  function onSelectEmployee(employee) {
+    setSelectedEmployee(employee);
+  }
+
+  function addComment(e) {
+    setComments(e.target.value);
+  }
+
+  function selectfile(e) {
+    setFile(e.target.files[0]);
+  }
+
+  function onSelectReopenReason(reason) {
+    setSelectedReopenReason(reason);
+  }
+
+  return (
+    <Modal
+      headerBarMain={
+        <Heading
+          label={
+            selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
+              ? t("CS_ACTION_ASSIGN")
+              : selectedAction === "REJECT"
+              ? t("CS_ACTION_REJECT")
+              : selectedAction === "REOPEN"
+              ? t("CS_COMMON_REOPEN")
+              : t("CS_COMMON_RESOLVE")
+          }
+        />
+      }
+      headerBarEnd={<CloseBtn onClick={() => close(popup)} />}
+      actionCancelLabel={t("CS_COMMON_CANCEL")}
+      actionCancelOnSubmit={() => close(popup)}
+      actionSaveLabel={
+        selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
+          ? t("CS_COMMON_ASSIGN")
+          : selectedAction === "REJECT"
+          ? t("CS_COMMON_REJECT")
+          : selectedAction === "REOPEN"
+          ? t("CS_COMMON_REOPEN")
+          : t("CS_COMMON_RESOLVE")
+      }
+      actionSaveOnSubmit={() => {
+        onAssign(selectedEmployee, comments, uploadedFile);
+      }}
+      error={error}
+      setError={setError}
+    >
+      <Card>
+        {selectedAction === "REJECT" || selectedAction === "RESOLVE" || selectedAction === "REOPEN" ? null : (
+          <React.Fragment>
+            <CardLabel>{t("CS_COMMON_EMPLOYEE_NAME")}</CardLabel>
+            {employeeData && <SectionalDropdown selected={selectedEmployee} menuData={employeeData} displayKey="name" select={onSelectEmployee} />}
+          </React.Fragment>
+        )}
+        {selectedAction === "REOPEN" ? (
+          <React.Fragment>
+            <CardLabel>{t("CS_REOPEN_COMPLAINT")}</CardLabel>
+            <Dropdown selected={selectedReopenReason} option={reopenReasonMenu} select={onSelectReopenReason} />
+          </React.Fragment>
+        ) : null}
+        <CardLabel>{t("CS_COMMON_EMPLOYEE_COMMENTS")}</CardLabel>
+        <TextArea name="comment" onChange={addComment} value={comments} />
+        <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
+        <CardLabelDesc>{t(`TL_UPLOAD_RESTRICTIONS`)}</CardLabelDesc>
+        <UploadFile
+          accept=".jpg"
+          onUpload={selectfile}
+          onDelete={() => {
+            setUploadedFile(null);
+          }}
+          message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+        />
+      </Card>
+    </Modal>
   );
 };
 
@@ -286,35 +411,15 @@ export const ComplaintDetails = (props) => {
       ) : null}
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
       {popup ? (
-        <Modal
+        <ComplaintDetailsModal
+          workflowDetails={workflowDetails}
           complaintDetails={complaintDetails}
-          employeeRoles={workflowDetails?.data?.nextActions ? workflowDetails?.data?.nextActions : null}
-          headerBarMain={
-            <Heading
-              label={
-                selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
-                  ? t("CS_ACTION_ASSIGN")
-                  : selectedAction === "REJECT"
-                  ? t("CS_ACTION_REJECT")
-                  : selectedAction === "REOPEN"
-                  ? t("CS_COMMON_REOPEN")
-                  : t("CS_COMMON_RESOLVE")
-              }
-            />
-          }
-          headerBarEnd={<CloseBtn onClick={() => close(popup)} />}
+          close={close}
+          popup={popup}
           selectedAction={selectedAction}
           onAssign={onAssign}
-          onCancel={() => close(popup)}
-          actionLabel={
-            selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
-              ? t("CS_COMMON_ASSIGN")
-              : selectedAction === "REJECT"
-              ? t("CS_COMMON_REJECT")
-              : selectedAction === "REOPEN"
-              ? t("CS_COMMON_REOPEN")
-              : t("CS_COMMON_RESOLVE")
-          }
+          tenantId={tenantId}
+          t={t}
         />
       ) : null}
       {toast && <Toast label={t(assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED")} onClose={closeToast} />}

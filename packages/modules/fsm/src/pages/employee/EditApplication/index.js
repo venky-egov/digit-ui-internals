@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown, Loader, PitDimension } from "@egovernments/digit-ui-react-components";
+import { Dropdown, Loader, PitDimension, FormComposer } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import { FormComposer } from "../../../components/FormComposer";
 
 const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -343,7 +341,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
       body: [
         {
-          label: t("ES_NEW_APPLICATION_LOCATION_PINCODE"),
+          label: t("ES_NEW_APPLICATION_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",
@@ -365,14 +363,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           ),
         },
         {
-          label: t("ES_NEW_APPLICATION_STREET_NAME"),
+          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
           type: "text",
           populators: {
             name: "streetName",
           },
         },
         {
-          label: t("ES_NEW_APPLICATION_DOOR_NO"),
+          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
           type: "text",
           populators: {
             name: "doorNo",

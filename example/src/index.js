@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
-import { PTModule } from "@egovernments/digit-ui-module-pt";
+import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
 import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
@@ -42,6 +42,7 @@ const registry = new Registry({
   PaymentModule,
   PaymentLinks,
   PTModule,
+  PTLinks,
 });
 
 const moduleReducers = (initData) => ({
@@ -74,9 +75,10 @@ window.Digit.SessionStorage.set("userType", userTypeInfo);
 
 if (userType !== "CITIZEN") {
   window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
-} else {
-  window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
 }
+// else {
+//   window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+// }
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);

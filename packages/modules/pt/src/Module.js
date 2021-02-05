@@ -1,14 +1,17 @@
 import React from "react";
-import { Loader } from "@egovernments/digit-ui-react-components";
-import { CitizenApp } from "../src/pages/citizen";
-import { EmployeeApp } from "../src/pages/employee";
+import CitizenApp from "./pages/citizen";
 
-export const PTModule = ({ stateCode, userType, tenants }) => {
+export const PTModule = ({ userType }) => {
   const moduleCode = "PT";
+  console.log(moduleCode, "module integrated");
 
   if (userType === "citizen") {
-    return <CitizenApp {...{ stateCode }} />;
+    return <CitizenApp />;
   } else {
-    return <EmployeeApp {...{ stateCode }} />;
+    return null;
   }
+};
+
+export const PTLinks = () => {
+  return <React.Fragment></React.Fragment>;
 };

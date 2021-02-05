@@ -77,7 +77,7 @@ const CheckPage = ({ onSubmit, value }) => {
         )}
         <Row
           label={t("CS_CHECK_SIZE")}
-          text={pitMeasurement}
+          text={[pitMeasurement, "LengthXBreadthXDepth"]}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>

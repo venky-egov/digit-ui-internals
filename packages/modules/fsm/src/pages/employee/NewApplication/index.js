@@ -21,6 +21,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
+  const [paymentAmount, setPaymentAmount] = useState();
+  const [noOfTrips, setNoOfTrips] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
@@ -46,6 +48,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
   // console.log("find vehicle menu", vehicleMenu);
   const [canSubmit, setSubmitValve] = useState(false);
+
+  const onFormValueChange = (formData, formState) => {
+    setNoOfTrips(formData?.noOfTrips || 1);
+
+    if (vehicle?.amount) {
+      setPaymentAmount(noOfTrips * vehicle?.amount);
+    }
+  };
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
@@ -110,6 +120,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   function selectVehicle(value) {
     setVehicle(value);
+    setPaymentAmount(noOfTrips * value.amount);
   }
 
   function selectedSubType(value) {
@@ -344,20 +355,24 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
+          isMandatory: true,
           type: "text",
           populators: {
             name: "noOfTrips",
             validation: { pattern: /[0-9]+/ },
+            defaultValue: noOfTrips,
           },
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
           isMandatory: true,
           type: "text",
+          disable: true,
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
             componentInFront: "₹",
+            defaultValue: paymentAmount ? paymentAmount : null,
           },
         },
       ],
@@ -382,6 +397,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
       config={config}
       onSubmit={onSubmit}
+      onFormValueChange={onFormValueChange}
     />
   );
 };

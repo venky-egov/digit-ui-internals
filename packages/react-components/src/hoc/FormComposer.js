@@ -51,6 +51,8 @@ export const FormComposer = (props) => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  borderColor: disable ? "#ccc" : "revert",
+                  color: disable ? "#ccc" : "revert",
                 }}
               >
                 {populators.componentInFront}
@@ -99,7 +101,7 @@ export const FormComposer = (props) => {
                     </CardLabel>
                   )}
                   <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators, field.isMandatory)}
+                    {fieldSelector(field.type, field.populators, field.isMandatory, field.disable)}
                   </div>
                 </React.Fragment>
               );

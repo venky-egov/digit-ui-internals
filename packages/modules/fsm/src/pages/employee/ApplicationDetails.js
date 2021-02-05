@@ -83,17 +83,50 @@ const ApplicationDetails = (props) => {
     setVehicle(value);
   }
 
-  const config = [
-    {
-      body: [
-        {
-          label: t("ES_VEHICLE_TYPE"),
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
-        },
-      ],
+  const config = {
+    label: {
+      heading: "ES_FSM_ACTION_TITLE_ASSIGN_DSO",
+      submit: "CS_COMMON_ASSIGN",
+      cancel: "CS_COMMON_CANCEL",
     },
-  ];
+    form: [
+      {
+        body: [
+          {
+            label: t("ES_FSM_ACTION_DSO_NAME"),
+            type: "dropdown",
+            populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+          },
+          {
+            label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
+            type: "dropdown",
+            populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+          },
+          {
+            label: t("ES_FSM_ACTION_VEHICLE_CAPACITY_IN_LTRS"),
+            type: "text",
+            populators: {
+              name: "capacity",
+              validation: {
+                required: true,
+                pattern: /^[0-9]\d{6}$/,
+              },
+            },
+          },
+          {
+            label: t("ES_FSM_ACTION_SERVICE_DATE"),
+            type: "date",
+            populators: {
+              name: "date",
+              validation: {
+                required: true,
+              },
+            },
+          },
+        ],
+      },
+    ],
+  };
 
   function onActionSelect(action) {
     setSelectedAction(action);
@@ -342,14 +375,14 @@ const ApplicationDetails = (props) => {
           </Card>
           {showModal ? (
             <Modal
-              headerBarMain={<Heading label={t("ES_GENERATE_DEMAND")} />}
+              headerBarMain={<Heading label={t(config.label.heading)} />}
               headerBarEnd={<CloseBtn onClick={closeModal} />}
-              actionCancelLabel={t("ES_CANCEL")}
+              actionCancelLabel={t(config.label.cancel)}
               actionCancelOnSubmit={closeModal}
-              actionSaveLabel={t("ES_SAVE")}
+              actionSaveLabel={t(config.label.submit)}
               actionSaveOnSubmit={() => {}}
             >
-              <FormComposer config={config} noBoxShadow inline childrenAtTheBottom onSubmit={handleGenerateDemand} />
+              <FormComposer config={config.form} noBoxShadow inline childrenAtTheBottom onSubmit={handleGenerateDemand} />
             </Modal>
           ) : null}
           {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (

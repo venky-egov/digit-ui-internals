@@ -19,10 +19,10 @@ const App = () => {
         <BackButton>Back</BackButton>
         <PrivateRoute path={`${path}/property/search`} component={SearchPropertyComponent} />
         <PrivateRoute path={`${path}/property/search-results`} component={SearchResultsComponent} />
-        <PrivateRoute path={`${path}/property/my-bills`} component={MyBills}></PrivateRoute>
-        <PrivateRoute path={`${path}/property/bill-details/:uniquePropertyId`} component={() => <BillDetails />}></PrivateRoute>
-        <PrivateRoute path={`${path}/property/my-applications`} component={MyApplications}></PrivateRoute>
-        <Redirect to={`${path}/property/my-applications`}></Redirect>
+        <PrivateRoute path={`${path}/property/my-bills`} component={MyBills} />
+        <PrivateRoute path={`${path}/property/bill-details/:uniquePropertyId`} component={() => <BillDetails />} />
+        <PrivateRoute path={`${path}/property/my-applications`} component={MyApplications} />
+        {/* <Redirect to={`${path}/property/my-applications`} /> */}
       </AppContainer>
     </Switch>
   );

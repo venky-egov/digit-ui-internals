@@ -24,10 +24,10 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
     [t("ES_INBOX_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
   }));
 
+  const DSO = Digit.UserService.hasAccess("DSO");
   const userDetails = Digit.UserService.getUser();
 
-  // const isFstpOperator = !!userDetails.info.roles.find((role) => role.code === "FSTP_OPERATOR");
-  const isFstpOperator = true;
+  const isFstpOperator = Digit.UserService.hasAccess("FSTP");
 
   // TODO: below line is hard coded, it should come from server
   const fstpOperatorData = [
@@ -55,7 +55,7 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {!isFstpOperator && <ApplicationLinks isMobile={true} />}
+          {(!DSO || !isFstpOperator) && <ApplicationLinks isMobile={true} />}
           <ApplicationCard
             data={isFstpOperator ? fstpOperatorData : localizedData}
             onFilterChange={onFilterChange}

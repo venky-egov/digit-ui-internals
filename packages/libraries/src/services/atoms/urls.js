@@ -19,6 +19,7 @@ const Urls = {
   OTP_Send: "/user-otp/v1/_send",
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
+  ChangePassword: "/user/password/nologin/_update",
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 
@@ -26,6 +27,8 @@ const Urls = {
     search: "/fsm/v1/_search",
     create: "/fsm/v1/_create",
     update: "/fsm/v1/_update",
+    vendorSearch: "/vendor/v1/_search",
+    vehicleSearch: "/vehicle/v1/_search",
   },
 
   payment: {

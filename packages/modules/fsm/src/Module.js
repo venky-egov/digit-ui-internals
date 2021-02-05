@@ -16,6 +16,7 @@ import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
+import MarkForDisposal from "./pages/MarkForDisposal";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 
 import { useTranslation } from "react-i18next";
@@ -42,6 +43,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
         <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
+        <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />
       </div>
     </Switch>
   );
@@ -95,9 +97,11 @@ export const FSMLinks = ({ matchPath, userType }) => {
     return (
       <React.Fragment>
         {/* TODO: change */}
-        <Header>{t("CS_HOME_FSM_SERVICES")}</Header>
-        <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
-        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+        <div>
+          <Header>{t("CS_HOME_FSM_SERVICES")}</Header>
+          <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
+          <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+        </div>
       </React.Fragment>
     );
   } else {

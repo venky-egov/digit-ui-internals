@@ -11,15 +11,13 @@ import { useHistory } from "react-router-dom";
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
   let { match } = useRouteMatch();
-  const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
+  const GetCell = (value) => <span className="cell-text">{value}</span>;
+
   const GetSlaCell = (value) => {
     if (isNaN(value)) value = "-";
-    return value < 0 ? (
-      <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
-    ) : (
-      <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
-    );
+    return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };
+
   const history = useHistory();
 
   function goTo(id) {
@@ -30,7 +28,7 @@ const DesktopInbox = (props) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: t("ES_INBOX_APPLICATION_NO"),
+        Header: t("CS_FILE_DESLUDGING_APPLICATION_NO"),
         accessor: "applicationNo",
         Cell: ({ row }) => {
           return (
@@ -70,7 +68,7 @@ const DesktopInbox = (props) => {
         Header: t("ES_INBOX_STATUS"),
         accessor: "status",
         Cell: (row) => {
-          return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
+          return GetCell(t(`CS_COMMON_FSM_${row.row.original["status"]}`));
         },
       },
       {
@@ -86,7 +84,7 @@ const DesktopInbox = (props) => {
   let result;
   if (props.isLoading) {
     result = <Loader />;
-  } else if (props.data.length === 0) {
+  } else if (props?.data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
         {/* TODO Change localization key */}
@@ -99,7 +97,7 @@ const DesktopInbox = (props) => {
           ))}
       </Card>
     );
-  } else if (props.data.length > 0) {
+  } else if (props?.data?.length > 0) {
     result = (
       <ApplicationTable
         data={props.data}

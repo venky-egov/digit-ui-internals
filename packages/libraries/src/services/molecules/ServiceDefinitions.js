@@ -1,4 +1,4 @@
-import { MdmsService } from "../molecules/MDMS";
+import { MdmsService } from "../elements/MDMS";
 import { Storage } from "../atoms/Utils/Storage";
 
 export const GetServiceDefinitions = {

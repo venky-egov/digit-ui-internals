@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown, PitDimension } from "@egovernments/digit-ui-react-components";
+import { Dropdown, PitDimension, FormComposer } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FormComposer } from "../../../components/FormComposer";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
@@ -25,14 +24,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
-  const cityProperty = Digit.SessionStorage.get("city_property");
-  const selectedLocalities = Digit.SessionStorage.get("selected_localities");
-  const localityProperty = Digit.SessionStorage.get("locality_property");
-
-  const [localities, setLocalities] = useState(selectedLocalities ? selectedLocalities : null);
+  const [localities, setLocalities] = useState(null);
   const [pincode, setPincode] = useState("");
   const [pincodeNotValid, setPincodeNotValid] = useState(false);
-  const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
+  const [selectedLocality, setSelectedLocality] = useState(null);
 
   const { t } = useTranslation();
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
@@ -201,7 +196,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
       },
       workflow: null,
     };
-    console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData, subType);
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -222,7 +216,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
         },
         {
-          label: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"),
+          label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -234,7 +228,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           },
         },
         {
-          label: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"),
+          label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -277,7 +271,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
       body: [
         {
-          label: t("ES_NEW_APPLICATION_LOCATION_PINCODE"),
+          label: t("ES_NEW_APPLICATION_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",

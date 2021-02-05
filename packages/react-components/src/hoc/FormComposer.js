@@ -14,7 +14,7 @@ import LabelFieldPair from "../atoms/LabelFieldPair";
 import { useTranslation } from "react-i18next";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, watch, control, formState } = useForm();
+  const { register, handleSubmit, setValue, watch, control, formState } = useForm({ defaultValues: props.defaultValues });
   const { t } = useTranslation();
 
   const formData = watch();
@@ -23,13 +23,18 @@ export const FormComposer = (props) => {
     props.onSubmit(data);
   }
 
+  function onSecondayActionClick(data) {
+    props.onSecondayActionClick();
+  }
+
   useEffect(() => {
     props.onFormValueChange && props.onFormValueChange(formData, formState);
   }, [formData]);
 
-  const fieldSelector = (type, populators) => {
+  const fieldSelector = (type, populators, isMandatory, disable = false) => {
     switch (type) {
       case "text":
+      case "password":
         // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (
           <div
@@ -51,12 +56,19 @@ export const FormComposer = (props) => {
                 {populators.componentInFront}
               </span>
             ) : null}
-            <TextInput className="field" {...populators} inputRef={register(populators.validation)} />
+            <TextInput
+              className="field"
+              {...populators}
+              inputRef={register(populators.validation)}
+              isRequired={isMandatory}
+              type={type}
+              disable={disable}
+            />
           </div>
         );
       case "textarea":
         if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
-        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} />;
+        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} disable={disable} />;
       case "custom":
         return (
           <Controller
@@ -78,28 +90,35 @@ export const FormComposer = (props) => {
           <React.Fragment key={index}>
             {section.head && <CardSectionHeader id={section.headId}>{section.head}</CardSectionHeader>}
             {section.body.map((field, index) => {
-              const FieldPair = () => (
-                <React.Fragment>
+              if (props.inline)
+                return (
+                  <React.Fragment>
+                    {!field.withoutLabel && (
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
+                        {field.label}
+                        {field.isMandatory ? " * " : null}
+                      </CardLabel>
+                    )}
+                    <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
+                      {fieldSelector(field.type, field.populators, field.isMandatory)}
+                    </div>
+                  </React.Fragment>
+                );
+              return (
+                <LabelFieldPair key={index}>
                   {!field.withoutLabel && (
-                    <CardLabel style={props.inline && { marginBottom: "8px" }}>
+                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
                       {field.label}
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}
                   <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators)}
+                    {fieldSelector(field.type, field.populators, field.isMandatory)}
                   </div>
-                </React.Fragment>
-              );
-
-              if (props.inline) return <FieldPair key={index} />;
-              return (
-                <LabelFieldPair key={index}>
-                  <FieldPair />
                 </LabelFieldPair>
               );
             })}
-            {array.length - 1 === index ? null : <BreakLine />}
+            {!props.noBreakLine && (array.length - 1 === index ? null : <BreakLine />)}
           </React.Fragment>
         );
       }),
@@ -112,16 +131,24 @@ export const FormComposer = (props) => {
     return styles;
   };
 
+  const isDisabled = props.isDisabled || false;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card style={getCardStyles()}>
         {!props.childrenAtTheBottom && props.children}
-        {props.heading && <CardSubHeader>{props.heading}</CardSubHeader>}
+        {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}
         {formFields}
         {props.childrenAtTheBottom && props.children}
-        {props.label && (
+        {props.submitInForm && <SubmitBar label={t(props.label)} submit="submit" style={{ width: "100%" }} />}
+        {props.secondaryActionLabel && (
+          <div className="primary-label-btn" style={{ margin: "20px auto 0 auto" }} onClick={onSecondayActionClick}>
+            {props.secondaryActionLabel}
+          </div>
+        )}
+        {!props.submitInForm && props.label && (
           <ActionBar>
-            <SubmitBar label={t(props.label)} submit="submit" />
+            <SubmitBar label={t(props.label)} submit="submit" disabled={isDisabled} />
           </ActionBar>
         )}
       </Card>

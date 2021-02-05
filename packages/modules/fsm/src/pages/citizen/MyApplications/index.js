@@ -18,7 +18,7 @@ export const MyApplications = () => {
 
   return (
     <React.Fragment>
-      <Header>{t("CS_TITLE_MY_APPLICATIONS")}</Header>
+      <Header>{t("CS_FSM_APPLICATION_TITLE_MY_APPLICATION")}</Header>
       {applicationsList?.length > 0 &&
         applicationsList.map((application, index) => (
           <div key={index}>

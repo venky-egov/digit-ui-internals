@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown, Loader, PitDimension } from "@egovernments/digit-ui-react-components";
+import { Dropdown, Loader, PitDimension, FormComposer } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import { FormComposer } from "../../../components/FormComposer";
 
 const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -19,6 +17,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(state, "FSM", "ApplicationChannel");
+  // console.log("find application channel data", applicationChannelData);
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   // console.log("find propertyTypesData sanitationTypeData here", propertyTypesData, sanitationTypeData);
@@ -33,7 +32,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const workflowDetails = Digit.Hooks.fsm.useWorkflowData(tenantId, applicationNumber);
   const [defaultValues, setDefaultValues] = useState();
 
-  console.log("find application details and workflow data here", applicationData, workflowDetails);
+  // console.log("find application details and workflow data here", applicationData, workflowDetails);
 
   const [menu, setMenu] = useState([]);
   const [subTypeMenu, setSubTypeMenu] = useState([]);
@@ -91,9 +90,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   useEffect(() => {
     if (applicationData && applicationData.fsm && channelMenu?.length > 0) {
       const applicationChannel = applicationData.fsm[0].source;
-      channelMenu.filter((channel) => channel.code === applicationChannel);
-      console.log("find channel here", channelMenu);
-      setChannel(channelMenu[0]);
+      const prePopulatedChannel = channelMenu.filter((channel) => channel.code === applicationChannel)[0];
+      // console.log("find channel here", applicationChannel,prePopulatedChannel);
+      setChannel(prePopulatedChannel);
     }
     if (applicationData && applicationData.fsm && !selectedLocality && localities) {
       const prePopulatedLocality = applicationData.fsm[0].address?.locality;
@@ -343,7 +342,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
       body: [
         {
-          label: t("ES_NEW_APPLICATION_LOCATION_PINCODE"),
+          label: t("ES_NEW_APPLICATION_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",

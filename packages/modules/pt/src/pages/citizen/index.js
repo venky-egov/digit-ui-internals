@@ -1,5 +1,6 @@
 import React from "react";
 import { MyApplications } from "./MyApplications";
+import { MyReceipts } from "./MyReceipts";
 import { MyBills } from "./MyBills";
 import { BillDetails } from "./bill-details";
 
@@ -22,6 +23,7 @@ const App = () => {
         <PrivateRoute path={`${path}/property/my-bills`} component={MyBills} />
         <PrivateRoute path={`${path}/property/bill-details/:uniquePropertyId`} component={() => <BillDetails />} />
         <PrivateRoute path={`${path}/property/my-applications`} component={MyApplications} />
+        <PrivateRoute path={`${path}/property/my-receipts`} component={MyReceipts} />
         {/* <Redirect to={`${path}/property/my-applications`} /> */}
       </AppContainer>
     </Switch>

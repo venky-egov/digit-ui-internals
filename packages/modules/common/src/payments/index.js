@@ -1,7 +1,10 @@
 import React, { Fragment } from "react";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+
 import { BrowserRouter as Router, Switch, useRouteMatch, Route } from "react-router-dom";
 import { Body, Loader } from "@egovernments/digit-ui-react-components";
-import { useSelector } from "react-redux";
+import { Header, HomeLink } from "@egovernments/digit-ui-react-components";
 
 import EmployeePayment from "./employee";
 import CitizenPayment from "./citizen";
@@ -24,4 +27,16 @@ export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCod
   return <React.Fragment>{getPaymentHome()}</React.Fragment>;
 };
 
-export const PaymentLinks = ({ matchPath }) => <Fragment></Fragment>;
+export const PaymentLinks = ({ matchPath }) => {
+  const { t } = useTranslation();
+
+  return (
+    <React.Fragment>
+      {/* TODO: change */}
+      <Header>{t("CS_HOME_QUICK_PAY")}</Header>
+      <HomeLink to={`pt/property-tax`}>{t("CS_HOME_PT")}</HomeLink>
+      <HomeLink to={`${matchPath}/tl-renewal`}>{t("CS_HOME_TRADE_LICENCE_RENEWAL")}</HomeLink>
+      <HomeLink to={`${matchPath}/water-bill`}>{t("CS_HOME_WATER_BILL")}</HomeLink>
+    </React.Fragment>
+  );
+};

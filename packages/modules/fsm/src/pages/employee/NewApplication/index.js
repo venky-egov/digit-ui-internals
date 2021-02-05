@@ -21,8 +21,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
-  const [paymentAmount, setPaymentAmount] = useState();
-  const [noOfTrips, setNoOfTrips] = useState();
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [noOfTrips, setNoOfTrips] = useState(1);
+  const [amountPerTrip, setAmountPerTrip] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
@@ -45,13 +46,19 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // console.log("find vehicle menu", vehicleMenu);
   const [canSubmit, setSubmitValve] = useState(false);
 
-  const onFormValueChange = (formData, formState) => {
+  const onFormValueChange = (formData) => {
     setNoOfTrips(formData?.noOfTrips || 1);
+  };
 
-    if (vehicle?.amount) {
+  useEffect(() => {
+    if (amountPerTrip) {
+      setPaymentAmount(noOfTrips * amountPerTrip);
+    } else {
+      if (vehicle?.amount) {
       setPaymentAmount(noOfTrips * vehicle?.amount);
     }
-  };
+    }
+  }, [vehicle, noOfTrips, amountPerTrip]);
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
@@ -143,6 +150,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
     if (!value) {
       setPincodeNotValid(false);
     }
+  };
+
+  const handleAmountPerTrip = (event) => {
+    const { value } = event.target;
+    setAmountPerTrip(value);
   };
 
   const isPincodeValid = () => !pincodeNotValid;
@@ -360,15 +372,23 @@ export const NewApplication = ({ parentUrl, heading }) => {
           },
         },
         {
+          label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
+          type: "text",
+          populators: {
+            name: "amountPerTrip",
+            onChange: handleAmountPerTrip,
+            validation: { pattern: /^[1-9][0-9]{5}$/ },
+          },
+        },
+        {
           label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
-          isMandatory: true,
           type: "text",
           disable: true,
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
-            componentInFront: "₹",
-            defaultValue: paymentAmount ? paymentAmount : null,
+            defaultValue: paymentAmount,
+            disable: true,
           },
         },
       ],

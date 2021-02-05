@@ -35,7 +35,7 @@ export const FormComposer = (props) => {
     switch (type) {
       case "text":
       case "password":
-        // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
+        if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (
           <div
             className="field-container"

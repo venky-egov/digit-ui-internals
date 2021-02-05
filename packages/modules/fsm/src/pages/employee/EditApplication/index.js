@@ -424,17 +424,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               required: true,
               pattern: /[0-9]+/,
             },
-            componentInFront: (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                ₹
-              </span>
-            ),
           },
         },
       ],

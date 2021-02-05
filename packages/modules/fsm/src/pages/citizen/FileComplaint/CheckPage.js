@@ -32,7 +32,9 @@ const CheckPage = ({ onSubmit, value }) => {
 
   const { city_complaint, locality_complaint, street, doorNo, landmark, propertyType, subtype, pitType, pitDetail } = value;
 
-  const pitMeasurement = Object.values(pitDetail).reduce((previous, current, index, array) => {
+  const pitDetailValues = Object.values(pitDetail)
+
+  const pitMeasurement = pitDetailValues.reduce((previous, current, index, array) => {
     if (index === array.length - 1) {
       return previous + current + "m";
     } else {
@@ -77,7 +79,7 @@ const CheckPage = ({ onSubmit, value }) => {
         )}
         <Row
           label={t("CS_CHECK_SIZE")}
-          text={[pitMeasurement, "LengthXBreadthXDepth"]}
+          text={[pitMeasurement, pitDetailValues?.length === 3 ? 'Length x Breadth x Depth' : 'Diameter x Depth']}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>

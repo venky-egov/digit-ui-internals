@@ -6,10 +6,12 @@ const CitizenHome = ({ modules }) => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const registry = useContext(ComponentProvider);
 
+  console.log(registry);
+
   return (
     <React.Fragment>
       {modules.map(({ code }, index) => {
-        const Links = registry.getComponent(`${code}Links`);
+        const Links = registry.getComponent(`${code}Links`) || (() => <React.Fragment />);
         return <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />;
       })}
     </React.Fragment>

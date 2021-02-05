@@ -69,7 +69,7 @@ const ApplicationDetails = () => {
         src={`${baseUrl}${tenantInfo?.logoId.split(".com")[1]}` || coreData?.stateInfo?.logoUrl}
         alt="mSeva"
       />
-      <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+      <Header>{t("CS_FSM_APPLICATION_DETAIL_TITLE_APPLICATION_DETAILS")}</Header>
       <Card style={{ position: "relative" }}>
         <LinkButton
           label={
@@ -85,24 +85,21 @@ const ApplicationDetails = () => {
           style={{ position: "absolute", top: 0, right: 20 }}
           onClick={handleDownloadPdf}
         />
-        <KeyNote keyValue={t("CS_MY_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory || t("ES_TITLE_FSM")} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType || t("CS_APPLICATION_TYPE_DESLUDGING")} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={t("CS_COMMON_" + application.applicationStatus)} />
+        <KeyNote keyValue={t("CS_FSM_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
+        <KeyNote keyValue={t("CS_FSM_APPLICATION_SERVICE_CATEGORY")} note={application.serviceCategory || t("CS_TITLE_FSM")} />
+        <KeyNote keyValue={t("CS_FSM_APPLICATION_TYPE")} note={application.applicationType || t("CS_FSM_APPLICATION_TYPE_DESLUDGING")} />
+        <KeyNote keyValue={t("CS_FSM_APPLICATION_DETAIL_STATUS")} note={t("CS_COMMON_" + application.applicationStatus)} />
+        <KeyNote keyValue={t("CS_FSM_APPLICATION_DATE")} note={Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime)} />
         <KeyNote
-          keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_DATE")}
-          note={Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime)}
-        />
-        <KeyNote
-          keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")}
+          keyValue={t("CS_FSM_APPLICATION_PROPERTY_TYPE")}
           note={t(getPropertyTypeLocale(application.propertyUsage)) + " / " + t(getPropertySubtypeLocale(application.propertyUsage))}
         />
-        <KeyNote keyValue={t("MYCITY_CODE_LABEL")} note={application.address.city} />
+        <KeyNote keyValue={t("CS_COMMON_MYCITY_CODE_LABEL")} note={application.address.city} />
         <KeyNote
-          keyValue={t("CS_CREATECOMPLAINT_MOHALLA")}
+          keyValue={t("CS_FSM_APPLICATION_MOHALLA")}
           note={t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`)}
         />
-        <KeyNote keyValue={t("CORE_COMMON_PINCODE")} note={application.address.pincode ? application.address.pincode : "NA"} />
+        <KeyNote keyValue={t("CS_FSM_APPLICATION_PINCODE")} note={application.address.pincode ? application.address.pincode : "NA"} />
         <KeyNote
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL")}
           note={application.address.street ? application.address.street : "NA"}
@@ -115,7 +112,7 @@ const ApplicationDetails = () => {
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL")}
           note={application.address.landmark ? application.address.landmark : "NA"}
         />
-        <KeyNote keyValue={t("CS_CHECK_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
+        <KeyNote keyValue={t("CS_COMMON_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
         <KeyNote
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
           note={displayPitDimension({
@@ -128,7 +125,7 @@ const ApplicationDetails = () => {
         {!workflowDetails?.isLoading && (
           <Fragment>
             <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
-              {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+              {t("CS_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
             </CardSectionHeader>
             {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
               <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />

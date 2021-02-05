@@ -1,5 +1,5 @@
 import { StoreService } from "../Store/service";
-import { UserService } from "../User";
+import { UserService } from "../../elements/User";
 
 export const ULBService = {
   getCurrentTenantId: () => {

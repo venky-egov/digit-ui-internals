@@ -1,5 +1,5 @@
-import { LocalizationService } from "../Localization/service";
-import { MdmsService } from "../MDMS";
+import { LocalizationService } from "../../elements/Localization/service";
+import { MdmsService } from "../../elements/MDMS";
 import { Storage } from "../../atoms/Utils/Storage";
 
 export const StoreService = {

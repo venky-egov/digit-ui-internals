@@ -57,11 +57,16 @@ const displayPitDimension = (pitDeminsion) => {
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = tenantId.split(".")[0];
+  const { data: dsoData, isLoading: isDsoLoading, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
   const { t } = useTranslation();
   const history = useHistory();
   let { id: applicationNumber } = useParams();
   const [displayMenu, setDisplayMenu] = useState(false);
+  const [dso, selectDSO] = useState(null);
   const [selectedAction, setSelectedAction] = useState(null);
+  const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const { isLoading, isError, data, error } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber, uuid: Digit.UserService.getUser().uuid });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
@@ -72,10 +77,10 @@ const ApplicationDetails = (props) => {
     serviceData: data,
   });
   const [vehicle, setVehicle] = useState(null);
-  const [vehicleMenu, setVehicleMenu] = useState([
-    { key: "Type A", name: "Type A" },
-    { key: "Type B", name: "Type B" },
-  ]);
+  // const [vehicleMenu, setVehicleMenu] = useState([
+  //   { key: "Type A", name: "Type A" },
+  //   { key: "Type B", name: "Type B" },
+  // ]);
 
   const DSO = Digit.UserService.hasAccess("DSO") || true;
 
@@ -83,7 +88,7 @@ const ApplicationDetails = (props) => {
     setVehicle(value);
   }
 
-  const config = {
+  const configAssignDso = {
     label: {
       heading: "ES_FSM_ACTION_TITLE_ASSIGN_DSO",
       submit: "CS_COMMON_ASSIGN",
@@ -95,7 +100,7 @@ const ApplicationDetails = (props) => {
           {
             label: t("ES_FSM_ACTION_DSO_NAME"),
             type: "dropdown",
-            populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+            populators: <Dropdown option={dsoData} optionKey="name" id="channel" selected={dso} select={selectDSO} />,
           },
           {
             label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
@@ -128,6 +133,82 @@ const ApplicationDetails = (props) => {
     ],
   };
 
+  const configReassignDSO = {
+    label: {
+      heading: "ES_FSM_ACTION_TITLE_REASSIGN_DSO",
+      submit: "CS_COMMON_ASSIGN",
+      cancel: "CS_COMMON_CANCEL",
+    },
+    form: [
+      {
+        body: [
+          {
+            label: t("ES_FSM_ACTION_DSO_NAME"),
+            type: "dropdown",
+            populators: <Dropdown option={dsoData} optionKey="name" id="channel" selected={dso} select={selectDSO} />,
+          },
+          {
+            label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
+            type: "dropdown",
+            populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+          },
+          {
+            label: t("ES_FSM_ACTION_VEHICLE_CAPACITY_IN_LTRS"),
+            type: "text",
+            populators: {
+              name: "capacity",
+              validation: {
+                required: true,
+                pattern: /^[0-9]\d{6}$/,
+              },
+            },
+          },
+          {
+            label: t("ES_FSM_ACTION_SERVICE_DATE"),
+            type: "date",
+            populators: {
+              name: "date",
+              validation: {
+                required: true,
+              },
+            },
+          },
+          {
+            label: t("ES_FSM_ACTION_REASSIGN_REASON"),
+            type: "dropdown",
+            populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+          },
+        ],
+      },
+    ],
+  };
+
+  const configRejectApplication = {
+    label: {
+      heading: "ES_FSM_ACTION_TITLE_DECLINE_REQUEST",
+      submit: "CS_COMMON_DECLINE",
+      cancel: "CS_COMMON_CANCEL",
+    },
+    form: [
+      {
+        body: [
+          {
+            label: t("ES_FSM_ACTION_DECLINE_REASON"),
+            type: "dropdown",
+            populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+          },
+          {
+            label: t("ES_FSM_ACTION_COMMENTS"),
+            type: "textarea",
+            populators: {
+              name: "comments",
+            },
+          },
+        ],
+      },
+    ],
+  };
+
   function onActionSelect(action) {
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -149,13 +230,22 @@ const ApplicationDetails = (props) => {
     console.log("action selected", selectedAction);
     switch (selectedAction) {
       case "DSO_ACCEPT":
-        return setShowModal(true);
+      // return setShowModal(true);
+      case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
+        setCurrentConfig(configAssignDso);
+        return setShowModal(true);
+      case "REASSIGN":
+        setCurrentConfig(configReassignDSO);
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+      case "CANCEL":
+      case "SENDBACK":
+        setCurrentConfig(configRejectApplication);
+        return setShowModal(true);
       case "PAY":
       case "FSM_PAY":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);

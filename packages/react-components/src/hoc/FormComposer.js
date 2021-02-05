@@ -34,6 +34,7 @@ export const FormComposer = (props) => {
   const fieldSelector = (type, populators, isMandatory, disable = false) => {
     switch (type) {
       case "text":
+      case "date":
       case "password":
         // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (

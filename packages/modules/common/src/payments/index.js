@@ -34,7 +34,7 @@ export const PaymentLinks = ({ matchPath }) => {
     <React.Fragment>
       {/* TODO: change */}
       <Header>{t("CS_HOME_QUICK_PAY")}</Header>
-      <HomeLink to={`pt/property-tax`}>{t("CS_HOME_PT")}</HomeLink>
+      <HomeLink to={`pt/property/my-bills`}>{t("CS_HOME_PT")}</HomeLink>
       <HomeLink to={`${matchPath}/tl-renewal`}>{t("CS_HOME_TRADE_LICENCE_RENEWAL")}</HomeLink>
       <HomeLink to={`${matchPath}/water-bill`}>{t("CS_HOME_WATER_BILL")}</HomeLink>
     </React.Fragment>

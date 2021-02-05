@@ -11,11 +11,10 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
 
   const onSubmitInput = (data) => {
     console.log("data", data);
-    if (data.applicationNo) {
-      onSearch({ applicationNo: data.applicationNo });
-    } else {
-      onSearch({ mobileNumber: data.mobileNumber });
+    if (!data.mobileNumber) {
+      delete data.mobileNumber;
     }
+    onSearch(data);
     if (type === "mobile") {
       onClose();
     }
@@ -23,8 +22,6 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   function clearSearch() {
     reset();
     onSearch({});
-    setApplicationNo("");
-    setMobileNo("");
   }
 
   const clearAll = () => {

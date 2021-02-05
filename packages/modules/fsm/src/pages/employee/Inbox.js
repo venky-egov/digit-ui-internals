@@ -40,30 +40,11 @@ const Inbox = () => {
             name: "name",
           },
         ];
-      case "DSO":
-        return [
-          {
-            label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
-            name: "applicationNo",
-          },
-          {
-            label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
-            name: "mobileNumber",
-          },
-          {
-            label: t("ES_SEARCH_FROM_DATE"),
-            name: "fromDate",
-          },
-          {
-            label: t("ES_SEARCH_TO_DATE"),
-            name: "toDate",
-          },
-        ];
       default:
         return [
           {
             label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
-            name: "applicationNo",
+            name: "applicationNos",
           },
           {
             label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),

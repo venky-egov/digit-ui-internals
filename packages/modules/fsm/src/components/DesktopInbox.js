@@ -127,7 +127,7 @@ const DesktopInbox = (props) => {
         </div>
       </div>
       <div style={{ flex: 1 }}>
-        <SearchApplication onSearch={props.onSearch} type="desktop" />
+        <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} />
         <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
       </div>
     </div>

@@ -22,6 +22,33 @@ const Inbox = () => {
     setSearchParams({ ...searchParams, ...params });
   };
 
+  const getSearchFields = (userRole) => {
+    switch (userRole) {
+      case "FSTP_OPERATOR":
+        return [
+          {
+            label: t("ES_FSTP_OPERATOR_VEHICLE_NO"),
+            name: "vehicleNo",
+          },
+          {
+            label: t("ES_FSTP_DSO_NAME"),
+            name: "name",
+          },
+        ];
+      default:
+        return [
+          {
+            label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
+            name: "applicationNos",
+          },
+          {
+            label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
+            name: "mobileNumber",
+          },
+        ];
+    }
+  };
+
   let isMobile = window.Digit.Utils.browser.isMobile;
   if (applications?.length !== null) {
     if (isMobile) {

@@ -24,7 +24,7 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
     [t("ES_INBOX_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
   }));
 
-  const DSO = Digit.UserService.hasAccess("DSO") || true;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const userDetails = Digit.UserService.getUser();
 
   const isFstpOperator = Digit.UserService.hasAccess("FSTP");

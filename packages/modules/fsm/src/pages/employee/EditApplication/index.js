@@ -251,16 +251,16 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         },
       }),
       (applicationData.noOfTrips = noOfTrips),
-      (applicationData.workflow = {
-        action: "SUBMIT",
-      }),
+      // (applicationData.workflow = {
+      //   action: "SUBMIT",
+      // }),
       delete applicationData["responseInfo"];
-    console.log(
-      "%c: onSubmit -> formData ",
-      "font-size:16px;background-color:#3dd445;color:white;",
-      { fsm: applicationData, workflow: applicationData.workflow },
-      subType
-    );
+    // console.log(
+    //   "%c: onSubmit -> formData ",
+    //   "font-size:16px;background-color:#3dd445;color:white;",
+    //   { fsm: applicationData, workflow: applicationData.workflow },
+    //   subType
+    // );
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -269,11 +269,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     Digit.SessionStorage.set("locality_property", null);
 
     history.push("/digit-ui/employee/fsm/response", {
-      applicationData: {
-        fsm: applicationData,
-        workflow: applicationData.workflow,
-      },
+      applicationData: { fsm: applicationData },
       key: "update",
+      action: "SUBMIT",
     });
   };
 

@@ -10,7 +10,7 @@ export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequest
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
 
-  const DSO = Digit.UserService.hasAccess("DSO") || true;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
 
   const handlePopupAction = (type) => {
     console.log("option");

@@ -27,6 +27,7 @@ import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
 import useDsoSearch from "./fsm/useDsoSearch";
+import useApplicationDetail from "./fsm/useApplicationDetail";
 
 const pgr = {
   useComplaintDetails,
@@ -47,12 +48,13 @@ const fsm = {
   useTenants: useTenantsFSM,
   useDesludging: useDesludging,
   useMDMS: useMDMS,
-  useSearch: useSearch,
+  useSearch,
   useInbox,
   useApplicationUpdate,
   useApplicationStatus,
   useWorkflowData,
   useDsoSearch,
+  useApplicationDetail,
 };
 
 const Hooks = {

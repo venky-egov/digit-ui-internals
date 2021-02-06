@@ -61,7 +61,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
             )}
             <div className="complaint-input-container" style={{ width: "100%" }}>
               {searchFields?.map((input, index) => (
-                <span className={index === 0 ? "complaint-input" : "mobile-input"}>
+                <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
                   <Label>{input.label}</Label>
                   <TextInput {...input} inputRef={register} />
                   {/* name={ip}

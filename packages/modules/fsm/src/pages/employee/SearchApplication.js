@@ -86,7 +86,7 @@ const SearchApplication = () => {
   } else {
     result = (
       <ApplicationTable
-        data={data?.fsm}
+        data={data}
         columns={columns}
         getCellProps={(cellInfo) => {
           return {

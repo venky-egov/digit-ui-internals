@@ -36,7 +36,7 @@ export const FormComposer = (props) => {
       case "text":
       case "date":
       case "password":
-        // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
+        if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (
           <div
             className="field-container"
@@ -52,6 +52,8 @@ export const FormComposer = (props) => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  borderColor: disable ? "#ccc" : "revert",
+                  color: disable ? "#ccc" : "revert",
                 }}
               >
                 {populators.componentInFront}
@@ -114,7 +116,7 @@ export const FormComposer = (props) => {
                     </CardLabel>
                   )}
                   <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators, field.isMandatory)}
+                    {fieldSelector(field.type, field.populators, field.isMandatory, field.disable)}
                   </div>
                 </LabelFieldPair>
               );

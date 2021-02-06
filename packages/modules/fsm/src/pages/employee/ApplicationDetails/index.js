@@ -21,7 +21,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 
 import { useHistory, useParams } from "react-router-dom";
-import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
+import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../../utils";
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -82,7 +82,7 @@ const ApplicationDetails = (props) => {
   //   { key: "Type B", name: "Type B" },
   // ]);
 
-  const DSO = Digit.UserService.hasAccess("DSO") || true;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
 
   function selectVehicle(value) {
     setVehicle(value);
@@ -344,6 +344,71 @@ const ApplicationDetails = (props) => {
     vehicleCapacity: "300 ltrs",
     possibleServiceDate: "12/08/2020",
   };
+  const applicationDetails = {
+    details: [
+      {
+        title: t("ES_TITLE_APPLICATION_DETAILS"),
+        values: [
+          { title: t("CS_FILE_DESLUDGING_APPLICATION_NO"), value: application.applicationNo },
+          { title: t("ES_APPLICATION_CHANNEL"), value: application.source },
+        ],
+      },
+      {
+        title: t("ES_TITLE_APPLICATION_DETAILS"),
+        values: [
+          { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: application.citizen?.name },
+          { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: application.citizen?.mobileNumber },
+          // { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
+        ],
+      },
+      {
+        title: t("ES_APPLICATION_DETAILS_PROPERTY_DETAILS"),
+        values: [
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(application.propertyUsage)) },
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: t(getPropertySubtypeLocale(application.propertyUsage)) },
+        ],
+      },
+      {
+        title: t("ES_APPLICATION_DETAILS_LOCATION_DETAILS"),
+        values: [
+          {
+            title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"),
+            value: t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`),
+          },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: application.address.city },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: application.address.pincode },
+          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"), value: application.address.street },
+          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: application.address.doorNo },
+          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: application.address.landmark },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
+        ],
+      },
+      {
+        title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
+        values: [
+          {
+            title: t("ES_APPLICATION_DETAILS_PIT_TYPE"),
+            value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "",
+          },
+          {
+            title: t("ES_APPLICATION_DETAILS_PIT_DIMENSION"),
+            value: [
+              displayPitDimension({
+                length: application.pitDetail.length,
+                width: application.pitDetail.width,
+                height: application.pitDetail.height,
+                diameter: application.pitDetail.diameter,
+              }),
+              `(${t("CS_FILE_PROPERTY_LENGTH")} X ${t("CS_FILE_PROPERTY_WIDTH")} X ${t("CS_FILE_PROPERTY_HEIGHT")})`,
+            ],
+          },
+          { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: application.noOfTrips === 0 ? "N/A" : application.noOfTrips },
+          { title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"), value: "N/A" },
+          { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: "N/A" },
+        ],
+      },
+    ],
+  };
 
   if (DSO) {
     application = dsoApplication;
@@ -410,10 +475,6 @@ const ApplicationDetails = (props) => {
         { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: application.totalAmount || "N/A" },
       ],
     },
-  };
-
-  let applicationDetails = {
-    details: [],
   };
 
   if (DSO) {

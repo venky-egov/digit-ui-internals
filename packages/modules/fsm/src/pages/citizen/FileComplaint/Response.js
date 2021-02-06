@@ -26,7 +26,8 @@ const Response = ({ data, onSuccess }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   console.log("data---------->", data);
   const mutation = Digit.Hooks.fsm.useDesludging(data.city_complaint ? data.city_complaint.code : tenantId);
-  console.log("%c ⚖️: Response -> mutation ", "font-size:16px;background-color:#a9ecf3;color:black;", mutation);
+  const coreData = Digit.Hooks.useCoreData();
+  // console.log("%c ⚖️: Response -> mutation ", "font-size:16px;background-color:#a9ecf3;color:black;", mutation);
   useEffect(() => {
     try {
       const { subtype, landmark, pincode, pitDetail, city_complaint, locality_complaint, pitType, source, street, doorNo } = data;
@@ -68,28 +69,26 @@ const Response = ({ data, onSuccess }) => {
     }
   }, []);
 
-  const { fsm } = mutation.data;
-  const [applicationDetails, ...rest] = fsm;
-  const tenantInfo = coreData.tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
-  const coreData = Digit.Hooks.useCoreData();
-
   const handleDownloadPdf = () => {
+    const { fsm } = mutation.data;
+    const [applicationDetails, ...rest] = fsm;
+    const tenantInfo = coreData.tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
+
+    // const baseUrl = window?.location?.origin?.includes("localhost") ? "https://egov-micro-qa.egovernments.org" : window?.location?.origin;
     Digit.Utils.pdf.generate(getPDFData(applicationDetails, tenantInfo, t));
   };
-
-  const baseUrl = window?.location?.origin?.includes("localhost") ? "https://egov-micro-qa.egovernments.org" : window?.location?.origin;
 
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />
   ) : (
     <Card>
-      <img
+      {/* <img
         style={{ opacity: 0, position: "absolute" }}
         id="pdf-logo"
         crossOrigin="anonymous"
         src={`${baseUrl}${tenantInfo?.logoId.split(".com")[1]}` || coreData?.stateInfo?.logoUrl}
         alt="mSeva"
-      />
+      /> */}
       <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
       <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
       {mutation.isSuccess && (

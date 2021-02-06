@@ -7,8 +7,10 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled, forcedError, componentInFront }) => {
-  const { register, watch, errors, handleSubmit } = useForm();
+const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled, _defaultValues = {}, forcedError, componentInFront }) => {
+  const { register, watch, errors, handleSubmit } = useForm({
+    defaultValues: _defaultValues,
+  });
 
   console.log("config", config);
   const goNext = (data) => {

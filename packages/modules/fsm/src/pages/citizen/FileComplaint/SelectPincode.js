@@ -7,9 +7,11 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
     const { pincode } = value;
     return pincode;
   });
+  const [pincodeServicability, setPincodeServicability] = useState(null);
 
   function onChange(e) {
     setPincode(e.target.value);
+    setPincodeServicability(null);
   }
 
   const goNext = async (data) => {
@@ -19,12 +21,24 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
       let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
       const filteredLocalities = __localityList.filter((obj) => obj.pincode?.find((item) => item == data.pincode));
       // Digit.SessionStorage.set("selected_localities", filteredLocalities?.length > 0 ? filteredLocalities : __localityList);
+      onSelect({ ...data, city_complaint: foundValue });
+    } else {
+      setPincodeServicability("CS_COMMON_PINCODE_NOT_SERVICABLE");
     }
-    onSelect({ ...data, city_complaint: foundValue });
   };
 
   const onSkip = () => onSelect();
-  return <FormStep t={t} config={config} onSelect={goNext} value={pincode} onChange={onChange} onSkip={onSkip}></FormStep>;
+  return (
+    <FormStep
+      t={t}
+      config={config}
+      onSelect={goNext}
+      _defaultValues={{ pincode }}
+      onChange={onChange}
+      onSkip={onSkip}
+      forcedError={t(pincodeServicability)}
+    ></FormStep>
+  );
 };
 
 export default SelectPincode;

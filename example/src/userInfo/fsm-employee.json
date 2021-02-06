@@ -9,23 +9,23 @@
     "type": "EMPLOYEE",
     "roles": [
       {
-        "name": "FSM Administrator",
-        "code": "FSM_ADMIN",
-        "tenantId": "pb.amritsar"
-      },
-      {
         "name": "FSM Employee Application Viewer",
         "code": "FSM_VIEW_EMP",
         "tenantId": "pb.amritsar"
       },
       {
-        "name": "FSM FSTP Opperator",
-        "code": "FSM_EMP_FSTPO",
+        "name": "FSM Administrator",
+        "code": "FSM_ADMIN",
         "tenantId": "pb.amritsar"
       },
       {
-        "name": "FSM Desluding Operator",
-        "code": "FSM_DSO",
+        "name": "Employee",
+        "code": "EMPLOYEE",
+        "tenantId": "pb.amritsar"
+      },
+      {
+        "name": "Employee Finance",
+        "code": "EMPLOYEE_FINANCE",
         "tenantId": "pb.amritsar"
       },
       {
@@ -44,8 +44,8 @@
         "tenantId": "pb.amritsar"
       },
       {
-        "name": "FSM Driver",
-        "code": "FSM_DRIVER",
+        "name": "EMPLOYEE ADMIN",
+        "code": "EMPLOYEE ADMIN",
         "tenantId": "pb.amritsar"
       },
       {

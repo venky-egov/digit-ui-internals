@@ -269,7 +269,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     Digit.SessionStorage.set("locality_property", null);
 
     history.push("/digit-ui/employee/fsm/response", {
-      applicationData: { fsm: applicationData },
+      applicationData,
       key: "update",
       action: "SUBMIT",
     });

@@ -177,7 +177,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const doorNo = data.doorNo;
     const landmark = data.landmark;
     const noOfTrips = data.noOfTrips;
-    const amount = data.amount;
+    const amount = data.amountPerTrip;
     const cityCode = selectedCity.code;
     const city = selectedCity.city.name;
     const district = selectedCity.city.name;
@@ -229,7 +229,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     Digit.SessionStorage.set("city_property", null);
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
-
+    // console.log("find form data here", formData);
     history.push("/digit-ui/employee/fsm/response", formData);
   };
 
@@ -378,12 +378,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
           type: "text",
-          disable: !FSM_CUSTOMIZATION.AmountPerTrip,
           populators: {
             name: "amountPerTrip",
             onChange: handleAmountPerTrip,
-            validation: { pattern: /^[1-9][0-9]{5}$/ },
-            disable: !FSM_CUSTOMIZATION.AmountPerTrip,
+            validation: { required: true },
+            defaultValue: vehicle?.amount,
           },
         },
         {

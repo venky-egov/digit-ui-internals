@@ -23,11 +23,13 @@ import useDesludging from "./fsm/useDesludging";
 import useApplicationStatus from "./fsm/useApplicationStatus";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
+import useSearchAll from "./fsm/useSearchAll";
 import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
 import useDsoSearch from "./fsm/useDsoSearch";
 import useApplicationDetail from "./fsm/useApplicationDetail";
+import useApplicationActions from "./fsm/useApplicationActions";
 
 const pgr = {
   useComplaintDetails,
@@ -49,12 +51,14 @@ const fsm = {
   useDesludging: useDesludging,
   useMDMS: useMDMS,
   useSearch,
+  useSearchAll,
   useInbox,
   useApplicationUpdate,
   useApplicationStatus,
   useWorkflowData,
   useDsoSearch,
   useApplicationDetail,
+  useApplicationActions,
 };
 
 const Hooks = {

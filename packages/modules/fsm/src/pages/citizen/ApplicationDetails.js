@@ -33,24 +33,23 @@ const ApplicationDetails = () => {
   const { id } = useParams();
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
+  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId,
     id,
     moduleCode: "FSM",
-    serviceData: data,
+    serviceData: application,
   });
   const coreData = Digit.Hooks.useCoreData();
 
   if (isLoading) {
     return <Loader />;
   }
-  const { fsm: applications } = data;
-  if (applications.length === 0) {
+
+  if (application.length === 0) {
     history.goBack();
   }
 
-  const application = applications[0];
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
   const handleDownloadPdf = async () => {

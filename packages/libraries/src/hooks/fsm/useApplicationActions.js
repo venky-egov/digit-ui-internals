@@ -1,8 +1,8 @@
 import { useMutation } from "react-query";
 import ApplicationUpdateActions from "../../services/molecules/FSM/ApplicationUpdateActions";
 
-const useApplicationUpdate = (tenantId) => {
-  return useMutation((applicationDetails, action) => ApplicationUpdateActions(applicationDetails, action, tenantId));
+const useApplicationActions = (tenantId) => {
+  return useMutation(({ applicationData, action }) => ApplicationUpdateActions(applicationData, action, tenantId));
 };
 
-export default useApplicationUpdate;
+export default useApplicationActions;

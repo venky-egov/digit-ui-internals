@@ -1,8 +1,9 @@
 import { FSMService } from "../../elements/FSM";
 
-const ApplicationUpdateActions = async (applicationDetails, action, tenantId) => {
+const ApplicationUpdateActions = async (applicationData, action, tenantId) => {
+  // console.log("find application update action here", applicationData, action, tenantId)
   const data = {
-    fsm: applicationDetails,
+    fsm: applicationData,
     workflow: {
       action: action,
     },

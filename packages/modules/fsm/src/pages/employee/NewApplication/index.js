@@ -47,8 +47,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [canSubmit, setSubmitValve] = useState(false);
 
   const FSM_CUSTOMIZATION = {
-    AmountPerTrip: false
-  }
+    AmountPerTrip: false,
+  };
 
   const onFormValueChange = (formData) => {
     setNoOfTrips(formData?.noOfTrips || 1);
@@ -59,8 +59,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
       setPaymentAmount(noOfTrips * amountPerTrip);
     } else {
       if (vehicle?.amount) {
-      setPaymentAmount(noOfTrips * vehicle?.amount);
-    }
+        setPaymentAmount(noOfTrips * vehicle?.amount);
+      }
     }
   }, [vehicle, noOfTrips, amountPerTrip]);
 
@@ -383,7 +383,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             name: "amountPerTrip",
             onChange: handleAmountPerTrip,
             validation: { pattern: /^[1-9][0-9]{5}$/ },
-            disable: !FSM_CUSTOMIZATION.AmountPerTrip
+            disable: !FSM_CUSTOMIZATION.AmountPerTrip,
           },
         },
         {

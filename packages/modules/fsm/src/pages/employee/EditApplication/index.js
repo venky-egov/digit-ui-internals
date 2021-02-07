@@ -22,11 +22,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   // console.log("find propertyTypesData sanitationTypeData here", propertyTypesData, sanitationTypeData);
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
+  // console.log("find property sub type here", propertySubtypesData)
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
 
   const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
-    { applicationNumber, uuid: userInfo.uuid },
+    { applicationNos: applicationNumber, uuid: userInfo.uuid },
     { staleTime: Infinity }
   );
   const workflowDetails = Digit.Hooks.fsm.useWorkflowData(tenantId, applicationNumber);
@@ -62,7 +63,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
 
   // console.log("find channel state here", channel);
   useEffect(() => {
-    const applicationDetails = applicationData?.fsm[0];
+    const applicationDetails = applicationData;
     if (applicationDetails) {
       setDefaultValues({
         applicantName: applicationDetails.citizen?.name,
@@ -88,37 +89,41 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   }, [applicationChannelData]);
 
   useEffect(() => {
-    if (applicationData && applicationData.fsm && channelMenu?.length > 0) {
-      const applicationChannel = applicationData.fsm[0].source;
+    setSubTypeMenu(propertySubtypesData?.data?.filter((item) => item.propertyType === propertyType?.code?.toUpperCase()));
+  }, [propertyType]);
+
+  useEffect(() => {
+    if (applicationData && channelMenu?.length > 0) {
+      const applicationChannel = applicationData.source;
       const prePopulatedChannel = channelMenu.filter((channel) => channel.code === applicationChannel)[0];
       // console.log("find channel here", applicationChannel,prePopulatedChannel);
       setChannel(prePopulatedChannel);
     }
-    if (applicationData && applicationData.fsm && !selectedLocality && localities) {
-      const prePopulatedLocality = applicationData.fsm[0].address?.locality;
+    if (applicationData && !selectedLocality && localities) {
+      const prePopulatedLocality = applicationData.address?.locality;
       const adminPreCode = tenantId.toUpperCase().split(".").join("_") + "_ADMIN_";
       const __selectedLocality = localities.filter((locality) => locality.code === `${adminPreCode + prePopulatedLocality.code}`)[0];
       // console.log("find localities here", localities, __selectedLocality);
       setSelectedLocality(__selectedLocality);
     }
-    if (applicationData && applicationData.fsm && propertyTypesData.data && propertySubtypesData.data) {
-      const prePropertyUsage = applicationData.fsm[0].propertyUsage;
+    if (applicationData && propertyTypesData.data && propertySubtypesData.data) {
+      const prePropertyUsage = applicationData.propertyUsage;
       const prePropertyType = prePropertyUsage.split(".")[0];
-
+      // console.log("find propertySubtypesData here", propertySubtypesData.data, prePropertyUsage, propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage))
       setPropertyType(propertyTypesData.data.filter((type) => type.code === prePropertyType)[0]);
       setSubType(propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)[0]);
     }
 
-    if (applicationData && applicationData.fsm && sanitationMenu) {
-      const prePitType = applicationData.fsm[0].sanitationtype;
+    if (applicationData && sanitationMenu) {
+      const prePitType = applicationData.sanitationtype;
       // console.log("find prePitType and sanitationType data here",prePitType, sanitationMenu, sanitationMenu.filter( pitType => pitType.code === prePitType)[0])
       setSanitation(sanitationMenu.filter((pitType) => pitType.code === prePitType)[0]);
     }
-    if (applicationData && applicationData.fsm && Object.keys(pitDimension).length === 0) {
-      const __height = applicationData.fsm[0].pitDetail?.height;
-      const __length = applicationData.fsm[0].pitDetail?.length;
-      const __width = applicationData.fsm[0].pitDetail?.width;
-      const __diameter = applicationData.fsm[0].pitDetail?.diameter;
+    if (applicationData && Object.keys(pitDimension).length === 0) {
+      const __height = applicationData.pitDetail?.height;
+      const __length = applicationData.pitDetail?.length;
+      const __width = applicationData.pitDetail?.width;
+      const __diameter = applicationData.pitDetail?.diameter;
       setPitDimension({
         height: __height,
         length: __length,
@@ -146,7 +151,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
 
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code));
+    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code?.toUpperCase()));
   }
 
   function selectSlum(value) {
@@ -210,25 +215,25 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const propertyType = name;
     const { height, length, width } = pitDimension;
 
-    (applicationData.fsm[0].citizen = {
+    (applicationData.citizen = {
       name: applicantName,
       mobileNumber,
     }),
-      (applicationData.fsm[0].tenantId = cityCode),
-      (applicationData.fsm[0].sanitationtype = sanitationtype),
-      (applicationData.fsm[0].source = applicationChannel),
-      (applicationData.fsm[0].additionalDetails = {
+      (applicationData.tenantId = cityCode),
+      (applicationData.sanitationtype = sanitationtype),
+      (applicationData.source = applicationChannel),
+      (applicationData.additionalDetails = {
         tripAmount: amount,
       }),
-      (applicationData.fsm[0].propertyUsage = subType.code),
-      (applicationData.fsm[0].vehicleType = vehicle.code),
-      (applicationData.fsm[0].pitDetail = {
+      (applicationData.propertyUsage = subType.code),
+      (applicationData.vehicleType = vehicle.code),
+      (applicationData.pitDetail = {
         distanceFromRoad: data.distanceFromRoad,
         height,
         length,
         width,
       }),
-      (applicationData.fsm[0].address = {
+      (applicationData.address = {
         tenantId: cityCode,
         landmark,
         doorNo,
@@ -245,17 +250,17 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           longitude: selectedLocality.longitude,
         },
       }),
-      (applicationData.fsm[0].noOfTrips = noOfTrips),
-      (applicationData.workflow = {
-        action: "SUBMIT",
-      }),
+      (applicationData.noOfTrips = noOfTrips),
+      // (applicationData.workflow = {
+      //   action: "SUBMIT",
+      // }),
       delete applicationData["responseInfo"];
-    console.log(
-      "%c: onSubmit -> formData ",
-      "font-size:16px;background-color:#3dd445;color:white;",
-      { fsm: applicationData.fsm[0], workflow: applicationData.workflow },
-      subType
-    );
+    // console.log(
+    //   "%c: onSubmit -> formData ",
+    //   "font-size:16px;background-color:#3dd445;color:white;",
+    //   { fsm: applicationData, workflow: applicationData.workflow },
+    //   subType
+    // );
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -264,11 +269,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     Digit.SessionStorage.set("locality_property", null);
 
     history.push("/digit-ui/employee/fsm/response", {
-      applicationData: {
-        fsm: applicationData.fsm[0],
-        workflow: applicationData.workflow,
-      },
+      applicationData: { fsm: applicationData },
       key: "update",
+      action: "SUBMIT",
     });
   };
 

@@ -1,13 +1,13 @@
 import { useQuery, useQueryClient } from "react-query";
-import useSearchAll from "./useSearch";
+import useSearchAll from "./useSearchAll";
 
 const useInbox = (tenantId, filters) => {
   const client = useQueryClient();
-  const { isLoading, isError, data } = useSearchAll(tenantId, filters);
+  const { isLoading, isError, data: applicationsList } = useSearchAll(tenantId, filters);
+  // console.log("find inbox application here", applicationsList)
 
   const fetchInboxData = async () => {
     let result = [];
-    const { fsm: applicationsList } = data;
     // const tenantId = Digit.ULBService.getCurrentTenantId();
     const serviceIds = applicationsList.map((application) => application.applicationNo);
     const serviceIdParams = serviceIds.join();
@@ -22,7 +22,7 @@ const useInbox = (tenantId, filters) => {
     }
   };
 
-  const result = useQuery(["FSM_INBOX", data], fetchInboxData, { enabled: !!data });
+  const result = useQuery(["FSM_INBOX", applicationsList], fetchInboxData, { enabled: !!applicationsList });
   return { ...result, revalidate: () => client.refetchQueries(["FSM_INBOX"]) };
 };
 

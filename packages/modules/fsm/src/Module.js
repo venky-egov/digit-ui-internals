@@ -16,7 +16,6 @@ import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
-import MarkForDisposal from "./pages/MarkForDisposal";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 
 import { useTranslation } from "react-i18next";

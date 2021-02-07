@@ -54,7 +54,7 @@ const Response = (props) => {
     };
     console.log("state -------->", state);
     if (state.key === "update") {
-      mutation.mutate(state.applicationData, {
+      mutation.mutate(state.applicationData, state.action, {
         onSuccess,
       });
     } else {

@@ -8,15 +8,15 @@ export const MyApplications = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { info: userInfo } = Digit.UserService.getUser();
 
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch(tenantId, { uuid: userInfo.uuid, limit: 100 });
+  const { isLoading, isError, error, data: applicationsList } = Digit.Hooks.fsm.useSearch(tenantId, { uuid: userInfo.uuid, limit: 100 });
 
   if (isLoading) {
     return <Loader />;
   }
 
-  const { fsm: applicationsList } = data;
-
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <React.Fragment>
       <Header>{t("CS_FSM_APPLICATION_TITLE_MY_APPLICATION")}</Header>
       {applicationsList?.length > 0 &&

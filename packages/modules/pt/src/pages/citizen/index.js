@@ -24,7 +24,7 @@ const App = () => {
         <PrivateRoute path={`${path}/property/bill-details/:uniquePropertyId`} component={() => <BillDetails />} />
         <PrivateRoute path={`${path}/property/my-applications`} component={MyApplications} />
         <PrivateRoute path={`${path}/property/my-receipts`} component={MyReceipts} />
-        {/* <Redirect to={`${path}/property/my-applications`} /> */}
+        <Redirect to={`${path}/property/my-applications`} />
       </AppContainer>
     </Switch>
   );

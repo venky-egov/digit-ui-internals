@@ -1,7 +1,7 @@
-import React, { useReducer } from "react";
-import { Header, Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
-import { useTranslation } from "react-i18next";
-import { Switch, Route, useParams, useRouteMatch, Redirect } from "react-router-dom";
+import React from "react";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
+
+import { MyBills } from "./bills";
 import { SelectPaymentType } from "./payment-type/index";
 import { SuccessfulPayment, FailedPayment } from "./response";
 
@@ -12,6 +12,9 @@ const CitizenPayment = ({ stateCode, cityCode, moduleCode }) => {
   return (
     <React.Fragment>
       <Switch>
+        <Route path={`${currentPath}/my-bills/:businessService`}>
+          <MyBills />
+        </Route>
         <Route path={`${currentPath}/collect/:businessService/:consumerCode`}>
           <SelectPaymentType {...commonProps} basePath={currentPath} />
         </Route>

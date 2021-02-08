@@ -49,6 +49,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [noOfTrips, setNoOfTrips] = useState(1);
+  const [amountPerTrip, setAmountPerTrip] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
@@ -61,10 +64,22 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [selectedLocality, setSelectedLocality] = useState();
   const [canSubmit, setSubmitValve] = useState(false);
 
+  useEffect(() => {
+    if (amountPerTrip) {
+      setPaymentAmount(noOfTrips * amountPerTrip);
+    } else {
+      if (vehicle?.amount) {
+        setPaymentAmount(noOfTrips * vehicle?.amount);
+      }
+    }
+  }, [vehicle, noOfTrips, amountPerTrip]);
+
   // console.log("find channel state here", channel);
   useEffect(() => {
     const applicationDetails = applicationData;
     if (applicationDetails) {
+      const vehicle = vehicleMenu.find((vehicle) => vehicle.code === applicationDetails.vehicleType);
+      setVehicle(vehicle);
       setDefaultValues({
         applicantName: applicationDetails.citizen?.name,
         mobileNumber: applicationDetails.citizen?.mobileNumber,
@@ -193,6 +208,11 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     setSelectedLocality(locality);
   }
 
+  const onFormValueChange = (formData) => {
+    setNoOfTrips(formData?.noOfTrips || 1);
+    setAmountPerTrip(formData?.amountPerTrip);
+  };
+
   const onSubmit = (data) => {
     const applicationChannel = channel.code;
     const sanitationtype = sanitation.code;
@@ -214,6 +234,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const { name } = subType;
     const propertyType = name;
     const { height, length, width } = pitDimension;
+    // const additionalTrip  = data.additionalTrip
+    // const additionalCharges  = data.additionalCharges
+    // const reasonForAdditionalCharges  = data.reasonForAdditionalCharges
+    // const additionalAmount  = data.additionalAmount
 
     (applicationData.citizen = {
       name: applicantName,
@@ -250,7 +274,11 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           longitude: selectedLocality.longitude,
         },
       }),
-      (applicationData.noOfTrips = noOfTrips),
+      // TODO: To be added after approval
+      // (applicationData.additionalTrip = additionalTrip ),
+      // (applicationData.additionalCharges = additionalCharges ),
+      // (applicationData.reasonForAdditionalCharges = reasonForAdditionalCharges ),
+      // (applicationData.additionalAmount = additionalAmount )
       // (applicationData.workflow = {
       //   action: "SUBMIT",
       // }),
@@ -410,6 +438,21 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
         },
         {
+          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+          isMandatory: true,
+          type: "dropdown",
+          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
+        },
+        {
+          label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
+          type: "text",
+          populators: {
+            name: "amountPerTrip",
+            validation: { required: true },
+            defaultValue: vehicle?.amount,
+          },
+        },
+        {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
           type: "text",
           populators: {
@@ -427,22 +470,41 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               required: true,
               pattern: /[0-9]+/,
             },
+            defaultValue: paymentAmount,
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
+          type: "text",
+          populators: {
+            name: "additionalTrip",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
+          type: "text",
+          populators: {
+            name: "additionalCharges",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
+          type: "text",
+          populators: {
+            name: "reasonForAdditionalCharges",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
+          type: "text",
+          populators: {
+            name: "additionalAmount",
           },
         },
       ],
     },
-    {
-      head: t(),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-        },
-      ],
-    },
   ];
+
   if (defaultValues) {
     return (
       <FormComposer
@@ -452,6 +514,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         config={config}
         onSubmit={onSubmit}
         defaultValues={defaultValues}
+        onFormValueChange={onFormValueChange}
       ></FormComposer>
     );
   } else {

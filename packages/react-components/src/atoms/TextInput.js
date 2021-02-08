@@ -14,8 +14,7 @@ const TextInput = (props) => {
           onChange={props.onChange}
           ref={props.inputRef}
           value={props.value}
-          disabled={props.disable}
-          style={{ borderColor: props.disable ? "#ccc" : "black", color: props.disable ? "#ccc" : "revert" }}
+          style={{ ...props.style }}
           defaultValue={props.defaultValue}
           minLength={props.minlength}
           maxLength={props.maxlength}
@@ -29,8 +28,7 @@ const TextInput = (props) => {
           onChange={props.onChange}
           ref={props.inputRef}
           value={props.value}
-          style={{ ...props.style, borderColor: props.disable ? "#ccc" : "black", color: props.disable ? "#ccc" : "revert" }}
-          disabled={props.disable}
+          style={{ ...props.style }}
           defaultValue={props.defaultValue}
           minLength={props.minlength}
           maxLength={props.maxlength}

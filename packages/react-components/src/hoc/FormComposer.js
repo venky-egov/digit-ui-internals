@@ -31,7 +31,7 @@ export const FormComposer = (props) => {
     props.onFormValueChange && props.onFormValueChange(formData, formState);
   }, [formData]);
 
-  const fieldSelector = (type, populators, isMandatory, disable = false) => {
+  const fieldSelector = (type, populators, isMandatory) => {
     switch (type) {
       case "text":
       case "date":
@@ -52,26 +52,17 @@ export const FormComposer = (props) => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  borderColor: disable ? "#ccc" : "revert",
-                  color: disable ? "#ccc" : "revert",
                 }}
               >
                 {populators.componentInFront}
               </span>
             ) : null}
-            <TextInput
-              className="field"
-              {...populators}
-              inputRef={register(populators.validation)}
-              isRequired={isMandatory}
-              type={type}
-              disable={disable}
-            />
+            <TextInput className="field" {...populators} inputRef={register(populators.validation)} isRequired={isMandatory} type={type} />
           </div>
         );
       case "textarea":
         if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
-        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} disable={disable} />;
+        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} />;
       case "custom":
         return (
           <Controller
@@ -97,7 +88,7 @@ export const FormComposer = (props) => {
                 return (
                   <React.Fragment>
                     {!field.withoutLabel && (
-                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
                         {field.label}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
@@ -110,13 +101,13 @@ export const FormComposer = (props) => {
               return (
                 <LabelFieldPair key={index}>
                   {!field.withoutLabel && (
-                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
+                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
                       {field.label}
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}
                   <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators, field.isMandatory, field.disable)}
+                    {fieldSelector(field.type, field.populators, field.isMandatory)}
                   </div>
                 </LabelFieldPair>
               );

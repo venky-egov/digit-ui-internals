@@ -54,7 +54,8 @@
   }
 
   .employee-card-input {
-    width: 496px;
+    @apply w-full;
+    max-width: 496px;
   }
 
   .employee-card-input-error {

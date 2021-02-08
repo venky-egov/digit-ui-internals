@@ -35,13 +35,16 @@ const RatingCard = ({ config, onSelect, t }) => {
     }
 
     if (input.type === "checkbox") {
-      return (
-        <React.Fragment key={index}>
-          <CardLabel>{t(input.label)}</CardLabel>
-          {input.checkLabels &&
-            input.checkLabels.map((label, index) => <CheckBox key={index} name={input.label} label={label} inputRef={register} />)}
-        </React.Fragment>
-      );
+      const name = rating <= 2 && rating > 0 ? "WHAT_WAS_BAD" : "WHAT_WAS_GOOD";
+      if (input.name === name) {
+        return (
+          <React.Fragment key={index}>
+            <CardLabel>{t(input.label)}</CardLabel>
+            {input.checkLabels &&
+              input.checkLabels.map((label, index) => <CheckBox key={index} name={input.label} label={label} inputRef={register} />)}
+          </React.Fragment>
+        );
+      }
     }
 
     if (input.type === "textarea") {

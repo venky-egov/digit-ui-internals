@@ -26,25 +26,8 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
           {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
-          <div
-            className="field-container"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {componentInFront ? (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                {componentInFront}
-              </span>
-            ) : null}
+          <div className="field-container">
+            {componentInFront ? <span className="component-in-front">{componentInFront}</span> : null}
             <TextInput
               key={index}
               name={input.name}

@@ -234,9 +234,6 @@
     }
 
     .field-container {
-      display: "flex";
-      justify-content: "center";
-      align-items: "center";
       span {
         border: 2px solid black;
         background: rgb(247, 247, 247);
@@ -264,5 +261,15 @@
     .header-end {
       margin-left: auto;
     }
+  }
+}
+
+.field-container {
+  @apply flex items-center  mb-md;
+
+  .component-in-front {
+    border-right: none;
+    padding: 6px;
+    @apply border-2 border-input-border bg-grey-bg;
   }
 }

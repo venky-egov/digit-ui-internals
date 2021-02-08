@@ -1,6 +1,6 @@
 .checkbox-wrap {
   height: 38px;
-  @apply flex mb-md relative items-baseline;
+  @apply flex mb-md relative items-center;
 
   input {
     width: 38px;
@@ -34,7 +34,8 @@
     height: 24px;
   }
 
-  input:checked ~ .custom-checkbox, input:hover ~ .custom-checkbox {
+  input:checked ~ .custom-checkbox,
+  input:hover ~ .custom-checkbox {
     @apply border-4 border-primary-main;
   }
 

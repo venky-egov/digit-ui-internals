@@ -3,7 +3,7 @@ import { Request } from "../atoms/Utils/Request";
 
 export const PTService = {
   fetchProperties: ({ tenantId, filters }) => {
-    Request({
+    return Request({
       url: Urls.pt.fectch_property,
       useCache: false,
       method: "POST",

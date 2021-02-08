@@ -2,7 +2,12 @@ import React from "react";
 import { CardSubHeader, ResponseComposer } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 
-const SearchResults = ({ template, header, actionButtonLabel, t }) => {
+const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
+  const { mobileNumber, propertyIds, oldpropertyids } = Digit.Hooks.useQueryParams();
+  console.log({ mobileNumber });
+
+  const result = Digit.Hooks.pt.usePropertySearch({ tenantId: "pb", filters: { mobileNumber, propertyIds, oldpropertyids } });
+  console.log({ property: result });
   const searchResults = [
     {
       total_due: "124",
@@ -21,16 +26,16 @@ const SearchResults = ({ template, header, actionButtonLabel, t }) => {
   );
 };
 
-SearchResults.propTypes = {
+PropertySearchResults.propTypes = {
   template: PropTypes.any,
   header: PropTypes.string,
   actionButtonLabel: PropTypes.string,
 };
 
-SearchResults.defaultProps = {
+PropertySearchResults.defaultProps = {
   template: [],
   header: null,
   actionButtonLabel: null,
 };
 
-export default SearchResults;
+export default PropertySearchResults;

@@ -27,6 +27,7 @@ import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
 import useDsoSearch from "./fsm/useDsoSearch";
+import usePropertySearch from "./pt/usePropertySearch";
 
 const pgr = {
   useComplaintDetails,
@@ -55,6 +56,10 @@ const fsm = {
   useDsoSearch,
 };
 
+const pt = {
+  usePropertySearch,
+};
+
 const Hooks = {
   useSessionStorage,
   useQueryParams,
@@ -66,6 +71,7 @@ const Hooks = {
   useCoreData,
   pgr,
   fsm,
+  pt,
 };
 
 export default Hooks;

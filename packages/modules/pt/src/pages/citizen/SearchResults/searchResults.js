@@ -8,15 +8,17 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
 
   const result = Digit.Hooks.pt.usePropertySearch({ tenantId: "pb", filters: { mobileNumber, propertyIds, oldpropertyids } });
   console.log({ property: result });
-  const searchResults = [
-    {
+  const searchResults = result?.data?.Properties?.map( property => {
+    let addr = property?.address || {}
+
+   return { 
+      property_id: property?.propertyId,
+      owner_name:(property?.owners || [])[0]?.name,
+      property_address: [(addr?.doorNo || ''), (addr?.buildingName || ''), (addr?.street || ''), (addr?.locality?.name || ''), (addr?.city || '') ].filter(a => a).join(', '),
       total_due: "124",
-      property_id: "123456789",
-      owner_name: "Example Name",
-      property_address: "Example Address, example country",
-      bil_due__date: "25-01-2022",
-    },
-  ];
+      bil_due__date: "25-01-2022"
+    }
+  })
 
   return (
     <div>

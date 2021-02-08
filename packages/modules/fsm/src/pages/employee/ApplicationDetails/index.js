@@ -15,9 +15,12 @@ import {
   ActionBar,
   Menu,
   LinkButton,
+  Toast,
 } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
+
+import { useQueryClient } from "react-query";
 
 import { useHistory, useParams } from "react-router-dom";
 
@@ -26,14 +29,23 @@ const ApplicationDetails = (props) => {
   const state = tenantId.split(".")[0];
   const { t } = useTranslation();
   const history = useHistory();
+  const queryClient = useQueryClient();
   let { id: applicationNumber } = useParams();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [showToast, setShowToast] = useState(null);
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   // console.log("find DSO here", DSO)
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
+  const {
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
+    mutate,
+  } = Digit.Hooks.fsm.useApplicationActions(tenantId);
 
   // console.log("find application details here", applicationDetails)
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
@@ -76,6 +88,7 @@ const ApplicationDetails = (props) => {
       // setCurrentConfig(configCompleteApplication);
       case "CANCEL":
       case "SENDBACK":
+      case "REJECT":
         // setCurrentConfig(configRejectApplication);
         return setShowModal(true);
       case "SUBMIT":
@@ -109,10 +122,25 @@ const ApplicationDetails = (props) => {
     setSelectedAction(null);
   };
 
+  const closeToast = () => {
+    setShowToast(null);
+  };
+
   const submitAction = (data) => {
-    console.log("find submit action data here", data);
+    // console.log("find submit action data here", data);
+    mutate(data, {
+      onError: (error, variables) => {
+        // console.log("find error here",error)
+        setShowToast({ key: "error", action: error });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        setShowToast({ key: "success", action: selectedAction });
+        setTimeout(closeToast, 5000);
+        queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+      },
+    });
     closeModal();
-    setVehicle(null);
   };
 
   if (isLoading) {
@@ -176,8 +204,23 @@ const ApplicationDetails = (props) => {
             )}
           </Card>
           {showModal ? (
-            <ActionModal t={t} action={selectedAction} tenantId={tenantId} state={state} closeModal={closeModal} submitAction={submitAction} />
+            <ActionModal
+              t={t}
+              action={selectedAction}
+              tenantId={tenantId}
+              state={state}
+              id={applicationNumber}
+              closeModal={closeModal}
+              submitAction={submitAction}
+            />
           ) : null}
+          {showToast && (
+            <Toast
+              error={showToast.key === "error" ? true : false}
+              label={t(showToast.key === "success" ? `ES_FSM_${showToast.action}_UPDATE_SUCCESS` : showToast.action)}
+              onClose={closeToast}
+            />
+          )}
           {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
             <ActionBar>
               {displayMenu && workflowDetails?.data?.nextActions ? (

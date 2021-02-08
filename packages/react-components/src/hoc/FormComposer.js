@@ -95,7 +95,7 @@ export const FormComposer = (props) => {
             {section.body.map((field, index) => {
               if (props.inline)
                 return (
-                  <React.Fragment>
+                  <React.Fragment key={index}>
                     {!field.withoutLabel && (
                       <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
                         {field.label}
@@ -137,7 +137,7 @@ export const FormComposer = (props) => {
   const isDisabled = props.isDisabled || false;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} id={props.formId}>
       <Card style={getCardStyles()}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}

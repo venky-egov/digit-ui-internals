@@ -12,7 +12,13 @@ const ButtonSelector = (props) => {
       break;
   }
   return (
-    <button className={theme} type="submit" onClick={props.onSubmit}>
+    <button
+      className={props.isDisabled ? "selector-button-primary-disabled" : theme}
+      type="submit"
+      form={props.formId}
+      onClick={props.onSubmit}
+      disabled={props.isDisabled}
+    >
       <h2>{props.label}</h2>
     </button>
   );

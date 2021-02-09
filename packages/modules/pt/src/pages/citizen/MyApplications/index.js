@@ -6,15 +6,14 @@ import { useTranslation } from "react-i18next";
 export const MyApplications = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { info: userInfo } = Digit.UserService.getUser();
 
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch(tenantId, { uuid: userInfo.uuid, limit: 100 });
+  const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ tenantId });
 
   if (isLoading) {
     return <Loader />;
   }
 
-  const { fsm: applicationsList } = data;
+  const { Properties: applicationsList } = data;
 
   return (
     <React.Fragment>

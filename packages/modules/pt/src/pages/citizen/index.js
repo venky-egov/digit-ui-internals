@@ -12,9 +12,6 @@ import ApplicationDetails from "./MyApplications/application-details";
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
-  console.log("pt citizen", { path, url, ...match });
-  const location = useLocation();
-  const mobileView = innerWidth <= 640;
   return (
     <Switch>
       <AppContainer>
@@ -23,7 +20,7 @@ const App = () => {
         <PrivateRoute path={`${path}/property/search-results`} component={SearchResultsComponent} />
         <PrivateRoute path={`${path}/property/my-bills`} component={MyBills}></PrivateRoute>
         <PrivateRoute path={`${path}/property/bill-details/:uniquePropertyId`} component={() => <BillDetails />}></PrivateRoute>
-        <PrivateRoute path={`${path}/property/application/:id`} component={ApplicationDetails}></PrivateRoute>
+        <PrivateRoute path={`${path}/property/application/:acknowledgementIds`} component={ApplicationDetails}></PrivateRoute>
         <PrivateRoute path={`${path}/property/my-applications`} component={MyApplications}></PrivateRoute>
         {/* <Redirect to={`${path}/property/my-applications`}></Redirect> */}
       </AppContainer>

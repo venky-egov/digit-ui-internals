@@ -70,10 +70,9 @@ window.Digit.SessionStorage.set("userType", userTypeInfo);
 
 if (userType !== "CITIZEN") {
   window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
+} else {
+  window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
 }
-// else {
-//   window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
-// }
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);

@@ -64,7 +64,7 @@ export const FormComposer = (props) => {
               inputRef={register(populators.validation)}
               isRequired={isMandatory}
               type={type}
-              disabled={disable}
+              disable={disable}
             />
           </div>
         );

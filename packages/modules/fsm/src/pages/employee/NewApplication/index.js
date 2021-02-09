@@ -196,7 +196,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         propertyUsage: subType.code,
         vehicleType: vehicle.code,
-        pitDetail: pitDimension,
+        pitDetail: {
+          ...pitDimension,
+          distanceFromRoad: data.distanceFromRoad,
+        },
         address: {
           tenantId: cityCode,
           landmark,
@@ -215,7 +218,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
           },
         },
         noOfTrips,
-        distanceFromRoad: data.distanceFromRoad,
       },
       workflow: null,
     };

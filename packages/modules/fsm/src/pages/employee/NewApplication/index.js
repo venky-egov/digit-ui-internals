@@ -156,11 +156,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
     }
   };
 
-  const handleAmountPerTrip = (event) => {
-    const { value } = event.target;
-    setAmountPerTrip(value);
-  };
-
   const isPincodeValid = () => !pincodeNotValid;
 
   function selectLocality(locality) {
@@ -201,7 +196,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         propertyUsage: subType.code,
         vehicleType: vehicle.code,
-        pitDetail: pitDimension,
+        pitDetail: {
+          ...pitDimension,
+          distanceFromRoad: data.distanceFromRoad,
+        },
         address: {
           tenantId: cityCode,
           landmark,
@@ -352,7 +350,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
           type: "dropdown",
-          isMandatory: true,
           populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
         },
         {
@@ -360,14 +357,19 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
         },
         {
+          label: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
+          type: "text",
+          populators: {
+            name: "distanceFromRoad",
+          },
+        },
+        {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
-          isMandatory: true,
           type: "text",
           populators: {
             name: "noOfTrips",
@@ -380,7 +382,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "amountPerTrip",
-            onChange: handleAmountPerTrip,
             validation: { required: true },
             defaultValue: vehicle?.amount,
           },
@@ -388,12 +389,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
           type: "text",
-          disable: true,
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
             defaultValue: paymentAmount,
-            disable: true,
           },
         },
       ],

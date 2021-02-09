@@ -93,7 +93,7 @@
 }
 
 .check-page-link-button {
-  color: #F47738 !important;
+  color: #f47738 !important;
 }
 
 .application-table-container {
@@ -123,4 +123,8 @@
   cursor: pointer;
   font-weight: 500;
   width: fit-content;
+}
+
+.disabled {
+  @apply border-grey-dark text-grey-dark !important;
 }

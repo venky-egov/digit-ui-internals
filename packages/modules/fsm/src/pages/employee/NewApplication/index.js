@@ -361,7 +361,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "distanceFromRoad",
-            validation: { pattern: /[0-9]+/ },
           },
         },
         {

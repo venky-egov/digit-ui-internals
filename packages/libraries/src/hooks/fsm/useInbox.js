@@ -8,7 +8,7 @@ const useInbox = (tenantId, filters) => {
   const fetchApplications = ({ queryKey }) => {
     const [_key, filters] = queryKey;
     let filtersObj = {};
-    const { applicationNos, mobileNumber } = filters;
+    const { applicationNos, mobileNumber, limit, offset } = filters;
     if (filters.applicationStatus) {
       filtersObj.applicationStatus = filters.applicationStatus.map((status) => status.code).join(",");
     }
@@ -19,12 +19,12 @@ const useInbox = (tenantId, filters) => {
       filtersObj.uuid = filters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
     }
     if (mobileNumber) {
-      filters.mobileNumber = mobileNumber;
+      filtersObj.mobileNumber = mobileNumber;
     }
     if (applicationNos) {
-      filters.applicationNos = applicationNos;
+      filtersObj.applicationNos = applicationNos;
     }
-    return Search.all(tenantId, filtersObj);
+    return Search.all(tenantId, { ...filtersObj, limit, offset });
   };
   const { isLoading, isError, data: applicationsList } = useSearchAll(tenantId, filters, fetchApplications);
   // console.log("find inbox application here", applicationsList)

@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 
-export const configRejectApplication = ({ t, vehicleMenu, vehicle, selectVehicle }) => ({
+export const configRejectApplication = ({ t, rejectMenu, rejectionReason, selectReason }) => ({
   label: {
     heading: "ES_FSM_ACTION_TITLE_DECLINE_REQUEST",
     submit: "CS_COMMON_DECLINE",
@@ -13,7 +13,7 @@ export const configRejectApplication = ({ t, vehicleMenu, vehicle, selectVehicle
         {
           label: t("ES_FSM_ACTION_DECLINE_REASON"),
           type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+          populators: <Dropdown option={rejectMenu} id="reason" selected={rejectionReason} select={selectReason} />,
         },
         {
           label: t("ES_FSM_ACTION_COMMENTS"),

@@ -56,7 +56,12 @@ const Response = (props) => {
     if (state.key === "update") {
       // console.log("find state here", state.applicationData, state.action)
       mutation.mutate(
-        { applicationData: state.applicationData, action: state.action },
+        {
+          fsm: state.applicationData,
+          workflow: {
+            action: state.action,
+          },
+        },
         {
           onSuccess,
         }

@@ -1,13 +1,28 @@
 import React from "react";
-import { CardSubHeader, ResponseComposer } from "@egovernments/digit-ui-react-components";
+import { CardSubHeader, ResponseComposer, Loader } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 
 const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
   const { mobileNumber, propertyIds, oldpropertyids } = Digit.Hooks.useQueryParams();
   console.log({ mobileNumber });
-
   const result = Digit.Hooks.pt.usePropertySearch({ tenantId: "pb", filters: { mobileNumber, propertyIds, oldpropertyids } });
   console.log({ property: result });
+  const consumerCodes = result?.data?.Properties?.map(a => a.propertyId).join(',')
+  const paymentDetails = Digit.Hooks.pt.usePropertyPayment({ tenantId: "pb", consumerCodes})
+
+  if (paymentDetails.isLoading || result.isLoading) {
+    return <Loader />;
+  }
+  
+  const payment = {}
+   paymentDetails?.data?.Bill?.forEach(element => {
+    if(element?.consumerCode){
+      payment[element?.consumerCode]= {
+        total_due: element?.totalAmount,
+        bil_due__date: new Date(element?.billDate).toDateString()
+      }
+    }
+  });
   const searchResults = result?.data?.Properties?.map((property) => {
     let addr = property?.address || {};
 
@@ -17,8 +32,8 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
       property_address: [addr.doorNo || "", addr.buildingName || "", addr.street || "", addr.locality?.name || "", addr.city || ""]
         .filter((a) => a)
         .join(", "),
-      total_due: "124",
-      bil_due__date: "25-01-2022",
+      total_due:payment[property?.propertyId]?.total_due || 0 ,
+      bil_due__date: payment[property?.propertyId]?.bil_due__date || 'No Demand Found' ,
     };
   });
 

@@ -8,6 +8,7 @@ import { useRouteMatch, Switch, useLocation, Redirect } from "react-router-dom";
 import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import SearchPropertyComponent from "./SearchProperty";
 import SearchResultsComponent from "./SearchResults";
+import ApplicationDetails from "./MyApplications/application-details";
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
@@ -20,11 +21,11 @@ const App = () => {
         <BackButton>Back</BackButton>
         <PrivateRoute path={`${path}/property/search`} component={SearchPropertyComponent} />
         <PrivateRoute path={`${path}/property/search-results`} component={SearchResultsComponent} />
-        <PrivateRoute path={`${path}/property/my-bills`} component={MyBills} />
-        <PrivateRoute path={`${path}/property/bill-details/:uniquePropertyId`} component={() => <BillDetails />} />
-        <PrivateRoute path={`${path}/property/my-applications`} component={MyApplications} />
-        <PrivateRoute path={`${path}/property/my-receipts`} component={MyReceipts} />
-        {/* <Redirect to={`${path}/property/my-applications`} /> */}
+        <PrivateRoute path={`${path}/property/my-bills`} component={MyBills}></PrivateRoute>
+        <PrivateRoute path={`${path}/property/bill-details/:uniquePropertyId`} component={() => <BillDetails />}></PrivateRoute>
+        <PrivateRoute path={`${path}/property/application/:id`} component={ApplicationDetails}></PrivateRoute>
+        <PrivateRoute path={`${path}/property/my-applications`} component={MyApplications}></PrivateRoute>
+        {/* <Redirect to={`${path}/property/my-applications`}></Redirect> */}
       </AppContainer>
     </Switch>
   );

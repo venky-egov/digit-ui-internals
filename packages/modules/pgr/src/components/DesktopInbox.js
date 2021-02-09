@@ -8,7 +8,19 @@ import Filter from "./inbox/Filter";
 import SearchComplaint from "./inbox/search";
 import { LOCALE } from "../constants/Localization";
 
-const DesktopInbox = ({ data, onFilterChange, onSearch, isLoading, searchParams }) => {
+const DesktopInbox = ({
+  data,
+  onFilterChange,
+  onSearch,
+  isLoading,
+  searchParams,
+  onNextPage,
+  onPrevPage,
+  currentPage,
+  pageSizeLimit,
+  onPageSizeChange,
+  totalRecords,
+}) => {
   const { t } = useTranslation();
   const GetCell = (value) => <span className="cell-text">{value}</span>;
   const GetSlaCell = (value) => {
@@ -89,6 +101,12 @@ const DesktopInbox = ({ data, onFilterChange, onSearch, isLoading, searchParams 
             },
           };
         }}
+        onNextPage={onNextPage}
+        onPrevPage={onPrevPage}
+        totalRecords={totalRecords}
+        onPageSizeChagne={onPageSizeChange}
+        currentPage={currentPage}
+        pageSizeLimit={pageSizeLimit}
       />
     );
   } else {

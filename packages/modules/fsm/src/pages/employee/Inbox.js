@@ -11,14 +11,34 @@ const Inbox = () => {
   const userRoles = userInfo.info.roles;
 
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useState({});
+  const [pageOffset, setPageOffset] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchParams, setSearchParams] = useState({
+    applicationStatus: [],
+    locality: [],
+    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+  });
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
     ...searchParams,
+    limit: pageSize + 1,
+    offset: pageOffset,
   });
+
+  const fetchNextPage = () => {
+    setPageOffset((prevState) => prevState + pageSize);
+  };
+
+  const fetchPrevPage = () => {
+    setPageOffset((prevState) => prevState - pageSize);
+  };
 
   const handleFilterChange = (filterParam) => {
     // console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     setSearchParams({ ...searchParams, ...filterParam });
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
   };
 
   const onSearch = (params = {}) => {
@@ -54,7 +74,15 @@ const Inbox = () => {
   let isMobile = window.Digit.Utils.browser.isMobile;
   if (applications?.length !== null) {
     if (isMobile) {
-      return <MobileInbox data={applications} isLoading={isLoading || isIdle} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+      return (
+        <MobileInbox
+          data={applications}
+          isLoading={isLoading || isIdle}
+          onFilterChange={handleFilterChange}
+          onSearch={onSearch}
+          searchParams={searchParams}
+        />
+      );
     } else {
       return (
         <div>
@@ -65,6 +93,11 @@ const Inbox = () => {
             onFilterChange={handleFilterChange}
             searchFields={getSearchFields(userRoles)}
             onSearch={onSearch}
+            onNextPage={fetchNextPage}
+            onPrevPage={fetchPrevPage}
+            currentPage={Math.floor(pageOffset / pageSize)}
+            pageSizeLimit={pageSize}
+            onPageSizeChange={handlePageSizeChange}
           />
         </div>
       );

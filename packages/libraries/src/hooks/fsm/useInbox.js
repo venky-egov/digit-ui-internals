@@ -1,9 +1,32 @@
 import { useQuery, useQueryClient } from "react-query";
+import { Search } from "../../services/molecules/FSM/Search";
 import useSearchAll from "./useSearchAll";
 
 const useInbox = (tenantId, filters) => {
   const client = useQueryClient();
-  const { isLoading, isError, data: applicationsList } = useSearchAll(tenantId, filters);
+  let { uuid } = Digit.UserService.getUser().info;
+  const fetchApplications = ({ queryKey }) => {
+    const [_key, filters] = queryKey;
+    let filtersObj = {};
+    const { applicationNos, mobileNumber } = filters;
+    if (filters.applicationStatus) {
+      filtersObj.applicationStatus = filters.applicationStatus.map((status) => status.code).join(",");
+    }
+    if (filters.locality) {
+      filtersObj.locality = filters.locality.map((item) => item.code.split("_").pop()).join(",");
+    }
+    if (filters.uuid && Object.keys(filters.uuid).length > 0) {
+      filtersObj.uuid = filters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
+    }
+    if (mobileNumber) {
+      filters.mobileNumber = mobileNumber;
+    }
+    if (applicationNos) {
+      filters.applicationNos = applicationNos;
+    }
+    return Search.all(tenantId, filtersObj);
+  };
+  const { isLoading, isError, data: applicationsList } = useSearchAll(tenantId, filters, fetchApplications);
   // console.log("find inbox application here", applicationsList)
 
   const fetchInboxData = async () => {

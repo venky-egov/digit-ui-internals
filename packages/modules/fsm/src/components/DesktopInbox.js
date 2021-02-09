@@ -114,6 +114,12 @@ const DesktopInbox = (props) => {
             },
           };
         }}
+        onPageSizeChange={props.onPageSizeChange}
+        currentPage={props.currentPage}
+        onNextPage={props.onNextPage}
+        onPrevPage={props.onPrevPage}
+        pageSizeLimit={props.pageSizeLimit}
+        onPageSizeChagne={props.onPageSizeChagne}
       />
     );
   }

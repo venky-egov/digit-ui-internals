@@ -28,7 +28,7 @@ const TextField = (props) => {
 
   return (
     <input
-      className="employee-select-wrap--elipses"
+      className={`employee-select-wrap--elipses ${props.disable && "disabled"}`}
       type="text"
       value={value}
       onChange={inputChange}
@@ -53,11 +53,13 @@ const Dropdown = (props) => {
   }, [props.selected]);
 
   function dropdownSwitch() {
-    var current = dropdownStatus;
-    if (!current) {
-      document.addEventListener("mousedown", handleClick, false);
+    if (!props.disable) {
+      var current = dropdownStatus;
+      if (!current) {
+        document.addEventListener("mousedown", handleClick, false);
+      }
+      setDropdownStatus(!current);
     }
-    setDropdownStatus(!current);
   }
 
   function handleClick(e) {
@@ -79,10 +81,6 @@ const Dropdown = (props) => {
   function onSelect(val) {
     //console.log(val, "curent", selectedOption, "old");
     if (val !== selectedOption) {
-      // console.log(val,"is selected");
-      props.select(val);
-      setSelectedOption(val);
-      setDropdownStatus(false);
     } else {
       setSelectedOption(val);
       setforceSet(forceSet + 1);
@@ -99,11 +97,11 @@ const Dropdown = (props) => {
       {hasCustomSelector && (
         <div className={props.showArrow ? "cp flex-right column-gap-5" : "cp"} onClick={dropdownSwitch}>
           {props.customSelector}
-          {props.showArrow && <ArrowDown onClick={dropdownSwitch} />}
+          {props.showArrow && <ArrowDown onClick={dropdownSwitch} className={props.disable && "disabled"} />}
         </div>
       )}
       {!hasCustomSelector && (
-        <div className={dropdownStatus ? "select-active" : "select"} style={{ borderColor: props.disable ? "#ccc" : "revert" }}>
+        <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`}>
           <TextField
             setFilter={setFilter}
             forceSet={forceSet}

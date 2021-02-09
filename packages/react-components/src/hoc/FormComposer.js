@@ -31,7 +31,7 @@ export const FormComposer = (props) => {
     props.onFormValueChange && props.onFormValueChange(formData, formState);
   }, [formData]);
 
-  const fieldSelector = (type, populators, isMandatory) => {
+  const fieldSelector = (type, populators, isMandatory, disable = false) => {
     switch (type) {
       case "text":
       case "date":
@@ -53,16 +53,24 @@ export const FormComposer = (props) => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
+                className={disable && "disabled"}
               >
                 {populators.componentInFront}
               </span>
             ) : null}
-            <TextInput className="field" {...populators} inputRef={register(populators.validation)} isRequired={isMandatory} type={type} />
+            <TextInput
+              className="field"
+              {...populators}
+              inputRef={register(populators.validation)}
+              isRequired={isMandatory}
+              type={type}
+              disabled={disable}
+            />
           </div>
         );
       case "textarea":
         if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
-        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} />;
+        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} disable={props.disable} />;
       case "custom":
         return (
           <Controller
@@ -88,26 +96,26 @@ export const FormComposer = (props) => {
                 return (
                   <React.Fragment>
                     {!field.withoutLabel && (
-                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
                         {field.label}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
                     <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                      {fieldSelector(field.type, field.populators, field.isMandatory)}
+                      {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable)}
                     </div>
                   </React.Fragment>
                 );
               return (
                 <LabelFieldPair key={index}>
                   {!field.withoutLabel && (
-                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
+                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
                       {field.label}
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}
                   <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators, field.isMandatory)}
+                    {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable)}
                   </div>
                 </LabelFieldPair>
               );

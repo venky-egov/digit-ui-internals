@@ -388,7 +388,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
           type: "text",
-          disable: true,
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },

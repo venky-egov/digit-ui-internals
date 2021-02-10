@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Header, Card, RadioButtons, CardSubHeader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
-import { useParams, useRouteMatch, useHistory } from "react-router-dom";
+import { useParams, useRouteMatch, useHistory, useLocation } from "react-router-dom";
 
 export const SelectPaymentType = (props) => {
+  const { state } = useLocation();
+  const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
   const history = useHistory();
   const { path: currentPath } = useRouteMatch();
@@ -13,6 +15,7 @@ export const SelectPaymentType = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
   const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
+
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
   console.log({ billDetails, payment: paymentdetails?.Bill });
 
@@ -20,8 +23,8 @@ export const SelectPaymentType = (props) => {
     const filterData = {
       Transaction: {
         tenantId: tenantId,
-        txnAmount: billDetails.totalAmount,
-        module: "FSM.TRIP_CHARGES",
+        txnAmount: paymentAmount || billDetails.totalAmount,
+        module: businessService,
         billId: billDetails.id,
         consumerCode: consumerCode,
         productInfo: "Common Payment",
@@ -29,7 +32,7 @@ export const SelectPaymentType = (props) => {
         taxAndPayments: [
           {
             billId: billDetails.id,
-            amountPaid: billDetails.totalAmount,
+            amountPaid: paymentAmount || billDetails.totalAmount,
           },
         ],
         user: {
@@ -68,7 +71,7 @@ export const SelectPaymentType = (props) => {
               <h2>Total Amount Due</h2>
             </span>
             <span style={{ fontSize: "20px" }} className="name">
-              ₹ {billDetails.totalAmount}
+              ₹ {paymentAmount || billDetails.totalAmount}
             </span>
           </div>
 

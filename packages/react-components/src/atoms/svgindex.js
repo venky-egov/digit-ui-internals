@@ -11,7 +11,7 @@ const ArrowDown = ({ className, onClick, styles, disable }) => (
     style={{ ...styles }}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill={disable ? "#ccc" : "black"}
+    fill={disable ? "#9E9E9E" : "black"}
     className={className}
     onClick={onClick}
     width="18px"

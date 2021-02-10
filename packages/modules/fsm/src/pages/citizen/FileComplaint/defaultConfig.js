@@ -44,8 +44,7 @@ export const config = {
           type: "text",
           name: "pincode",
           validation: {
-            minLength: 6,
-            maxLength: 7,
+            pattern: /^([1-9])(\d{5})$/,
           },
           error: "CORE_COMMON_PINCODE_INVALID",
         },
@@ -76,11 +75,19 @@ export const config = {
           label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL",
           type: "text",
           name: "street",
+          validation: {
+            pattern: /^[\w\s]{1,256}$/,
+          },
+          error: "CORE_COMMON_STREET_INVALID",
         },
         {
           label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL",
           type: "text",
           name: "doorNo",
+          validation: {
+            pattern: /^[\w\\\s]*$/,
+          },
+          error: "CORE_COMMON_DOOR_INVALID",
         },
       ],
       nextStep: "landmark",
@@ -99,6 +106,9 @@ export const config = {
           label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL",
           type: "textarea",
           name: "landmark",
+          validation: {
+            maxLength: 1024,
+          },
         },
       ],
       nextStep: "pit-type",

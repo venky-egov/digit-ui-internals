@@ -4,7 +4,7 @@ import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
 import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
-import { useFetchPayment, usePaymentUpdate } from "./payment";
+import { useFetchPayment, usePaymentUpdate, useFetchCitizenBillsForBuissnessService } from "./payment";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -28,6 +28,8 @@ import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
 import useDsoSearch from "./fsm/useDsoSearch";
+import usePropertySearch from "./pt/usePropertySearch";
+import usePropertyPayment from "./pt/usePropertyPayment";
 import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
 
@@ -61,17 +63,24 @@ const fsm = {
   useApplicationActions,
 };
 
+const pt = {
+  usePropertySearch,
+  usePropertyPayment,
+};
+
 const Hooks = {
   useSessionStorage,
   useQueryParams,
   useFetchPayment,
   usePaymentUpdate,
+  useFetchCitizenBillsForBuissnessService,
   useWorkflowDetails,
   useInitStore,
   useClickOutside,
   useCoreData,
   pgr,
   fsm,
+  pt,
 };
 
 export default Hooks;

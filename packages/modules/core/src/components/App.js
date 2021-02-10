@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
-import { TopBar, Dropdown, LogoutIcon, HomeIcon } from "@egovernments/digit-ui-react-components";
+import { TopBar, Dropdown, LogoutIcon, HomeIcon, Hamburger } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "./ChangeLanguage";
 import { useSelector } from "react-redux";
 
@@ -115,49 +115,48 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         </div>
       </Route>
       <Route path="/digit-ui/citizen">
-        {mobileView && (
+        {
           <TopBar
-            img={cityDetails?.logoId}
-            ulb={`${t(stateInfo?.name)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
+            img={stateInfo?.logoUrlWhite}
             isMobile={true}
             toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
-            logoUrl={logoUrl}
+            logoUrl={stateInfo?.logoUrlWhite}
             onLogout={handleLogout}
             userDetails={userDetails}
           />
-        )}
-        {!mobileView && (
-          <div className="topbar flex-between">
-            <div>
-              <img
-                className="state"
-                style={stateInfo ? { height: "30px", width: "auto", marginRight: "10px" } : { marginTop: "8px", height: "30px", width: "auto" }}
-                src={
-                  stateInfo
-                    ? stateInfo.logoUrl
-                    : "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png"
-                }
-              />
-            </div>
-            <div className="right width-20 flex-right column-gap-15">
-              <div className="left">
-                <ChangeLanguage dropdown={true} />
-              </div>
-              <div className="left">
-                <Dropdown
-                  option={userOptions}
-                  optionKey={"name"}
-                  select={handleUserDropdownSelection}
-                  showArrow={false}
-                  style={{ right: 0 }}
-                  customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} />}
-                />
-              </div>
-              {/* <img className="state" src={logoUrl} /> */}
-            </div>
-          </div>
-        )}
-        {!mobileView && (
+        }
+        {
+          // <div className="topbar flex-between">
+          //   <div>
+          //     <img
+          //       className="state"
+          //       style={stateInfo ? { height: "30px", width: "auto", marginRight: "10px" } : { marginTop: "8px", height: "30px", width: "auto" }}
+          //       src={
+          //         stateInfo
+          //           ? stateInfo.logoUrl
+          //           : "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png"
+          //       }
+          //     />
+          //   </div>
+          //   <div className="right width-20 flex-right column-gap-15">
+          //     <div className="left">
+          //       <ChangeLanguage dropdown={true} />
+          //     </div>
+          //     <div className="left">
+          //       <Dropdown
+          //         option={userOptions}
+          //         optionKey={"name"}
+          //         select={handleUserDropdownSelection}
+          //         showArrow={false}
+          //         style={{ right: 0 }}
+          //         customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} />}
+          //       />
+          //     </div>
+          //     <img className="state" src={logoUrl} />
+          //   </div>
+          // </div>
+        }
+        {/* {!mobileView && (
           <div className="sidebar">
             <Link to="/digit-ui/citizen">
               <div className="actions active">
@@ -169,8 +168,8 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
               </div>
             </Link>
           </div>
-        )}
-        <CitizenSidebar isOpen={isSidebarOpen} isMobile={mobileView} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
+        )} */}
+        <CitizenSidebar isOpen={isSidebarOpen} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>

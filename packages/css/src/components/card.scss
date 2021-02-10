@@ -155,11 +155,13 @@
   }
 
   .card {
-    margin-left: auto;
     margin-right: auto;
     padding-right: 300px;
     padding-left: 16px;
     padding-top: 16px;
+    max-width: 960px;
+    min-width: 640px;
+    margin-left: 0px;
 
     .card-header {
       @apply text-heading-xl-dt;
@@ -221,7 +223,7 @@
     }
 
     .label-field-pair {
-      @apply flex;
+      @apply flex items-center;
 
       h2 {
         width: 30%;

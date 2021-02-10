@@ -22,16 +22,55 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, action, tenantId, state, closeModal, submitAction }) => {
+const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction }) => {
   const { data: dsoData, isLoading: isDsoLoading, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
-  const { data: vehicleMenu, isLoading: isVehicleData } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
+  const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: id }, { staleTime: Infinity });
+  // console.log("find application details here", applicationData)
+  // const { data: vehicleMenu, isLoading: isVehicleData } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
 
   const [config, setConfig] = useState({});
-  const [dso, selectDSO] = useState(null);
+  const [dso, setDSO] = useState(null);
+  const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
+  const [rejectMenu, setRejectMenu] = useState([
+    "ES_FSM_REJECTION_OPTION_A",
+    "ES_FSM_REJECTION_OPTION_B",
+    "ES_FSM_REJECTION_OPTION_C",
+    "ES_FSM_REJECTION_OPTION_D",
+  ]);
+  const [reassignReasonMenu, setReassignReasonMenu] = useState([
+    "ES_FSM_REASSIGN_OPTION_A",
+    "ES_FSM_REASSIGN_OPTION_B",
+    "ES_FSM_REASSIGN_OPTION_C",
+    "ES_FSM_REASSIGN_OPTION_D",
+  ]);
+  const [rejectionReason, selectReason] = useState(null);
+  const [reassignReason, selectReassignReason] = useState(null);
+  const [formValve, setFormValve] = useState(false);
+
+  function selectDSO(dsoDetails) {
+    // console.log("find dso details here", dsoDetails);
+    setDSO(dsoDetails);
+    setVehicleMenu(dsoDetails.vehicles);
+  }
 
   function selectVehicle(value) {
+    // console.log("find vehicle details here", value)
     setVehicle(value);
+  }
+
+  function submit(data) {
+    // console.log("find submit here",data);
+    const workflow = { action: action };
+
+    if (dso) applicationData.dsoId = dso.id;
+    if (vehicle) applicationData.vehicleId = vehicle.id;
+    if (vehicle) applicationData.vehicleType = vehicle.type;
+    if (data.date) applicationData.possibleServiceDate = new Date(data.date).getTime();
+
+    if (rejectionReason) workflow.comments = rejectionReason;
+
+    submitAction({ fsm: applicationData, workflow });
   }
 
   useEffect(() => {
@@ -40,6 +79,7 @@ const ActionModal = ({ t, action, tenantId, state, closeModal, submitAction }) =
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
+        setFormValve(dso && vehicle ? true : false);
         return setConfig(
           configAssignDso({
             t,
@@ -52,6 +92,7 @@ const ActionModal = ({ t, action, tenantId, state, closeModal, submitAction }) =
           })
         );
       case "REASSIGN":
+        setFormValve(dso && vehicle ? true : false);
         return setConfig(
           configReassignDSO({
             t,
@@ -61,21 +102,27 @@ const ActionModal = ({ t, action, tenantId, state, closeModal, submitAction }) =
             vehicleMenu,
             vehicle,
             selectVehicle,
+            reassignReasonMenu,
+            reassignReason,
+            selectReassignReason,
           })
         );
       case "COMPLETE":
+        setFormValve(true);
         return setConfig(configCompleteApplication({ t }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "CANCEL":
       case "SENDBACK":
+      case "REJECT":
+        setFormValve(rejectionReason ? true : false);
         return setConfig(
           configRejectApplication({
             t,
-            vehicleMenu,
-            vehicle,
-            selectVehicle,
+            rejectMenu,
+            rejectionReason,
+            selectReason,
           })
         );
       case "PAY":
@@ -85,8 +132,8 @@ const ActionModal = ({ t, action, tenantId, state, closeModal, submitAction }) =
         console.log("default case");
         break;
     }
-  }, [action]);
-  return action && config.form && !isDsoLoading && !isVehicleData ? (
+  }, [action, isDsoLoading, dso, vehicle, rejectionReason]);
+  return action && config.form && !isDsoLoading ? (
     <Modal
       headerBarMain={<Heading label={t(config.label.heading)} />}
       headerBarEnd={<CloseBtn onClick={closeModal} />}
@@ -94,8 +141,10 @@ const ActionModal = ({ t, action, tenantId, state, closeModal, submitAction }) =
       actionCancelOnSubmit={closeModal}
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => {}}
+      formId="modal-action"
+      isDisabled={!formValve}
     >
-      <FormComposer config={config.form} noBoxShadow inline childrenAtTheBottom onSubmit={submitAction} />
+      <FormComposer config={config.form} noBoxShadow inline childrenAtTheBottom onSubmit={submit} formId="modal-action" />
     </Modal>
   ) : (
     <Loader />

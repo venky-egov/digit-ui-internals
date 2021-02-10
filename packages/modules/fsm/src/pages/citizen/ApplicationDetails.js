@@ -57,17 +57,8 @@ const ApplicationDetails = () => {
     Digit.Utils.pdf.generate(data);
   };
 
-  const baseUrl = window?.location?.origin?.includes("localhost") ? "https://egov-micro-qa.egovernments.org" : window?.location?.origin;
-
   return (
     <React.Fragment>
-      <img
-        style={{ opacity: 0, position: "absolute" }}
-        id="pdf-logo"
-        crossOrigin="anonymous"
-        src={`${baseUrl}${tenantInfo?.logoId.split(".com")[1]}` || coreData?.stateInfo?.logoUrl}
-        alt="mSeva"
-      />
       <Header>{t("CS_FSM_APPLICATION_DETAIL_TITLE_APPLICATION_DETAILS")}</Header>
       <Card style={{ position: "relative" }}>
         <LinkButton

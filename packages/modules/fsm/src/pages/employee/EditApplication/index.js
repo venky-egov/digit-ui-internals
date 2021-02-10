@@ -14,6 +14,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const cities = Digit.Hooks.fsm.useTenants();
   console.log("find cities here", cities);
 
+  const FSM_CREATOR_EMP = Digit.UserService.hasAccess("FSM_CREATOR_EMP");
+
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(state, "FSM", "ApplicationChannel");
@@ -49,6 +51,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [noOfTrips, setNoOfTrips] = useState(1);
+  const [amountPerTrip, setAmountPerTrip] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
@@ -61,10 +66,22 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [selectedLocality, setSelectedLocality] = useState();
   const [canSubmit, setSubmitValve] = useState(false);
 
+  useEffect(() => {
+    if (amountPerTrip) {
+      setPaymentAmount(noOfTrips * amountPerTrip);
+    } else {
+      if (vehicle?.amount) {
+        setPaymentAmount(noOfTrips * vehicle?.amount);
+      }
+    }
+  }, [vehicle, noOfTrips, amountPerTrip]);
+
   // console.log("find channel state here", channel);
   useEffect(() => {
     const applicationDetails = applicationData;
     if (applicationDetails) {
+      const vehicle = vehicleMenu?.find((vehicle) => vehicle.code === applicationDetails.vehicleType);
+      setVehicle(vehicle);
       setDefaultValues({
         applicantName: applicationDetails.citizen?.name,
         mobileNumber: applicationDetails.citizen?.mobileNumber,
@@ -193,6 +210,11 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     setSelectedLocality(locality);
   }
 
+  const onFormValueChange = (formData) => {
+    setNoOfTrips(formData?.noOfTrips || 1);
+    setAmountPerTrip(formData?.amountPerTrip);
+  };
+
   const onSubmit = (data) => {
     const applicationChannel = channel.code;
     const sanitationtype = sanitation.code;
@@ -214,6 +236,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const { name } = subType;
     const propertyType = name;
     const { height, length, width } = pitDimension;
+    // const additionalTrip  = data.additionalTrip
+    // const additionalCharges  = data.additionalCharges
+    // const reasonForAdditionalCharges  = data.reasonForAdditionalCharges
+    // const additionalAmount  = data.additionalAmount
 
     (applicationData.citizen = {
       name: applicantName,
@@ -250,7 +276,11 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           longitude: selectedLocality.longitude,
         },
       }),
-      (applicationData.noOfTrips = noOfTrips),
+      // TODO: To be added after approval
+      // (applicationData.additionalTrip = additionalTrip ),
+      // (applicationData.additionalCharges = additionalCharges ),
+      // (applicationData.reasonForAdditionalCharges = reasonForAdditionalCharges ),
+      // (applicationData.additionalAmount = additionalAmount )
       // (applicationData.workflow = {
       //   action: "SUBMIT",
       // }),
@@ -282,7 +312,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
           type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
+          populators: (
+            <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} disable={true} />
+          ),
         },
         // {
         //   label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
@@ -300,6 +332,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               pattern: /[A-Za-z]/,
             },
           },
+          disable: true,
         },
         {
           label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
@@ -312,6 +345,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               pattern: /^[6-9]\d{9}$/,
             },
           },
+          disable: true,
         },
         // {
         //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
@@ -329,7 +363,15 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />
+            <Dropdown
+              option={propertyTypesData.data}
+              optionKey="i18nKey"
+              id="propertyType"
+              selected={propertyType}
+              select={selectedType}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
           ),
         },
         {
@@ -337,7 +379,17 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} t={t} />,
+          populators: (
+            <Dropdown
+              option={subTypeMenu}
+              optionKey="i18nKey"
+              id="propertySubType"
+              selected={subType}
+              select={selectedSubType}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
+          ),
         },
       ],
     },
@@ -351,19 +403,31 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "pincode",
             validation: { pattern: /^[1-9][0-9]{5}$/ },
           },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
+          populators: (
+            <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" disable={!FSM_CREATOR_EMP} />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
+            <Dropdown
+              isMandatory
+              selected={selectedLocality}
+              optionKey="code"
+              id="locality"
+              option={localities}
+              select={selectLocality}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
           ),
         },
         {
@@ -371,14 +435,22 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "streetName",
+            error: t("CORE_COMMON_STREET_INVALID"),
+            validation: { pattern: /^[\w\s]{1,256}$/ },
           },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
           type: "text",
           populators: {
             name: "doorNo",
+            error: t("CORE_COMMON_DOOR_INVALID"),
+            validation: {
+              pattern: /^[\w\\\s]*$/,
+            },
           },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
@@ -386,6 +458,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "landmark",
           },
+          disable: !FSM_CREATOR_EMP,
         },
       ],
     },
@@ -395,27 +468,69 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
           type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
+          populators: (
+            <Dropdown
+              option={sanitationMenu}
+              optionKey="i18nKey"
+              id="sanitation"
+              selected={sanitation}
+              select={selectSanitation}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
-          populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
+          populators: (
+            <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} disable={!FSM_CREATOR_EMP} />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DISTANCE_FROM_ROAD"),
           type: "text",
           populators: {
             name: "distanceFromRoad",
-            validation: { pattern: /[0-9]+/ },
+            error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
+            validation: { pattern: /^[1-9]\d?(\.\d{1,2})?$/ },
           },
+          disable: !FSM_CREATOR_EMP,
+        },
+        {
+          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+          isMandatory: true,
+          type: "dropdown",
+          populators: (
+            <Dropdown
+              option={vehicleMenu}
+              optionKey="i18nKey"
+              id="vehicle"
+              selected={vehicle}
+              select={selectVehicle}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
+          ),
+        },
+        {
+          label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
+          type: "text",
+          populators: {
+            name: "amountPerTrip",
+            validation: { required: true },
+            defaultValue: vehicle?.amount,
+          },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
           type: "text",
           populators: {
             name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
+            error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+            validation: { pattern: /^[1-9]{1}$/ },
           },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
@@ -423,26 +538,47 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "amount",
+            error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
             validation: {
               required: true,
-              pattern: /[0-9]+/,
+              pattern: /^[1-9]\d*$/,
             },
+            defaultValue: paymentAmount,
+          },
+          disable: true,
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
+          type: "text",
+          populators: {
+            name: "additionalTrip",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
+          type: "text",
+          populators: {
+            name: "additionalCharges",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
+          type: "text",
+          populators: {
+            name: "reasonForAdditionalCharges",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
+          type: "text",
+          populators: {
+            name: "additionalAmount",
           },
         },
       ],
     },
-    {
-      head: t(),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-        },
-      ],
-    },
   ];
+
   if (defaultValues) {
     return (
       <FormComposer
@@ -452,6 +588,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         config={config}
         onSubmit={onSubmit}
         defaultValues={defaultValues}
+        onFormValueChange={onFormValueChange}
       ></FormComposer>
     );
   } else {

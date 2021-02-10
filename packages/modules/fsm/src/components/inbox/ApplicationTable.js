@@ -1,9 +1,10 @@
 import React from "react";
 import { Table } from "@egovernments/digit-ui-react-components";
 
-const ApplicationTable = ({ currentPage, columns, data, getCellProps, onNextPage, onPrevPage, onPageSizeChange, pageSizeLimit }) => {
+const ApplicationTable = ({ t, currentPage, columns, data, getCellProps, onNextPage, onPrevPage, onPageSizeChange, pageSizeLimit }) => {
   return (
     <Table
+      t={t}
       data={data}
       currentPage={currentPage}
       columns={columns}

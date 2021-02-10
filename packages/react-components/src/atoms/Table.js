@@ -17,7 +17,7 @@ import { ArrowBack, ArrowForward } from "./svgindex";
 //   );
 // });
 
-const Table = ({ data, columns, getCellProps, currentPage = 0, pageSizeLimit = 10, totalRecords, onNextPage, onPrevPage, onPageSizeChange }) => {
+const Table = ({ t, data, columns, getCellProps, currentPage = 0, pageSizeLimit = 10, totalRecords, onNextPage, onPrevPage, onPageSizeChange }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -115,7 +115,7 @@ const Table = ({ data, columns, getCellProps, currentPage = 0, pageSizeLimit = 1
       </table>
       {canNextPage && (
         <div className="pagination">
-          Rows Per Page{":"}
+          {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
           <select className="cp" value={pageSize} style={{ marginRight: "15px" }} onChange={onPageSizeChange}>
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>

@@ -90,6 +90,7 @@ const DesktopInbox = ({
   } else if (data.length > 0) {
     result = (
       <ComplaintTable
+        t={t}
         data={data}
         columns={columns}
         getCellProps={(cellInfo) => {

@@ -100,6 +100,7 @@ const DesktopInbox = (props) => {
   } else if (props?.data?.length > 0) {
     result = (
       <ApplicationTable
+        t={t}
         data={props.data}
         columns={columns}
         getCellProps={(cellInfo) => {
@@ -119,7 +120,7 @@ const DesktopInbox = (props) => {
         onNextPage={props.onNextPage}
         onPrevPage={props.onPrevPage}
         pageSizeLimit={props.pageSizeLimit}
-        onPageSizeChagne={props.onPageSizeChagne}
+        onPageSizeChange={props.onPageSizeChange}
       />
     );
   }

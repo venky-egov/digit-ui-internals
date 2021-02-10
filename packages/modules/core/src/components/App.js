@@ -37,7 +37,6 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userOptions = [{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
 
   const mobileView = innerWidth <= 640;
-  console.log({ stateInfo });
   return (
     <Switch>
       <Route path="/digit-ui/employee">

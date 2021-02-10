@@ -59,7 +59,6 @@
 .citizen {
   .main {
     padding-top: 82px;
-    padding-left: 170px;
   }
 }
 
@@ -122,8 +121,11 @@
 
   .citizen {
     .main {
+      gap: 0.3rem;
+      width: 100%;
       padding-top: 80px;
-      margin-left: 210px;
+      margin-left: 160px;
+      flex-wrap: wrap;
     }
   }
 }

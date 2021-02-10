@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 
 import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
+import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
 import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
@@ -31,7 +32,7 @@ initLibraries();
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, QAGRO, FSM_EMPLOYEE, NAWANSHAHR_QA_GRO };
 
-const enabledModules = ["PGR", "FSM", "Payment"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT"];
 const registry = new Registry({
   ...pgrComponents,
   PGRLinks,
@@ -40,7 +41,10 @@ const registry = new Registry({
   FSMLinks,
   PaymentModule,
   PaymentLinks,
+  PTModule,
+  PTLinks,
 });
+
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
 });
@@ -64,7 +68,7 @@ const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stat
 const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
 const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
 
-const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
+const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 

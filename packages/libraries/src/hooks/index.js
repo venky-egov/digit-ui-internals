@@ -28,6 +28,7 @@ import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
 import useDsoSearch from "./fsm/useDsoSearch";
 import usePropertySearch from "./pt/usePropertySearch";
+import usePropertyPayment from "./pt/usePropertyPayment";
 
 const pgr = {
   useComplaintDetails,
@@ -58,6 +59,7 @@ const fsm = {
 
 const pt = {
   usePropertySearch,
+  usePropertyPayment,
 };
 
 const Hooks = {

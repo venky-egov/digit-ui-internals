@@ -8,9 +8,9 @@ const BillDetails = () => {
   const { state, ...location } = useLocation();
   const { consumerCode } = useParams();
   const [bill, setBill] = useState(state?.bill);
+  const tenantId = state?.tenantId || Digit.UserService.getUser().info.tenantId;
 
-  debugger;
-  const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchCitizenBillsForBuissnessService({ businessService: "PT" });
+  const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService: "PT", consumerCode });
 
   const billDetails = (bill?.billDetails.length && bill?.billDetails[0]) || [];
 
@@ -38,7 +38,9 @@ const BillDetails = () => {
 
   useEffect(() => {
     if (!bill && data) {
-      setBill(data.Bill.filter((e) => e.consumerCode == consumerCode)[0]);
+      let requiredBill = data.Bill.filter((e) => e.consumerCode == consumerCode)[0];
+      console.log("=================>>>>>>>", requiredBill, data.Bill);
+      setBill(requiredBill);
     }
   }, [isLoading]);
 

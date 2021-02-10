@@ -11,7 +11,9 @@ const SearchProperty = ({ config: propsConfig, t }) => {
     if (!data.mobileNumber && !data.propertyId && !data.oldPropertyId) {
       return alert("Provide at least one parameter");
     } else {
-      history.push("/digit-ui/citizen/pt/property/search-results");
+      history.push(
+        `/digit-ui/citizen/pt/property/search-results?mobileNumber=${data.mobileNumber}&=propertyIds=${data.propertyId}&oldPropertyIds=${data.oldPropertyId}`
+      );
     }
   };
 

@@ -5,7 +5,9 @@ import { useTranslation } from "react-i18next";
 
 const SelectRating = ({ parentRoute }) => {
   const { t } = useTranslation();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const history = useHistory();
+  const checklistData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "Checklist");
   // console.log("parent route", parentRoute);
 
   function log(data) {

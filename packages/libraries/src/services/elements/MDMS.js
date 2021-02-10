@@ -183,6 +183,23 @@ const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getChecklistCriteria = (tenantId, moduleCode) => ({
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "CheckList",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -290,5 +307,8 @@ export const MdmsService = {
   },
   getVehicleType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getVehicleTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getChecklist: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getChecklistCriteria(tenantId, moduleCode), moduleCode);
   },
 };

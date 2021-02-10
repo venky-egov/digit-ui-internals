@@ -52,9 +52,8 @@ export const FormComposer = (props) => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  borderColor: disable ? "#ccc" : "revert",
-                  color: disable ? "#ccc" : "revert",
                 }}
+                className={disable && "disabled"}
               >
                 {populators.componentInFront}
               </span>
@@ -95,28 +94,28 @@ export const FormComposer = (props) => {
             {section.body.map((field, index) => {
               if (props.inline)
                 return (
-                  <React.Fragment>
+                  <React.Fragment key={index}>
                     {!field.withoutLabel && (
-                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
                         {field.label}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
                     <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                      {fieldSelector(field.type, field.populators, field.isMandatory)}
+                      {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable)}
                     </div>
                   </React.Fragment>
                 );
               return (
                 <LabelFieldPair key={index}>
                   {!field.withoutLabel && (
-                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", color: field?.disable ? "#ccc" : "revert" }}>
+                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
                       {field.label}
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}
                   <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators, field.isMandatory, field.disable)}
+                    {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable)}
                   </div>
                 </LabelFieldPair>
               );
@@ -137,7 +136,7 @@ export const FormComposer = (props) => {
   const isDisabled = props.isDisabled || false;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} id={props.formId}>
       <Card style={getCardStyles()}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}

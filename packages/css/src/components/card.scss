@@ -221,7 +221,7 @@
     }
 
     .label-field-pair {
-      @apply flex;
+      @apply flex items-center;
 
       h2 {
         width: 30%;

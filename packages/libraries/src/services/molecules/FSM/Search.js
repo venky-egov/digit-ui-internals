@@ -4,6 +4,15 @@ const getPropertyTypeLocale = (value) => {
   return `PROPERTYTYPE_MASTERS_${value?.split(".")[0]}`;
 };
 
+const isJsonString = (str) => {
+  try {
+    JSON.parse(str);
+  } catch (err) {
+    return true;
+  }
+  return true;
+};
+
 const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
 
 const displayPitDimension = (pitDeminsion) => {
@@ -88,7 +97,10 @@ export const Search = {
             }),
           },
           { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
-          { title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"), value: response?.amountPerTrip || "N/A" },
+          {
+            title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),
+            value: isJsonString(response?.additionalDetails) ? JSON.parse(response.additionalDetails).tripAmount : "N/A",
+          },
           { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: response?.totalAmount || "N/A" },
         ],
       },

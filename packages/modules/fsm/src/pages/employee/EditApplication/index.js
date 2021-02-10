@@ -435,6 +435,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "streetName",
+            error: t("CORE_COMMON_STREET_INVALID"),
+            validation: { pattern: /^[\w\s]{1,256}$/ },
           },
           disable: !FSM_CREATOR_EMP,
         },
@@ -443,6 +445,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "doorNo",
+            error: t("CORE_COMMON_DOOR_INVALID"),
+            validation: {
+              pattern: /^[\w\\\s]*$/,
+            },
           },
           disable: !FSM_CREATOR_EMP,
         },
@@ -485,7 +491,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "distanceFromRoad",
-            validation: { pattern: /[0-9]+/ },
+            error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
+            validation: { pattern: /^[1-9]\d?(\.\d{1,2})?$/ },
           },
           disable: !FSM_CREATOR_EMP,
         },
@@ -520,7 +527,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
+            error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+            validation: { pattern: /^[1-9]{1}$/ },
           },
           disable: !FSM_CREATOR_EMP,
         },
@@ -530,9 +538,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "amount",
+            error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
             validation: {
               required: true,
-              pattern: /[0-9]+/,
+              pattern: /^[1-9]\d*$/,
             },
             defaultValue: paymentAmount,
           },

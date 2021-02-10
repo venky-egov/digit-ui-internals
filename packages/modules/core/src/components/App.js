@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
-import { TopBar, Dropdown, LogoutIcon, HomeIcon } from "@egovernments/digit-ui-react-components";
+import { TopBar, Dropdown, LogoutIcon, HomeIcon, Hamburger } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "./ChangeLanguage";
 import { useSelector } from "react-redux";
 
@@ -129,6 +129,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         {!mobileView && (
           <div className="topbar flex-between">
             <div>
+              <Hamburger color="#0B0C0C" handleClick={() => toggleSidebar(!isSidebarOpen)} />
               <img
                 className="state"
                 style={stateInfo ? { height: "30px", width: "auto", marginRight: "10px" } : { marginTop: "8px", height: "30px", width: "auto" }}
@@ -157,20 +158,8 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
             </div>
           </div>
         )}
-        {!mobileView && (
-          <div className="sidebar">
-            <Link to="/digit-ui/citizen">
-              <div className="actions active">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="white" />
-                </svg>
-                {t("COMMON_BOTTOM_NAVIGATION_HOME")}
-              </div>
-            </Link>
-          </div>
-        )}
-        <CitizenSidebar isOpen={isSidebarOpen} isMobile={mobileView} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
+
+        <CitizenSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>

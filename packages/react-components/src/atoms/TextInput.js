@@ -14,7 +14,6 @@ const TextInput = (props) => {
           onChange={props.onChange}
           ref={props.inputRef}
           value={props.value}
-          disabled={props.disable}
           style={{ ...props.style }}
           defaultValue={props.defaultValue}
           minLength={props.minlength}
@@ -29,7 +28,6 @@ const TextInput = (props) => {
           onChange={props.onChange}
           ref={props.inputRef}
           value={props.value}
-          disabled={props.disable}
           style={{ ...props.style }}
           defaultValue={props.defaultValue}
           minLength={props.minlength}

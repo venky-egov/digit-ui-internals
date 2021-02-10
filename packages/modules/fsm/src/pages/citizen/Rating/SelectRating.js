@@ -29,7 +29,9 @@ const SelectRating = ({ parentRoute }) => {
       CHECKLIST: checklist,
     };
     const requestBody = {
-      ...applicationData,
+      fsm: {
+        ...applicationData,
+      },
       workflow: {
         action: "SUBMIT_FEEDBACK",
         rating,

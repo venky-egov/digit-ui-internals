@@ -34,7 +34,7 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
 
   const clearAll = () => {
     return (
-      <LinkLabel style={{ color: "#F47738", cursor: "pointer" }} onClick={clearSearch}>
+      <LinkLabel className="clear-search-label" onClick={clearSearch}>
         {t("CS_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
@@ -52,17 +52,9 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
         <div className="search-container" style={{ width: "auto" }}>
-          <div className="search-complaint-container" style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
+          <div className="search-complaint-container">
             {type === "mobile" && (
-              <div
-                className="complaint-header"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  marginBottom: "20px",
-                }}
-              >
+              <div className="complaint-header">
                 <h2> {t("CS_COMMON_SEARCH_BY")}:</h2>
                 <span onClick={onClose}>x</span>
               </div>

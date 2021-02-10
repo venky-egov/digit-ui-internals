@@ -1,6 +1,38 @@
-import { LocalizationService } from "../Localization/service";
-import { MdmsService } from "../MDMS";
+import { LocalizationService } from "../../elements/Localization/service";
+import { MdmsService } from "../../elements/MDMS";
 import { Storage } from "../../atoms/Utils/Storage";
+
+const getImgUrl = (url, fallbackUrl) => {
+  if (!url && fallbackUrl) {
+    return fallbackUrl;
+  }
+  if (url.includes("s3.ap-south-1.amazonaws.com")) {
+    const baseDomain = window?.location?.origin;
+    return url.replace("https://s3.ap-south-1.amazonaws.com", baseDomain);
+  }
+  return url;
+};
+const addLogo = (id, url, fallbackUrl = "") => {
+  const containerDivId = "logo-img-container";
+  let containerDiv = document.getElementById(containerDivId);
+  if (!containerDiv) {
+    containerDiv = document.createElement("div");
+    containerDiv.id = containerDivId;
+    containerDiv.style = "position: absolute; top: 0; left: -9999px;";
+    document.body.appendChild(containerDiv);
+  }
+  const img = document.createElement("img");
+  img.src = getImgUrl(url, fallbackUrl);
+  img.id = `logo-${id}`;
+  containerDiv.appendChild(img);
+};
+
+const renderTenantLogos = (stateInfo, tenants) => {
+  addLogo(stateInfo.code, stateInfo.logoUrl);
+  tenants.forEach((tenant) => {
+    addLogo(tenant.code, tenant.logoId, stateInfo.logoUrl);
+  });
+};
 
 export const StoreService = {
   getInitData: () => {
@@ -26,6 +58,13 @@ export const StoreService = {
     };
     initData.selectedLanguage = initData.languages[0].value;
 
+    // TODO: remove the FSM & Payment temp data once added in mdms master
+    initData.modules.push({
+      module: "Payment",
+      code: "Payment",
+      tenants: [{ code: "pb.amritsar" }],
+    });
+
     const moduleTenants = initData.modules
       .map((module) => module.tenants)
       .flat()
@@ -49,6 +88,9 @@ export const StoreService = {
       localities[boundry.TenantBoundary[0].tenantId] = Digit.LocalityService.get(boundry.TenantBoundary[0]);
     });
     initData.localities = localities;
+    setTimeout(() => {
+      renderTenantLogos(stateInfo, initData.tenants);
+    }, 0);
     return initData;
   },
   defaultData: async (stateCode, moduleCode, language) => {

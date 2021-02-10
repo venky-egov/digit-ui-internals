@@ -23,6 +23,7 @@ const allLinks = [
 
 const EmployeeHome = () => {
   const { t } = useTranslation();
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
 
   return (
     <div className="employee-app-container">
@@ -57,7 +58,7 @@ const EmployeeHome = () => {
         </div>
 
         {/* FSM Card */}
-        {/* <div className="employeeCard card-home">
+        <div className="employeeCard card-home">
           <div className="complaint-links-container">
             <div className="header">
               <span className="logo">
@@ -75,15 +76,19 @@ const EmployeeHome = () => {
               <span className="link">
                 <Link to={`/digit-ui/employee/fsm/inbox`}>{t("ES_TITLE_INBOX")}</Link>
               </span>
-              <span className="link">
-                <Link to={`/digit-ui/employee/fsm/new-application`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>
-              </span>
-              <span className="link">
-                <Link to={`/digit-ui/employee/fsm/application-audit`}>{t("ES_TITLE_APPLICATION_AUDIT")}</Link>
-              </span>
+              {!DSO && (
+                <React.Fragment>
+                  <span className="link">
+                    <Link to={`/digit-ui/employee/fsm/new-application`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>
+                  </span>
+                  <span className="link">
+                    <Link to={`/digit-ui/employee/fsm/application-audit`}>{t("ES_TITLE_APPLICATION_AUDIT")}</Link>
+                  </span>
+                </React.Fragment>
+              )}
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

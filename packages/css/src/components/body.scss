@@ -41,6 +41,28 @@
   }
 }
 
+.bread-crumb {
+  font-size: 14px;
+  color: #505a5f;
+  display: flex;
+  margin-bottom: 10px;
+}
+.bread-crumb--item {
+  margin-left: 5px;
+
+  &:not(:last-child):after {
+    content: "  /";
+  }
+
+  button {
+    outline: none;
+  }
+
+  .last {
+    color: #0b0c0c;
+  }
+}
+
 .back-btn2 {
   width: fit-content;
   @apply flex border-solid border-b border-text-primary font-rc text-text-primary text-text-btn ml-sm mb-md;
@@ -65,7 +87,7 @@
 
   .app-container {
     width: 960px;
-    margin-left: auto;
+    margin-left: 8px;
     margin-right: auto;
   }
 

@@ -19,11 +19,14 @@
 }
 */
 .employee-select-wrap {
-  @apply  relative;
+  @apply mb-lg relative;
 
   .select {
     @apply relative block w-full h-10 border-2 border-solid border-input-border;
-
+    &:hover {
+      @apply border-2 border-solid border-primary-main;
+    }
+    
     input[type="text"] {
       width: calc(100% - 32px);
       background-color: transparent;
@@ -91,6 +94,13 @@
   }
 }
 
+.employee-select-wrap--elipses{
+  width: 85% !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .select-wrap {
   @apply mb-lg relative;
 
@@ -147,6 +157,7 @@
 
   .options-card {
     width: 100% !important;
+    min-width: max-content;
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
     @apply absolute z-20 mt-xs bg-white;
 
@@ -161,14 +172,6 @@
   }
 }
 
-.select-wrap-emp {
-  @extend .select-wrap;
-  @apply mb-xs;
-}
-
 @screen dt {
-  .select-wrap {
-  }
-  .employee-select-wrap {
-  }
+  
 }

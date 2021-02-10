@@ -7,8 +7,10 @@ import SelectPropertyType from "./SelectPropertyType";
 import SelectPropertySubtype from "./SelectPropertySubtype";
 import CheckPage from "./CheckPage";
 import Response from "./Response";
+import { useQueryClient } from "react-query";
 
 const FileComplaint = ({ parentRoute }) => {
+  const queryClient = useQueryClient();
   const match = useRouteMatch();
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -29,11 +31,16 @@ const FileComplaint = ({ parentRoute }) => {
   };
 
   function handleSelect(data) {
-    setParams({ ...params, ...data });
+    setParams({ ...params, ...data, ...{ source: "ONLINE" } });
     goNext();
   }
 
   const handleSkip = () => {};
+
+  const handleSUccess = () => {
+    clearParams();
+    queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+  };
 
   return (
     <Switch>
@@ -50,7 +57,7 @@ const FileComplaint = ({ parentRoute }) => {
         <CheckPage onSubmit={submitComplaint} value={params} />
       </Route>
       <Route path={`${match.path}/response`}>
-        <Response data={params} onSuccess={clearParams} />
+        <Response data={params} onSuccess={handleSUccess} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />

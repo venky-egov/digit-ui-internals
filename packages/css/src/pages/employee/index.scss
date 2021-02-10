@@ -62,8 +62,8 @@
   }
 }
 
-.citizen, .employee {
-  
+.citizen,
+.employee {
   .sidebar {
     position: fixed;
     left: 0;
@@ -72,7 +72,7 @@
     height: 100%;
     color: white;
     margin-top: 80px;
-    z-index: 9999;
+    z-index: 1000;
 
     .actions {
       cursor: pointer;
@@ -87,6 +87,18 @@
   }
 }
 
+.citizen {
+  .sidebar {
+    margin-top: 54px;
+    min-width: 200px;
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
+
 .link {
   @apply text-link-normal;
 
@@ -96,10 +108,33 @@
 }
 
 @media (min-width: 640px) {
-  .employee, .citizen {
+  .employee {
     .main {
       padding-top: 80px;
       margin-left: 88px;
     }
+  }
+
+  .citizen {
+    .main {
+      display: flex;
+      gap: 0.3rem;
+      padding-top: 80px;
+      margin-left: 210px;
+    }
+  }
+}
+
+.multi-select-container {
+  .disposal-text {
+    @apply font-bold;
+  }
+
+  .disposal-info {
+    @apply my-md ml-sm;
+  }
+
+  .disposal-action-bar {
+    @apply flex justify-between items-center;
   }
 }

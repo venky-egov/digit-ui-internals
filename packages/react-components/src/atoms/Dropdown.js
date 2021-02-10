@@ -17,14 +17,27 @@ const TextField = (props) => {
   }
 
   function broadcastToOpen() {
-    props.dropdownDisplay(true);
+    if (!props.disable) {
+      props.dropdownDisplay(true);
+    }
   }
 
   function broadcastToClose() {
     props.dropdownDisplay(false);
   }
 
-  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
+  return (
+    <input
+      className="employee-select-wrap--elipses"
+      type="text"
+      value={value}
+      onChange={inputChange}
+      onClick={props.onClick}
+      onFocus={broadcastToOpen}
+      onBlur={broadcastToClose}
+      disabled={props.disable}
+    />
+  );
 };
 
 const Dropdown = (props) => {
@@ -84,13 +97,13 @@ const Dropdown = (props) => {
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
       {hasCustomSelector && (
-        <div className={props.showArrow ? "cp margin-top-6 flex-right column-gap-5" : "cp margin-top-6"} onClick={dropdownSwitch}>
+        <div className={props.showArrow ? "cp flex-right column-gap-5" : "cp"} onClick={dropdownSwitch}>
           {props.customSelector}
           {props.showArrow && <ArrowDown onClick={dropdownSwitch} />}
         </div>
       )}
       {!hasCustomSelector && (
-        <div className={dropdownStatus ? "select-active" : "select"}>
+        <div className={dropdownStatus ? "select-active" : "select"} style={{ borderColor: props.disable ? "#ccc" : "revert" }}>
           <TextField
             setFilter={setFilter}
             forceSet={forceSet}
@@ -106,15 +119,16 @@ const Dropdown = (props) => {
             filterVal={filterVal}
             // onClick={dropdownOn}
             dropdownDisplay={dropdownOn}
+            disable={props.disable}
             freeze={props.freeze ? true : false}
           />
-          <ArrowDown onClick={dropdownSwitch} />
+          <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
       )}
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
-          <div className={`${hasCustomSelector ? "margin-top-10" : ""} options-card`} ref={optionRef}>
+          <div className={`${hasCustomSelector ? "margin-top-10" : ""} options-card`} style={{ ...props.style }} ref={optionRef}>
             {props.option &&
               props.option
                 .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))

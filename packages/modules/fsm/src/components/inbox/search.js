@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 import { useTranslation } from "react-i18next";
 
-const SearchApplication = ({ onSearch, type, onClose }) => {
+const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFields }) => {
   const { t } = useTranslation();
   const [applicationNo, setApplicationNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
@@ -11,11 +11,10 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
 
   const onSubmitInput = (data) => {
     console.log("data", data);
-    if (data.serviceRequestId) {
-      onSearch({ serviceRequestId: data.serviceRequestId });
-    } else {
-      onSearch({ mobileNumber: data.mobileNumber });
+    if (!data.mobileNumber) {
+      delete data.mobileNumber;
     }
+    onSearch(data);
     if (type === "mobile") {
       onClose();
     }
@@ -23,8 +22,6 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
   function clearSearch() {
     reset();
     onSearch({});
-    setApplicationNo("");
-    setMobileNo("");
   }
 
   const clearAll = () => {
@@ -58,15 +55,27 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
                   marginBottom: "20px",
                 }}
               >
-                <h2>SEARCH BY:</h2>
+                <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
                 <span onClick={onClose}>x</span>
               </div>
             )}
             <div className="complaint-input-container" style={{ width: "100%" }}>
-              <span className="complaint-input">
-                <Label>{t("ES_SEARCH_APPLICATION_APPLICATION_NO")}</Label>
+              {searchFields?.map((input, index) => (
+                <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
+                  <Label>{input.label}</Label>
+                  <TextInput {...input} inputRef={register} />
+                  {/* name={ip}
+                    value={applicationNo}
+                    onChange={setComplaint}
+                    inputRef={register}
+                    style={{ width: "280px", marginBottom: "8px" }}
+                  ></TextInput> */}
+                </span>
+              ))}
+              {/* <span className="complaint-input">
+                <Label>{isFstpOperator ? t("ES_FSTP_OPERATOR_VEHICLE_NO") : t("ES_SEARCH_APPLICATION_APPLICATION_NO")}</Label>
                 <TextInput
-                  name="serviceRequestId"
+                  name="applicationNo"
                   value={applicationNo}
                   onChange={setComplaint}
                   inputRef={register}
@@ -74,9 +83,9 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
                 ></TextInput>
               </span>
               <span className="mobile-input">
-                <Label>{t("ES_SEARCH_APPLICATION_MOBILE_NO")}</Label>
+                <Label>{isFstpOperator ? t("ES_FSTP_DSO_NAME") : t("ES_SEARCH_APPLICATION_MOBILE_NO")}</Label>
                 <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
-              </span>
+              </span> */}
               {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: "auto" }} label={t("ES_COMMON_SEARCH")} submit />}
             </div>
             {type === "desktop" && <span className="clear-search">{clearAll()}</span>}

@@ -9,7 +9,9 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertyType", { select });
+  const stateId = tenantId.split(".")[0];
+
+  const propertyTypesData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertyType", { select });
 
   const goNext = () => {
     onSelect({ propertyType: propertyType });
@@ -34,7 +36,7 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
         onSave={goNext}
         t={t}
       />
-      <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_APPLICATION")} />
+      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT")} />
     </Fragment>
   );
 };

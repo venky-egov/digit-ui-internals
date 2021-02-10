@@ -19,12 +19,26 @@ const Urls = {
   OTP_Send: "/user-otp/v1/_send",
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
+  ChangePassword: "/user/password/nologin/_update",
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 
   fsm: {
     search: "/fsm/v1/_search",
     create: "/fsm/v1/_create",
+    update: "/fsm/v1/_update",
+    vendorSearch: "/vendor/v1/_search",
+    vehicleSearch: "/vehicle/v1/_search",
+  },
+
+  payment: {
+    fetch_bill: "/billing-service/bill/v2/_fetchbill",
+    create_reciept: "/collection-services/payments/_create",
+    print_reciept: "/collection-services/payments",
+    file_store: "/filestore/v1/files/url",
+    generate_pdf: "/pdf-service/v1/_create",
+    create_citizen_reciept: "/pg-service/transaction/v1/_create",
+    update_citizen_reciept: "/pg-service/transaction/v1/_update",
   },
 };
 

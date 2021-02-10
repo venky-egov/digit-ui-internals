@@ -3,7 +3,8 @@ import { FormStep, CardLabel, Dropdown } from "@egovernments/digit-ui-react-comp
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value }) => {
-  const cities = Digit.Hooks.fsm.useTenants();
+  const allCities = Digit.Hooks.fsm.useTenants();
+  const cities = value?.pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == value["pincode"])) : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
   const [selectedCity, setSelectedCity] = useState(() => {
     const { city_complaint } = value;
@@ -23,6 +24,9 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == value.pincode));
       }
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
+      if (filteredLocalityList.length === 1) {
+        setSelectedLocality(filteredLocalityList[0]);
+      }
     }
   }, [selectedCity, value.pincode]);
 

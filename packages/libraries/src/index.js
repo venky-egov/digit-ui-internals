@@ -1,29 +1,33 @@
 import i18next from "i18next";
+import Enums from "./enums/index";
 import mergeConfig from "./config/mergeConfig";
 import { useStore } from "./services/index";
 import { initI18n } from "./translations/index";
+
 import { Storage } from "./services/atoms/Utils/Storage";
-import Enums from "./enums/index";
-import { LocationService } from "./services/molecules/Location";
-import { LocalityService } from "./services/elements/Localities";
-import { LocalizationService } from "./services/molecules/Localization/service";
-import { LoginService } from "./services/Login";
-import { PGRService } from "./services/molecules/PGR";
-import { FSMService } from "./services/elements/FSM";
-import * as dateUtils from "./services/atoms/Utils/Date";
-import { WorkflowService } from "./services/molecules/WorkFlow";
-import { MdmsService } from "./services/molecules/MDMS";
 import { UploadServices } from "./services/atoms/UploadServices";
 
-import { GetServiceDefinitions } from "./services/elements/ServiceDefinitions";
+import { LocationService } from "./services/elements/Location";
+import { LocalityService } from "./services/elements/Localities";
+import { LocalizationService } from "./services/elements/Localization/service";
+import { LoginService } from "./services/elements/Login";
+import { PGRService } from "./services/elements/PGR";
+import { FSMService } from "./services/elements/FSM";
+import { PaymentService } from "./services/elements/Payment";
+import * as dateUtils from "./services/atoms/Utils/Date";
+import { WorkflowService } from "./services/elements/WorkFlow";
+import { MdmsService } from "./services/elements/MDMS";
 import { Complaint } from "./services/elements/Complaint";
-import { UserService } from "./services/molecules/User";
+import { UserService } from "./services/elements/User";
+
+import { GetServiceDefinitions } from "./services/molecules/ServiceDefinitions";
 import { ULBService } from "./services/molecules/Ulb";
 import { FileDesludging } from "./services/molecules/FSM/FileDesludging";
 
 import Contexts from "./contexts";
 import Hooks from "./hooks";
 import Utils from "./utils";
+import { subFormRegistry } from "./subFormRegistry";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -45,6 +49,7 @@ const initLibraries = () => {
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("FSMService", FSMService);
+  setupLibraries("PaymentService", PaymentService);
   setupLibraries("DateUtils", dateUtils);
   setupLibraries("WorkflowService", WorkflowService);
   setupLibraries("MDMSService", MdmsService);
@@ -62,4 +67,4 @@ const initLibraries = () => {
   window.i18next = i18next;
 };
 
-export { initLibraries, Enums, Hooks };
+export { initLibraries, Enums, Hooks, subFormRegistry };

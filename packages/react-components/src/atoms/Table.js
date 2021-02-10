@@ -110,36 +110,39 @@ const Table = ({ data, columns, getCellProps }) => {
           })}
         </tbody>
       </table>
-      <div className="pagination">
-        Rows Per Page{":"}
-        <select
-          value={pageSize}
-          style={{ marginRight: "15px" }}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              {pageSize}
-            </option>
-          ))}
-        </select>
-        <span>
+      {canNextPage && (
+        <div className="pagination">
+          Rows Per Page{":"}
+          <select
+            className="cp"
+            value={pageSize}
+            style={{ marginRight: "15px" }}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+            }}
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
           <span>
-            {pageIndex * 10 + 1}
-            {"-"}
-            {(pageIndex + 1) * 10} of {rows.length}
-          </span>{" "}
-        </span>
-        {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
+            <span>
+              {pageIndex * 10 + 1}
+              {"-"}
+              {(pageIndex + 1) * 10} of {rows.length}
+            </span>{" "}
+          </span>
+          {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
           <span>
 
           </span>
         </button> */}
-        {canPreviousPage && <ArrowBack onClick={() => previousPage()} />}
-        {canNextPage && <ArrowForward onClick={() => nextPage()} />}
-      </div>
+          {canPreviousPage && <ArrowBack onClick={() => previousPage()} className={"cp"} />}
+          {canNextPage && <ArrowForward onClick={() => nextPage()} className={"cp"} />}
+        </div>
+      )}
     </React.Fragment>
   );
 };

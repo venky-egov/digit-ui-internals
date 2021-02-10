@@ -1,6 +1,6 @@
 /*@import 'normalize.css';*/
 
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap");
+/*@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap");*/
 
 @import "tailwindcss/base";
 
@@ -47,7 +47,8 @@
 @import "./components/languageSelector.scss";
 @import "./components/custombtn.scss";
 @import "./components/citizenInfoLabel.scss";
-@import "./components//roundedLabel.scss";
+@import "./components/roundedLabel.scss";
+@import "./components/changeLanguage.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/popupmodule.scss";
@@ -61,4 +62,69 @@
   a {
     color: #1d70b8;
   }
+}
+
+.clear-search-label {
+  color: "#F47738";
+  cursor: "pointer";
+}
+
+.search-submit-bar {
+  margin-top: 32;
+  margin-left: "auto";
+}
+
+.application-details-link-button {
+  @apply flex justify-between items-center;
+
+  .download-button {
+    color: "#f47738";
+    margin-left: "8px";
+  }
+}
+
+.response-download-button {
+  @apply flex;
+
+  .download-button {
+    color: "#f47738";
+    margin-left: "8px";
+  }
+}
+
+.check-page-link-button {
+  color: #f47738 !important;
+}
+
+.application-table-container {
+  margin-top: "24px";
+  margin-top: "24px";
+  margin-left: "24px";
+  flex: 1;
+}
+
+.primary-label-btn {
+  display: flex;
+  gap: 10px;
+
+  svg {
+    fill: #f47738;
+  }
+
+  color: #f47738;
+  &:hover {
+    color: #000;
+
+    svg {
+      fill: #000;
+    }
+  }
+
+  cursor: pointer;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.disabled {
+  @apply border-grey-dark text-grey-dark !important;
 }

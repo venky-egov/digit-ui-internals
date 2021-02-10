@@ -70,7 +70,7 @@ export const FormComposer = (props) => {
         );
       case "textarea":
         if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
-        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} disable={props.disable} />;
+        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} disable={disable} />;
       case "custom":
         return (
           <Controller
@@ -96,7 +96,7 @@ export const FormComposer = (props) => {
                 return (
                   <React.Fragment key={index}>
                     {!field.withoutLabel && (
-                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
                         {field.label}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
@@ -109,7 +109,7 @@ export const FormComposer = (props) => {
               return (
                 <LabelFieldPair key={index}>
                   {!field.withoutLabel && (
-                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
+                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
                       {field.label}
                       {field.isMandatory ? " * " : null}
                     </CardLabel>

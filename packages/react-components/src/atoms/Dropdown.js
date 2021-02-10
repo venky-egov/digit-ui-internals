@@ -35,7 +35,6 @@ const TextField = (props) => {
       onClick={props.onClick}
       onFocus={broadcastToOpen}
       onBlur={broadcastToClose}
-      disabled={props.disable}
     />
   );
 };
@@ -81,6 +80,9 @@ const Dropdown = (props) => {
   function onSelect(val) {
     //console.log(val, "curent", selectedOption, "old");
     if (val !== selectedOption) {
+      props.select(val);
+      setSelectedOption(val);
+      setDropdownStatus(false);
     } else {
       setSelectedOption(val);
       setforceSet(forceSet + 1);

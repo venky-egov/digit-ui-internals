@@ -413,7 +413,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "distanceFromRoad",
             error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
-            validation: { pattern: /^\d{1,2}(\.\d{1,2})?$/ },
+            validation: { pattern: /^[1-9]\d?(\.\d{1,2})?$/ },
           },
         },
         {

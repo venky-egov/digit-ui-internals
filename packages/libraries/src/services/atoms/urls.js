@@ -40,6 +40,10 @@ const Urls = {
     create_citizen_reciept: "/pg-service/transaction/v1/_create",
     update_citizen_reciept: "/pg-service/transaction/v1/_update",
   },
+
+  pt: {
+    fectch_property: "/property-services/property/_search",
+  },
 };
 
 export default Urls;

@@ -3,8 +3,6 @@ import { Card, KeyNote, Header, RadioButtons, CardSubHeader, TextInput, SubmitBa
 import BillSumary from "./bill-summary";
 import { useParams } from "react-router-dom";
 
-const styles = <style></style>;
-
 export const BillDetails = ({}) => {
   const [paymentType, setPaymentType] = useState("Full Amount");
   const [amount, setAmount] = useState("6000");

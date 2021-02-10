@@ -22,5 +22,6 @@ module.exports = function (app) {
     "/pg-service",
     "/vehicle",
     "/vendor",
+    "/property-services",
   ].forEach((location) => app.use(location, createProxy));
 };

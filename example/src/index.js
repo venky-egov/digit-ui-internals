@@ -68,7 +68,7 @@ const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stat
 const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
 const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
 
-const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
+const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 

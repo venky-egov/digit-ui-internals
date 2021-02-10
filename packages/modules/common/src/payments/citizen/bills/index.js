@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { BillListPT } from "./pt/my-bills";
+import PTRoutes from "./pt";
 // import { myBillMap } from "./myBillsKeysMap";
 
 export const MyBills = ({ ...props }) => {
@@ -11,15 +11,15 @@ export const MyBills = ({ ...props }) => {
     if (data) console.log(">>>>>>>>>>>>>>>>>>>", data);
   }, [isLoading]);
 
-  const billsList = (data && data.Bill) || [];
+  const billsList = data?.Bill || [];
 
   const ComponentToLoad = () => {
     switch (businessService) {
       case "PT":
-        return <BillListPT {...{ billsList }} />;
+        return <PTRoutes {...{ billsList }} />;
 
       default:
-        return <BillListPT {...{ billsList }} />;
+        return <PTRoutes {...{ billsList }} />;
     }
   };
 

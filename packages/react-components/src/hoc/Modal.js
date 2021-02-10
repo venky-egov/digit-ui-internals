@@ -15,6 +15,8 @@ const Modal = ({
   actionSaveOnSubmit,
   error,
   setError,
+  formId,
+  isDisabled,
 }) => {
   return (
     <PopUp>
@@ -24,7 +26,7 @@ const Modal = ({
           {children}
           <div className="popup-module-action-bar">
             <ButtonSelector theme="border" label={actionCancelLabel} onSubmit={actionCancelOnSubmit} />
-            <ButtonSelector label={actionSaveLabel} onSubmit={actionSaveOnSubmit} />
+            <ButtonSelector label={actionSaveLabel} onSubmit={actionSaveOnSubmit} formId={formId} isDisabled={isDisabled} />
           </div>
         </div>
       </div>

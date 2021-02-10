@@ -1,8 +1,8 @@
 import { Search } from "../../services/molecules/FSM/Search";
 import { useQuery } from "react-query";
 
-const useSearchAll = (tenantId, filters, config = {}) => {
+const useSearch = (tenantId, filters, config = {}) => {
   return useQuery(["FSM_CITIZEN_SEARCH", filters], () => Search.application(tenantId, filters), config);
 };
 
-export default useSearchAll;
+export default useSearch;

@@ -1,5 +1,3 @@
-import { update } from "lodash";
-import React from "react";
 import { useMutation } from "react-query";
 import { FSMService } from "../../services/elements/FSM";
 

@@ -1,6 +1,6 @@
 /*@import 'normalize.css';*/
 
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap");
+/*@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap");*/
 
 @import "tailwindcss/base";
 
@@ -93,7 +93,7 @@
 }
 
 .check-page-link-button {
-  color: "#F47738";
+  color: #f47738 !important;
 }
 
 .application-table-container {
@@ -123,4 +123,9 @@
   cursor: pointer;
   font-weight: 500;
   width: fit-content;
+}
+
+.disabled {
+  @apply border-grey-dark text-grey-dark !important;
+  pointer-events: none !important;
 }

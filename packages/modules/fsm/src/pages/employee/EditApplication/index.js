@@ -14,6 +14,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const cities = Digit.Hooks.fsm.useTenants();
   console.log("find cities here", cities);
 
+  const FSM_CREATOR_EMP = Digit.UserService.hasAccess("FSM_CREATOR_EMP");
+
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(state, "FSM", "ApplicationChannel");
@@ -22,11 +24,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   // console.log("find propertyTypesData sanitationTypeData here", propertyTypesData, sanitationTypeData);
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
+  // console.log("find property sub type here", propertySubtypesData)
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
 
   const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
-    { applicationNumber, uuid: userInfo.uuid },
+    { applicationNos: applicationNumber, uuid: userInfo.uuid },
     { staleTime: Infinity }
   );
   const workflowDetails = Digit.Hooks.fsm.useWorkflowData(tenantId, applicationNumber);
@@ -48,6 +51,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [noOfTrips, setNoOfTrips] = useState(1);
+  const [amountPerTrip, setAmountPerTrip] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
@@ -60,10 +66,22 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [selectedLocality, setSelectedLocality] = useState();
   const [canSubmit, setSubmitValve] = useState(false);
 
+  useEffect(() => {
+    if (amountPerTrip) {
+      setPaymentAmount(noOfTrips * amountPerTrip);
+    } else {
+      if (vehicle?.amount) {
+        setPaymentAmount(noOfTrips * vehicle?.amount);
+      }
+    }
+  }, [vehicle, noOfTrips, amountPerTrip]);
+
   // console.log("find channel state here", channel);
   useEffect(() => {
-    const applicationDetails = applicationData?.fsm[0];
+    const applicationDetails = applicationData;
     if (applicationDetails) {
+      const vehicle = vehicleMenu?.find((vehicle) => vehicle.code === applicationDetails.vehicleType);
+      setVehicle(vehicle);
       setDefaultValues({
         applicantName: applicationDetails.citizen?.name,
         mobileNumber: applicationDetails.citizen?.mobileNumber,
@@ -88,37 +106,41 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   }, [applicationChannelData]);
 
   useEffect(() => {
-    if (applicationData && applicationData.fsm && channelMenu?.length > 0) {
-      const applicationChannel = applicationData.fsm[0].source;
+    setSubTypeMenu(propertySubtypesData?.data?.filter((item) => item.propertyType === propertyType?.code?.toUpperCase()));
+  }, [propertyType]);
+
+  useEffect(() => {
+    if (applicationData && channelMenu?.length > 0) {
+      const applicationChannel = applicationData.source;
       const prePopulatedChannel = channelMenu.filter((channel) => channel.code === applicationChannel)[0];
       // console.log("find channel here", applicationChannel,prePopulatedChannel);
       setChannel(prePopulatedChannel);
     }
-    if (applicationData && applicationData.fsm && !selectedLocality && localities) {
-      const prePopulatedLocality = applicationData.fsm[0].address?.locality;
+    if (applicationData && !selectedLocality && localities) {
+      const prePopulatedLocality = applicationData.address?.locality;
       const adminPreCode = tenantId.toUpperCase().split(".").join("_") + "_ADMIN_";
       const __selectedLocality = localities.filter((locality) => locality.code === `${adminPreCode + prePopulatedLocality.code}`)[0];
       // console.log("find localities here", localities, __selectedLocality);
       setSelectedLocality(__selectedLocality);
     }
-    if (applicationData && applicationData.fsm && propertyTypesData.data && propertySubtypesData.data) {
-      const prePropertyUsage = applicationData.fsm[0].propertyUsage;
+    if (applicationData && propertyTypesData.data && propertySubtypesData.data) {
+      const prePropertyUsage = applicationData.propertyUsage;
       const prePropertyType = prePropertyUsage.split(".")[0];
-
+      // console.log("find propertySubtypesData here", propertySubtypesData.data, prePropertyUsage, propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage))
       setPropertyType(propertyTypesData.data.filter((type) => type.code === prePropertyType)[0]);
       setSubType(propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)[0]);
     }
 
-    if (applicationData && applicationData.fsm && sanitationMenu) {
-      const prePitType = applicationData.fsm[0].sanitationtype;
+    if (applicationData && sanitationMenu) {
+      const prePitType = applicationData.sanitationtype;
       // console.log("find prePitType and sanitationType data here",prePitType, sanitationMenu, sanitationMenu.filter( pitType => pitType.code === prePitType)[0])
       setSanitation(sanitationMenu.filter((pitType) => pitType.code === prePitType)[0]);
     }
-    if (applicationData && applicationData.fsm && Object.keys(pitDimension).length === 0) {
-      const __height = applicationData.fsm[0].pitDetail?.height;
-      const __length = applicationData.fsm[0].pitDetail?.length;
-      const __width = applicationData.fsm[0].pitDetail?.width;
-      const __diameter = applicationData.fsm[0].pitDetail?.diameter;
+    if (applicationData && Object.keys(pitDimension).length === 0) {
+      const __height = applicationData.pitDetail?.height;
+      const __length = applicationData.pitDetail?.length;
+      const __width = applicationData.pitDetail?.width;
+      const __diameter = applicationData.pitDetail?.diameter;
       setPitDimension({
         height: __height,
         length: __length,
@@ -146,7 +168,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
 
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code));
+    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code?.toUpperCase()));
   }
 
   function selectSlum(value) {
@@ -188,6 +210,11 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     setSelectedLocality(locality);
   }
 
+  const onFormValueChange = (formData) => {
+    setNoOfTrips(formData?.noOfTrips || 1);
+    setAmountPerTrip(formData?.amountPerTrip);
+  };
+
   const onSubmit = (data) => {
     const applicationChannel = channel.code;
     const sanitationtype = sanitation.code;
@@ -209,26 +236,30 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     const { name } = subType;
     const propertyType = name;
     const { height, length, width } = pitDimension;
+    // const additionalTrip  = data.additionalTrip
+    // const additionalCharges  = data.additionalCharges
+    // const reasonForAdditionalCharges  = data.reasonForAdditionalCharges
+    // const additionalAmount  = data.additionalAmount
 
-    (applicationData.fsm[0].citizen = {
+    (applicationData.citizen = {
       name: applicantName,
       mobileNumber,
     }),
-      (applicationData.fsm[0].tenantId = cityCode),
-      (applicationData.fsm[0].sanitationtype = sanitationtype),
-      (applicationData.fsm[0].source = applicationChannel),
-      (applicationData.fsm[0].additionalDetails = {
+      (applicationData.tenantId = cityCode),
+      (applicationData.sanitationtype = sanitationtype),
+      (applicationData.source = applicationChannel),
+      (applicationData.additionalDetails = {
         tripAmount: amount,
       }),
-      (applicationData.fsm[0].propertyUsage = subType.code),
-      (applicationData.fsm[0].vehicleType = vehicle.code),
-      (applicationData.fsm[0].pitDetail = {
+      (applicationData.propertyUsage = subType.code),
+      (applicationData.vehicleType = vehicle.code),
+      (applicationData.pitDetail = {
         distanceFromRoad: data.distanceFromRoad,
         height,
         length,
         width,
       }),
-      (applicationData.fsm[0].address = {
+      (applicationData.address = {
         tenantId: cityCode,
         landmark,
         doorNo,
@@ -245,17 +276,21 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           longitude: selectedLocality.longitude,
         },
       }),
-      (applicationData.fsm[0].noOfTrips = noOfTrips),
-      (applicationData.workflow = {
-        action: "SUBMIT",
-      }),
+      // TODO: To be added after approval
+      // (applicationData.additionalTrip = additionalTrip ),
+      // (applicationData.additionalCharges = additionalCharges ),
+      // (applicationData.reasonForAdditionalCharges = reasonForAdditionalCharges ),
+      // (applicationData.additionalAmount = additionalAmount )
+      // (applicationData.workflow = {
+      //   action: "SUBMIT",
+      // }),
       delete applicationData["responseInfo"];
-    console.log(
-      "%c: onSubmit -> formData ",
-      "font-size:16px;background-color:#3dd445;color:white;",
-      { fsm: applicationData.fsm[0], workflow: applicationData.workflow },
-      subType
-    );
+    // console.log(
+    //   "%c: onSubmit -> formData ",
+    //   "font-size:16px;background-color:#3dd445;color:white;",
+    //   { fsm: applicationData, workflow: applicationData.workflow },
+    //   subType
+    // );
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -264,11 +299,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     Digit.SessionStorage.set("locality_property", null);
 
     history.push("/digit-ui/employee/fsm/response", {
-      applicationData: {
-        fsm: applicationData.fsm[0],
-        workflow: applicationData.workflow,
-      },
+      applicationData,
       key: "update",
+      action: "SUBMIT",
     });
   };
 
@@ -279,7 +312,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
           type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
+          populators: (
+            <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} disable={true} />
+          ),
         },
         // {
         //   label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
@@ -297,6 +332,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               pattern: /[A-Za-z]/,
             },
           },
+          disable: true,
         },
         {
           label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
@@ -309,6 +345,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               pattern: /^[6-9]\d{9}$/,
             },
           },
+          disable: true,
         },
         // {
         //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
@@ -326,7 +363,15 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />
+            <Dropdown
+              option={propertyTypesData.data}
+              optionKey="i18nKey"
+              id="propertyType"
+              selected={propertyType}
+              select={selectedType}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
           ),
         },
         {
@@ -334,7 +379,17 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} t={t} />,
+          populators: (
+            <Dropdown
+              option={subTypeMenu}
+              optionKey="i18nKey"
+              id="propertySubType"
+              selected={subType}
+              select={selectedSubType}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
+          ),
         },
       ],
     },
@@ -348,19 +403,31 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "pincode",
             validation: { pattern: /^[1-9][0-9]{5}$/ },
           },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
+          populators: (
+            <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" disable={!FSM_CREATOR_EMP} />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
+            <Dropdown
+              isMandatory
+              selected={selectedLocality}
+              optionKey="code"
+              id="locality"
+              option={localities}
+              select={selectLocality}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
           ),
         },
         {
@@ -369,6 +436,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "streetName",
           },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
@@ -376,6 +444,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "doorNo",
           },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
@@ -383,6 +452,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "landmark",
           },
+          disable: !FSM_CREATOR_EMP,
         },
       ],
     },
@@ -392,11 +462,23 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
           type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
+          populators: (
+            <Dropdown
+              option={sanitationMenu}
+              optionKey="i18nKey"
+              id="sanitation"
+              selected={sanitation}
+              select={selectSanitation}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
-          populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
+          populators: (
+            <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} disable={!FSM_CREATOR_EMP} />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DISTANCE_FROM_ROAD"),
@@ -405,6 +487,33 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "distanceFromRoad",
             validation: { pattern: /[0-9]+/ },
           },
+          disable: !FSM_CREATOR_EMP,
+        },
+        {
+          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+          isMandatory: true,
+          type: "dropdown",
+          populators: (
+            <Dropdown
+              option={vehicleMenu}
+              optionKey="i18nKey"
+              id="vehicle"
+              selected={vehicle}
+              select={selectVehicle}
+              t={t}
+              disable={!FSM_CREATOR_EMP}
+            />
+          ),
+        },
+        {
+          label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
+          type: "text",
+          populators: {
+            name: "amountPerTrip",
+            validation: { required: true },
+            defaultValue: vehicle?.amount,
+          },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
@@ -413,6 +522,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "noOfTrips",
             validation: { pattern: /[0-9]+/ },
           },
+          disable: !FSM_CREATOR_EMP,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
@@ -424,33 +534,42 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               required: true,
               pattern: /[0-9]+/,
             },
-            componentInFront: (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                ₹
-              </span>
-            ),
+            defaultValue: paymentAmount,
+          },
+          disable: true,
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
+          type: "text",
+          populators: {
+            name: "additionalTrip",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
+          type: "text",
+          populators: {
+            name: "additionalCharges",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
+          type: "text",
+          populators: {
+            name: "reasonForAdditionalCharges",
+          },
+        },
+        {
+          label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
+          type: "text",
+          populators: {
+            name: "additionalAmount",
           },
         },
       ],
     },
-    {
-      head: t(),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-        },
-      ],
-    },
   ];
+
   if (defaultValues) {
     return (
       <FormComposer
@@ -460,6 +579,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         config={config}
         onSubmit={onSubmit}
         defaultValues={defaultValues}
+        onFormValueChange={onFormValueChange}
       ></FormComposer>
     );
   } else {

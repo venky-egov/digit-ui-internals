@@ -21,6 +21,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [noOfTrips, setNoOfTrips] = useState(1);
+  const [amountPerTrip, setAmountPerTrip] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
@@ -42,6 +45,24 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
   // console.log("find vehicle menu", vehicleMenu);
   const [canSubmit, setSubmitValve] = useState(false);
+
+  const FSM_CUSTOMIZATION = {
+    AmountPerTrip: false,
+  };
+
+  const onFormValueChange = (formData) => {
+    setNoOfTrips(formData?.noOfTrips || 1);
+  };
+
+  useEffect(() => {
+    if (amountPerTrip) {
+      setPaymentAmount(noOfTrips * amountPerTrip);
+    } else {
+      if (vehicle?.amount) {
+        setPaymentAmount(noOfTrips * vehicle?.amount);
+      }
+    }
+  }, [vehicle, noOfTrips, amountPerTrip]);
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
@@ -106,6 +127,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   function selectVehicle(value) {
     setVehicle(value);
+    setPaymentAmount(noOfTrips * value.amount);
   }
 
   function selectedSubType(value) {
@@ -150,7 +172,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const doorNo = data.doorNo;
     const landmark = data.landmark;
     const noOfTrips = data.noOfTrips;
-    const amount = data.amount;
+    const amount = data.amountPerTrip;
     const cityCode = selectedCity.code;
     const city = selectedCity.city.name;
     const district = selectedCity.city.name;
@@ -174,7 +196,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         propertyUsage: subType.code,
         vehicleType: vehicle.code,
-        pitDetail: pitDimension,
+        pitDetail: {
+          ...pitDimension,
+          distanceFromRoad: data.distanceFromRoad,
+        },
         address: {
           tenantId: cityCode,
           landmark,
@@ -202,7 +227,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     Digit.SessionStorage.set("city_property", null);
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
-
+    // console.log("find form data here", formData);
     history.push("/digit-ui/employee/fsm/response", formData);
   };
 
@@ -332,36 +357,57 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
         },
         {
+          label: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
+          type: "text",
+          populators: {
+            name: "distanceFromRoad",
+          },
+        },
+        {
+          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+          type: "dropdown",
+          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
+        },
+        {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
           type: "text",
           populators: {
             name: "noOfTrips",
             validation: { pattern: /[0-9]+/ },
+            defaultValue: noOfTrips,
+          },
+        },
+        {
+          label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
+          type: "text",
+          populators: {
+            name: "amountPerTrip",
+            validation: { required: true },
+            defaultValue: vehicle?.amount,
           },
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
-          isMandatory: true,
           type: "text",
           populators: {
             name: "amount",
             validation: { pattern: /[0-9]+/ },
-            componentInFront: "₹",
+            defaultValue: paymentAmount,
           },
         },
       ],
     },
-    {
-      head: t(),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-        },
-      ],
-    },
+    // {
+    //   head: t(),
+    //   body: [
+    //     {
+    //       label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+    //       isMandatory: true,
+    //       type: "dropdown",
+    //       populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
+    //     },
+    //   ],
+    // },
   ];
 
   return (
@@ -371,6 +417,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
       config={config}
       onSubmit={onSubmit}
+      onFormValueChange={onFormValueChange}
     />
   );
 };

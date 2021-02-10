@@ -46,7 +46,7 @@ const Response = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { state } = props.location;
 
-  const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationUpdate(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
+  const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
 
   useEffect(() => {
     const onSuccess = () => {
@@ -54,10 +54,20 @@ const Response = (props) => {
     };
     console.log("state -------->", state);
     if (state.key === "update") {
-      mutation.mutate(state.applicationData, {
-        onSuccess,
-      });
+      // console.log("find state here", state.applicationData, state.action)
+      mutation.mutate(
+        {
+          fsm: state.applicationData,
+          workflow: {
+            action: state.action,
+          },
+        },
+        {
+          onSuccess,
+        }
+      );
     } else {
+      // console.log("find state here", state);
       mutation.mutate(state, {
         onSuccess,
       });

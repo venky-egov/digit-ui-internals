@@ -23,12 +23,15 @@ import useDesludging from "./fsm/useDesludging";
 import useApplicationStatus from "./fsm/useApplicationStatus";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
+import useSearchAll from "./fsm/useSearchAll";
 import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
 import useDsoSearch from "./fsm/useDsoSearch";
 import usePropertySearch from "./pt/usePropertySearch";
 import usePropertyPayment from "./pt/usePropertyPayment";
+import useApplicationDetail from "./fsm/useApplicationDetail";
+import useApplicationActions from "./fsm/useApplicationActions";
 
 const pgr = {
   useComplaintDetails,
@@ -49,12 +52,15 @@ const fsm = {
   useTenants: useTenantsFSM,
   useDesludging: useDesludging,
   useMDMS: useMDMS,
-  useSearch: useSearch,
+  useSearch,
+  useSearchAll,
   useInbox,
   useApplicationUpdate,
   useApplicationStatus,
   useWorkflowData,
   useDsoSearch,
+  useApplicationDetail,
+  useApplicationActions,
 };
 
 const pt = {

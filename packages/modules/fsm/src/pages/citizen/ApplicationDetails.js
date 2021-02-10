@@ -33,24 +33,23 @@ const ApplicationDetails = () => {
   const { id } = useParams();
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
+  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId,
     id,
     moduleCode: "FSM",
-    serviceData: data,
+    serviceData: application,
   });
   const coreData = Digit.Hooks.useCoreData();
 
   if (isLoading) {
     return <Loader />;
   }
-  const { fsm: applications } = data;
-  if (applications.length === 0) {
+
+  if (application.length === 0) {
     history.goBack();
   }
 
-  const application = applications[0];
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
   const handleDownloadPdf = async () => {
@@ -58,17 +57,8 @@ const ApplicationDetails = () => {
     Digit.Utils.pdf.generate(data);
   };
 
-  const baseUrl = window?.location?.origin?.includes("localhost") ? "https://egov-micro-qa.egovernments.org" : window?.location?.origin;
-
   return (
     <React.Fragment>
-      <img
-        style={{ opacity: 0, position: "absolute" }}
-        id="pdf-logo"
-        crossOrigin="anonymous"
-        src={`${baseUrl}${tenantInfo?.logoId.split(".com")[1]}` || coreData?.stateInfo?.logoUrl}
-        alt="mSeva"
-      />
       <Header>{t("CS_FSM_APPLICATION_DETAIL_TITLE_APPLICATION_DETAILS")}</Header>
       <Card style={{ position: "relative" }}>
         <LinkButton
@@ -106,7 +96,7 @@ const ApplicationDetails = () => {
         />
         <KeyNote
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL")}
-          note={application.address.door ? application.address.door : "NA"}
+          note={application.address.doorNo ? application.address.doorNo : "NA"}
         />
         <KeyNote
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL")}

@@ -14,7 +14,6 @@ export const SelectPaymentType = (props) => {
   const { consumerCode, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
-  debugger;
   const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
 
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};

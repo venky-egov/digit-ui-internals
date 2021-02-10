@@ -14,7 +14,7 @@ const GetSlaCell = (value) => {
 
 const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
 
-const MobileInbox = ({ data, onFilterChange, onSearch }) => {
+const MobileInbox = ({ data, onFilterChange, onSearch, searchParams }) => {
   const { t } = useTranslation();
   const localizedData = data?.map(({ locality, applicationNo, createdTime, tenantId, status, sla }) => ({
     [t("ES_INBOX_APPLICATION_NO")]: applicationNo,
@@ -78,6 +78,7 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
             serviceRequestIdKey={isFstpOperator ? "FSTP_OPERATOR_VEHICLE_NO" : DSO ? "Application No." : t("ES_INBOX_APPLICATION_NO")}
             isFstpOperator={isFstpOperator}
             onSearch={!DSO ? onSearch : false}
+            searchParams={searchParams}
           />
         </div>
       </div>

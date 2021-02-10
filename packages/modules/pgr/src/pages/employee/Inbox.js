@@ -7,8 +7,31 @@ import MobileInbox from "../../components/MobileInbox";
 
 const Inbox = () => {
   const { t } = useTranslation();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { uuid } = Digit.UserService.getUser().info;
+  const [pageOffset, setPageOffset] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [searchParams, setSearchParams] = useState({ filters: { wfFilters: { assignee: [{ code: uuid }] } }, search: "", sort: {} });
+
+  useEffect(async () => {
+    let response = await Digit.PGRService.count(tenantId, {});
+    if (response?.count) {
+      setTotalRecords(response.count);
+    }
+  }, []);
+
+  const fetchNextPage = () => {
+    setPageOffset((prevState) => prevState + 10);
+  };
+
+  const fetchPrevPage = () => {
+    setPageOffset((prevState) => prevState - 10);
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+  };
 
   const handleFilterChange = (filterParam) => {
     console.log("handleFilterChange", { ...searchParams, filters: filterParam });
@@ -20,7 +43,7 @@ const Inbox = () => {
   };
 
   // let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
-  let { data: complaints, isLoading, revalidate } = Digit.Hooks.pgr.useInboxData(searchParams) || [];
+  let { data: complaints, isLoading, revalidate } = Digit.Hooks.pgr.useInboxData({ ...searchParams, offset: pageOffset, limit: pageSize }) || [];
 
   let isMobile = Digit.Utils.browser.isMobile;
 
@@ -37,7 +60,19 @@ const Inbox = () => {
       return (
         <div>
           <Header>{t("ES_COMMON_INBOX")}</Header>
-          <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} searchParams={searchParams} />
+          <DesktopInbox
+            data={complaints}
+            isLoading={isLoading}
+            onFilterChange={handleFilterChange}
+            onSearch={onSearch}
+            searchParams={searchParams}
+            onNextPage={fetchNextPage}
+            onPrevPage={fetchPrevPage}
+            onPageSizeChange={handlePageSizeChange}
+            currentPage={Math.floor(pageOffset / pageSize)}
+            totalRecords={totalRecords}
+            pageSizeLimit={pageSize}
+          />
         </div>
       );
     }

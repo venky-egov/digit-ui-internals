@@ -5,8 +5,7 @@ import { useHistory } from "react-router-dom";
 
 const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   const [user, setUser] = useState(null);
-  const mobileNumber = Digit.Hooks.useQueryParams("mobile_number");
-  const tenantId = Digit.Hooks.useQueryParams("tenantId");
+  const { mobile_number: mobileNumber, tenantId } = Digit.Hooks.useQueryParams();
   const history = useHistory();
   const getUserType = () => Digit.UserService.getType();
   let otpReference = "";

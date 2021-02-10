@@ -1,7 +1,11 @@
-const useQueryParams = (key) => {
+const useQueryParams = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  return urlParams.get(key);
+  const params = {};
+  urlParams.forEach((value, key) => {
+    params[key] = value;
+  });
+  return params;
 };
 
 export default useQueryParams;

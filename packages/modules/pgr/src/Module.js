@@ -7,7 +7,8 @@ import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
 import { PGR_CITIZEN_CREATE_COMPLAINT } from "./constants/Citizen";
-
+import { useTranslation } from "react-i18next";
+import { LOCALE } from "./constants/Localization";
 export const PGRReducers = getRootReducer;
 
 export const PGRModule = ({ stateCode, userType, tenants }) => {
@@ -30,6 +31,7 @@ export const PGRModule = ({ stateCode, userType, tenants }) => {
 };
 
 export const PGRLinks = ({ matchPath }) => {
+  const { t } = useTranslation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
 
   useEffect(() => {
@@ -40,8 +42,8 @@ export const PGRLinks = ({ matchPath }) => {
     <React.Fragment>
       <div>
         <Header>Complaints</Header>
-        <HomeLink to={`${matchPath}/create-complaint/complaint-type`}>File a Complaint</HomeLink>
-        <HomeLink to={`${matchPath}/complaints`}>My Complaints</HomeLink>
+        <HomeLink to={`${matchPath}/create-complaint/complaint-type`}>{t("CS_COMMON_FILE_A_COMPLAINT")}</HomeLink>
+        <HomeLink to={`${matchPath}/complaints`}>{t(LOCALE.MY_COMPLAINTS)}</HomeLink>
       </div>
     </React.Fragment>
   );

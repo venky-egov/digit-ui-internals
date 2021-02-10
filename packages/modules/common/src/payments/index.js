@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
 import { BrowserRouter as Router, Switch, useRouteMatch, Route } from "react-router-dom";
-import { Body, Loader } from "@egovernments/digit-ui-react-components";
+import { Body, Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import EmployeePayment from "./employee";
 import CitizenPayment from "./citizen";
@@ -16,7 +17,7 @@ export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCod
     return <Loader />;
   }
 
-  // console.log("payment", userType, state, store);
+  console.log("payment", userType, state, store);
 
   const getPaymentHome = () => {
     if (userType === "citizen") return <CitizenPayment {...{ stateCode, moduleCode, cityCode, path, url }} />;
@@ -25,4 +26,18 @@ export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCod
   return <React.Fragment>{getPaymentHome()}</React.Fragment>;
 };
 
-export const PaymentLinks = ({ matchPath }) => <Fragment></Fragment>;
+export const PaymentLinks = ({ matchPath }) => {
+  const { t } = useTranslation();
+
+  return (
+    <React.Fragment>
+      {/* TODO: change */}
+      <div>
+        <Header>{t("CS_HOME_QUICK_PAY")}</Header>
+        <HomeLink to={`/digit-ui/citizen/payment/my-bills/PT`}>{t("CS_HOME_PT")}</HomeLink>
+        <HomeLink to={`${matchPath}/tl-renewal`}>{t("CS_HOME_TRADE_LICENCE_RENEWAL")}</HomeLink>
+        <HomeLink to={`${matchPath}/water-bill`}>{t("CS_HOME_WATER_BILL")}</HomeLink>
+      </div>
+    </React.Fragment>
+  );
+};

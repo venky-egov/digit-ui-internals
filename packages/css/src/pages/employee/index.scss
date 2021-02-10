@@ -107,6 +107,10 @@
   }
 }
 
+.d-flex {
+  @apply flex;
+}
+
 @media (min-width: 640px) {
   .employee {
     .main {
@@ -121,7 +125,6 @@
       width: 100%;
       padding-top: 80px;
       margin-left: 160px;
-      flex-wrap: wrap;
     }
   }
 }

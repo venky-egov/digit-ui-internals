@@ -115,51 +115,61 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         </div>
       </Route>
       <Route path="/digit-ui/citizen">
-        {mobileView && (
+        {
           <TopBar
-            img={cityDetails?.logoId}
-            ulb={`${t(stateInfo?.name)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
+            img={stateInfo?.logoUrlWhite}
             isMobile={true}
             toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
-            logoUrl={logoUrl}
+            logoUrl={stateInfo?.logoUrlWhite}
             onLogout={handleLogout}
             userDetails={userDetails}
           />
-        )}
-        {!mobileView && (
-          <div className="topbar flex-between">
-            <div>
-              <Hamburger color="#0B0C0C" handleClick={() => toggleSidebar(!isSidebarOpen)} />
-              <img
-                className="state"
-                style={stateInfo ? { height: "30px", width: "auto", marginRight: "10px" } : { marginTop: "8px", height: "30px", width: "auto" }}
-                src={
-                  stateInfo
-                    ? stateInfo.logoUrl
-                    : "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png"
-                }
-              />
-            </div>
-            <div className="right width-20 flex-right column-gap-15">
-              <div className="left">
-                <ChangeLanguage dropdown={true} />
+        }
+        {
+          // <div className="topbar flex-between">
+          //   <div>
+          //     <img
+          //       className="state"
+          //       style={stateInfo ? { height: "30px", width: "auto", marginRight: "10px" } : { marginTop: "8px", height: "30px", width: "auto" }}
+          //       src={
+          //         stateInfo
+          //           ? stateInfo.logoUrl
+          //           : "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png"
+          //       }
+          //     />
+          //   </div>
+          //   <div className="right width-20 flex-right column-gap-15">
+          //     <div className="left">
+          //       <ChangeLanguage dropdown={true} />
+          //     </div>
+          //     <div className="left">
+          //       <Dropdown
+          //         option={userOptions}
+          //         optionKey={"name"}
+          //         select={handleUserDropdownSelection}
+          //         showArrow={false}
+          //         style={{ right: 0 }}
+          //         customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} />}
+          //       />
+          //     </div>
+          //     <img className="state" src={logoUrl} />
+          //   </div>
+          // </div>
+        }
+        {/* {!mobileView && (
+          <div className="sidebar">
+            <Link to="/digit-ui/citizen">
+              <div className="actions active">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="white" />
+                </svg>
+                {t("COMMON_BOTTOM_NAVIGATION_HOME")}
               </div>
-              <div className="left">
-                <Dropdown
-                  option={userOptions}
-                  optionKey={"name"}
-                  select={handleUserDropdownSelection}
-                  showArrow={false}
-                  style={{ right: 0 }}
-                  customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Citizen"} />}
-                />
-              </div>
-              {/* <img className="state" src={logoUrl} /> */}
-            </div>
+            </Link>
           </div>
-        )}
-
-        <CitizenSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
+        )} */}
+        <CitizenSidebar isOpen={isSidebarOpen} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>

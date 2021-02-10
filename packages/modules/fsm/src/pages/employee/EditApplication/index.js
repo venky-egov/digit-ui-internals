@@ -371,6 +371,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "streetName",
+            error: t("CORE_COMMON_STREET_INVALID"),
+            validation: { pattern: /^[\w\s]{1,256}$/ },
           },
         },
         {
@@ -378,6 +380,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "doorNo",
+            error: t("CORE_COMMON_DOOR_INVALID"),
+            validation: {
+              pattern: /^[\w\\\s]*$/,
+            },
           },
         },
         {
@@ -406,6 +412,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "distanceFromRoad",
+            error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
             validation: { pattern: /^\d{1,2}(\.\d{1,2})?$/ },
           },
         },
@@ -414,6 +421,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "noOfTrips",
+            error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
             validation: { pattern: /^[1-9]{1}$/ },
           },
         },
@@ -423,6 +431,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "amount",
+            error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
             validation: {
               required: true,
               pattern: /^[1-9]\d*$/,

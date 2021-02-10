@@ -76,8 +76,9 @@ export const config = {
           type: "text",
           name: "street",
           validation: {
-            pattern: /^[\w\s]{0,256}$/,
+            pattern: /^[\w\s]{1,256}$/,
           },
+          error: "CORE_COMMON_STREET_INVALID",
         },
         {
           label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL",
@@ -86,6 +87,7 @@ export const config = {
           validation: {
             pattern: /^[\w\\\s]*$/,
           },
+          error: "CORE_COMMON_DOOR_INVALID",
         },
       ],
       nextStep: "landmark",

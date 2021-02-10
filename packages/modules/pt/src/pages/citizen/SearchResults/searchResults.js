@@ -11,11 +11,15 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
   const consumerCodes = result?.data?.Properties?.map((a) => a.propertyId).join(",");
   const paymentDetails = Digit.Hooks.pt.usePropertyPayment({ tenantId: "pb", consumerCodes });
   const history = useHistory();
-
+  if(result.error || !consumerCodes){
+    return (
+      <div>No Results</div>
+    )
+  }
   if (paymentDetails.isLoading || result.isLoading) {
     return <Loader />;
   }
-
+  
   const onSubmit = (data) => {
     console.log("data from composer", data);
     history.push(`/digit-ui/citizen/payment/my-bills/PT/${data.property_id}`, { tenantId: "pb" });

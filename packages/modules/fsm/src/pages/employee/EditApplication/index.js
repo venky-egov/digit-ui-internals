@@ -406,7 +406,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "distanceFromRoad",
-            validation: { pattern: /[0-9]+/ },
+            validation: { pattern: /^\d{1,2}(\.\d{1,2})?$/ },
           },
         },
         {
@@ -414,7 +414,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           type: "text",
           populators: {
             name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
+            validation: { pattern: /^[1-9]{1}$/ },
           },
         },
         {
@@ -425,7 +425,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "amount",
             validation: {
               required: true,
-              pattern: /[0-9]+/,
+              pattern: /^[1-9]\d*$/,
             },
           },
         },

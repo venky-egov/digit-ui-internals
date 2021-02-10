@@ -371,7 +371,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
+            validation: { pattern: /^[1-9]{1}$/ },
             defaultValue: noOfTrips,
           },
         },

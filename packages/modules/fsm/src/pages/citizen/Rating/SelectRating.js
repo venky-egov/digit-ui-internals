@@ -8,12 +8,13 @@ const SelectRating = ({ parentRoute }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const history = useHistory();
-  let { id: applicationNumber } = useParams();
+  let { id: applicationNos } = useParams();
+  const { isError, error, data: application } = Digit.Hooks.fsm.useSearchAll(tenantId, { applicationNos });
   const { isLoading, data: checklistData } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "Checklist");
   const [answers, setAnswers] = useState({});
 
-  function log(data) {
-    console.log(data);
+  async function log(data) {
+    const { rating } = data;
     const allAnswers = { ...data, ...answers };
     let checklist = Object.keys(allAnswers).reduce((acc, key) => {
       if (key === "comments" || key === "rating") {
@@ -23,8 +24,18 @@ const SelectRating = ({ parentRoute }) => {
       return acc;
     }, []);
 
-    console.log(checklist);
-
+    const [applicationData] = application;
+    applicationData.additionalDetails = {
+      CHECKLIST: checklist,
+    };
+    const requestBody = {
+      ...applicationData,
+      workflow: {
+        action: "SUBMIT_FEEDBACK",
+        rating,
+      },
+    };
+    const result = await Digit.FSMService.update(requestBody, tenantId);
     // history.push(`${parentRoute}/response`);
   }
 

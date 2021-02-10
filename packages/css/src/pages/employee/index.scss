@@ -107,6 +107,10 @@
   }
 }
 
+.d-flex {
+  @apply flex;
+}
+
 @media (min-width: 640px) {
   .employee {
     .main {
@@ -117,8 +121,6 @@
 
   .citizen {
     .main {
-      display: flex;
-      gap: 0.3rem;
       padding-top: 80px;
       margin-left: 210px;
     }

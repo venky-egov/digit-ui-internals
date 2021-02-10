@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
-import { TopBar, Dropdown, LogoutIcon, HomeIcon } from "@egovernments/digit-ui-react-components";
+import { TopBar, Dropdown, LogoutIcon, HomeIcon, Hamburger } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "./ChangeLanguage";
 import { useSelector } from "react-redux";
 

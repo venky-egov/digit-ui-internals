@@ -8,11 +8,10 @@ import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
 import { PGR_CITIZEN_CREATE_COMPLAINT } from "./constants/Citizen";
 import { useTranslation } from "react-i18next";
-import { LOCALE } from "../constants/Localization";
+import { LOCALE } from "./constants/Localization";
 export const PGRReducers = getRootReducer;
 
 export const PGRModule = ({ stateCode, userType, tenants }) => {
-  const { t } = useTranslation();
   const moduleCode = "PGR";
   const state = useSelector((state) => state["pgr"]);
   const language = state?.common?.selectedLanguage;
@@ -32,6 +31,7 @@ export const PGRModule = ({ stateCode, userType, tenants }) => {
 };
 
 export const PGRLinks = ({ matchPath }) => {
+  const { t } = useTranslation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
 
   useEffect(() => {

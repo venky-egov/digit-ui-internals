@@ -127,4 +127,5 @@
 
 .disabled {
   @apply border-grey-dark text-grey-dark !important;
+  pointer-events: none !important;
 }

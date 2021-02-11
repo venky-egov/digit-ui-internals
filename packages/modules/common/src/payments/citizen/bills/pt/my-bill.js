@@ -25,7 +25,7 @@ const MyBill = ({ bill, currentPath }) => {
         <KeyNote keyValue={t("PT_PROPERTY_ADDRESS")} note={bill.address?.locality?.name || t("CS_APPLICATION_TYPE_DESLUDGING")} />
         <KeyNote keyValue={t("PT_DUE_DATE")} note={t(bill.dueDate)} />
         {/* <Link to={}> */}
-        <SubmitBar onSubmit={onsubmit} label={t("CS_MY_APPLICATION_VIEW")} />
+        <SubmitBar onSubmit={onsubmit} label={t("CS_MY_APPLICATION_VIEW_DETAILS")} />
         {/* </Link> */}
       </Card>
     </React.Fragment>

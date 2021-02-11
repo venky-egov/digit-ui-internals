@@ -7,11 +7,7 @@ export const MyBills = ({ ...props }) => {
   const { businessService } = useParams();
   const { isLoading, data } = Digit.Hooks.useFetchCitizenBillsForBuissnessService({ businessService });
   const { tenantId } = Digit.UserService.getUser().info;
-  const { isLoading: mdmsLoading, data: mdmsBillingData } = Digit.Hooks.useMdmsBillingServiceForBusinessService(tenantId);
-
-  // useEffect(() => {
-  //   if (mdmsBillingData) console.log(">>>>>>>>>>>>>>>>>>>", mdmsBillingData);
-  // }, [mdmsLoading]);
+  const { isLoading: mdmsLoading, data: mdmsBillingData } = Digit.Hooks.useGetPaymentRulesForBusinessServices(tenantId);
 
   const billsList = data?.Bill || [];
 
@@ -33,7 +29,6 @@ export const MyBills = ({ ...props }) => {
     switch (businessService) {
       case "PT":
         return <PTRoutes {...getProps()} />;
-
       default:
         return <PTRoutes {...getProps()} />;
     }

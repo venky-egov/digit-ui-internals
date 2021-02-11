@@ -52,7 +52,7 @@ export const BillListPT = ({ billsList, currentPath }) => {
     <React.Fragment>
       <div onClick={goToSearch} className="back-btn2">
         <ArrowLeft />
-        <p>Search Property</p>
+        <p>{t("PT_SEARCH_PROPERTY")}</p>
       </div>
       <Header>{t("CS_TITLE_MY_BILLS")}</Header>
       {propertyList?.length > 0 &&

@@ -6,20 +6,36 @@ import PTRoutes from "./pt";
 export const MyBills = ({ ...props }) => {
   const { businessService } = useParams();
   const { isLoading, data } = Digit.Hooks.useFetchCitizenBillsForBuissnessService({ businessService });
+  const { tenantId } = Digit.UserService.getUser().info;
+  const { isLoading: mdmsLoading, data: mdmsBillingData } = Digit.Hooks.useMdmsBillingServiceForBusinessService(tenantId);
 
-  useEffect(() => {
-    if (data) console.log(">>>>>>>>>>>>>>>>>>>", data);
-  }, [isLoading]);
+  // useEffect(() => {
+  //   if (mdmsBillingData) console.log(">>>>>>>>>>>>>>>>>>>", mdmsBillingData);
+  // }, [mdmsLoading]);
 
   const billsList = data?.Bill || [];
+
+  const getPaymentRestrictionDetails = () => {
+    const payRestrictiondetails = mdmsBillingData?.MdmsRes?.BillingService?.BusinessService;
+    if (payRestrictiondetails?.length) return payRestrictiondetails.filter((e) => e.code == businessService)[0];
+    else
+      return {
+        // isAdvanceAllowed: false,
+        // isVoucherCreationEnabled: true,
+        // minAmountPayable: 100,
+        // partPaymentAllowed: true,
+      };
+  };
+
+  const getProps = () => ({ billsList, paymentRules: getPaymentRestrictionDetails() });
 
   const ComponentToLoad = () => {
     switch (businessService) {
       case "PT":
-        return <PTRoutes {...{ billsList }} />;
+        return <PTRoutes {...getProps()} />;
 
       default:
-        return <PTRoutes {...{ billsList }} />;
+        return <PTRoutes {...getProps()} />;
     }
   };
 

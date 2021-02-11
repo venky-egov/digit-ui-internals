@@ -36,3 +36,20 @@ export const usePaymentUpdate = ({ egId }) => {
 
   return useQuery(["paymentUpdate", egId], () => getPaymentData(egId));
 };
+
+export const useMdmsBillingServiceForBusinessService = (tenantId) => {
+  const mdmsCriteria = {
+    moduleDetails: [
+      {
+        moduleName: "BillingService",
+        masterDetails: [{ name: "BusinessService" }],
+      },
+      // {
+      //   moduleName: "common-masters",
+      //   masterDetails: [{ name: "uiCommonPay" }],
+      // },
+    ],
+  };
+  // Digit.MDMSService.call(tenantId);
+  return useQuery(["billingServiceForBusinessService", tenantId], () => Digit.MDMSService.call(tenantId, mdmsCriteria));
+};

@@ -28,19 +28,21 @@ const SelectRating = ({ parentRoute }) => {
     applicationData.additionalDetails = {
       CHECKLIST: checklist,
     };
-    const requestBody = {
-      fsm: {
-        ...applicationData,
-      },
-      workflow: {
-        action: "SUBMIT_FEEDBACK",
-        rating,
-      },
-    };
-    mutation.mutate(requestBody, {
-      onSuccess: handleSuccess,
+    // const requestBody = {
+    //   fsm: {
+    //     ...applicationData,
+    //   },
+    //   workflow: {
+    //     action: "SUBMIT_FEEDBACK",
+    //     rating,
+    //   },
+    // };
+
+    history.push("/digit-ui/employee/fsm/response", {
+      applicationData,
+      key: "update",
+      action: "SUBMIT_FEEDBACK",
     });
-    // history.push(`${parentRoute}/response`);
   }
 
   const handleSuccess = () => {

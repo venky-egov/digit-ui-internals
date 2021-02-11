@@ -167,7 +167,7 @@ const ApplicationDetails = () => {
             <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
           </Link>
         )} */}
-        {workflowDetails.data && showNextActions(workflowDetails.data.nextActions[0])}
+        {workflowDetails.data && showNextActions(workflowDetails.data?.nextActions[0])}
       </Card>
     </React.Fragment>
   );

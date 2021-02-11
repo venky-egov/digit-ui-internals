@@ -34,17 +34,7 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
               alignItems: "center",
             }}
           >
-            {componentInFront ? (
-              <span
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                {componentInFront}
-              </span>
-            ) : null}
+            {componentInFront ? <span className="citizen-card-input citizen-card-input--front">{componentInFront}</span> : null}
             <TextInput
               key={index}
               name={input.name}

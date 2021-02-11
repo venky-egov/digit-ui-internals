@@ -36,7 +36,7 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
         onSave={goNext}
         t={t}
       />
-      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT")} />
+      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT")} style={{ maxWidth: "960px" }} />
     </Fragment>
   );
 };

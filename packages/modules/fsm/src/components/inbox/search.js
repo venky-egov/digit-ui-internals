@@ -64,12 +64,6 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
                 <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
                   <Label>{input.label}</Label>
                   <TextInput {...input} inputRef={register} />
-                  {/* name={ip}
-                    value={applicationNo}
-                    onChange={setComplaint}
-                    inputRef={register}
-                    style={{ width: "280px", marginBottom: "8px" }}
-                  ></TextInput> */}
                 </span>
               ))}
               {/* <span className="complaint-input">

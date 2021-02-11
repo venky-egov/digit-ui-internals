@@ -52,7 +52,13 @@ export const StoreService = {
     const localities = {};
     const initData = {
       languages: stateInfo.hasLocalisation ? stateInfo.languages : [{ label: "ENGLISH", value: "en_IN" }],
-      stateInfo: { code: stateInfo.code, name: stateInfo.name, logoUrl: stateInfo.logoUrl },
+      stateInfo: {
+        code: stateInfo.code,
+        name: stateInfo.name,
+        logoUrl: stateInfo.logoUrl,
+        logoUrlWhite: stateInfo.logoUrlWhite,
+        bannerUrl: stateInfo.bannerUrl,
+      },
       localizationModules: stateInfo.localizationModules,
       modules: MdmsRes?.tenant?.citymodule.filter((module) => enabledModules.includes(module.code)),
     };

@@ -17,7 +17,7 @@ import { ArrowBack, ArrowForward } from "./svgindex";
 //   );
 // });
 
-const Table = ({ data, columns, getCellProps }) => {
+const Table = ({ t, data, columns, getCellProps, currentPage = 0, pageSizeLimit = 10, totalRecords, onNextPage, onPrevPage, onPageSizeChange }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -38,7 +38,10 @@ const Table = ({ data, columns, getCellProps }) => {
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: currentPage, pageSize: pageSizeLimit },
+      pageCount: totalRecords > 0 ? Math.ceil(totalRecords / pageSizeLimit) : -1,
+      manualPagination: true,
+      autoResetPage: false,
     },
     usePagination,
     useRowSelect
@@ -112,15 +115,8 @@ const Table = ({ data, columns, getCellProps }) => {
       </table>
       {canNextPage && (
         <div className="pagination">
-          Rows Per Page{":"}
-          <select
-            className="cp"
-            value={pageSize}
-            style={{ marginRight: "15px" }}
-            onChange={(e) => {
-              setPageSize(Number(e.target.value));
-            }}
-          >
+          {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
+          <select className="cp" value={pageSize} style={{ marginRight: "15px" }} onChange={onPageSizeChange}>
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 {pageSize}
@@ -129,9 +125,9 @@ const Table = ({ data, columns, getCellProps }) => {
           </select>
           <span>
             <span>
-              {pageIndex * 10 + 1}
+              {currentPage * 10 + 1}
               {"-"}
-              {(pageIndex + 1) * 10} of {rows.length}
+              {(currentPage + 1) * 10} {totalRecords ? `of ${totalRecords}` : ""}
             </span>{" "}
           </span>
           {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
@@ -139,8 +135,8 @@ const Table = ({ data, columns, getCellProps }) => {
 
           </span>
         </button> */}
-          {canPreviousPage && <ArrowBack onClick={() => previousPage()} className={"cp"} />}
-          {canNextPage && <ArrowForward onClick={() => nextPage()} className={"cp"} />}
+          {canPreviousPage && <ArrowBack onClick={() => onPrevPage()} className={"cp"} />}
+          {canNextPage && <ArrowForward onClick={() => onNextPage()} className={"cp"} />}
         </div>
       )}
     </React.Fragment>

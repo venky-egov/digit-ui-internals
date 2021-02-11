@@ -6,7 +6,7 @@ import Filter from "./Filter";
 import SearchApplication from "./search";
 import SortBy from "./SortBy";
 
-export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey, isFstpOperator }) => {
+export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey, isFstpOperator, searchParams }) => {
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
 
@@ -15,9 +15,11 @@ export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequest
   const handlePopupAction = (type) => {
     console.log("option");
     if (type === "SEARCH") {
-      setSelectedComponent(<SearchApplication type="mobile" onClose={handlePopupClose} onSearch={onSearch} isFstpOperator={isFstpOperator} />);
+      setSelectedComponent(
+        <SearchApplication type="mobile" onClose={handlePopupClose} onSearch={onSearch} isFstpOperator={isFstpOperator} searchParams={searchParams} />
+      );
     } else if (type === "FILTER") {
-      setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
+      setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" searchParams={searchParams} />);
     } else if (type === "SORT") {
       setSelectedComponent(<SortBy type="mobile" onClose={handlePopupClose} type="mobile" />);
     }

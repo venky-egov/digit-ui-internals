@@ -56,6 +56,7 @@ const ApplicationAudit = () => {
     <div>
       <Header>{t("ES_TITLE_APPLICATION_AUDIT")}</Header>
       <Table
+        t={t}
         data={data}
         columns={columns}
         getCellProps={(cellInfo) => {

@@ -1,6 +1,7 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_API || "https://egov-micro-dev.egovernments.org",
+  // target: process.env.REACT_APP_PROXY_API || "https://egov-micro-qa.egovernments.org",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
@@ -25,6 +26,7 @@ module.exports = function (app) {
     "/pg-service",
     "/vehicle",
     "/vendor",
+    "/property-services",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
 };

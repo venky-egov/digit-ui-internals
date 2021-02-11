@@ -42,10 +42,8 @@ export const CollectPayment = (props) => {
   };
 
   const getPaymentModes = () => defaultPaymentModes;
-
-  const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
-
   const paidByMenu = ["Owner", "Other"];
+  const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
 
   const onSubmit = async (data) => {
     bill.totalAmount = Math.round(bill.totalAmount);
@@ -126,6 +124,13 @@ export const CollectPayment = (props) => {
                 {...customProps}
                 selected={props.value}
                 select={(d) => {
+                  if (isEqual(d, paidByMenu[0])) {
+                    props.setValue("payerName", bill?.payerName);
+                    props.setValue("payerMobile", bill?.mobileNumber);
+                  } else {
+                    props.setValue("payerName", "");
+                    props.setValue("payerMobile", "");
+                  }
                   props.onChange(d);
                 }}
               />
@@ -205,7 +210,6 @@ export const CollectPayment = (props) => {
         onSubmit={onSubmit}
         formState={formState}
         onFormValueChange={(formValue) => {
-          console.log(formValue);
           if (!isEqual(formValue.paymentMode, selectedPaymentMode)) {
             setFormState(formValue);
             setPaymentMode(formState.paymentMode);

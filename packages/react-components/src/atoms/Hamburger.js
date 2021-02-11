@@ -1,9 +1,9 @@
 import React from "react";
 import { HamburgerIcon } from "./svgindex";
 
-const Hamburger = ({ handleClick }) => (
+const Hamburger = ({ handleClick, color }) => (
   <span style={{ marginRight: "10px" }} onClick={handleClick}>
-    <HamburgerIcon styles={{ display: "inline" }} />
+    <HamburgerIcon styles={{ display: "inline" }} color={color} />
   </span>
 );
 

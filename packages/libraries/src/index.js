@@ -19,6 +19,7 @@ import { WorkflowService } from "./services/elements/WorkFlow";
 import { MdmsService } from "./services/elements/MDMS";
 import { Complaint } from "./services/elements/Complaint";
 import { UserService } from "./services/elements/User";
+import { PTService } from "./services/elements/PT";
 
 import { GetServiceDefinitions } from "./services/molecules/ServiceDefinitions";
 import { ULBService } from "./services/molecules/Ulb";
@@ -49,6 +50,7 @@ const initLibraries = () => {
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("FSMService", FSMService);
+  setupLibraries("PTService", PTService);
   setupLibraries("PaymentService", PaymentService);
   setupLibraries("DateUtils", dateUtils);
   setupLibraries("WorkflowService", WorkflowService);

@@ -10,7 +10,7 @@ const TextArea = (props) => {
       ref={props.inputRef}
       value={props.value}
       onChange={props.onChange}
-      className={user_type ? "employee-card-textarea" : "card-textarea"}
+      className={`${user_type ? "employee-card-textarea" : "card-textarea"} ${props.disable && "disabled"}`}
     ></textarea>
   );
 };

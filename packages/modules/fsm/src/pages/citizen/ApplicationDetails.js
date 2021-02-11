@@ -33,7 +33,7 @@ const ApplicationDetails = () => {
   const { id } = useParams();
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
+  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.tenantId,
     id,

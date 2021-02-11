@@ -129,6 +129,7 @@ export const config = {
         header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",
         cardText: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TEXT",
         nextText: "CS_COMMON_NEXT",
+        skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       nextStep: null,
     },

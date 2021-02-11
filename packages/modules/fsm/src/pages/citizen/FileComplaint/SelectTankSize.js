@@ -19,8 +19,10 @@ const SelectTankSize = ({ config, onSelect, t, value }) => {
     onSelect({ pitDetail: size });
   };
 
+  const onSkip = () => onSelect();
+
   return (
-    <FormStep config={config} onSelect={handleSubmit} t={t}>
+    <FormStep config={config} onSelect={handleSubmit} t={t} onSkip={onSkip}>
       <PitDimension sanitationType={value.pitType} size={size} handleChange={handleChange} t={t} />
     </FormStep>
   );

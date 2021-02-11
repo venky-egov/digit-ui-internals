@@ -27,23 +27,25 @@ const Filter = (props) => {
     applicationStatus: [],
   });
 
-  const [wfFilters, setWfFilters] = useState({
-    applicationStatus: [],
-    locality: [],
-    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
-  });
+  const [wfFilters, setWfFilters] = useState(
+    props.searchParams || {
+      applicationStatus: [],
+      locality: [],
+      uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+    }
+  );
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const localities = useSelector((state) => state.common.localities[tenantId]);
 
   useEffect(() => {
-    let filters = {};
-    filters.applicationStatus = wfFilters.applicationStatus.map((status) => status.code).join(",");
-    filters.locality = wfFilters.locality.map((item) => item.code.split("_").pop()).join(",");
-    if (wfFilters.uuid && Object.keys(wfFilters.uuid).length > 0) {
-      filters.uuid = wfFilters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
-    }
-    props.onFilterChange(filters);
+    // let filters = {};
+    // filters.applicationStatus = wfFilters.applicationStatus.map((status) => status.code).join(",");
+    // filters.locality = wfFilters.locality.map((item) => item.code.split("_").pop()).join(",");
+    // if (wfFilters.uuid && Object.keys(wfFilters.uuid).length > 0) {
+    //   filters.uuid = wfFilters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
+    // }
+    props.onFilterChange(wfFilters);
     //props.onClose();
   }, [wfFilters]);
 
@@ -73,7 +75,7 @@ const Filter = (props) => {
     let afterRemove = wfFilters[key].filter((value, i) => {
       return i !== index;
     });
-    setWfFilters({ ...pgrfilters, [key]: afterRemove });
+    setWfFilters({ ...wfFilters, [key]: afterRemove });
   };
 
   const handleAssignmentChange = (e, type) => {

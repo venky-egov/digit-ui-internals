@@ -12,7 +12,8 @@ const useInboxData = (searchParams) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     let serviceIds = [];
     let commonFilters = { start: 1, end: 10 };
-    let appFilters = { ...commonFilters, ...searchParams.filters.pgrQuery, ...searchParams.search };
+    const { limit, offset } = searchParams;
+    let appFilters = { ...commonFilters, ...searchParams.filters.pgrQuery, ...searchParams.search, limit, offset };
     let wfFilters = { ...commonFilters, ...searchParams.filters.wfQuery };
     let complaintDetailsResponse = null;
     let combinedRes = [];

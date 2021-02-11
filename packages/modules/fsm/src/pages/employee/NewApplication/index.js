@@ -326,6 +326,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "streetName",
+            error: t("CORE_COMMON_STREET_INVALID"),
+            validation: { pattern: /^[\w\s]{1,256}$/ },
           },
         },
         {
@@ -333,6 +335,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "doorNo",
+            error: t("CORE_COMMON_DOOR_INVALID"),
+            validation: {
+              pattern: /^[\w\\\s]*$/,
+            },
           },
         },
         {
@@ -373,7 +379,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
+            error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+            validation: { pattern: /^[1-9]{1}$/ },
             defaultValue: noOfTrips,
           },
         },
@@ -382,7 +389,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "amountPerTrip",
-            validation: { required: true },
+            error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
+            validation: { required: true, pattern: /^[1-9]\d+$/ },
             defaultValue: vehicle?.amount,
           },
         },
@@ -391,7 +399,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           type: "text",
           populators: {
             name: "amount",
-            validation: { pattern: /[0-9]+/ },
+            validation: { required: true },
             defaultValue: paymentAmount,
           },
         },

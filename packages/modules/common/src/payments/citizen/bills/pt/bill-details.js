@@ -75,7 +75,7 @@ const BillDetails = ({ paymentRules }) => {
         <BillSumary billAccountDetails={getBillBreakDown()} />
         <div style={{ position: "sticky", bottom: "0", paddingBottom: "32px", backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))" }}>
           <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
-          <CardSubHeader>Payment Amount</CardSubHeader>
+          <CardSubHeader>{t("CS_COMMON_PAYMENT_AMOUNT")}</CardSubHeader>
           <RadioButtons
             selectedOption={paymentType}
             onSelect={setPaymentType}

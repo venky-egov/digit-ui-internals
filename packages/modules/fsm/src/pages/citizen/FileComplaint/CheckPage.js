@@ -32,9 +32,9 @@ const CheckPage = ({ onSubmit, value }) => {
 
   const { city_complaint, locality_complaint, street, doorNo, landmark, propertyType, subtype, pitType, pitDetail } = value;
 
-  const pitDetailValues = Object.values(pitDetail);
+  const pitDetailValues = pitDetail ? Object.values(pitDetail) : null;
 
-  const pitMeasurement = pitDetailValues.reduce((previous, current, index, array) => {
+  const pitMeasurement = pitDetailValues?.reduce((previous, current, index, array) => {
     if (index === array.length - 1) {
       return previous + current + "m";
     } else {
@@ -77,11 +77,18 @@ const CheckPage = ({ onSubmit, value }) => {
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pit-type" />}
           />
         )}
-        <Row
-          label={t("CS_CHECK_SIZE")}
-          text={[pitMeasurement, pitDetailValues?.length === 3 ? "Length x Breadth x Depth" : "Diameter x Depth"]}
-          actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
-        />
+        {pitMeasurement && (
+          <Row
+            label={t("CS_CHECK_SIZE")}
+            text={[
+              pitMeasurement,
+              pitDetailValues?.length === 3
+                ? `${t(`CS_COMMON_LENGTH`)} x ${t(`CS_COMMON_BREADTH`)} x ${t(`CS_COMMON_DEPTH`)}`
+                : `${t(`CS_COMMON_DIAMETER`)} x ${t(`CS_COMMON_DEPTH`)}`,
+            ]}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
+          />
+        )}
       </StatusTable>
       {/* <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_TEXT")} /> */}
       <SubmitBar label="Submit" onSubmit={onSubmit} />

@@ -48,7 +48,7 @@ export const Search = {
         title: t("ES_TITLE_APPLICATION_DETAILS"),
         values: [
           { title: t("CS_FILE_DESLUDGING_APPLICATION_NO"), value: response?.applicationNo },
-          { title: t("ES_APPLICATION_CHANNEL"), value: response?.source },
+          { title: t("ES_APPLICATION_CHANNEL"), value: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${response?.source}` },
         ],
       },
       {

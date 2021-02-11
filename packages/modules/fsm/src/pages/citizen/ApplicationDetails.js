@@ -33,7 +33,7 @@ const ApplicationDetails = () => {
   const { id } = useParams();
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
+  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.tenantId,
     id,
@@ -143,6 +143,11 @@ const ApplicationDetails = () => {
         {application.applicationStatus === "PENDING_APPL_FEE_PAYMENT" && (
           <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
             <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
+          </Link>
+        )}
+        {["COMPLETED", "CANCELED"].includes(application.applicationStatus) && (
+          <Link to={`/digit-ui/citizen/fsm/rate/${application.applicationNo}`}>
+            <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
           </Link>
         )}
       </Card>

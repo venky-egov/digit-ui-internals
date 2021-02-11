@@ -6,14 +6,14 @@ import { useTranslation } from "react-i18next";
 const SelectRating = ({ parentRoute }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
   const history = useHistory();
   let { id: applicationNos } = useParams();
   const { isError, error, data: application } = Digit.Hooks.fsm.useSearchAll(tenantId, { applicationNos });
-  const { isLoading, data: checklistData } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "Checklist");
+  const { isLoading, data: checklistData } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "Checklist");
+  const mutation = Digit.Hooks.fsm.useApplicationUpdate(tenantId);
   const [answers, setAnswers] = useState({});
 
-  async function log(data) {
+  function handleSubmit(data) {
     const { rating } = data;
     const allAnswers = { ...data, ...answers };
     let checklist = Object.keys(allAnswers).reduce((acc, key) => {
@@ -37,9 +37,15 @@ const SelectRating = ({ parentRoute }) => {
         rating,
       },
     };
-    const result = await Digit.FSMService.update(requestBody, tenantId);
+    mutation.mutate(requestBody, {
+      onSuccess: handleSuccess,
+    });
     // history.push(`${parentRoute}/response`);
   }
+
+  const handleSuccess = () => {
+    console.log("success");
+  };
 
   const handleSelect = (key) => {
     return (value) => {
@@ -95,6 +101,6 @@ const SelectRating = ({ parentRoute }) => {
       },
     ],
   };
-  return <RatingCard config={{ ...config, inputs: [...inputs, ...config.inputs] }} t={t} onSelect={log} />;
+  return <RatingCard config={{ ...config, inputs: [...inputs, ...config.inputs] }} t={t} onSelect={handleSubmit} />;
 };
 export default SelectRating;

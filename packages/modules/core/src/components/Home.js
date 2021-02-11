@@ -7,10 +7,14 @@ const CitizenHome = ({ modules }) => {
   const registry = useContext(ComponentProvider);
 
   console.log(registry);
+  const paymentModule = modules.filter(({ code }) => code === "Payment")[0];
+  const moduleArr = modules.filter(({ code }) => code !== "Payment");
+  const moduleArray = [paymentModule, ...moduleArr];
 
   return (
     <React.Fragment>
-      {modules.map(({ code }, index) => {
+      {moduleArray.map(({ code }, index) => {
+        //console.log("in module map", code);
         const Links = registry.getComponent(`${code}Links`) || (() => <React.Fragment />);
         return <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />;
       })}

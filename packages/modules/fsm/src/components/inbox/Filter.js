@@ -20,6 +20,7 @@ const Filter = (props) => {
   const { t } = useTranslation();
   const [selectedLocality, setSelectedLocality] = useState(null);
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
@@ -125,7 +126,7 @@ const Filter = (props) => {
 
   return (
     <React.Fragment>
-      <div className="filter">
+      <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
         <div className="filter-card">
           <div className="heading">
             <div className="filter-label">{t("FILTER_BY")}:</div>
@@ -140,7 +141,7 @@ const Filter = (props) => {
             {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
           </div>
           <div>
-            {!DSO && (
+            {!DSO && !isFstpOperator && (
               <RadioButtons
                 onSelect={onRadioChange}
                 selectedOption={wfFilters.uuid}

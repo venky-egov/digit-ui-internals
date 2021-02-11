@@ -12,6 +12,7 @@ const DesktopInbox = (props) => {
   const { t } = useTranslation();
   let { match } = useRouteMatch();
   const GetCell = (value) => <span className="cell-text">{value}</span>;
+  const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const GetSlaCell = (value) => {
     if (isNaN(value)) value = "-";
@@ -128,14 +129,14 @@ const DesktopInbox = (props) => {
   return (
     <div className="inbox-container">
       <div className="filters-container">
-        <FSMLink />
+        {!isFstpOperator && <FSMLink />}
         <div>
           <Filter applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
         </div>
       </div>
       <div style={{ flex: 1 }}>
         <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} />
-        <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
+        <div style={{ marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

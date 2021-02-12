@@ -29,11 +29,9 @@ export const SuccessfulPayment = (props) => {
     if (printing) return;
     setPrinting(true);
     const tenantId = paymentData?.tenantId;
-    console.log("--------", { payments });
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
     if (!paymentData?.fileStoreId) {
       response = await Digit.PaymentService.generatePdf(tenantId, { Payments: payments.Payments });
-      // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     if (fileStore && fileStore[response.filestoreIds[0]]) {

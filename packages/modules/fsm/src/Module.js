@@ -51,16 +51,16 @@ const EmployeeApp = ({ path, url, userType }) => {
 const CitizenApp = ({ path }) => {
   const location = useLocation();
   return (
-    <Switch>
-      <div className="ground-container">
-        {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
+    <React.Fragment>
+      {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
+      <Switch>
         <PrivateRoute path={`${path}/new-application`} component={() => <FileComplaint parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
         <PrivateRoute path={`${path}/application-details/:id`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
-      </div>
-    </Switch>
+      </Switch>
+    </React.Fragment>
   );
 };
 
@@ -75,7 +75,7 @@ export const FSMModule = ({ stateCode, userType }) => {
     return <Loader />;
   }
 
-  console.log("fsm", userType, state, store);
+  console.log("fsm", userType, path, state, store);
 
   if (userType === "citizen") {
     return <CitizenApp path={path} />;

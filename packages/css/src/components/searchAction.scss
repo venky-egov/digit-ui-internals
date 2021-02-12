@@ -1,5 +1,5 @@
 .searchBox {
-  @apply flex m-sm;
+  @apply flex m-sm justify-between;
   .searchAction {
     position: relative;
     @apply flex flex-row text-focus;

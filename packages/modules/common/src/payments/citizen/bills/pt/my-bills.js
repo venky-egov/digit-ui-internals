@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Header, Loader } from "@egovernments/digit-ui-react-components";
+import { ArrowLeft, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
 
 import MyBill from "./my-bill";
 
 export const BillListPT = ({ billsList, currentPath }) => {
   const { t } = useTranslation();
+  const history = useHistory();
 
   console.log(currentPath);
   const propertyIds = billsList.map((bill) => bill.consumerCode);
@@ -38,12 +40,20 @@ export const BillListPT = ({ billsList, currentPath }) => {
     }
   }, [result.data]);
 
+  const goToSearch = () => {
+    history.push(`/digit-ui/citizen/pt/property/search`);
+  };
+
   if (result.isLoading) {
     return <Loader />;
   }
 
   return (
     <React.Fragment>
+      <div onClick={goToSearch} className="back-btn2">
+        <ArrowLeft />
+        <p>{t("PT_SEARCH_PROPERTY")}</p>
+      </div>
       <Header>{t("CS_TITLE_MY_BILLS")}</Header>
       {propertyList?.length > 0 &&
         propertyList.map((bill, index) => (

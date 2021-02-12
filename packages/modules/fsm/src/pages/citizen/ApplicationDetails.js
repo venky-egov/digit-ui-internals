@@ -33,7 +33,7 @@ const ApplicationDetails = () => {
   const { id } = useParams();
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNumber: id });
+  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.tenantId,
     id,
@@ -141,9 +141,11 @@ const ApplicationDetails = () => {
         {/* <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} /> */}
         {/* <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} /> */}
         {application.applicationStatus === "PENDING_APPL_FEE_PAYMENT" && (
-          <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
-            <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
-          </Link>
+          <div style={{ marginTop: "24px" }}>
+            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
+              <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
+            </Link>
+          </div>
         )}
       </Card>
     </React.Fragment>

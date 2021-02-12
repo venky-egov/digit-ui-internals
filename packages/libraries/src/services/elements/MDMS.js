@@ -183,6 +183,15 @@ const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getBillingServiceForBusinessServiceCriteria = () => ({
+  moduleDetails: [
+    {
+      moduleName: "BillingService",
+      masterDetails: [{ name: "BusinessService" }],
+    },
+  ],
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -290,5 +299,9 @@ export const MdmsService = {
   },
   getVehicleType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getVehicleTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+
+  getPaymentRules: (tenantId) => {
+    return MdmsService.call(tenantId, getBillingServiceForBusinessServiceCriteria());
   },
 };

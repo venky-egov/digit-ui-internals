@@ -36,3 +36,7 @@ export const usePaymentUpdate = ({ egId }) => {
 
   return useQuery(["paymentUpdate", egId], () => getPaymentData(egId));
 };
+
+export const useGetPaymentRulesForBusinessServices = (tenantId) => {
+  return useQuery(["getPaymentRules", tenantId], () => Digit.MDMSService.getPaymentRules(tenantId));
+};

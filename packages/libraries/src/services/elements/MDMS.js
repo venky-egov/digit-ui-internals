@@ -174,7 +174,7 @@ const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
         moduleName: moduleCode,
         masterDetails: [
           {
-            name: "VehicleType",
+            name: "VehicleMakeModel",
             filter: null,
           },
         ],

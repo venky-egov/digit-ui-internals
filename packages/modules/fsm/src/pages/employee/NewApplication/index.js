@@ -42,7 +42,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   // console.log("find vehicle menu", vehicleMenu);
   const [canSubmit, setSubmitValve] = useState(false);
 

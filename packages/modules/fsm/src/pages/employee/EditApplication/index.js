@@ -25,7 +25,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   // console.log("find propertyTypesData sanitationTypeData here", propertyTypesData, sanitationTypeData);
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   // console.log("find property sub type here", propertySubtypesData)
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
   const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,

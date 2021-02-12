@@ -8,11 +8,19 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
     const { pincode } = value;
     return pincode;
   });
-
+  let isNextDisabled = pincode ? false : true;
   const [pincodeServicability, setPincodeServicability] = useState(null);
 
   function onChange(e) {
     setPincode(e.target.value);
+    
+    if(!e.target.value) {
+      console.log("changed")
+      isNextDisabled = true;
+    } else {
+      console.log("changed false")
+      isNextDisabled = false;
+    }
     // Digit.SessionStorage.set("PGR_CREATE_PINCODE", e.target.value);
     setPincodeServicability(null);
   }
@@ -44,6 +52,7 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
       onChange={onChange}
       onSkip={onSkip}
       forcedError={t(pincodeServicability)}
+      isDisabled={isNextDisabled}
     ></FormStep>
   );
 };

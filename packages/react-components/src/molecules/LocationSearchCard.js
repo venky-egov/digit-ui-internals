@@ -10,7 +10,7 @@ import LocationSearch from "../atoms/LocationSearch";
 import SubmitBar from "../atoms/SubmitBar";
 import LinkButton from "../atoms/LinkButton";
 
-const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, skip, onSave }) => {
+const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, skip, onSave, onChange }) => {
   return (
     <Card>
       <CardHeader>{header}</CardHeader>
@@ -20,7 +20,7 @@ const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, s
         {cardText}
       </CardText>
 
-      <LocationSearch />
+      <LocationSearch onChange={onChange}/>
 
       <SubmitBar label={nextText} onSubmit={onSave} />
       {skip ? <LinkButton label={skipAndContinueText} /> : null}
@@ -35,6 +35,7 @@ LocationSearchCard.propTypes = {
   skipAndContinueText: PropTypes.string,
   skip: PropTypes.bool,
   onSave: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 LocationSearchCard.defaultProps = {
@@ -44,6 +45,7 @@ LocationSearchCard.defaultProps = {
   skipAndContinueText: "",
   skip: false,
   onSave: null,
+  onChange: () => {}
 };
 
 export default LocationSearchCard;

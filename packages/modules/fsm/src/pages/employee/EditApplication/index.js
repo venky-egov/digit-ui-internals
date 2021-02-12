@@ -534,7 +534,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           disable: !FSM_CREATOR_EMP,
         },
         {
-          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
+          label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
           isMandatory: true,
           type: "text",
           populators: {

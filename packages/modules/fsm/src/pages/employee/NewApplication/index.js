@@ -398,7 +398,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           },
         },
         {
-          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
+          label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
           type: "text",
           populators: {
             name: "amount",

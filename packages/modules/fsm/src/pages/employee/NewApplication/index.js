@@ -84,12 +84,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
   }, [sanitationTypeData]);
 
   useEffect(() => {
-    if (propertyType?.code && subType?.code && selectedCity?.code && selectedLocality?.code) {
+    if (propertyType?.code && subType?.code && selectedCity?.code && selectedLocality?.code && sanitation?.code) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
     }
-  }, [propertyType, subType, selectedCity, selectedLocality]);
+  }, [propertyType, subType, selectedCity, selectedLocality, sanitation]);
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
@@ -355,8 +355,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
       body: [
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
+          isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
+          populators: (
+            <Dropdown isMandatory option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),

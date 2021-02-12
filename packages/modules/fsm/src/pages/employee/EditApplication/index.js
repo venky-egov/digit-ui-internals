@@ -89,7 +89,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         streetName: applicationDetails.address?.street,
         doorNo: applicationDetails.address?.doorNo,
         landmark: applicationDetails.address?.landmark,
-        noOfTrips: applicationDetails.noOfTrips,
+        noOfTrips: applicationDetails.noOfTrips || 1,
         distanceFromRoad: applicationDetails?.pitDetail?.distanceFromRoad,
       });
     }
@@ -253,6 +253,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       }),
       (applicationData.propertyUsage = subType.code),
       (applicationData.vehicleType = vehicle.code),
+      (applicationData.noOfTrips = noOfTrips),
       (applicationData.pitDetail = {
         distanceFromRoad: data.distanceFromRoad,
         height,
@@ -492,7 +493,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "distanceFromRoad",
             error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
-            validation: { pattern: /^[1-9]\d?(\.\d{1,2})?$/ },
+            validation: { pattern: /^[0-9]\d?(\.\d{1,2})?$/ },
           },
           disable: !FSM_CREATOR_EMP,
         },
@@ -528,7 +529,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "noOfTrips",
             error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-            validation: { pattern: /^[1-9]{1}$/ },
+            validation: { required: true, pattern: /^[1-9]{1}$/ },
           },
           disable: !FSM_CREATOR_EMP,
         },
@@ -547,34 +548,34 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
           disable: true,
         },
-        {
-          label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
-          type: "text",
-          populators: {
-            name: "additionalTrip",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
-          type: "text",
-          populators: {
-            name: "additionalCharges",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
-          type: "text",
-          populators: {
-            name: "reasonForAdditionalCharges",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
-          type: "text",
-          populators: {
-            name: "additionalAmount",
-          },
-        },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalTrip",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalCharges",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
+        //   type: "text",
+        //   populators: {
+        //     name: "reasonForAdditionalCharges",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalAmount",
+        //   },
+        // },
       ],
     },
   ];

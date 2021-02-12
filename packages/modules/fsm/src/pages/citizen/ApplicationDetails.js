@@ -114,9 +114,11 @@ const ApplicationDetails = () => {
         />
         {!workflowDetails?.isLoading && (
           <Fragment>
-            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
-              {t("CS_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
-            </CardSectionHeader>
+            {workflowDetails?.data?.timeline?.length > 0 && (
+              <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+                {t("CS_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+              </CardSectionHeader>
+            )}
             {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
               <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
             ) : (

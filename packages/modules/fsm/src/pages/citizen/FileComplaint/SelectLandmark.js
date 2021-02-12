@@ -10,11 +10,11 @@ const SelectLandmark = ({ t, config, onSelect, value }) => {
   const [error, setError] = useState("");
 
   function onChange(e) {
-    setLandmark(e.target.value);
     if (e.target.value.length > 1024) {
       setError("CS_COMMON_LANDMARK_MAX_LENGTH");
     } else {
       setError(null);
+      setLandmark(e.target.value);
     }
   }
 

@@ -26,9 +26,9 @@ const FileComplaint = ({ parentRoute }) => {
     history.push(`${match.path}/${nextStep}`);
   };
 
-  // const submitComplaint = async () => {
-  //   history.push(`${parentRoute}/new-application/response`);
-  // };
+  const submitComplaint = async () => {
+    history.push(`${parentRoute}/new-application/response`);
+  };
 
   function handleSelect(data) {
     setParams({ ...params, ...data, ...{ source: "ONLINE" } });
@@ -56,9 +56,9 @@ const FileComplaint = ({ parentRoute }) => {
       {/* <Route path={`${match.path}/check`}>
         <CheckPage onSubmit={submitComplaint} value={params} />
       </Route> */}
-      <Route path={`${match.path}/response`}>
+      {/* <Route path={`${match.path}/response`}>
         <Response data={params} onSuccess={handleSUccess} />
-      </Route>
+      </Route> */}
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>

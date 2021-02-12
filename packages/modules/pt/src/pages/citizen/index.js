@@ -6,6 +6,8 @@ import { MyBills } from "./MyBills";
 import { useRouteMatch, Switch, useLocation, Redirect } from "react-router-dom";
 import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import SearchPropertyComponent from "./SearchProperty";
+import FileComplaint from "./FileComplaint";
+
 import SearchResultsComponent from "./SearchResults";
 import ApplicationDetails from "./MyApplications/application-details";
 
@@ -15,6 +17,7 @@ const App = () => {
     <Switch>
       <AppContainer>
         <BackButton>Back</BackButton>
+        <PrivateRoute path={`${path}/property/test`} component={FileComplaint} />
         <PrivateRoute path={`${path}/property/search`} component={SearchPropertyComponent} />
         <PrivateRoute path={`${path}/property/search-results`} component={SearchResultsComponent} />
         <PrivateRoute path={`${path}/property/my-bills`} component={MyBills}></PrivateRoute>

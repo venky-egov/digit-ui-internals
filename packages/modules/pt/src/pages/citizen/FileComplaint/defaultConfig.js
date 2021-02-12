@@ -9,6 +9,26 @@ import SelectPitType from "./SelectPitType";
 
 export const config = {
   routes: {
+    "property-type": {
+      component: SelectPropertyType,
+      texts: {
+        headerCaption: "",
+        header: "CS_FILE_APPLICATION_PROPERTY_LABEL",
+        cardText: "CS_FILE_APPLICATION_PROPERTY_TEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
+      },
+      nextStep: "property-subtype",
+    },
+    "property-subtype": {
+      component: SelectPropertySubtype,
+      texts: {
+        headerCaption: "",
+        header: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL",
+        cardText: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_TEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
+      },
+      nextStep: "pincode",
+    },
     pincode: {
       component: SelectPincode,
       texts: {

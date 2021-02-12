@@ -200,6 +200,15 @@ const getChecklistCriteria = (tenantId, moduleCode) => ({
   },
 });
 
+const getBillingServiceForBusinessServiceCriteria = () => ({
+  moduleDetails: [
+    {
+      moduleName: "BillingService",
+      masterDetails: [{ name: "BusinessService" }],
+    },
+  ],
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -310,5 +319,8 @@ export const MdmsService = {
   },
   getChecklist: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getChecklistCriteria(tenantId, moduleCode), moduleCode);
+  },
+  getPaymentRules: (tenantId) => {
+    return MdmsService.call(tenantId, getBillingServiceForBusinessServiceCriteria());
   },
 };

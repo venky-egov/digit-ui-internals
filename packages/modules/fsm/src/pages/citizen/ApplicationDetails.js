@@ -61,9 +61,11 @@ const ApplicationDetails = () => {
     switch (nextAction?.action) {
       case "PAY":
         return (
-          <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
-            <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
-          </Link>
+          <div style={{ marginTop: "24px" }}>
+            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
+              <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
+            </Link>
+          </div>
         );
       case "RATING":
         return (

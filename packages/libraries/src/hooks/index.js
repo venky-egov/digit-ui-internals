@@ -33,6 +33,7 @@ import usePropertySearch from "./pt/usePropertySearch";
 import usePropertyPayment from "./pt/usePropertyPayment";
 import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
+import useConfig from "./fsm/useConfig";
 
 const pgr = {
   useComplaintDetails,
@@ -63,6 +64,7 @@ const fsm = {
   useApplicationDetail,
   useApplicationActions,
   useVehicleSearch,
+  useConfig,
 };
 
 const pt = {

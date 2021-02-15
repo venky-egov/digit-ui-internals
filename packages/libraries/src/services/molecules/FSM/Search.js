@@ -42,7 +42,8 @@ export const Search = {
   applicationDetails: async (t, tenantId, applicationNos) => {
     const filter = { applicationNos };
     const response = await Search.application(tenantId, filter);
-    // console.log("find response data here", response)
+    const amountPerTrip = isJsonString(response?.additionalDetails) ? JSON.parse(response.additionalDetails).tripAmount : "N/A";
+    const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
     return [
       {
         title: t("ES_TITLE_APPLICATION_DETAILS"),
@@ -99,9 +100,9 @@ export const Search = {
           { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
             title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),
-            value: isJsonString(response?.additionalDetails) ? JSON.parse(response.additionalDetails).tripAmount : "N/A",
+            value: amountPerTrip,
           },
-          { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: response?.totalAmount || "N/A" },
+          { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: totalAmount },
         ],
       },
       {

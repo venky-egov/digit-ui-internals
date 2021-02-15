@@ -51,7 +51,7 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
       return (
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
-          <TextArea key={index} name={input.name} value={value} onChange={onChange} inputRef={register(input.validation)}></TextArea>
+          <TextArea key={index} name={input.name} value={value} onChange={onChange} inputRef={register(input.validation)} maxLength="1024"></TextArea>
         </React.Fragment>
       );
   });

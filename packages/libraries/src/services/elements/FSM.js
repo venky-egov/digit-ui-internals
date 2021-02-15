@@ -25,7 +25,7 @@ export const FSMService = {
     Request({
       url: Urls.fsm.update,
       data: details,
-      useCache: true,
+      useCache: false,
       userService: true,
       method: "POST",
       params: { tenantId },

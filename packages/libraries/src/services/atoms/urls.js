@@ -22,6 +22,7 @@ const Urls = {
   ChangePassword: "/user/password/nologin/_update",
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
+  UserSearch: "/user/_search",
 
   fsm: {
     search: "/fsm/v1/_search",
@@ -29,6 +30,7 @@ const Urls = {
     update: "/fsm/v1/_update",
     vendorSearch: "/vendor/v1/_search",
     vehicleSearch: "/vehicle/v1/_search",
+    audit: "/fsm/v1/_audit",
   },
 
   payment: {

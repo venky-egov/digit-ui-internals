@@ -5,6 +5,7 @@ import useQueryParams from "./useQueryParams";
 import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
 import { useFetchPayment, usePaymentUpdate, useFetchCitizenBillsForBuissnessService, useGetPaymentRulesForBusinessServices } from "./payment";
+import { useUserSearch } from "./userSearch";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -32,6 +33,8 @@ import usePropertySearch from "./pt/usePropertySearch";
 import usePropertyPayment from "./pt/usePropertyPayment";
 import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
+import useApplicationAudit from "./fsm/useApplicationAudit";
+import useSearchForAuditData from "./fsm/useSearchForAudit";
 
 const pgr = {
   useComplaintDetails,
@@ -61,6 +64,8 @@ const fsm = {
   useDsoSearch,
   useApplicationDetail,
   useApplicationActions,
+  useApplicationAudit,
+  useSearchForAuditData,
 };
 
 const pt = {
@@ -79,6 +84,7 @@ const Hooks = {
   useInitStore,
   useClickOutside,
   useCoreData,
+  useUserSearch,
   pgr,
   fsm,
   pt,

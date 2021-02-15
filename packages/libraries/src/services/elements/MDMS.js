@@ -200,6 +200,23 @@ const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getChecklistCriteria = (tenantId, moduleCode) => ({
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "CheckList",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getBillingServiceForBusinessServiceCriteria = () => ({
   moduleDetails: [
     {
@@ -317,7 +334,9 @@ export const MdmsService = {
   getVehicleType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getVehicleTypeCriteria(tenantId, moduleCode, type), moduleCode);
   },
-
+  getChecklist: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getChecklistCriteria(tenantId, moduleCode), moduleCode);
+  },
   getPaymentRules: (tenantId) => {
     return MdmsService.call(tenantId, getBillingServiceForBusinessServiceCriteria());
   },

@@ -97,6 +97,10 @@ export const Search = {
               diameter: response?.pitDetail?.diameter,
             }),
           },
+          {
+            title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
+            value: response?.pitDetail?.distanceFromRoad,
+          },
           { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
             title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),

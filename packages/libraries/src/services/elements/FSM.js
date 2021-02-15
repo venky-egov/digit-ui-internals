@@ -25,7 +25,7 @@ export const FSMService = {
     Request({
       url: Urls.fsm.update,
       data: details,
-      useCache: true,
+      useCache: false,
       userService: true,
       method: "POST",
       params: { tenantId },
@@ -47,6 +47,14 @@ export const FSMService = {
       userService: true,
       method: "POST",
       params: { tenantId, ...filters },
+    }),
+  vehicleSearch: (tenantId, details) =>
+    Request({
+      url: Urls.fsm.vehicleSearch,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId, ...details },
       auth: true,
     }),
 };

@@ -8,7 +8,7 @@ const key = globalConfigs.getConfig("GMAPS_API_KEY");
 const GetPinCode = (places) => {
   console.log("Places address component:", places.address_components);
   let postalCode = null;
-  places.address_components.forEach((place) => {
+  places?.address_components?.forEach((place) => {
     let hasPostalCode = place.types.includes("postal_code");
     postalCode = hasPostalCode ? place.long_name : null;
   });
@@ -39,11 +39,12 @@ const LocationSearch = (props) => {
 
     async function mapScriptCall() {
       const initAutocomplete = function () {
+        const defaultLatLong = {
+          lat: 31.6160638,
+          lng: 74.8978579,
+        };
         const map = new window.google.maps.Map(document.getElementById("map"), {
-          center: {
-            lat: 31.6160638,
-            lng: 74.8978579,
-          },
+          center: defaultLatLong,
           zoom: 15,
           mapTypeId: "roadmap",
         }); // Create the search box and link it to the UI element.
@@ -55,9 +56,18 @@ const LocationSearch = (props) => {
         map.addListener("bounds_changed", () => {
           searchBox.setBounds(map.getBounds());
         });
-        let markers = []; // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
 
+        let markers = [
+          new window.google.maps.Marker({
+            map,
+            title: "a",
+            position: defaultLatLong,
+            draggable: true,
+            clickable: true,
+          }),
+        ]; // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        markers[0].addListener("dragend", onMarkerDragged);
         searchBox.addListener("places_changed", () => {
           const places = searchBox.getPlaces();
           console.log("places", places);
@@ -81,22 +91,16 @@ const LocationSearch = (props) => {
               return;
             }
 
-            const icon = {
-              url: place.icon,
-              size: new window.google.maps.Size(71, 71),
-              origin: new window.google.maps.Point(0, 0),
-              anchor: new window.google.maps.Point(17, 34),
-              scaledSize: new window.google.maps.Size(25, 25),
-            }; // Create a marker for each place.
-
             markers.push(
               new window.google.maps.Marker({
                 map,
-                icon,
                 title: place.name,
                 position: place.geometry.location,
+                draggable: true,
+                clickable: true,
               })
             );
+            markers[0].addListener("dragend", onMarkerDragged);
             console.log("place.geometry.location:", place.geometry.location);
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
@@ -107,6 +111,35 @@ const LocationSearch = (props) => {
           });
           map.fitBounds(bounds);
         });
+      };
+      const onMarkerDragged = (marker) => {
+        if (!marker) return;
+        console.log({ marker });
+        const { latLng } = marker;
+        const currLat = latLng.lat();
+        const currLang = latLng.lng();
+        const location = {
+          lat: currLat,
+          lng: currLang,
+        };
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode(
+          {
+            location,
+          },
+          function (results, status) {
+            if (status === "OK") {
+              if (results[0]) {
+                let pincode = GetPinCode(results[0]);
+                props.onChange(pincode);
+              } else {
+                console.log("No results found");
+              }
+            } else {
+              console.log("Geocoder failed due to: " + status);
+            }
+          }
+        );
       };
 
       loadGoogleMaps(initAutocomplete);

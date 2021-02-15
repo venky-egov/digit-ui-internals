@@ -4,13 +4,26 @@ import { Loader } from "@googlemaps/js-api-loader";
 
 //API key
 const key = globalConfigs.getConfig("GMAPS_API_KEY");
+let defaultBounds = {};
 
+const updateDefaultBounds = (center) => {
+  if (!center.lat || !center.lng) {
+    return;
+  }
+  defaultBounds = {
+    north: center.lat + 0.1,
+    south: center.lat - 0.1,
+    east: center.lng + 0.1,
+    west: center.lng - 0.1,
+  };
+};
 const GetPinCode = (places) => {
   let postalCode = null;
   places?.address_components?.forEach((place) => {
     let hasPostalCode = place.types.includes("postal_code");
     postalCode = hasPostalCode ? place.long_name : null;
   });
+  console.log({ postalCode }, { places });
   return postalCode;
 };
 
@@ -48,7 +61,16 @@ const LocationSearch = (props) => {
         }); // Create the search box and link it to the UI element.
 
         const input = document.getElementById("pac-input");
-        const searchBox = new window.google.maps.places.SearchBox(input);
+        updateDefaultBounds(defaultLatLong);
+        const options = {
+          bounds: defaultBounds,
+          componentRestrictions: { country: "in" },
+          fields: ["address_components", "geometry", "icon", "name"],
+          origin: defaultLatLong,
+          strictBounds: false,
+          types: ["address"],
+        };
+        const searchBox = new window.google.maps.places.Autocomplete(input, options);
         // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); // Bias the SearchBox results towards current map's viewport.
 
         map.addListener("bounds_changed", () => {
@@ -66,14 +88,13 @@ const LocationSearch = (props) => {
         ]; // Listen for the event fired when the user selects a prediction and retrieve
         // more details for that place.
         markers[0].addListener("dragend", onMarkerDragged);
-        searchBox.addListener("places_changed", () => {
-          const places = searchBox.getPlaces();
-          console.log("places", places);
+        searchBox.addListener("place_changed", () => {
+          const place = searchBox.getPlace();
 
-          if (places.length === 0) {
+          if (!place) {
             return;
           } // Clear out the old markers.
-          let pincode = GetPinCode(places[0]);
+          let pincode = GetPinCode(place);
           if (pincode) {
             props.onChange(pincode);
           }
@@ -83,30 +104,29 @@ const LocationSearch = (props) => {
           markers = []; // For each place, get the icon, name and location.
 
           const bounds = new window.google.maps.LatLngBounds();
-          places.forEach((place) => {
-            if (!place.geometry) {
-              console.log("Returned place contains no geometry");
-              return;
-            }
+          if (!place.geometry) {
+            console.log("Returned place contains no geometry");
+            return;
+          }
 
-            markers.push(
-              new window.google.maps.Marker({
-                map,
-                title: place.name,
-                position: place.geometry.location,
-                draggable: true,
-                clickable: true,
-              })
-            );
-            markers[0].addListener("dragend", onMarkerDragged);
-            console.log("place.geometry.location:", place.geometry.location);
-            if (place.geometry.viewport) {
-              // Only geocodes have viewport.
-              bounds.union(place.geometry.viewport);
-            } else {
-              bounds.extend(place.geometry.location);
-            }
-          });
+          markers.push(
+            new window.google.maps.Marker({
+              map,
+              title: place.name,
+              position: place.geometry.location,
+              draggable: true,
+              clickable: true,
+            })
+          );
+          markers[0].addListener("dragend", onMarkerDragged);
+          console.log("place.geometry.location:", place.geometry.location);
+          if (place.geometry.viewport) {
+            // Only geocodes have viewport.
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+
           map.fitBounds(bounds);
         });
       };

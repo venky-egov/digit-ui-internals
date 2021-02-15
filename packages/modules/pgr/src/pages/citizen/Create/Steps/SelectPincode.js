@@ -13,12 +13,10 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
 
   function onChange(e) {
     setPincode(e.target.value);
-    
-    if(!e.target.value) {
-      console.log("changed")
+
+    if (!e.target.value) {
       isNextDisabled = true;
     } else {
-      console.log("changed false")
       isNextDisabled = false;
     }
     // Digit.SessionStorage.set("PGR_CREATE_PINCODE", e.target.value);

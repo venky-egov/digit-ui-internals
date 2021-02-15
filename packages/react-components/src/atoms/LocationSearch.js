@@ -6,13 +6,11 @@ import { Loader } from "@googlemaps/js-api-loader";
 const key = globalConfigs.getConfig("GMAPS_API_KEY");
 
 const GetPinCode = (places) => {
-  console.log("Places address component:", places.address_components);
   let postalCode = null;
   places?.address_components?.forEach((place) => {
     let hasPostalCode = place.types.includes("postal_code");
     postalCode = hasPostalCode ? place.long_name : null;
   });
-  console.log("GetPinCode:", postalCode);
   return postalCode;
 };
 
@@ -114,7 +112,6 @@ const LocationSearch = (props) => {
       };
       const onMarkerDragged = (marker) => {
         if (!marker) return;
-        console.log({ marker });
         const { latLng } = marker;
         const currLat = latLng.lat();
         const currLang = latLng.lng();

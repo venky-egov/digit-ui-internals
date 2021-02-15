@@ -7,30 +7,13 @@ const SelectLandmark = ({ t, config, onSelect, value }) => {
     return landmark ? landmark : "";
   });
 
-  const [error, setError] = useState("");
-
   function onChange(e) {
-    if (e.target.value.length > 1024) {
-      setError("CS_COMMON_LANDMARK_MAX_LENGTH");
-    } else {
-      setError(null);
-      setLandmark(e.target.value);
-    }
+    setLandmark(e.target.value);
   }
 
   const onSkip = () => onSelect();
 
-  return (
-    <FormStep
-      config={config}
-      value={landmark}
-      onChange={onChange}
-      onSelect={(data) => onSelect(data)}
-      onSkip={onSkip}
-      t={t}
-      forcedError={t(error)}
-    ></FormStep>
-  );
+  return <FormStep config={config} value={landmark} onChange={onChange} onSelect={(data) => onSelect(data)} onSkip={onSkip} t={t}></FormStep>;
 };
 
 export default SelectLandmark;

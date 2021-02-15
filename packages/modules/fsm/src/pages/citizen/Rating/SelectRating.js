@@ -45,10 +45,6 @@ const SelectRating = ({ parentRoute }) => {
     });
   }
 
-  const handleSuccess = () => {
-    console.log("success");
-  };
-
   const handleSelect = (key) => {
     return (value) => {
       setAnswers({ ...answers, [key]: value });

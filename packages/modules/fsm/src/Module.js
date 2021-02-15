@@ -38,7 +38,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
-        <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails />} />
+        <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
         <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
@@ -130,9 +130,9 @@ export const FSMLinks = ({ matchPath, userType }) => {
                 <span className="link">
                   <Link to={`${matchPath}/new-application/`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>
                 </span>
-                <span className="link">
+                {/* <span className="link">
                   <Link to={`${matchPath}/application-audit/`}>{t("ES_TITLE_APPLICATION_AUDIT")}</Link>
-                </span>
+                </span> */}
               </div>
             </div>
           </div>

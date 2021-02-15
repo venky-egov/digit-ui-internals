@@ -24,6 +24,7 @@ import useApplicationStatus from "./fsm/useApplicationStatus";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
 import useSearchAll from "./fsm/useSearchAll";
+import useVehicleSearch from "./fsm/useVehicleSearch";
 import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
@@ -62,6 +63,7 @@ const fsm = {
   useDsoSearch,
   useApplicationDetail,
   useApplicationActions,
+  useVehicleSearch,
   useConfig,
 };
 

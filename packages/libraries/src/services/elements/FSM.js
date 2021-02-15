@@ -40,4 +40,13 @@ export const FSMService = {
       params: { tenantId },
       auth: true,
     }),
+  vehicleSearch: (tenantId, details) =>
+    Request({
+      url: Urls.fsm.vehicleSearch,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId, ...details },
+      auth: true,
+    }),
 };

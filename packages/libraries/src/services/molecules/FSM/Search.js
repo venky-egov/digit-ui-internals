@@ -116,4 +116,7 @@ export const Search = {
       },
     ];
   },
+  allVehicles: (tenantId, filters) => {
+    return FSMService.vehicleSearch(tenantId, filters);
+  },
 };

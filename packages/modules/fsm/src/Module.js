@@ -20,6 +20,7 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 
 import { useTranslation } from "react-i18next";
 import SearchApplication from "./pages/employee/SearchApplication";
+import FstpInbox from "./pages/employee/FstpInbox";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
@@ -34,10 +35,11 @@ const EmployeeApp = ({ path, url, userType }) => {
         </p>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
         <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
+        <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
-        <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
-        <PrivateRoute path={`${path}/fstp-operator-details`} component={FstpOperatorDetails} />
+        <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails />} />
+        <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />

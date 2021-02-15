@@ -25,6 +25,7 @@ import useApplicationStatus from "./fsm/useApplicationStatus";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
 import useSearchAll from "./fsm/useSearchAll";
+import useVehicleSearch from "./fsm/useVehicleSearch";
 import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
@@ -35,6 +36,7 @@ import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
 import useApplicationAudit from "./fsm/useApplicationAudit";
 import useSearchForAuditData from "./fsm/useSearchForAudit";
+import useConfig from "./fsm/useConfig";
 
 const pgr = {
   useComplaintDetails,
@@ -66,6 +68,8 @@ const fsm = {
   useApplicationActions,
   useApplicationAudit,
   useSearchForAuditData,
+  useVehicleSearch,
+  useConfig,
 };
 
 const pt = {

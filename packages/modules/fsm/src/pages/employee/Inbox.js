@@ -78,6 +78,7 @@ const Inbox = () => {
         <MobileInbox
           data={applications}
           isLoading={isLoading || isIdle}
+          searchFields={getSearchFields(userRoles)}
           onFilterChange={handleFilterChange}
           onSearch={onSearch}
           searchParams={searchParams}

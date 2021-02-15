@@ -29,8 +29,9 @@ const Urls = {
     create: "/fsm/v1/_create",
     update: "/fsm/v1/_update",
     vendorSearch: "/vendor/v1/_search",
-    vehicleSearch: "/vehicle/v1/_search",
+    // vehicleSearch: "/vehicle/v1/_search",
     audit: "/fsm/v1/_audit",
+    vehicleSearch: "/vehicle/trip/v1/_search",
   },
 
   payment: {

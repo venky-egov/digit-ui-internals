@@ -12,7 +12,6 @@ const DesktopInbox = (props) => {
   const { t } = useTranslation();
   let { match } = useRouteMatch();
   const GetCell = (value) => <span className="cell-text">{value}</span>;
-  const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const GetSlaCell = (value) => {
     if (isNaN(value)) value = "-";
@@ -26,61 +25,91 @@ const DesktopInbox = (props) => {
     // history.push("/digit-ui/employee/fsm/complaint/details/" + id);
   }
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: t("CS_FILE_DESLUDGING_APPLICATION_NO"),
-        accessor: "applicationNo",
-        Cell: ({ row }) => {
-          return (
-            <div>
-              <span className="link">
-                <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
-              </span>
-              {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
-            </div>
-          );
-        },
-      },
-      {
-        Header: t("ES_INBOX_APPLICATION_DATE"),
-        accessor: "createdTime",
-        Cell: ({ row }) => {
-          return GetCell(
-            `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
-          );
-        },
-        // Cell: (row) => {
-        //   return GetCell(
-        //     t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
-        //   );
-        // },
-      },
-      {
-        Header: t("ES_INBOX_LOCALITY"),
-        Cell: ({ row }) => {
-          return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
-        },
-        // Cell: (row) => {
-        //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
-        // },
-      },
-      {
-        Header: t("ES_INBOX_STATUS"),
-        accessor: "status",
-        Cell: (row) => {
-          return GetCell(t(`CS_COMMON_FSM_${row.row.original["status"]}`));
-        },
-      },
-      {
-        Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
-        Cell: ({ row }) => {
-          return GetSlaCell(row.original["sla"]);
-        },
-      },
-    ],
-    []
-  );
+  const columns = React.useMemo(() => {
+    switch (props.userRole) {
+      case "FSM_EMP_FSTPO":
+        return [
+          {
+            Header: t("ES_INBOX_VEHICLE_LOG"),
+            accessor: "applicationNo",
+            Cell: ({ row }) => {
+              return (
+                <div>
+                  <span className="link">
+                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                  </span>
+                </div>
+              );
+            },
+          },
+          {
+            Header: t("ES_INBOX_VEHICLE_NO"),
+            accessor: (row) => row.vehicle.registrationNumber,
+          },
+          {
+            Header: t("ES_INBOX_DSO_NAME"),
+            accessor: (row) => row.tripOwner.name,
+          },
+          {
+            Header: t("ES_INBOX_WASTE_COLLECTED"),
+            accessor: (row) => row.volumeCarried,
+          },
+        ];
+      default:
+        return [
+          {
+            Header: t("CS_FILE_DESLUDGING_APPLICATION_NO"),
+            accessor: "applicationNo",
+            Cell: ({ row }) => {
+              return (
+                <div>
+                  <span className="link">
+                    <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                  </span>
+                  {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
+                </div>
+              );
+            },
+          },
+          {
+            Header: t("ES_INBOX_APPLICATION_DATE"),
+            accessor: "createdTime",
+            Cell: ({ row }) => {
+              return GetCell(
+                `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
+              );
+            },
+            // Cell: (row) => {
+            //   return GetCell(
+            //     t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
+            //   );
+            // },
+          },
+          {
+            Header: t("ES_INBOX_LOCALITY"),
+            Cell: ({ row }) => {
+              return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
+            },
+            // Cell: (row) => {
+            //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
+            // },
+          },
+          {
+            Header: t("ES_INBOX_STATUS"),
+            accessor: "status",
+            Cell: (row) => {
+              return GetCell(t(`CS_COMMON_FSM_${row.row.original["status"]}`));
+            },
+          },
+          {
+            Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
+            Cell: ({ row }) => {
+              return GetSlaCell(row.original["sla"]);
+            },
+          },
+        ];
+    }
+  }, []);
 
   let result;
   if (props.isLoading) {
@@ -128,12 +157,14 @@ const DesktopInbox = (props) => {
 
   return (
     <div className="inbox-container">
-      <div className="filters-container">
-        {!isFstpOperator && <FSMLink />}
-        <div>
-          <Filter applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+      {props.userRole !== "FSM_EMP_FSTPO" && (
+        <div className="filters-container">
+          <FSMLink />
+          <div>
+            <Filter applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+          </div>
         </div>
-      </div>
+      )}
       <div style={{ flex: 1 }}>
         <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} />
         <div style={{ marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>

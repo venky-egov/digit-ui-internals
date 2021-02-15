@@ -19,6 +19,7 @@ import QAGRO from "./userInfo/qa-gro.json";
 import QACSR from "./userInfo/qa-csr.json";
 import QACT from "./userInfo/qa-citizen.json";
 import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
+import FSM_FSTP from "./userInfo/fsm-fstp.json";
 import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
 
 import * as comps from "@egovernments/digit-ui-react-components";
@@ -30,7 +31,7 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, QAGRO, FSM_EMPLOYEE, NAWANSHAHR_QA_GRO };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, QAGRO, FSM_EMPLOYEE, FSM_FSTP, NAWANSHAHR_QA_GRO };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
 const registry = new Registry({

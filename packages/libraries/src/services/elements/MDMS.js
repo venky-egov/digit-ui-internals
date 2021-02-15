@@ -165,6 +165,23 @@ const getPropertyUsageCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getConfig = (tenantId, moduleCode) => ({
+  type: "Config",
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "Config",
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
   type,
   details: {
@@ -174,7 +191,24 @@ const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
         moduleName: moduleCode,
         masterDetails: [
           {
-            name: "VehicleType",
+            name: "VehicleMakeModel",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getChecklistCriteria = (tenantId, moduleCode) => ({
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "CheckList",
             filter: null,
           },
         ],
@@ -222,7 +256,7 @@ const GetPropertySubtype = (MdmsRes) =>
   }));
 
 const GetVehicleType = (MdmsRes) =>
-  MdmsRes["FSM"].VehicleType.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
+  MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
     return {
       ...vehicleDetails,
       i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
@@ -300,8 +334,14 @@ export const MdmsService = {
   getVehicleType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getVehicleTypeCriteria(tenantId, moduleCode, type), moduleCode);
   },
-
+  getChecklist: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getChecklistCriteria(tenantId, moduleCode), moduleCode);
+  },
   getPaymentRules: (tenantId) => {
     return MdmsService.call(tenantId, getBillingServiceForBusinessServiceCriteria());
+  },
+
+  getCustomizationConfig: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getConfig(tenantId, moduleCode), moduleCode);
   },
 };

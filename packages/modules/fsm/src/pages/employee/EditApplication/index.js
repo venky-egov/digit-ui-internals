@@ -25,7 +25,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   // console.log("find propertyTypesData sanitationTypeData here", propertyTypesData, sanitationTypeData);
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   // console.log("find property sub type here", propertySubtypesData)
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
+  // console.log(
+  //   "find customization config here",
+  //   customizationConfig
+  // );
 
   const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
@@ -49,8 +54,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [sanitationMenu, setSanitationMenu] = useState([]);
   const [pitDimension, setPitDimension] = useState({});
   const [vehicle, setVehicle] = useState(null);
-  const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
-  const [slum, setSlum] = useState("NJagbandhu");
+  const [slumMenu, setSlumMenu] = useState([
+    { key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" },
+    { key: "PB_AMRITSAR_SUN01_SLUM_B", name: "Slum B" },
+    { key: "PB_AMRITSAR_SUN01_SLUM_C", name: "Slum C" },
+  ]);
+  const [slum, setSlum] = useState({ key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" });
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [noOfTrips, setNoOfTrips] = useState(1);
   const [amountPerTrip, setAmountPerTrip] = useState();
@@ -89,7 +98,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         streetName: applicationDetails.address?.street,
         doorNo: applicationDetails.address?.doorNo,
         landmark: applicationDetails.address?.landmark,
-        noOfTrips: applicationDetails.noOfTrips,
+        noOfTrips: applicationDetails.noOfTrips || 1,
         distanceFromRoad: applicationDetails?.pitDetail?.distanceFromRoad,
       });
     }
@@ -253,6 +262,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       }),
       (applicationData.propertyUsage = subType.code),
       (applicationData.vehicleType = vehicle.code),
+      (applicationData.noOfTrips = noOfTrips),
       (applicationData.pitDetail = {
         distanceFromRoad: data.distanceFromRoad,
         height,
@@ -305,6 +315,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     });
   };
 
+  function isDisabled(prop) {
+    return customizationConfig ? !customizationConfig["ALLOW_MODIFY"].override.includes(prop) : true;
+  }
+
   const config = [
     {
       head: t("ES_TITLE_APPLICATION_DETAILS"),
@@ -347,12 +361,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
           disable: true,
         },
-        // {
-        //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-        //   type: "radio",
-        //   isMandatory: true,
-        //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
-        // },
       ],
     },
     {
@@ -370,7 +378,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               selected={propertyType}
               select={selectedType}
               t={t}
-              disable={!FSM_CREATOR_EMP}
+              disable={isDisabled("propertyUsage")}
             />
           ),
         },
@@ -387,7 +395,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               selected={subType}
               select={selectedSubType}
               t={t}
-              disable={!FSM_CREATOR_EMP}
+              disable={isDisabled("propertyUsage")}
             />
           ),
         },
@@ -403,14 +411,22 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "pincode",
             validation: { pattern: /^[1-9][0-9]{5}$/ },
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: isDisabled("address.pincode"),
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" disable={!FSM_CREATOR_EMP} />
+            <Dropdown
+              isMandatory
+              selected={selectedCity}
+              option={cities}
+              id="city"
+              select={selectCity}
+              optionKey="name"
+              disable={isDisabled("address.city")}
+            />
           ),
         },
         {
@@ -426,10 +442,16 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               option={localities}
               select={selectLocality}
               t={t}
-              disable={!FSM_CREATOR_EMP}
+              disable={isDisabled("address.locality")}
             />
           ),
         },
+        // {
+        //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
+        //   type: "dropdown",
+        //   isMandatory: true,
+        //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+        // },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
           type: "text",
@@ -438,7 +460,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             error: t("CORE_COMMON_STREET_INVALID"),
             validation: { pattern: /^[\w\s]{1,256}$/ },
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: isDisabled("address.street"),
         },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
@@ -450,7 +472,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               pattern: /^[\w\\\s]*$/,
             },
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: isDisabled("address.doorNo"),
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
@@ -458,7 +480,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "landmark",
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: isDisabled("address.landmark"),
         },
       ],
     },
@@ -476,14 +498,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               selected={sanitation}
               select={selectSanitation}
               t={t}
-              disable={!FSM_CREATOR_EMP}
+              disable={isDisabled("pitDetail")}
             />
           ),
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
           populators: (
-            <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} disable={!FSM_CREATOR_EMP} />
+            <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} disable={isDisabled("pitDetail")} />
           ),
         },
         {
@@ -492,9 +514,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "distanceFromRoad",
             error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
-            validation: { pattern: /^[1-9]\d?(\.\d{1,2})?$/ },
+            validation: { pattern: /^[0-9]\d?(\.\d{1,2})?$/ },
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: isDisabled("pitDetail"),
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
@@ -508,7 +530,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               selected={vehicle}
               select={selectVehicle}
               t={t}
-              disable={!FSM_CREATOR_EMP}
+              disable={isDisabled("vehicleType")}
             />
           ),
         },
@@ -520,7 +542,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             validation: { required: true },
             defaultValue: vehicle?.amount,
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"] : true,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
@@ -528,12 +550,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "noOfTrips",
             error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-            validation: { pattern: /^[1-9]{1}$/ },
+            validation: { required: true, pattern: /^[1-9]{1}$/ },
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: customizationConfig ? !customizationConfig["noOfTrips"] : true,
         },
         {
-          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
+          label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -547,34 +569,34 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
           disable: true,
         },
-        {
-          label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
-          type: "text",
-          populators: {
-            name: "additionalTrip",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
-          type: "text",
-          populators: {
-            name: "additionalCharges",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
-          type: "text",
-          populators: {
-            name: "reasonForAdditionalCharges",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
-          type: "text",
-          populators: {
-            name: "additionalAmount",
-          },
-        },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalTrip",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalCharges",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
+        //   type: "text",
+        //   populators: {
+        //     name: "reasonForAdditionalCharges",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalAmount",
+        //   },
+        // },
       ],
     },
   ];

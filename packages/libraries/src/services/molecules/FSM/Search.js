@@ -44,7 +44,6 @@ export const Search = {
     const response = await Search.application(tenantId, filter);
     const amountPerTrip = isJsonString(response?.additionalDetails) ? JSON.parse(response.additionalDetails).tripAmount : "N/A";
     const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
-
     return [
       {
         title: t("ES_TITLE_APPLICATION_DETAILS"),

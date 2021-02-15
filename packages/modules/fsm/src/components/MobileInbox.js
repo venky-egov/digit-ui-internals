@@ -27,24 +27,24 @@ const MobileInbox = ({ data, onFilterChange, onSearch, searchParams }) => {
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const userDetails = Digit.UserService.getUser();
 
-  const isFstpOperator = Digit.UserService.hasAccess("FSTP");
+  const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   // TODO: below line is hard coded, it should come from server
   const fstpOperatorData = [
     {
-      DSO: "Jagdamba Cleaners",
+      "Vehicle Log": "VL/FSM/2020/34",
       "Vehicle No": "KA-25235",
       "Vehicle Capacity": "2500 ltrs",
       "Waste Collected": "2250 ltrs",
     },
     {
-      DSO: "Jagdamba Cleaners",
+      "Vehicle Log": "VL/FSM/2020/12",
       "Vehicle No": "KA-25235",
       "Vehicle Capacity": "2500 ltrs",
       "Waste Collected": "2250 ltrs",
     },
     {
-      DSO: "Jagdamba Cleaners",
+      "Vehicle Log": "VL/FSM/2020/67",
       "Vehicle No": "KA-25235",
       "Vehicle Capacity": "2500 ltrs",
       "Waste Collected": "2250 ltrs",
@@ -74,7 +74,7 @@ const MobileInbox = ({ data, onFilterChange, onSearch, searchParams }) => {
           {!DSO && !isFstpOperator && <ApplicationLinks isMobile={true} />}
           <ApplicationCard
             data={isFstpOperator ? fstpOperatorData : DSO ? dsoData : localizedData}
-            onFilterChange={onFilterChange}
+            onFilterChange={!isFstpOperator ? onFilterChange : false}
             serviceRequestIdKey={isFstpOperator ? "FSTP_OPERATOR_VEHICLE_NO" : DSO ? "Application No." : t("ES_INBOX_APPLICATION_NO")}
             isFstpOperator={isFstpOperator}
             onSearch={!DSO ? onSearch : false}

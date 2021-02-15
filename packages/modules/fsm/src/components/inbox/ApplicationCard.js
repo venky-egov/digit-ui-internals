@@ -35,7 +35,7 @@ export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequest
     <React.Fragment>
       <div className="searchBox">
         {onSearch && <SearchAction text="SEARCH" handleActionClick={() => handlePopupAction("SEARCH")} />}
-        <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
+        {onFilterChange && <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />}
         <FilterAction text="SORT" handleActionClick={() => handlePopupAction("SORT")} />
       </div>
       <DetailsCard

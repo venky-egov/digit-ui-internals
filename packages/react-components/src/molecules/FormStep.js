@@ -67,4 +67,18 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
   );
 };
 
+FormStep.propTypes = {
+  config: PropTypes.shape({}),
+  onSelect: PropTypes.func,
+  onSkip: PropTypes.func,
+  t: PropTypes.func,
+};
+
+FormStep.defaultProps = {
+  config: {},
+  onSelect: undefined,
+  onSkip: undefined,
+  t: (value) => value,
+};
+
 export default FormStep;

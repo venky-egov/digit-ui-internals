@@ -23,8 +23,18 @@ const GetPinCode = (places) => {
     let hasPostalCode = place.types.includes("postal_code");
     postalCode = hasPostalCode ? place.long_name : null;
   });
-  console.log({ postalCode }, { places });
   return postalCode;
+};
+
+const getName = (places) => {
+  let name = "";
+  places?.address_components?.forEach((place) => {
+    let hasName = place.types.includes("sublocality_level_2") || place.types.includes("sublocality_level_1");
+    if (hasName) {
+      name = hasName ? place.long_name : null;
+    }
+  });
+  return name;
 };
 
 const loadGoogleMaps = (callback) => {
@@ -119,7 +129,6 @@ const LocationSearch = (props) => {
             })
           );
           markers[0].addListener("dragend", onMarkerDragged);
-          console.log("place.geometry.location:", place.geometry.location);
           if (place.geometry.viewport) {
             // Only geocodes have viewport.
             bounds.union(place.geometry.viewport);
@@ -149,6 +158,8 @@ const LocationSearch = (props) => {
               if (results[0]) {
                 let pincode = GetPinCode(results[0]);
                 props.onChange(pincode);
+                const infoWindowContent = document.getElementById("pac-input");
+                infoWindowContent.value = getName(results[0]);
               } else {
                 console.log("No results found");
               }

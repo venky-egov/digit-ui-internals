@@ -404,7 +404,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             name: "noOfTrips",
             error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
             validation: { pattern: /^[1-9]{1}$/ },
-            defaultValue: customizationConfig ? customizationConfig?.noOfTrips?.default : noOfTrips,
+            defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
           },
           disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
         },

@@ -558,7 +558,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "noOfTrips",
             error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-            validation: { required: true, pattern: /^[1-9]{1}$/ },
+            defaultValue: 1,
           },
           disable: customizationConfig ? !customizationConfig["noOfTrips"] : true,
         },

@@ -6,6 +6,7 @@ import SelectLandmark from "./SelectLandmark";
 import SelectPincode from "./SelectPincode";
 import SelectTankSize from "./SelectTankSize";
 import SelectPitType from "./SelectPitType";
+import SelectGeolocation from "./SelectGeolocation";
 
 export const config = {
   routes: {
@@ -27,6 +28,10 @@ export const config = {
         cardText: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_TEXT",
         submitBarLabel: "CS_COMMON_NEXT",
       },
+      nextStep: "map",
+    },
+    map: {
+      component: SelectGeolocation,
       nextStep: "pincode",
     },
     pincode: {
@@ -45,6 +50,8 @@ export const config = {
           name: "pincode",
           validation: {
             pattern: /^([1-9])(\d{5})$/,
+            minLength: 6,
+            maxLength: 7,
           },
           error: "CORE_COMMON_PINCODE_INVALID",
         },

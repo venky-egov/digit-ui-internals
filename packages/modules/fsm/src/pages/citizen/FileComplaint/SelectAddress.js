@@ -47,7 +47,7 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
+      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} disable={value?.pincode} />
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
       {selectedCity && localities && (
         <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />

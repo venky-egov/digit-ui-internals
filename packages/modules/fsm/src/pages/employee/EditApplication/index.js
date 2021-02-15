@@ -26,7 +26,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   // console.log("find property sub type here", propertySubtypesData)
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
-  const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
+  // const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
+  const customizationConfig = {};
   // console.log(
   //   "find customization config here",
   //   customizationConfig
@@ -98,7 +99,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         streetName: applicationDetails.address?.street,
         doorNo: applicationDetails.address?.doorNo,
         landmark: applicationDetails.address?.landmark,
-        noOfTrips: applicationDetails.noOfTrips,
+        noOfTrips: applicationDetails.noOfTrips || 1,
         distanceFromRoad: applicationDetails?.pitDetail?.distanceFromRoad,
       });
     }
@@ -262,6 +263,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       }),
       (applicationData.propertyUsage = subType.code),
       (applicationData.vehicleType = vehicle.code),
+      (applicationData.noOfTrips = noOfTrips),
       (applicationData.pitDetail = {
         distanceFromRoad: data.distanceFromRoad,
         height,
@@ -315,7 +317,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   };
 
   function isDisabled(prop) {
-    return customizationConfig ? !customizationConfig["ALLOW_MODIFY"].override.includes(prop) : true;
+    if (Object.keys(customizationConfig).length === 0) return null;
+    return customizationConfig ? !customizationConfig["ALLOW_MODIFY"]?.override?.includes(prop) : true;
   }
 
   const config = [
@@ -377,7 +380,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               selected={propertyType}
               select={selectedType}
               t={t}
-              disable={isDisabled("propertyUsage")}
+              disable={isDisabled("propertyUsage") ? isDisabled("propertyUsage") : false}
             />
           ),
         },
@@ -394,7 +397,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               selected={subType}
               select={selectedSubType}
               t={t}
-              disable={isDisabled("propertyUsage")}
+              disable={isDisabled("propertyUsage") ? isDisabled("propertyUsage") : false}
             />
           ),
         },
@@ -410,7 +413,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "pincode",
             validation: { pattern: /^[1-9][0-9]{5}$/ },
           },
-          disable: isDisabled("address.pincode"),
+          disable: isDisabled("address.pincode") ? isDisabled("address.pincode") : false,
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
@@ -424,7 +427,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               id="city"
               select={selectCity}
               optionKey="name"
-              disable={isDisabled("address.city")}
+              disable={isDisabled("address.city") ? isDisabled("address.city") : false}
             />
           ),
         },
@@ -441,7 +444,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               option={localities}
               select={selectLocality}
               t={t}
-              disable={isDisabled("address.locality")}
+              disable={isDisabled("address.locality") ? isDisabled("address.locality") : false}
             />
           ),
         },
@@ -459,7 +462,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             error: t("CORE_COMMON_STREET_INVALID"),
             validation: { pattern: /^[\w\s]{1,256}$/ },
           },
-          disable: isDisabled("address.street"),
+          disable: isDisabled("address.street") ? isDisabled("address.street") : false,
         },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
@@ -471,7 +474,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               pattern: /^[\w\\\s]*$/,
             },
           },
-          disable: isDisabled("address.doorNo"),
+          disable: isDisabled("address.doorNo") ? isDisabled("address.doorNo") : false,
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
@@ -479,7 +482,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "landmark",
           },
-          disable: isDisabled("address.landmark"),
+          disable: isDisabled("address.landmark") ? isDisabled("address.landmark") : false,
         },
       ],
     },
@@ -497,14 +500,20 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               selected={sanitation}
               select={selectSanitation}
               t={t}
-              disable={isDisabled("pitDetail")}
+              disable={isDisabled("pitDetail") ? isDisabled("pitDetail") : false}
             />
           ),
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
           populators: (
-            <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} disable={isDisabled("pitDetail")} />
+            <PitDimension
+              sanitationType={sanitation}
+              t={t}
+              size={pitDimension}
+              handleChange={handlePitDimension}
+              disable={isDisabled("pitDetail") ? isDisabled("pitDetail") : false}
+            />
           ),
         },
         {
@@ -513,9 +522,9 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "distanceFromRoad",
             error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
-            validation: { pattern: /^[1-9]\d?(\.\d{1,2})?$/ },
+            validation: { pattern: /^[0-9]\d?(\.\d{1,2})?$/ },
           },
-          disable: isDisabled("pitDetail"),
+          disable: isDisabled("pitDetail") ? isDisabled("pitDetail") : false,
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
@@ -529,7 +538,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
               selected={vehicle}
               select={selectVehicle}
               t={t}
-              disable={isDisabled("vehicleType")}
+              disable={isDisabled("vehicleType") ? isDisabled("vehicleType") : false}
             />
           ),
         },
@@ -549,12 +558,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "noOfTrips",
             error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-            validation: { pattern: /^[1-9]{1}$/ },
+            defaultValue: 1,
           },
           disable: customizationConfig ? !customizationConfig["noOfTrips"] : true,
         },
         {
-          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
+          label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -568,34 +577,34 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
           disable: true,
         },
-        {
-          label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
-          type: "text",
-          populators: {
-            name: "additionalTrip",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
-          type: "text",
-          populators: {
-            name: "additionalCharges",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
-          type: "text",
-          populators: {
-            name: "reasonForAdditionalCharges",
-          },
-        },
-        {
-          label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
-          type: "text",
-          populators: {
-            name: "additionalAmount",
-          },
-        },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_ADDITIONAL_TRIP"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalTrip",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_ADDITIONAL_CHARGES"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalCharges",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_REASON_FOR_ADDITIONAL_CHARGES"),
+        //   type: "text",
+        //   populators: {
+        //     name: "reasonForAdditionalCharges",
+        //   },
+        // },
+        // {
+        //   label: t("ES_EDIT_APPLICATION_AMOUNT_TO_BE_PAID"),
+        //   type: "text",
+        //   populators: {
+        //     name: "additionalAmount",
+        //   },
+        // },
       ],
     },
   ];

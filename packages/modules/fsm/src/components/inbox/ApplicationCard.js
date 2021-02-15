@@ -6,7 +6,7 @@ import Filter from "./Filter";
 import SearchApplication from "./search";
 import SortBy from "./SortBy";
 
-export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey, isFstpOperator, searchParams }) => {
+export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey, isFstpOperator, searchParams, searchFields, linkPrefix }) => {
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
 
@@ -16,7 +16,14 @@ export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequest
     console.log("option");
     if (type === "SEARCH") {
       setSelectedComponent(
-        <SearchApplication type="mobile" onClose={handlePopupClose} onSearch={onSearch} isFstpOperator={isFstpOperator} searchParams={searchParams} />
+        <SearchApplication
+          type="mobile"
+          onClose={handlePopupClose}
+          onSearch={onSearch}
+          isFstpOperator={isFstpOperator}
+          searchParams={searchParams}
+          searchFields={searchFields}
+        />
       );
     } else if (type === "FILTER") {
       setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" searchParams={searchParams} />);
@@ -41,7 +48,7 @@ export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequest
       <DetailsCard
         data={data}
         serviceRequestIdKey={serviceRequestIdKey}
-        linkPrefix={DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
+        linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
       />
       {popup && (
         <PopUp>

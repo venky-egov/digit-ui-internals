@@ -9,6 +9,7 @@ import CheckBox from "../atoms/CheckBox";
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import SubmitBar from "../atoms/SubmitBar";
+import RadioButtons from "../atoms/RadioButtons";
 
 const RatingCard = ({ config, onSelect, t }) => {
   const { register, watch, handleSubmit } = useForm();
@@ -35,16 +36,22 @@ const RatingCard = ({ config, onSelect, t }) => {
     }
 
     if (input.type === "checkbox") {
-      const name = rating <= 2 && rating > 0 ? "WHAT_WAS_BAD" : "WHAT_WAS_GOOD";
-      if (input.name === name) {
-        return (
-          <React.Fragment key={index}>
-            <CardLabel>{t(input.label)}</CardLabel>
-            {input.checkLabels &&
-              input.checkLabels.map((label, index) => <CheckBox key={index} name={input.label} label={label} inputRef={register} />)}
-          </React.Fragment>
-        );
-      }
+      return (
+        <React.Fragment key={index}>
+          <CardLabel>{t(input.label)}</CardLabel>
+          {input.checkLabels &&
+            input.checkLabels.map((label, index) => <CheckBox key={index} name={input.label} label={label} inputRef={register} />)}
+        </React.Fragment>
+      );
+    }
+
+    if (input.type === "radio") {
+      return (
+        <React.Fragment key={index}>
+          <CardLabel>{t(input.label)}</CardLabel>
+          <RadioButtons options={input.checkLabels} onSelect={input.onSelect} selectedOption={input.selectedOption} />
+        </React.Fragment>
+      );
     }
 
     if (input.type === "textarea") {

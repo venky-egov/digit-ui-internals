@@ -14,7 +14,7 @@ const GetSlaCell = (value) => {
 
 const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
 
-const MobileInbox = ({ data, onFilterChange, onSearch, searchParams }) => {
+const MobileInbox = ({ data, vehicleLog, onFilterChange, onSearch, searchParams, searchFields, linkPrefix }) => {
   const { t } = useTranslation();
   const localizedData = data?.map(({ locality, applicationNo, createdTime, tenantId, status, sla }) => ({
     [t("ES_INBOX_APPLICATION_NO")]: applicationNo,
@@ -27,29 +27,14 @@ const MobileInbox = ({ data, onFilterChange, onSearch, searchParams }) => {
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const userDetails = Digit.UserService.getUser();
 
-  const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
+  const isFstpOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
-  // TODO: below line is hard coded, it should come from server
-  const fstpOperatorData = [
-    {
-      "Vehicle Log": "VL/FSM/2020/34",
-      "Vehicle No": "KA-25235",
-      "Vehicle Capacity": "2500 ltrs",
-      "Waste Collected": "2250 ltrs",
-    },
-    {
-      "Vehicle Log": "VL/FSM/2020/12",
-      "Vehicle No": "KA-25235",
-      "Vehicle Capacity": "2500 ltrs",
-      "Waste Collected": "2250 ltrs",
-    },
-    {
-      "Vehicle Log": "VL/FSM/2020/67",
-      "Vehicle No": "KA-25235",
-      "Vehicle Capacity": "2500 ltrs",
-      "Waste Collected": "2250 ltrs",
-    },
-  ];
+  const fstpOperatorData = vehicleLog?.map((vehicle) => ({
+    [t("ES_INBOX_VEHICLE_LOG")]: vehicle.applicationNo,
+    [t("ES_INBOX_VEHICLE_NO")]: vehicle.vehicle.registrationNumber,
+    [t("ES_INBOX_DSO_NAME")]: vehicle.tripOwner.name,
+    [t("ES_INBOX_WASTE_COLLECTED")]: vehicle.volumeCarried,
+  }));
 
   // TODO: below line is hard coded, it should come from server
   const dsoData = [
@@ -75,10 +60,12 @@ const MobileInbox = ({ data, onFilterChange, onSearch, searchParams }) => {
           <ApplicationCard
             data={isFstpOperator ? fstpOperatorData : DSO ? dsoData : localizedData}
             onFilterChange={!isFstpOperator ? onFilterChange : false}
-            serviceRequestIdKey={isFstpOperator ? "FSTP_OPERATOR_VEHICLE_NO" : DSO ? "Application No." : t("ES_INBOX_APPLICATION_NO")}
+            serviceRequestIdKey={isFstpOperator ? "Vehicle Log" : DSO ? "Application No." : t("ES_INBOX_APPLICATION_NO")}
             isFstpOperator={isFstpOperator}
             onSearch={!DSO ? onSearch : false}
             searchParams={searchParams}
+            searchFields={searchFields}
+            linkPrefix={linkPrefix}
           />
         </div>
       </div>

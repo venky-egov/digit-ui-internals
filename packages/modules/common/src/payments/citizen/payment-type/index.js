@@ -46,6 +46,7 @@ export const SelectPaymentType = (props) => {
         },
       },
     };
+
     const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
     const redirectUrl = data?.Transaction?.redirectUrl;
     window.location = redirectUrl;

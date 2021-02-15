@@ -1,5 +1,5 @@
 import Urls from "../../atoms/urls";
-import { ServiceRequest } from "../../atoms/Utils/Request";
+import { ServiceRequest, Request } from "../../atoms/Utils/Request";
 import { Storage } from "../../atoms/Utils/Storage";
 
 export const UserService = {
@@ -79,4 +79,22 @@ export const UserService = {
       },
       params: { tenantId: stateCode },
     }),
+
+  employeeSearch: (tenantId, filters) => {
+    return Request({
+      url: Urls.EmployeeSearch,
+      params: { tenantId, ...filters },
+      auth: true,
+    });
+  },
+  userSearch: async (tenantId, data, filters) => {
+    return Request({
+      url: Urls.UserSearch,
+      params: { ...filters },
+      method: "POST",
+      auth: true,
+      userService: true,
+      data: data.pageSize ? { tenantId, ...data } : { tenantId, ...data, pageSize: "100" },
+    });
+  },
 };

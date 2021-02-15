@@ -43,7 +43,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   // console.log("find vehicle menu", vehicleMenu);
-  const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
+  // const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
+  const customizationConfig = {};
   const [slumMenu, setSlumMenu] = useState([
     { key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" },
     { key: "PB_AMRITSAR_SUN01_SLUM_B", name: "Slum B" },
@@ -88,12 +89,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
   }, [sanitationTypeData]);
 
   useEffect(() => {
-    if (propertyType?.code && subType?.code && selectedCity?.code && selectedLocality?.code) {
+    if (propertyType?.code && subType?.code && selectedCity?.code && selectedLocality?.code && sanitation?.code) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
     }
-  }, [propertyType, subType, selectedCity, selectedLocality]);
+  }, [propertyType, subType, selectedCity, selectedLocality, sanitation]);
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
@@ -315,17 +316,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
             <Dropdown isMandatory freeze={true} selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />
           ),
         },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
-          type: "checkbox",
-          populators: (
-            <CheckBox
-              label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
-              onChange={slumCheck}
-              disable={customizationConfig ? !customizationConfig.slumName.override : true}
-            />
-          ),
-        },
+        // {
+        //   label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
+        //   type: "checkbox",
+        //   populators: (
+        //     <CheckBox
+        //       label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
+        //       onChange={slumCheck}
+        //       disable={customizationConfig ? !customizationConfig?.slumName?.override : true}
+        //     />
+        //   ),
+        // },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
           isMandatory: true,
@@ -334,12 +335,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
             <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
           ),
         },
-        {
-          label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-          type: "dropdown",
-          isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} disable={!slumEnable} />,
-        },
+        // {
+        //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
+        //   type: "dropdown",
+        //   isMandatory: true,
+        //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} disable={!slumEnable} />,
+        // },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
           type: "text",
@@ -374,8 +375,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
       body: [
         {
           label: t("ES_NEW_APPLICATION_PIT_TYPE"),
+          isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />,
+          populators: (
+            <Dropdown isMandatory option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
@@ -400,9 +404,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
             name: "noOfTrips",
             error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
             validation: { pattern: /^[1-9]{1}$/ },
-            defaultValue: customizationConfig ? customizationConfig.noOfTrips.default : noOfTrips,
+            defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
           },
-          disable: customizationConfig ? !customizationConfig.noOfTrips.override : true,
+          disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
         },
         {
           label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
@@ -413,10 +417,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
             validation: { required: true, pattern: /^[1-9]\d+$/ },
             defaultValue: vehicle?.amount,
           },
-          disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"].override : true,
+          disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
         },
         {
-          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
+          label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
           type: "text",
           populators: {
             name: "amount",

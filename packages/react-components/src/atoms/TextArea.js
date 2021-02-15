@@ -11,6 +11,8 @@ const TextArea = (props) => {
       value={props.value}
       onChange={props.onChange}
       className={`${user_type ? "employee-card-textarea" : "card-textarea"} ${props.disable && "disabled"}`}
+      minLength={props.minLength}
+      maxLength={props.maxLength}
     ></textarea>
   );
 };

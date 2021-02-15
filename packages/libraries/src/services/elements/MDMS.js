@@ -165,6 +165,23 @@ const getPropertyUsageCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getConfig = (tenantId, moduleCode) => ({
+  type: "Config",
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "Config",
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getVehicleTypeCriteria = (tenantId, moduleCode, type) => ({
   type,
   details: {
@@ -222,7 +239,7 @@ const GetPropertySubtype = (MdmsRes) =>
   }));
 
 const GetVehicleType = (MdmsRes) =>
-  MdmsRes["FSM"].VehicleType.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
+  MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
     return {
       ...vehicleDetails,
       i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
@@ -303,5 +320,9 @@ export const MdmsService = {
 
   getPaymentRules: (tenantId) => {
     return MdmsService.call(tenantId, getBillingServiceForBusinessServiceCriteria());
+  },
+
+  getCustomizationConfig: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getConfig(tenantId, moduleCode), moduleCode);
   },
 };

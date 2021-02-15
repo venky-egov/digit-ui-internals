@@ -26,6 +26,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   // console.log("find property sub type here", propertySubtypesData)
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
+  console.log(
+    "find customization config here",
+    customizationConfig,
+    customizationConfig ? customizationConfig["additionalDetails.tripAmount"] : null
+  );
 
   const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
@@ -494,22 +500,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
             validation: { pattern: /^[1-9]\d?(\.\d{1,2})?$/ },
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: false,
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown
-              option={vehicleMenu}
-              optionKey="i18nKey"
-              id="vehicle"
-              selected={vehicle}
-              select={selectVehicle}
-              t={t}
-              disable={!FSM_CREATOR_EMP}
-            />
+            <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} disable={false} />
           ),
         },
         {
@@ -520,7 +518,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             validation: { required: true },
             defaultValue: vehicle?.amount,
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"] : true,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
@@ -530,7 +528,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
             validation: { pattern: /^[1-9]{1}$/ },
           },
-          disable: !FSM_CREATOR_EMP,
+          disable: customizationConfig ? !customizationConfig["noOfTrips"] : true,
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),

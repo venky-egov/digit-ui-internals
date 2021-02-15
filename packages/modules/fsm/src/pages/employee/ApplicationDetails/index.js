@@ -156,7 +156,9 @@ const ApplicationDetails = (props) => {
               <LinkButton
                 label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
                 style={{ position: "absolute", top: 0, right: 20 }}
-                onClick={() => {}}
+                onClick={() => {
+                  history.push(props.parentRoute + "/application-audit/" + applicationNumber);
+                }}
               />
             )}
             {applicationDetails.map((detail, index) => (

@@ -10,8 +10,8 @@ import LocationSearch from "../atoms/LocationSearch";
 import SubmitBar from "../atoms/SubmitBar";
 import LinkButton from "../atoms/LinkButton";
 
-const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, skip, onSave, onChange }) => {
-  let isDisabled = false;
+const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, skip, onSave, onChange, disabled }) => {
+  let isDisabled = false || disabled;
   const onLocationChange = (val) => {
     isDisabled = val ? false : true;
     onChange(val);
@@ -28,7 +28,7 @@ const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, s
       <LocationSearch onChange={onLocationChange} />
 
       <SubmitBar label={nextText} onSubmit={onSave} disabled={isDisabled} />
-      {skip ? <LinkButton label={skipAndContinueText} /> : null}
+      {skip ? <LinkButton onClick={skip} label={skipAndContinueText} /> : null}
     </Card>
   );
 };

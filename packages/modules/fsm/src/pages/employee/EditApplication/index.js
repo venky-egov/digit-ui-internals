@@ -448,12 +448,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             />
           ),
         },
-        // {
-        //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-        //   type: "dropdown",
-        //   isMandatory: true,
-        //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
-        // },
+        {
+          label: t("ES_NEW_APPLICATION_SLUM_NAME"),
+          type: "dropdown",
+          isMandatory: true,
+          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+        },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
           type: "text",

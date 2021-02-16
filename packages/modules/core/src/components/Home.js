@@ -88,9 +88,6 @@ const EmployeeHome = () => {
                   <span className="link">
                     <Link to={`/digit-ui/employee/fsm/new-application`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>
                   </span>
-                  <span className="link">
-                    <Link to={`/digit-ui/employee/fsm/application-audit`}>{t("ES_TITLE_APPLICATION_AUDIT")}</Link>
-                  </span>
                 </React.Fragment>
               )}
             </div>

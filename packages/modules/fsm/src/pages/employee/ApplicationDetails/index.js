@@ -77,6 +77,7 @@ const ApplicationDetails = (props) => {
     console.log("action selected", selectedAction);
     switch (selectedAction) {
       case "DSO_ACCEPT":
+      case "ACCEPT":
       // return setShowModal(true);
       case "ASSIGN":
       case "GENERATE_DEMAND":

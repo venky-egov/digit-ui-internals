@@ -20,7 +20,7 @@ export const configCompleteApplication = ({ t }) => ({
           label: t("ES_FSM_ACTION_WASTE_VOLUME_LABEL"),
           type: "text",
           populators: {
-            name: "wasteVolume",
+            name: "wasteCollected",
           },
         },
       ],

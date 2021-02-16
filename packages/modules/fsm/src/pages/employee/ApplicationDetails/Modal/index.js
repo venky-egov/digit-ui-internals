@@ -67,6 +67,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     if (vehicle) applicationData.vehicleId = vehicle.id;
     if (vehicle) applicationData.vehicleType = vehicle.type;
     if (data.date) applicationData.possibleServiceDate = new Date(data.date).getTime();
+    if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
 
     if (rejectionReason) workflow.comments = rejectionReason;
 
@@ -76,6 +77,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   useEffect(() => {
     switch (action) {
       case "DSO_ACCEPT":
+      case "ACCEPT":
+        //TODO: add accept UI
+        setFormValve(true);
+        return setConfig(configCompleteApplication({ t }));
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
@@ -108,12 +113,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
           })
         );
       case "COMPLETE":
+      case "COMPLETED":
         setFormValve(true);
         return setConfig(configCompleteApplication({ t }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "CANCEL":
+      case "DECLINE":
       case "SENDBACK":
       case "REJECT":
         setFormValve(rejectionReason ? true : false);
@@ -126,6 +133,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
           })
         );
       case "PAY":
+      case "ADDITIONAL_PAY_REQUEST":
       case "FSM_PAY":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:

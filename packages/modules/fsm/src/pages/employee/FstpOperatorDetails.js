@@ -66,12 +66,12 @@ const FstpOperatorDetails = () => {
   };
 
   const handleSuccess = () => {
+    /* Show Toast on success */
     console.log("success");
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(name, value, "on change");
     if (name === "tripTime") {
       setTripTime(value);
     } else if (name === "wasteRecieved") {

@@ -78,25 +78,23 @@ const ApplicationDetails = (props) => {
     switch (selectedAction) {
       case "DSO_ACCEPT":
       case "ACCEPT":
-      // return setShowModal(true);
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
-      // setCurrentConfig(configAssignDso);
       case "REASSIGN":
-      // setCurrentConfig(configReassignDSO);
       case "COMPLETE":
-      // setCurrentConfig(configCompleteApplication);
+      case "COMPLETED":
       case "CANCEL":
       case "SENDBACK":
       case "REJECT":
-        // setCurrentConfig(configRejectApplication);
+      case "DECLINE":
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "PAY":
       case "FSM_PAY":
+      case "ADDITIONAL_PAY_REQUEST":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
         console.log("default case");

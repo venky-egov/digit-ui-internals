@@ -8,6 +8,10 @@ const config = [
     component: "Inbox",
   },
   {
+    path: "fstp-inbox",
+    component: "FstpInbox",
+  },
+  {
     path: "new-application",
     component: "NewApplication",
   },
@@ -38,9 +42,5 @@ const config = [
   {
     path: "search",
     component: "SearchApplication",
-  },
-  {
-    path: "mark-for-disposal",
-    component: "MarkForDisposal",
   },
 ];

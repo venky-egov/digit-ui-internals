@@ -15,16 +15,32 @@ const FstpInbox = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [searchParams, setSearchParams] = useState({});
+  const [pageOffset, setPageOffset] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const { isLoading, data: vehicleLog, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters: searchParams, config });
 
-  const onSearch = () => {};
+  const onSearch = (params = {}) => {
+    setSearchParams({ ...searchParams, ...params });
+  };
+
+  const fetchNextPage = () => {
+    setPageOffset((prevState) => prevState + pageSize);
+  };
+
+  const fetchPrevPage = () => {
+    setPageOffset((prevState) => prevState - pageSize);
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+  };
 
   const handleFilterChange = () => {};
 
   const searchFields = [
     {
       label: t("ES_FSTP_OPERATOR_VEHICLE_NO"),
-      name: "vehicleNo",
+      name: "registrationNumber",
     },
     {
       label: t("ES_FSTP_DSO_NAME"),
@@ -57,11 +73,11 @@ const FstpInbox = () => {
           onFilterChange={handleFilterChange}
           searchFields={searchFields}
           onSearch={onSearch}
-          // onNextPage={fetchNextPage}
-          // onPrevPage={fetchPrevPage}
-          // currentPage={Math.floor(pageOffset / pageSize)}
-          // pageSizeLimit={pageSize}
-          // onPageSizeChange={handlePageSizeChange}
+          onNextPage={fetchNextPage}
+          onPrevPage={fetchPrevPage}
+          currentPage={Math.floor(pageOffset / pageSize)}
+          pageSizeLimit={pageSize}
+          onPageSizeChange={handlePageSizeChange}
         />
       </div>
     );

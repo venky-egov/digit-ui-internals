@@ -67,11 +67,13 @@ const ApplicationDetails = () => {
             </Link>
           </div>
         );
-      case "RATING":
+      case "SUBMIT_FEEDBACK":
         return (
-          <Link to={`/digit-ui/citizen/fsm/rate/${application.applicationNo}`}>
-            <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
-          </Link>
+          <div style={{ marginTop: "24px" }}>
+            <Link to={`/digit-ui/citizen/fsm/rate/${application.applicationNo}`}>
+              <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
+            </Link>
+          </div>
         );
     }
   };

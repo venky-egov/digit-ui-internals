@@ -471,7 +471,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
             name: "doorNo",
             error: t("CORE_COMMON_DOOR_INVALID"),
             validation: {
-              pattern: /^[\w\\\s]*$/,
+              pattern: /^[\w]([\w\/,\s])*$/,
             },
           },
           disable: isDisabled("address.doorNo") ? isDisabled("address.doorNo") : false,

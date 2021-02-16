@@ -22,6 +22,7 @@ import QADSO from "./userInfo/qa-dso.json";
 import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
 import FSM_FSTP from "./userInfo/fsm-fstp.json";
 import FSM_DSO from "./userInfo/fsm-dso.json";
+import FSTP from "./userInfo/fstp.json";
 import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
 
 import * as comps from "@egovernments/digit-ui-react-components";
@@ -77,9 +78,10 @@ window.Digit.SessionStorage.set("userType", userTypeInfo);
 
 if (userType !== "CITIZEN") {
   window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
-} else {
-  window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
 }
+// else {
+//   window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+// }
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);

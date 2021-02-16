@@ -355,17 +355,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
             <Dropdown isMandatory freeze={true} selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />
           ),
         },
-        // {
-        //   label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
-        //   type: "checkbox",
-        //   populators: (
-        //     <CheckBox
-        //       label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
-        //       onChange={slumCheck}
-        //       disable={customizationConfig ? !customizationConfig?.slumName?.override : true}
-        //     />
-        //   ),
-        // },
+        {
+          label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
+          type: "checkbox",
+          populators: (
+            <CheckBox
+              label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
+              onChange={slumCheck}
+              disable={customizationConfig ? !customizationConfig?.slumName?.override : true}
+            />
+          ),
+        },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
           isMandatory: true,
@@ -396,7 +396,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             name: "doorNo",
             error: t("CORE_COMMON_DOOR_INVALID"),
             validation: {
-              pattern: /^[\w\\\s]*$/,
+              pattern: /^[\w]([\w\/,\s])*$/,
             },
           },
         },

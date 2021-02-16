@@ -26,6 +26,7 @@ import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
 import useSearchAll from "./fsm/useSearchAll";
 import useVehicleSearch from "./fsm/useVehicleSearch";
+import useVehicleUpdate from "./fsm/useVehicleUpdate";
 import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
@@ -69,6 +70,7 @@ const fsm = {
   useApplicationAudit,
   useSearchForAuditData,
   useVehicleSearch,
+  useVehicleUpdate,
   useConfig,
 };
 

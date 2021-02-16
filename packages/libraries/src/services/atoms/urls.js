@@ -33,6 +33,7 @@ const Urls = {
     audit: "/fsm/v1/_audit",
     vehicleSearch: "/vehicle/trip/v1/_search",
     billingSlabSearch: "/fsm-calculator/v1/billingSlab/_search",
+    vehilceUpdate: "/vehicle/trip/v1/_update",
   },
 
   payment: {

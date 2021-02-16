@@ -27,18 +27,9 @@ const SelectRating = ({ parentRoute }) => {
     application.additionalDetails = {
       CHECKLIST: checklist,
     };
-    // const requestBody = {
-    //   fsm: {
-    //     ...applicationData,
-    //   },
-    //   workflow: {
-    //     action: "SUBMIT_FEEDBACK",
-    //     rating,
-    //   },
-    // };
 
     history.push("/digit-ui/employee/fsm/response", {
-      application,
+      applicationData: application,
       key: "update",
       action: "SUBMIT_FEEDBACK",
     });

@@ -59,6 +59,12 @@ const ApplicationDetails = (props) => {
     serviceData: applicationDetails,
   });
 
+  useEffect(() => {
+    if (showToast) {
+      workflowDetails.revalidate();
+    }
+  }, [showToast]);
+
   function onActionSelect(action) {
     setSelectedAction(action);
     setDisplayMenu(false);

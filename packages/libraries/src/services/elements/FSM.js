@@ -66,4 +66,14 @@ export const FSMService = {
       params: { tenantId, ...filters },
       auth: true,
     }),
+  vehicleUpdate: (details) => {
+    Request({
+      url: Urls.fsm.vehilceUpdate,
+      data: details,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      auth: true,
+    });
+  },
 };

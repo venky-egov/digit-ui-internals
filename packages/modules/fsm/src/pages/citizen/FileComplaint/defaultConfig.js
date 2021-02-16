@@ -92,7 +92,7 @@ export const config = {
           type: "text",
           name: "doorNo",
           validation: {
-            pattern: /^[\w\\\s]*$/,
+            pattern: /^[\w]([\w\/,\s])*$/,
           },
           error: "CORE_COMMON_DOOR_INVALID",
         },

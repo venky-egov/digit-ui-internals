@@ -357,7 +357,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             name: "doorNo",
             error: t("CORE_COMMON_DOOR_INVALID"),
             validation: {
-              pattern: /^[\w\\\s]*$/,
+              pattern: /^[\w]([\w\/,\s])*$/,
             },
           },
         },

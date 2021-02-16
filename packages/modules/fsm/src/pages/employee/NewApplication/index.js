@@ -113,6 +113,18 @@ export const NewApplication = ({ parentUrl, heading }) => {
     }
   }, [pincode]);
 
+  useEffect(async () => {
+    if (propertyType && subType && vehicle) {
+      const { capacity } = vehicle;
+      const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
+
+      const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+      if (billSlab?.price) {
+        setAmountPerTrip(billSlab.price);
+      }
+    }
+  }, [propertyType, subType, vehicle]);
+
   function selectedType(value) {
     setPropertyType(value);
     setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code));
@@ -281,17 +293,44 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />
-          ),
+          type: "custom",
+          populators: {
+            name: "propertyType",
+            customProps: { option: propertyTypesData.data, optionKey: "i18nKey", t },
+            defaultValue: propertyType,
+            component: (props, customProps) => (
+              <Dropdown
+                id="propertyType"
+                selected={props.defaultValue}
+                select={(d) => {
+                  selectedType(d);
+                  props.onChange(d);
+                }}
+                {...customProps}
+              />
+            ),
+          },
         },
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
-          type: "dropdown",
-          menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} t={t} />,
+          type: "custom",
+          populators: {
+            name: "propertySubType",
+            defaultValue: subType,
+            customProps: { option: subTypeMenu, t, optionKey: "i18nKey" },
+            component: (props, customProps) => (
+              <Dropdown
+                id="propertySubType"
+                selected={props.value}
+                select={(d) => {
+                  setSubType(d);
+                  props.onChange(d);
+                }}
+                {...customProps}
+              />
+            ),
+          },
         },
       ],
     },
@@ -394,8 +433,23 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
+          type: "custom",
+          populators: {
+            name: "vehicle",
+            defaultValue: vehicle,
+            customProps: { option: vehicleMenu, optionKey: "i18nKey", t },
+            component: (props, customProps) => (
+              <Dropdown
+                id="vehicle"
+                selected={props.value}
+                select={(d) => {
+                  props.onChange(d);
+                  selectVehicle(d);
+                }}
+                {...customProps}
+              />
+            ),
+          },
         },
         {
           label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
@@ -415,7 +469,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             name: "amountPerTrip",
             error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
             validation: { required: true, pattern: /^[1-9]\d+$/ },
-            defaultValue: vehicle?.amount,
+            defaultValue: amountPerTrip || vehicle?.price,
           },
           disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
         },

@@ -1,7 +1,7 @@
 import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 
-import { configAssignDso, configCompleteApplication, configReassignDSO, configRejectApplication } from "../config";
+import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication } from "../config";
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -23,13 +23,25 @@ const CloseBtn = (props) => {
 };
 
 const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction }) => {
-  const { data: dsoData, isLoading: isDsoLoading, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
-  const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: id }, { staleTime: Infinity });
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
+  const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
+    tenantId,
+    { applicationNos: id },
+    { staleTime: Infinity }
+  );
   // console.log("find application details here", applicationData)
-  // const { data: vehicleMenu, isLoading: isVehicleData } = Digit.Hooks.fsm.useMDMS(state, "FSM", "VehicleType", { staleTime: Infinity });
-
+  const stateCode = tenantId.split(".")[0];
+  const { data: vehicleList, isLoading: isVehicleData, isSuccess: isVehicleDataLoaded } = Digit.Hooks.fsm.useMDMS(
+    stateCode,
+    "Vehicle",
+    "VehicleType",
+    { staleTime: Infinity }
+  );
+  const [dsoList, setDsoList] = useState([]);
+  const [vehicleNoList, setVehicleNoList] = useState([]);
   const [config, setConfig] = useState({});
   const [dso, setDSO] = useState(null);
+  const [vehicleNo, setVehicleNo] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
   const [rejectMenu, setRejectMenu] = useState([
@@ -48,10 +60,37 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   const [reassignReason, selectReassignReason] = useState(null);
   const [formValve, setFormValve] = useState(false);
 
+  useEffect(() => {
+    if (isSuccess && isVehicleDataLoaded) {
+      const [vehicle] = vehicleList.filter((item) => item.code === applicationData.vehicleType);
+      setVehicleMenu([vehicle]);
+      setVehicle(vehicle);
+    }
+  }, [isVehicleDataLoaded, isSuccess]);
+
+  useEffect(() => {
+    if (vehicle && isDsoSuccess) {
+      const dsoList = dsoData.filter((dso) => dso.vehicles.find((dsoVehicle) => dsoVehicle.type === vehicle.code));
+      setDsoList(dsoList);
+    }
+  }, [vehicle, isDsoSuccess]);
+
+  useEffect(() => {
+    if (isSuccess && isDsoSuccess && applicationData.dsoId) {
+      const [dso] = dsoData.filter((dso) => dso.id === applicationData.dsoId);
+      const vehicleNoList = dso.vehicles.filter((vehicle) => vehicle.type === applicationData.vehicleType);
+      setVehicleNoList(vehicleNoList);
+    }
+  }, [isSuccess, isDsoSuccess]);
+
   function selectDSO(dsoDetails) {
     // console.log("find dso details here", dsoDetails);
     setDSO(dsoDetails);
-    setVehicleMenu(dsoDetails.vehicles);
+    // setVehicleMenu(dsoDetails.vehicles);
+  }
+
+  function selectVehicleNo(vehicleNo) {
+    setVehicleNo(vehicleNo);
   }
 
   function selectVehicle(value) {
@@ -64,8 +103,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     const workflow = { action: action };
 
     if (dso) applicationData.dsoId = dso.id;
-    if (vehicle) applicationData.vehicleId = vehicle.id;
-    if (vehicle) applicationData.vehicleType = vehicle.type;
+    if (vehicleNo && action === "ACCEPT") applicationData.vehicleId = vehicleNo.id;
+    if (vehicle && action === "ASSIGN") applicationData.vehicleType = vehicle.code;
     if (data.date) applicationData.possibleServiceDate = new Date(data.date).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
 
@@ -79,8 +118,18 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "DSO_ACCEPT":
       case "ACCEPT":
         //TODO: add accept UI
-        setFormValve(true);
-        return setConfig(configCompleteApplication({ t }));
+        setFormValve(vehicleNo ? true : false);
+        return setConfig(
+          configAcceptDso({
+            t,
+            dsoData,
+            dso,
+            vehicle,
+            vehicleNo,
+            vehicleNoList,
+            selectVehicleNo,
+          })
+        );
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
@@ -140,7 +189,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
         console.log("default case");
         break;
     }
-  }, [action, isDsoLoading, dso, vehicle, rejectionReason]);
+  }, [action, isDsoLoading, dso, vehicle, rejectionReason, vehicleNo, vehicleNoList]);
   return action && config.form && !isDsoLoading ? (
     <Modal
       headerBarMain={<Heading label={t(config.label.heading)} />}

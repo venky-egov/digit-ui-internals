@@ -140,7 +140,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     if (applicationData && propertyTypesData.data && propertySubtypesData.data) {
       const prePropertyUsage = applicationData.propertyUsage;
       const prePropertyType = prePropertyUsage.split(".")[0];
-     // console.log( "find propertySubtypesData here",propertySubtypesData.data,prePropertyUsage,propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage) );
+      // console.log( "find propertySubtypesData here",propertySubtypesData.data,prePropertyUsage,propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage) );
       setPropertyType(propertyTypesData.data.filter((type) => type.code === prePropertyType)[0]);
       setSubType(propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)[0]);
     }
@@ -225,6 +225,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   // };
 
   useEffect(async () => {
+    debugger;
     if (propertyType && subType && vehicle) {
       setSubmitValve(false);
       const { capacity } = vehicle;
@@ -232,6 +233,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
       if (billSlab?.price) {
         setAmountPerTrip(billSlab.price);
+        setSubmitValve(true);
       }
       setSubmitValve(true);
     }
@@ -381,7 +383,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
-
           populators: (
             <Dropdown
               id="propertyType"

@@ -140,12 +140,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     if (applicationData && propertyTypesData.data && propertySubtypesData.data) {
       const prePropertyUsage = applicationData.propertyUsage;
       const prePropertyType = prePropertyUsage.split(".")[0];
-      console.log(
-        "find propertySubtypesData here",
-        propertySubtypesData.data,
-        prePropertyUsage,
-        propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)
-      );
+     // console.log( "find propertySubtypesData here",propertySubtypesData.data,prePropertyUsage,propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage) );
       setPropertyType(propertyTypesData.data.filter((type) => type.code === prePropertyType)[0]);
       setSubType(propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)[0]);
     }

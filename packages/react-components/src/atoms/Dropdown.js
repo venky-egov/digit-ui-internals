@@ -31,6 +31,7 @@ const TextField = (props) => {
       className={`employee-select-wrap--elipses ${props.disable && "disabled"}`}
       type="text"
       value={value}
+      autoComplete={props.autoComplete || "on"}
       onChange={inputChange}
       onClick={props.onClick}
       onFocus={broadcastToOpen}
@@ -105,6 +106,7 @@ const Dropdown = (props) => {
       {!hasCustomSelector && (
         <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`}>
           <TextField
+            autoComplete={props.autoComplete}
             setFilter={setFilter}
             forceSet={forceSet}
             selectedVal={

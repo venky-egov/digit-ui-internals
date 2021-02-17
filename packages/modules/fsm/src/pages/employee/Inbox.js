@@ -82,7 +82,7 @@ const Inbox = ({ parentRoute }) => {
           onFilterChange={handleFilterChange}
           onSearch={onSearch}
           searchParams={searchParams}
-          parentRoute={parentRoute}
+          linkPrefix={"/digit-ui/employee/fsm/application-details/"}
         />
       );
     } else {

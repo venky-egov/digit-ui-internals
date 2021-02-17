@@ -47,6 +47,7 @@ export const FSMService = {
       userService: true,
       method: "POST",
       params: { tenantId, ...filters },
+      auth: true,
     }),
   vehicleSearch: (tenantId, details) =>
     Request({

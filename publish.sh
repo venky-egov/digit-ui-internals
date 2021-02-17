@@ -29,9 +29,11 @@ cd "$BASEDIR/packages/react-components" && yarn publish --access public
 msg "Building and publishing PGR module"
 cd "$BASEDIR/packages/modules/pgr" && yarn publish --access public
 
-
 msg "Building and publishing FSM module"
 cd "$BASEDIR/packages/modules/fsm" && yarn publish --access public
+
+msg "Building and publishing PT module"
+cd "$BASEDIR/packages/modules/pt" && yarn publish --access public
 
 msg "Building and publishing Common module"
 cd "$BASEDIR/packages/modules/common" && yarn publish --access public

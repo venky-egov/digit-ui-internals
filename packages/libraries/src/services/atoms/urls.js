@@ -32,6 +32,7 @@ const Urls = {
     // vehicleSearch: "/vehicle/v1/_search",
     audit: "/fsm/v1/_audit",
     vehicleSearch: "/vehicle/trip/v1/_search",
+    vehilceUpdate: "/vehicle/trip/v1/_update",
   },
 
   payment: {

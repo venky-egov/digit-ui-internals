@@ -51,6 +51,10 @@
   @apply bg-white shadow-card p-md;
   border-radius: 4px;
 
+  .field-container {
+    @apply flex justify-center items-center;
+  }
+
   .card-header {
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
   }
@@ -236,9 +240,6 @@
     }
 
     .field-container {
-      display: "flex";
-      justify-content: "center";
-      align-items: "center";
       span {
         border: 2px solid black;
         background: rgb(247, 247, 247);

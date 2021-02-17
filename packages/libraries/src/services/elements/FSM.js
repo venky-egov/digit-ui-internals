@@ -57,6 +57,15 @@ export const FSMService = {
       params: { tenantId, ...details },
       auth: true,
     }),
+  billingSlabSearch: (tenantId, filters) =>
+    Request({
+      url: Urls.fsm.billingSlabSearch,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId, ...filters },
+      auth: true,
+    }),
   vehicleUpdate: (details) => {
     Request({
       url: Urls.fsm.vehilceUpdate,

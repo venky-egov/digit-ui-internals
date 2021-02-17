@@ -123,4 +123,8 @@ export const Search = {
   allVehicles: (tenantId, filters) => {
     return FSMService.vehicleSearch(tenantId, filters);
   },
+
+  applicationWithBillSlab: async (t, tenantId, applicationNos) => {
+    const app = await Search.applicationDetails(t, tenantId, applicationNos);
+  },
 };

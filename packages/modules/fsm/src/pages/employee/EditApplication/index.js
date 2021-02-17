@@ -225,7 +225,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   // };
 
   useEffect(async () => {
-    debugger;
     if (propertyType && subType && vehicle) {
       setSubmitValve(false);
       const { capacity } = vehicle;

@@ -154,6 +154,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
     setSubType(value);
   }
 
+  function selectPropertyType(value) {
+    setPropertyType(value);
+    setSubTypeMenu(propertySubtypesData?.data?.filter((item) => item.propertyType === value?.code?.toUpperCase()));
+  }
+
   // city locality logic
   const selectCity = async (city) => {
     setSelectedCity(city);
@@ -301,7 +306,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             <Dropdown
               id="propertyType"
               selected={propertyType}
-              select={setPropertyType}
+              select={selectPropertyType}
               {...{ option: propertyTypesData.data, optionKey: "i18nKey", t }}
             />
           ),

@@ -115,6 +115,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(async () => {
     if (propertyType && subType && vehicle) {
+      setSubmitValve(false);
       const { capacity } = vehicle;
       const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
 
@@ -122,6 +123,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       if (billSlab?.price) {
         setAmountPerTrip(billSlab.price);
       }
+      setSubmitValve(true);
     }
   }, [propertyType, subType, vehicle]);
 

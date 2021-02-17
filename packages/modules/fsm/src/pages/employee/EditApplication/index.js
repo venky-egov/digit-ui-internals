@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Dropdown, Loader, PitDimension, FormComposer, TextInput } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { check } from "prettier";
 
 const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -227,12 +226,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
 
   useEffect(async () => {
     if (propertyType && subType && vehicle) {
+      setSubmitValve(false);
       const { capacity } = vehicle;
       const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
       const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
       if (billSlab?.price) {
         setAmountPerTrip(billSlab.price);
       }
+      setSubmitValve(true);
     }
   }, [propertyType, subType, vehicle]);
 

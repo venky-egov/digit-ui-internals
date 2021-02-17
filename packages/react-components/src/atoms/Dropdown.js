@@ -47,9 +47,23 @@ const Dropdown = (props) => {
   const [forceSet, setforceSet] = useState(0);
   const optionRef = useRef(null);
   const hasCustomSelector = props.customSelector ? true : false;
+
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
+
+  useEffect(() => {
+    if (!dropdownStatus) {
+      if (selectedOption?.name && filterVal?.length > 0 && filterVal !== selectedOption?.name) {
+        setforceSet(true);
+        setFilter("");
+      }
+    }
+    return () => {
+      setforceSet(0);
+      setFilter("");
+    };
+  }, [dropdownStatus]);
 
   function dropdownSwitch() {
     if (!props.disable) {

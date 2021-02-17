@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, Dropdown, Loader, CardLabel } from "@egovernments/digit-ui-react-components";
 
-const SelectPitType = ({ t, config, onSelect, value }) => {
+const SelectPitType = ({ t, config, onSelect, value, userType, setValue }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
 
   const [sanitationMenu, setSanitationMenu] = useState([]);
   const [pitType, setPitType] = useState(() => {
-    const { pitType } = value;
+    const { pitType } = value || {};
     return pitType !== undefined ? pitType : null;
   });
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PitType");
@@ -22,6 +22,9 @@ const SelectPitType = ({ t, config, onSelect, value }) => {
 
   const selectPitType = (value) => {
     setPitType(value);
+    if(userType === 'employee') {
+      setValue(config.key, value)
+    }
   };
 
   const onSkip = () => {
@@ -35,7 +38,9 @@ const SelectPitType = ({ t, config, onSelect, value }) => {
   if (sanitationTypeData.isLoading) {
     return <Loader />;
   }
-
+  if(userType === 'employee') {
+    return <Dropdown isMandatory option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} t={t} />
+  }
   return (
     <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!pitType} t={t}>
       <CardLabel>{`${t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")} *`}</CardLabel>

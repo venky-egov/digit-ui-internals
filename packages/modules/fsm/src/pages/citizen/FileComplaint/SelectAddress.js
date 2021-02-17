@@ -1,18 +1,18 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { FormStep, CardLabel, Dropdown } from "@egovernments/digit-ui-react-components";
+import { FormStep, CardLabel, Dropdown, LabelFieldPair } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
-const SelectAddress = ({ t, config, onSelect, value }) => {
+const SelectAddress = ({ t, config, onSelect, value, userType, setValue, secondaryKey, secondaryValue }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   const cities = value?.pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == value["pincode"])) : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
   const [selectedCity, setSelectedCity] = useState(() => {
-    const { city_complaint } = value;
+    const { city_complaint } = value || {};
     return city_complaint ? city_complaint : null;
   });
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(() => {
-    const { locality_complaint } = value;
+    const { locality_complaint } = value || {};
     return locality_complaint ? locality_complaint : null;
   });
 
@@ -20,7 +20,7 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     if (selectedCity) {
       let __localityList = localitiesObj[selectedCity.code];
       let filteredLocalityList = [];
-      if (value.pincode) {
+      if (value?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == value.pincode));
       }
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
@@ -28,22 +28,45 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
         setSelectedLocality(filteredLocalityList[0]);
       }
     }
-  }, [selectedCity, value.pincode]);
+  }, [selectedCity, value?.pincode]);
 
   function selectCity(city) {
     setSelectedLocality(null);
     setLocalities(null);
     setSelectedCity(city);
+    if(userType === 'employee') {
+      setValue(config.key, city)
+    }
   }
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
+    if(userType === 'employee') {
+       console.log({locality})
+      setValue('locality_complaint', locality)
+    }
   }
 
   function onSubmit() {
     onSelect({ city_complaint: selectedCity, locality_complaint: selectedLocality });
   }
-
+  if(userType === 'employee') {
+    return<div> 
+      <React.Fragment>
+        <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+            {config.label}
+            {config.isMandatory ? " * " : null}
+        </CardLabel>
+        <Dropdown className="field" isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
+      </React.Fragment>
+      <React.Fragment>
+        <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+          {t("CS_CREATECOMPLAINT_MOHALLA")}
+        </CardLabel>
+        <Dropdown className="field" isMandatory selected={selectedLocality} option={localities} select={selectLocality} optionKey="code" t={t} />
+        </React.Fragment>
+    </div>
+  }
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>

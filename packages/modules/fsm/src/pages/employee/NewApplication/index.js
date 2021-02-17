@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown, PitDimension, FormComposer, CheckBox } from "@egovernments/digit-ui-react-components";
+import { Dropdown, PitDimension, FormComposer, CheckBox, CardSubHeader, Card } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { newConfig } from "../../config/NewApplication/config";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
@@ -239,217 +240,95 @@ export const NewApplication = ({ parentUrl, heading }) => {
     // console.log("find form data here", formData);
     history.push("/digit-ui/employee/fsm/response", formData);
   };
-
-  const config = [
+  const itemsAtStart = {
+    head: t("ES_TITLE_APPLICATION_DETAILS"),
+    body: [
+      {
+        label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
+        type: "dropdown",
+        populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
+      },
+      {
+        label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
+        type: "text",
+        isMandatory: true,
+        populators: {
+          name: "applicantName",
+          validation: {
+            required: true,
+            pattern: /[A-Za-z]/,
+          },
+        },
+      },
+      {
+        label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
+        type: "text",
+        isMandatory: true,
+        populators: {
+          name: "mobileNumber",
+          validation: {
+            required: true,
+            pattern: /^[6-9]\d{9}$/,
+          },
+        },
+      },
+    ],
+  }
+  //newConfig.unshift(itemsAtStart)
+  const itemsAtLast = [
     {
-      head: t("ES_TITLE_APPLICATION_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
-          type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
-          type: "text",
-          isMandatory: true,
-          populators: {
-            name: "applicantName",
-            validation: {
-              required: true,
-              pattern: /[A-Za-z]/,
-            },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
-          type: "text",
-          isMandatory: true,
-          populators: {
-            name: "mobileNumber",
-            validation: {
-              required: true,
-              pattern: /^[6-9]\d{9}$/,
-            },
-          },
-        },
-      ],
+      label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
+      type: "dropdown",
+      populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
     },
     {
-      head: t("ES_NEW_APPLICATION_PROPERTY_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />
-          ),
-        },
-        {
-          label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
-          isMandatory: true,
-          type: "dropdown",
-          menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} t={t} />,
-        },
-      ],
+      label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
+      type: "text",
+      populators: {
+        name: "noOfTrips",
+        error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+        validation: { pattern: /^[1-9]{1}$/ },
+        defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
+      },
+      disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
     },
     {
-      head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_PINCODE"),
-          type: "text",
-          populators: {
-            name: "pincode",
-            error: t("CORE_COMMON_PINCODE_INVALID"),
-            onChange: handlePincode,
-            validation: { pattern: /^[1-9][0-9]{5}$/, validate: isPincodeValid },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown isMandatory freeze={true} selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />
-          ),
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
-          type: "checkbox",
-          populators: (
-            <CheckBox
-              label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
-              onChange={slumCheck}
-              disable={customizationConfig ? !customizationConfig?.slumName?.override : true}
-            />
-          ),
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
-          ),
-        },
-        // {
-        //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-        //   type: "dropdown",
-        //   isMandatory: true,
-        //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} disable={!slumEnable} />,
-        // },
-        {
-          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
-          type: "text",
-          populators: {
-            name: "streetName",
-            error: t("CORE_COMMON_STREET_INVALID"),
-            validation: { pattern: /^[\w\s]{1,256}$/ },
-          },
-        },
-        {
-          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
-          type: "text",
-          populators: {
-            name: "doorNo",
-            error: t("CORE_COMMON_DOOR_INVALID"),
-            validation: {
-              pattern: /^[\w]([\w\/,\s])*$/,
-            },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
-          type: "textarea",
-          populators: {
-            name: "landmark",
-          },
-        },
-      ],
+      label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
+      type: "text",
+      populators: {
+        name: "amountPerTrip",
+        error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
+        validation: { required: true, pattern: /^[1-9]\d+$/ },
+        defaultValue: vehicle?.amount,
+      },
+      disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
     },
     {
-      head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_PIT_TYPE"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown isMandatory option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} t={t} />
-          ),
-        },
-        {
-          label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
-          populators: <PitDimension sanitationType={sanitation} t={t} size={pitDimension} handleChange={handlePitDimension} />,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
-          type: "text",
-          populators: {
-            name: "distanceFromRoad",
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-          type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
-          type: "text",
-          populators: {
-            name: "noOfTrips",
-            error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-            validation: { pattern: /^[1-9]{1}$/ },
-            defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
-          },
-          disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
-          type: "text",
-          populators: {
-            name: "amountPerTrip",
-            error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
-            validation: { required: true, pattern: /^[1-9]\d+$/ },
-            defaultValue: vehicle?.amount,
-          },
-          disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
-        },
-        {
-          label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
-          type: "text",
-          populators: {
-            name: "amount",
-            validation: { required: true },
-            defaultValue: paymentAmount,
-          },
-          disable: true,
-        },
-      ],
+      label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
+      type: "text",
+      populators: {
+        name: "amount",
+        validation: { required: true },
+        defaultValue: paymentAmount,
+      },
+      disable: true,
     },
-    // {
-    //   head: t(),
-    //   body: [
-    //     {
-    //       label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-    //       isMandatory: true,
-    //       type: "dropdown",
-    //       populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-    //     },
-    //   ],
-    // },
-  ];
-
+  ]
+  const newBody = newConfig[newConfig.length-1].body.concat(itemsAtLast)
+  //newConfig[newConfig.length-1].body = newBody
   return (
-    <FormComposer
+    
+      <FormComposer
       heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
-      isDisabled={!canSubmit}
+      isDisabled={false}
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={config}
+      config={newConfig.map(config => {
+        return{
+          ...config,
+          body: config.body.filter(a => !a.hideInEmployee)
+        }
+      })}
+      inline={true}
       onSubmit={onSubmit}
       onFormValueChange={onFormValueChange}
     />

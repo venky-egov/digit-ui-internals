@@ -1,17 +1,20 @@
-import { FormStep } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 
-const SelectPincode = ({ t, config, onSelect, value }) => {
+const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => {
     const { pincode } = value;
     return pincode;
   });
   const [pincodeServicability, setPincodeServicability] = useState(null);
-
+  console.log({value}, "pindocde")
   function onChange(e) {
     setPincode(e.target.value);
     setPincodeServicability(null);
+    if(userType === 'employee') {
+      setValue(config.key, e.target.value)
+    }
   }
 
   const goNext = async (data) => {
@@ -27,6 +30,13 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
     }
   };
 
+  if(userType === 'employee') {
+    return <TextInput
+    key={config.key}
+    name={""}
+    onChange={onChange}
+  />
+  }
   const onSkip = () => onSelect();
   return (
     <FormStep

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { FormStep } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextArea, LabelFieldPair, CardLabel  } from "@egovernments/digit-ui-react-components";
 
-const SelectLandmark = ({ t, config, onSelect, value }) => {
+const SelectLandmark = ({ t, config, onSelect, value, userType, setValue  }) => {
   const [landmark, setLandmark] = useState(() => {
-    const { landmark } = value;
+    const { landmark } = value || {};
     return landmark ? landmark : "";
   });
 
@@ -18,6 +18,17 @@ const SelectLandmark = ({ t, config, onSelect, value }) => {
     }
   }
 
+  if(userType === 'employee') {
+    return config?.inputs?.map(input =>{
+      return <LabelFieldPair>
+        <TextArea
+        style={{width: "50%"}}
+        key={input.name}
+        onChange={setValue}
+      />
+      </LabelFieldPair>
+    })
+  }
   const onSkip = () => onSelect();
 
   return (

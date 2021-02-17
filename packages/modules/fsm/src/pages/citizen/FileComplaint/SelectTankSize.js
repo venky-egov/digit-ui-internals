@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FormStep, CardText, TextInput, PitDimension } from "@egovernments/digit-ui-react-components";
 
-const SelectTankSize = ({ config, onSelect, t, value }) => {
+const SelectTankSize = ({ config, onSelect, t, value = {}, userType, setValue }) => {
   const [size, setSize] = useState(() => {
     const { pitDetail } = value;
     return pitDetail || {};
@@ -12,6 +12,9 @@ const SelectTankSize = ({ config, onSelect, t, value }) => {
     console.log(isNaN(value), "is not a number");
     if (!isNaN(value)) {
       setSize({ ...size, [name]: value });
+      if(userType === 'employee') {
+        setValue(config.key, value)
+      }
     }
   };
 
@@ -20,7 +23,10 @@ const SelectTankSize = ({ config, onSelect, t, value }) => {
   };
 
   const onSkip = () => onSelect();
-
+  if(userType === 'employee') {
+    return <PitDimension sanitationType={value.pitType} size={size} handleChange={handleChange} t={t} />
+  }
+  
   return (
     <FormStep config={config} onSkip={onSkip} onSelect={handleSubmit} isDisabled={Object.values(size)?.length === 0} t={t}>
       <PitDimension sanitationType={value.pitType} size={size} handleChange={handleChange} t={t} />

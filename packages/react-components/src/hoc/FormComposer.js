@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import BreakLine from "../atoms/BreakLine";
 import Card from "../atoms/Card";
@@ -17,10 +17,10 @@ import { useTranslation } from "react-i18next";
 export const FormComposer = (props) => {
   const { register, handleSubmit, setValue, watch, control, formState } = useForm({ defaultValues: props.defaultValues });
   const { t } = useTranslation();
-
   const formData = watch();
-
   function onSubmit(data) {
+    console.log({data})
+    return
     props.onSubmit(data);
   }
 
@@ -29,10 +29,11 @@ export const FormComposer = (props) => {
   }
 
   useEffect(() => {
+    console.log({formData})
     props.onFormValueChange && props.onFormValueChange(formData, formState);
   }, [formData]);
 
-  const fieldSelector = (type, populators, isMandatory, disable = false) => {
+  const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
     switch (type) {
       case "text":
       case "date":
@@ -81,6 +82,13 @@ export const FormComposer = (props) => {
             control={control}
           />
         );
+      case "component":
+        const Component = typeof component === "string" ? registry.getComponent(component) : component;
+        return <Controller
+                as={<Component userType={"employee"} t={t} setValue={setValue} config={config} data={formData} value={formData[config.key]} />}
+                name={config.key}
+                control={control}
+              />
       default:
         return populators.dependency !== false ? populators : null;
     }
@@ -102,8 +110,8 @@ export const FormComposer = (props) => {
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
-                    <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                      {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable)}
+                    <div style={field.withoutLabel ? { width: "100%"} : {}} className="field">
+                      {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                     </div>
                   </React.Fragment>
                 );
@@ -115,8 +123,8 @@ export const FormComposer = (props) => {
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}
-                  <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable)}
+                  <div style={field.withoutLabel ? { width: "100%" } : {}} className="field" >
+                    {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                   </div>
                 </LabelFieldPair>
               );
@@ -125,7 +133,7 @@ export const FormComposer = (props) => {
           </React.Fragment>
         );
       }),
-    [props.config]
+    [props.config, formData]
   );
 
   const getCardStyles = () => {

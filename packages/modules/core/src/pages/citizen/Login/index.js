@@ -20,6 +20,25 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   const [error, setError] = useState(null);
   const [tokens, setTokens] = useState(null);
   const [params, setParmas] = useState({});
+  const [errorTO, setErrorTO] = useState(null);
+
+  useEffect(() => {
+    let errorTimeout;
+    if (error) {
+      if (errorTO) {
+        clearTimeout(errorTO);
+        setErrorTO(null);
+      }
+      errorTimeout = setTimeout(() => {
+        console.log("clearing err");
+        setError("");
+      }, 5000);
+      setErrorTO(errorTimeout);
+    }
+    return () => {
+      errorTimeout && clearTimeout(errorTimeout);
+    };
+  }, [error]);
 
   useEffect(() => {
     if (!user) {
@@ -64,8 +83,11 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     if (isUserRegistered) {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
       if (!err) {
-        history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
+        history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui", role: location.state?.role });
         return;
+      }
+      if (location.state?.role) {
+        setError("User not registered.");
       }
     } else {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
@@ -98,6 +120,14 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         };
 
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
+        if (location.state?.role) {
+          const roleInfo = info.roles.find((userRole) => userRole.code === location.state.role);
+          if (!roleInfo || !roleInfo.code) {
+            setError("User not permitterd.");
+            setTimeout(() => history.replace("/digit-ui/citizen"), 5000);
+            return;
+          }
+        }
         setUser({ info, ...tokens });
       } else if (!isUserRegistered) {
         const requestData = {
@@ -148,7 +178,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
             config={stepItems[0]}
             mobileNumber={params.mobileNumber || ""}
             onMobileChange={handleMobileChange}
-            showRegisterLink={isUserRegistered}
+            showRegisterLink={isUserRegistered && !location.state?.role}
             t={t}
           />
         </Route>

@@ -1,7 +1,7 @@
 import { FSMService } from "../../elements/FSM";
 
-const DsoDetails = async (tenantId) => {
-  const dsoDetails = await FSMService.vendorSearch(tenantId);
+const DsoDetails = async (tenantId, filters = {}) => {
+  const dsoDetails = await FSMService.vendorSearch(tenantId, filters);
 
   //TODO get possible dates to book dso
   const data = dsoDetails.vendor.map((dso) => ({
@@ -14,7 +14,7 @@ const DsoDetails = async (tenantId) => {
         registrationNumber: vehicle.registrationNumber,
         type: vehicle.type,
         i18nKey: `FSM_VEHICLE_TYPE_${vehicle.type}`,
-        capacity: vehicle.tankCapicity,
+        capacity: vehicle.tankCapacity,
         suctionType: vehicle.suctionType,
         model: vehicle.model,
       })),

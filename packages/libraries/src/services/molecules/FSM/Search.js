@@ -1,4 +1,5 @@
 import { FSMService } from "../../elements/FSM";
+import DsoDetails from "./DsoDetails";
 
 const getPropertyTypeLocale = (value) => {
   return `PROPERTYTYPE_MASTERS_${value?.split(".")[0]}`;
@@ -28,6 +29,11 @@ const displayPitDimension = (pitDeminsion) => {
     .join(" x ");
 };
 
+const displayServiceDate = (timeStamp) => {
+  const date = new Date(timeStamp);
+  return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+};
+
 export const Search = {
   all: async (tenantId, filters = {}) => {
     const response = await FSMService.search(tenantId, { ...filters });
@@ -41,7 +47,16 @@ export const Search = {
 
   applicationDetails: async (t, tenantId, applicationNos) => {
     const filter = { applicationNos };
+    let dsoDetails = {},
+      vehicle = {};
     const response = await Search.application(tenantId, filter);
+    if (response?.dsoId) {
+      const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
+      [dsoDetails] = await DsoDetails(tenantId, dsoFilters);
+      if (response?.vehicleId) {
+        vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
+      }
+    }
     const amountPerTrip = isJsonString(response?.additionalDetails) ? JSON.parse(response.additionalDetails).tripAmount : "N/A";
     const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
     return [
@@ -49,7 +64,7 @@ export const Search = {
         title: t("ES_TITLE_APPLICATION_DETAILS"),
         values: [
           { title: t("CS_FILE_DESLUDGING_APPLICATION_NO"), value: response?.applicationNo },
-          { title: t("ES_APPLICATION_CHANNEL"), value: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${response?.source}` },
+          { title: t("ES_APPLICATION_CHANNEL"), value: t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${response?.source}`) },
         ],
       },
       {
@@ -112,10 +127,10 @@ export const Search = {
       {
         title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: response?.assignedDso || "N/A" },
-          { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: response?.vehicleDso || "N/A" },
-          { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: response?.vehicleCapacity || "N/A" },
-          { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: response?.possibleServiceDate || "N/A" },
+          { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: dsoDetails?.name || "N/A" },
+          { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: vehicle?.registrationNumber || "N/A" },
+          { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: vehicle?.capacity || "N/A" },
+          { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
         ],
       },
     ];

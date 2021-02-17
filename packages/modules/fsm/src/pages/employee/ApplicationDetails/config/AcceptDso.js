@@ -13,7 +13,16 @@ export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoLis
         {
           label: t("ES_FSM_ACTION_VEHICLE_REGISTRATION_NO"),
           type: "dropdown",
-          populators: <Dropdown option={vehicleNoList} optionKey="registrationNumber" id="vehicle" select={selectVehicleNo} selected={vehicleNo} />,
+          populators: (
+            <Dropdown
+              option={vehicleNoList}
+              autoComplete="off"
+              optionKey="registrationNumber"
+              id="vehicle"
+              select={selectVehicleNo}
+              selected={vehicleNo}
+            />
+          ),
         },
         {
           label: t("ES_FSM_ACTION_VEHICLE_CAPACITY_IN_LTRS"),

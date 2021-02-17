@@ -82,6 +82,7 @@ const Inbox = () => {
           onFilterChange={handleFilterChange}
           onSearch={onSearch}
           searchParams={searchParams}
+          linkPrefix={"/digit-ui/employee/fsm/application-details/"}
         />
       );
     } else {

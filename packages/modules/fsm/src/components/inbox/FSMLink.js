@@ -14,7 +14,7 @@ const FSMLink = ({ isMobile, data }) => {
       // accessTo: ["CSR"]
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
-    { text: t("ES_TITLE_DASHBOARD"), link: "/digit-ui/employee" },
+    { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },
   ];
 
   const [links, setLinks] = useState([]);

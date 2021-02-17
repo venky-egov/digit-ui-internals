@@ -5,7 +5,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 
-const Inbox = () => {
+const Inbox = ({ parentRoute }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo.info.roles;
@@ -100,6 +100,7 @@ const Inbox = () => {
             currentPage={Math.floor(pageOffset / pageSize)}
             pageSizeLimit={pageSize}
             onPageSizeChange={handlePageSizeChange}
+            parentRoute={parentRoute}
           />
         </div>
       );

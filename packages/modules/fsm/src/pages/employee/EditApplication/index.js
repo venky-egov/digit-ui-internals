@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown, Loader, PitDimension, FormComposer } from "@egovernments/digit-ui-react-components";
+import { Dropdown, Loader, PitDimension, FormComposer, TextInput } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -40,6 +40,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   );
   const workflowDetails = Digit.Hooks.fsm.useWorkflowData(tenantId, applicationNumber);
   const [defaultValues, setDefaultValues] = useState();
+  let setFormValue;
 
   // console.log("find application details and workflow data here", applicationData, workflowDetails);
 
@@ -79,6 +80,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   useEffect(() => {
     if (amountPerTrip) {
       setPaymentAmount(noOfTrips * amountPerTrip);
+      setAmountPerTrip(amountPerTrip);
     } else {
       if (vehicle?.amount) {
         setPaymentAmount(noOfTrips * vehicle?.amount);
@@ -92,6 +94,8 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     if (applicationDetails) {
       const vehicle = vehicleMenu?.find((vehicle) => vehicle.code === applicationDetails.vehicleType);
       setVehicle(vehicle);
+      // setSlum;
+
       setDefaultValues({
         applicantName: applicationDetails.citizen?.name,
         mobileNumber: applicationDetails.citizen?.mobileNumber,
@@ -136,7 +140,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     if (applicationData && propertyTypesData.data && propertySubtypesData.data) {
       const prePropertyUsage = applicationData.propertyUsage;
       const prePropertyType = prePropertyUsage.split(".")[0];
-      // console.log("find propertySubtypesData here", propertySubtypesData.data, prePropertyUsage, propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage))
+      // console.log( "find propertySubtypesData here",propertySubtypesData.data,prePropertyUsage,propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage) );
       setPropertyType(propertyTypesData.data.filter((type) => type.code === prePropertyType)[0]);
       setSubType(propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)[0]);
     }
@@ -163,7 +167,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
       const data = sanitationTypeData.data?.map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
-
       setSanitationMenu(data);
     }
   }, [sanitationTypeData]);
@@ -179,10 +182,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   function selectedType(value) {
     setPropertyType(value);
     setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code?.toUpperCase()));
-  }
-
-  function selectSlum(value) {
-    setSlum(value);
   }
 
   function selectChannel(value) {
@@ -220,10 +219,25 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     setSelectedLocality(locality);
   }
 
-  const onFormValueChange = (formData) => {
-    setNoOfTrips(formData?.noOfTrips || 1);
-    setAmountPerTrip(formData?.amountPerTrip);
-  };
+  // const fetchTripAmount = async (formData) => {
+  //   setNoOfTrips(formData?.noOfTrips || 1);
+  //   setAmountPerTrip(formData?.amountPerTrip);
+  // };
+
+  useEffect(async () => {
+    if (propertyType && subType && vehicle) {
+      setSubmitValve(false);
+      const { capacity } = vehicle;
+      const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
+      const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+      if (billSlab?.price) {
+        setAmountPerTrip(billSlab.price);
+      }
+      setSubmitValve(true);
+    }
+  }, [propertyType, subType, vehicle]);
+
+  const onFormValueChange = async (formData) => {};
 
   const onSubmit = (data) => {
     const applicationChannel = channel.code;
@@ -251,11 +265,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     // const reasonForAdditionalCharges  = data.reasonForAdditionalCharges
     // const additionalAmount  = data.additionalAmount
 
-    (applicationData.citizen = {
-      name: applicantName,
-      mobileNumber,
-    }),
-      (applicationData.tenantId = cityCode),
+    (applicationData.tenantId = cityCode),
       (applicationData.sanitationtype = sanitationtype),
       (applicationData.source = applicationChannel),
       (applicationData.additionalDetails = {
@@ -371,33 +381,31 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
-          type: "dropdown",
+
           populators: (
             <Dropdown
-              option={propertyTypesData.data}
-              optionKey="i18nKey"
               id="propertyType"
               selected={propertyType}
-              select={selectedType}
+              select={setPropertyType}
+              disable={isDisabled("propertyUsage")}
+              option={propertyTypesData.data}
+              optionKey="i18nKey"
               t={t}
-              disable={isDisabled("propertyUsage") ? isDisabled("propertyUsage") : false}
             />
           ),
         },
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
-          type: "dropdown",
-          menu: { ...subTypeMenu },
           populators: (
             <Dropdown
-              option={subTypeMenu}
-              optionKey="i18nKey"
               id="propertySubType"
               selected={subType}
-              select={selectedSubType}
+              select={setSubType}
+              option={subTypeMenu}
               t={t}
-              disable={isDisabled("propertyUsage") ? isDisabled("propertyUsage") : false}
+              disable={isDisabled("propertyUsage")}
+              optionKey={"i18nKey"}
             />
           ),
         },
@@ -452,7 +460,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           label: t("ES_NEW_APPLICATION_SLUM_NAME"),
           type: "dropdown",
           isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={setSlum} />,
         },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
@@ -529,26 +537,37 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown
-              option={vehicleMenu}
-              optionKey="i18nKey"
-              id="vehicle"
-              selected={vehicle}
-              select={selectVehicle}
-              t={t}
-              disable={isDisabled("vehicleType") ? isDisabled("vehicleType") : false}
-            />
-          ),
+          type: "custom",
+          populators: {
+            name: "vehicle",
+            defaultValue: vehicle,
+            customProps: { option: vehicleMenu, optionKey: "i18nKey", t, disable: isDisabled("vehicleType") ? isDisabled("vehicleType") : false },
+            component: (props, customProps) => (
+              <Dropdown
+                id="vehicle"
+                selected={props.value}
+                select={(d) => {
+                  props.onChange(d);
+
+                  setVehicle(d);
+                }}
+                {...customProps}
+              />
+            ),
+          },
         },
         {
           label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
           type: "text",
+          isMendatory: true,
           populators: {
             name: "amountPerTrip",
-            validation: { required: true },
-            defaultValue: vehicle?.amount,
+            error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
+            validation: {
+              required: true,
+              pattern: /^[1-9]\d*$/,
+            },
+            defaultValue: amountPerTrip,
           },
           disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"] : true,
         },

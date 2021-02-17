@@ -140,7 +140,12 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     if (applicationData && propertyTypesData.data && propertySubtypesData.data) {
       const prePropertyUsage = applicationData.propertyUsage;
       const prePropertyType = prePropertyUsage.split(".")[0];
-      // console.log("find propertySubtypesData here", propertySubtypesData.data, prePropertyUsage, propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage))
+      console.log(
+        "find propertySubtypesData here",
+        propertySubtypesData.data,
+        prePropertyUsage,
+        propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)
+      );
       setPropertyType(propertyTypesData.data.filter((type) => type.code === prePropertyType)[0]);
       setSubType(propertySubtypesData.data.filter((subtype) => subtype.code === prePropertyUsage)[0]);
     }
@@ -385,45 +390,33 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
-          type: "custom",
-          populators: {
-            name: "propertyType",
-            customProps: { option: propertyTypesData.data, optionKey: "i18nKey", t },
-            defaultValue: propertyType,
-            component: (props, customProps) => (
-              <Dropdown
-                id="propertyType"
-                selected={props.defaultValue}
-                select={(d) => {
-                  setPropertyType(d);
-                  props.onChange(d);
-                }}
-                disable={isDisabled("propertyUsage")}
-                {...customProps}
-              />
-            ),
-          },
+
+          populators: (
+            <Dropdown
+              id="propertyType"
+              selected={propertyType}
+              select={setPropertyType}
+              disable={isDisabled("propertyUsage")}
+              option={propertyTypesData.data}
+              optionKey="i18nKey"
+              t={t}
+            />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
-          type: "custom",
-          populators: {
-            name: "propertySubType",
-            defaultValue: subType,
-            customProps: { option: subTypeMenu, t, disable: isDisabled("propertyUsage"), optionKey: "i18nKey" },
-            component: (props, customProps) => (
-              <Dropdown
-                id="propertySubType"
-                selected={props.value}
-                select={(d) => {
-                  setSubType(d);
-                  props.onChange(d);
-                }}
-                {...customProps}
-              />
-            ),
-          },
+          populators: (
+            <Dropdown
+              id="propertySubType"
+              selected={subType}
+              select={setSubType}
+              option={subTypeMenu}
+              t={t}
+              disable={isDisabled("propertyUsage")}
+              optionKey={"i18nKey"}
+            />
+          ),
         },
       ],
     },
@@ -476,7 +469,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           label: t("ES_NEW_APPLICATION_SLUM_NAME"),
           type: "dropdown",
           isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={setSlum} />,
         },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),

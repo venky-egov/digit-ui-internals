@@ -295,44 +295,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
-          type: "custom",
-          populators: {
-            name: "propertyType",
-            customProps: { option: propertyTypesData.data, optionKey: "i18nKey", t },
-            defaultValue: propertyType,
-            component: (props, customProps) => (
-              <Dropdown
-                id="propertyType"
-                selected={props.defaultValue}
-                select={(d) => {
-                  selectedType(d);
-                  props.onChange(d);
-                }}
-                {...customProps}
-              />
-            ),
-          },
+
+          populators: (
+            <Dropdown
+              id="propertyType"
+              selected={propertyType}
+              select={setPropertyType}
+              {...{ option: propertyTypesData.data, optionKey: "i18nKey", t }}
+            />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
-          type: "custom",
-          populators: {
-            name: "propertySubType",
-            defaultValue: subType,
-            customProps: { option: subTypeMenu, t, optionKey: "i18nKey" },
-            component: (props, customProps) => (
-              <Dropdown
-                id="propertySubType"
-                selected={props.value}
-                select={(d) => {
-                  setSubType(d);
-                  props.onChange(d);
-                }}
-                {...customProps}
-              />
-            ),
-          },
+          populators: <Dropdown id="propertySubType" selected={subType} select={setSubType} {...{ option: subTypeMenu, t, optionKey: "i18nKey" }} />,
         },
       ],
     },

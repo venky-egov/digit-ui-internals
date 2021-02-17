@@ -270,11 +270,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     // const reasonForAdditionalCharges  = data.reasonForAdditionalCharges
     // const additionalAmount  = data.additionalAmount
 
-    (applicationData.citizen = {
-      name: applicantName,
-      mobileNumber,
-    }),
-      (applicationData.tenantId = cityCode),
+    (applicationData.tenantId = cityCode),
       (applicationData.sanitationtype = sanitationtype),
       (applicationData.source = applicationChannel),
       (applicationData.additionalDetails = {

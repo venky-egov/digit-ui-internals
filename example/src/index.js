@@ -19,10 +19,15 @@ import QAGRO from "./userInfo/qa-gro.json";
 import QACSR from "./userInfo/qa-csr.json";
 import QACT from "./userInfo/qa-citizen.json";
 import QADSO from "./userInfo/qa-dso.json";
-import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
+
+import FSM_EDITOR from "./userInfo/fsm-editor.json";
+import FSM_COLLECTOR from "./userInfo/fsm-collector.json";
 import FSM_FSTP from "./userInfo/fsm-fstp.json";
 import FSM_DSO from "./userInfo/fsm-dso.json";
-import FSTP from "./userInfo/fstp.json";
+import FSM_ADMIN from "./userInfo/fsm-admin.json";
+import FSM_CREATOR from "./userInfo/fsm-creator.json";
+
+import QAFSTP from "./userInfo/fstp.json";
 import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
 
 import * as comps from "@egovernments/digit-ui-react-components";
@@ -34,7 +39,23 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, QAGRO, QADSO, FSM_EMPLOYEE, FSM_FSTP, FSM_DSO, NAWANSHAHR_QA_GRO };
+const userInfo = {
+  CITIZEN,
+  EMPLOYEE,
+  LME,
+  GRO,
+  QACSR,
+  QACT,
+  QAGRO,
+  QADSO,
+  FSM_ADMIN,
+  FSM_CREATOR,
+  FSM_EDITOR,
+  FSM_COLLECTOR,
+  FSM_FSTP,
+  FSM_DSO,
+  NAWANSHAHR_QA_GRO,
+};
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
 const registry = new Registry({

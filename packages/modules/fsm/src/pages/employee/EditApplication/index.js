@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown, Loader, PitDimension, FormComposer, TextInput } from "@egovernments/digit-ui-react-components";
-import { Switch, Route, useRouteMatch, useHistory, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { check } from "prettier";
+import { useHistory, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -226,12 +225,15 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   // };
 
   useEffect(async () => {
+    debugger;
     if (propertyType && subType && vehicle) {
+      setSubmitValve(false);
       const { capacity } = vehicle;
       const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
       const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
       if (billSlab?.price) {
         setAmountPerTrip(billSlab.price);
+        setSubmitValve(true);
       }
     }
   }, [propertyType, subType, vehicle]);
@@ -384,45 +386,36 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
-          type: "custom",
-          populators: {
-            name: "propertyType",
-            customProps: { option: propertyTypesData.data, optionKey: "i18nKey", t },
-            defaultValue: propertyType,
-            component: (props, customProps) => (
-              <Dropdown
-                id="propertyType"
-                selected={props.defaultValue}
-                select={(d) => {
-                  setPropertyType(d);
-                  props.onChange(d);
-                }}
-                disable={isDisabled("propertyUsage")}
-                {...customProps}
-              />
-            ),
-          },
+          type: "",
+          defaultValue: propertyType,
+          populators: (
+            <Dropdown
+              id="propertyType"
+              selected={propertyType}
+              select={setPropertyType}
+              disable={isDisabled("propertyUsage")}
+              option={propertyTypesData?.data}
+              optionKey="i18nKey"
+              t={t}
+            />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
-          type: "custom",
-          populators: {
-            name: "propertySubType",
-            defaultValue: subType,
-            customProps: { option: subTypeMenu, t, disable: isDisabled("propertyUsage"), optionKey: "i18nKey" },
-            component: (props, customProps) => (
-              <Dropdown
-                id="propertySubType"
-                selected={props.value}
-                select={(d) => {
-                  setSubType(d);
-                  props.onChange(d);
-                }}
-                {...customProps}
-              />
-            ),
-          },
+          type: "",
+          defaultValue: subType,
+          populators: (
+            <Dropdown
+              id="propertySubType"
+              selected={subType}
+              select={setSubType}
+              option={subTypeMenu}
+              t={t}
+              disable={isDisabled("propertyUsage")}
+              optionKey="i18nKey"
+            />
+          ),
         },
       ],
     },
@@ -475,7 +468,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           label: t("ES_NEW_APPLICATION_SLUM_NAME"),
           type: "dropdown",
           isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={setSlum} />,
         },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),

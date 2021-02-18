@@ -3,7 +3,7 @@ import { SearchIconSvg } from "./svgindex";
 import { Loader } from "@googlemaps/js-api-loader";
 
 //API key
-const key = globalConfigs.getConfig("GMAPS_API_KEY");
+const key = "AIzaSyDHVGCHFr-kGZA7dKFpGmF1uQafwaEkDus";
 let defaultBounds = {};
 
 const updateDefaultBounds = (center) => {

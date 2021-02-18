@@ -1,4 +1,4 @@
-import { FormStep, TextInput } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 
 const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) => {
@@ -8,12 +8,12 @@ const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) 
     return pincode;
   });
   const [pincodeServicability, setPincodeServicability] = useState(null);
-  console.log({value}, "pindocde")
+  console.log({ value }, "pindocde");
   function onChange(e) {
     setPincode(e.target.value);
     setPincodeServicability(null);
-    if(userType === 'employee') {
-      setValue(config.key, e.target.value)
+    if (userType === "employee") {
+      setValue(config.key, e.target.value);
     }
   }
 
@@ -30,12 +30,18 @@ const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) 
     }
   };
 
-  if(userType === 'employee') {
-    return <TextInput
-    key={config.key}
-    name={""}
-    onChange={onChange}
-  />
+  if (userType === "employee") {
+    return config?.inputs?.map((input) => {
+      return (
+        <React.Fragment>
+          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+            {t(input.label)}
+            {config.isMandatory ? " * " : null}
+          </CardLabel>
+          <TextInput key={input.name} onChange={onChange} />
+        </React.Fragment>
+      );
+    });
   }
   const onSkip = () => onSelect();
   return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from "react";
 import { FormStep, CardLabel, Dropdown, LabelFieldPair } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
-const SelectAddress = ({ t, config, onSelect, value, userType, setValue, secondaryKey, secondaryValue }) => {
+const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   const cities = value?.pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == value["pincode"])) : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
@@ -34,38 +34,37 @@ const SelectAddress = ({ t, config, onSelect, value, userType, setValue, seconda
     setSelectedLocality(null);
     setLocalities(null);
     setSelectedCity(city);
-    if(userType === 'employee') {
-      setValue(config.key, city)
+    if (userType === "employee") {
+      setValue(config.key, { ...data[config.key], city_complaint: city });
     }
   }
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
-    if(userType === 'employee') {
-       console.log({locality})
-      setValue('locality_complaint', locality)
+    if (userType === "employee") {
+      setValue(config.key, { ...data[config.key], locality_complaint: locality });
     }
   }
 
   function onSubmit() {
     onSelect({ city_complaint: selectedCity, locality_complaint: selectedLocality });
   }
-  if(userType === 'employee') {
-    return<div> 
-      <React.Fragment>
-        <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
-            {config.label}
+  if (userType === "employee") {
+    return (
+      <div>
+        <React.Fragment>
+          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+            {t("MYCITY_CODE_LABEL")}
             {config.isMandatory ? " * " : null}
-        </CardLabel>
-        <Dropdown className="field" isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
-      </React.Fragment>
-      <React.Fragment>
-        <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
-          {t("CS_CREATECOMPLAINT_MOHALLA")}
-        </CardLabel>
-        <Dropdown className="field" isMandatory selected={selectedLocality} option={localities} select={selectLocality} optionKey="code" t={t} />
+          </CardLabel>
+          <Dropdown className="field" isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
         </React.Fragment>
-    </div>
+        <React.Fragment>
+          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>
+          <Dropdown className="field" isMandatory selected={selectedLocality} option={localities} select={selectLocality} optionKey="code" t={t} />
+        </React.Fragment>
+      </div>
+    );
   }
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>

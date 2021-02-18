@@ -19,8 +19,8 @@ export const FormComposer = (props) => {
   const { t } = useTranslation();
   const formData = watch();
   function onSubmit(data) {
-    console.log({data})
-    return
+    console.log({ data });
+    return;
     props.onSubmit(data);
   }
 
@@ -29,7 +29,7 @@ export const FormComposer = (props) => {
   }
 
   useEffect(() => {
-    console.log({formData})
+    console.log({ formData });
     props.onFormValueChange && props.onFormValueChange(formData, formState);
   }, [formData]);
 
@@ -84,11 +84,13 @@ export const FormComposer = (props) => {
         );
       case "component":
         const Component = typeof component === "string" ? registry.getComponent(component) : component;
-        return <Controller
-                as={<Component userType={"employee"} t={t} setValue={setValue} config={config} data={formData} value={formData[config.key]} />}
-                name={config.key}
-                control={control}
-              />
+        return (
+          <Controller
+            as={<Component userType={"employee"} t={t} setValue={setValue} config={config} data={formData} />}
+            name={config.key}
+            control={control}
+          />
+        );
       default:
         return populators.dependency !== false ? populators : null;
     }
@@ -110,7 +112,7 @@ export const FormComposer = (props) => {
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
-                    <div style={field.withoutLabel ? { width: "100%"} : {}} className="field">
+                    <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
                       {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                     </div>
                   </React.Fragment>
@@ -123,7 +125,7 @@ export const FormComposer = (props) => {
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}
-                  <div style={field.withoutLabel ? { width: "100%" } : {}} className="field" >
+                  <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
                     {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                   </div>
                 </LabelFieldPair>

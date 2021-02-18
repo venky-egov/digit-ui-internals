@@ -8,6 +8,7 @@ const TextArea = (props) => {
     <textarea
       name={props.name}
       ref={props.inputRef}
+      id={props.id}
       value={props.value}
       onChange={props.onChange}
       className={`${user_type ? "employee-card-textarea" : "card-textarea"} ${props.disable && "disabled"}`}
@@ -23,6 +24,7 @@ TextArea.propTypes = {
   ref: PropTypes.func,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  id: PropTypes.string,
 };
 
 TextArea.defaultProps = {

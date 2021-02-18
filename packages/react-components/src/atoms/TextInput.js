@@ -9,6 +9,7 @@ const TextInput = (props) => {
         <input
           type={props.type || "text"}
           name={props.name}
+          id={props.id}
           className={`${user_type ? "employee-card-input-error" : "card-input-error"} ${props.disable && "disabled"}`}
           placeholder={props.placeholder}
           onChange={props.onChange}
@@ -24,6 +25,7 @@ const TextInput = (props) => {
         <input
           type={props.type || "text"}
           name={props.name}
+          id={props.id}
           className={`${user_type ? "employee-card-input" : "card-input"} ${props.disable && "disabled"}`}
           placeholder={props.placeholder}
           onChange={props.onChange}

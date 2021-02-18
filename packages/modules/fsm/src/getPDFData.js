@@ -66,7 +66,9 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_APPLICATION_DETAILS_DISTANCE_FROM_ROAD"),
-            value: application?.pitDetail?.distanceFromRoad !== 0 ? `${application?.pitDetail?.distanceFromRoad}m` : "NA",
+            value: application?.pitDetail?.distanceFromRoad
+              ? application?.pitDetail?.distanceFromRoad !== 0 && `${application?.pitDetail?.distanceFromRoad}m`
+              : "NA",
           },
           { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "NA" },
           {

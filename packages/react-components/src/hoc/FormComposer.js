@@ -25,7 +25,6 @@ export const FormComposer = (props) => {
 
   function onSubmit(data) {
     console.log({ data });
-    return;
     props.onSubmit(data);
   }
 

@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Dropdown, PitDimension, FormComposer, CheckBox, CardSubHeader, Card } from "@egovernments/digit-ui-react-components";
-import SelectPropertySubtype from "../../citizen/FileComplaint/SelectPropertySubtype";
-import SelectPropertyType from "../../citizen/FileComplaint/SelectPropertyType";
-import SelectAddress from "../../citizen/FileComplaint/SelectAddress";
-import SelectStreet from "../../citizen/FileComplaint/SelectStreet";
-import SelectLandmark from "../../citizen/FileComplaint/SelectLandmark";
-import SelectPincode from "../../citizen/FileComplaint/SelectPincode";
-import SelectTankSize from "../../citizen/FileComplaint/SelectTankSize";
-import SelectPitType from "../../citizen/FileComplaint/SelectPitType";
-import SelectGeolocation from "../../citizen/FileComplaint/SelectGeolocation";
-import { NewApplication } from "../../employee/NewApplication/index";
+import SelectPropertySubtype from "../../pageComponents/SelectPropertySubtype";
+import SelectPropertyType from "../../pageComponents/SelectPropertyType";
+import SelectAddress from "../../pageComponents/SelectAddress";
+import SelectStreet from "../../pageComponents/SelectStreet";
+import SelectLandmark from "../../pageComponents/SelectLandmark";
+import SelectPincode from "../../pageComponents/SelectPincode";
+import SelectTankSize from "../../pageComponents/SelectTankSize";
+import SelectPitType from "../../pageComponents/SelectPitType";
+import SelectGeolocation from "../../pageComponents/SelectGeolocation";
+import SelectSlumName from "../../pageComponents/SelectSlumName"
+import { NewApplication } from "../../pages/employee/NewApplication/index";
 import { useTranslation } from "react-i18next";
 const t = (str) => str;
 
@@ -139,23 +140,17 @@ export const newConfig = [
         isMandatory: true,
         type: "component",
       },
-      //     {
-      //       label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
-      //       type: "checkbox",
-      //       populators: (
-      //         <CheckBox
-      //           label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
-      //           onChange={slumCheck}
-      //           disable={customizationConfig ? !customizationConfig?.slumName?.override : true}
-      //         />
-      //       ),
-      //     },
-      // {
-      //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-      //   type: "dropdown",
-      //   isMandatory: true,
-      //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} disable={!slumEnable} />,
-      // },
+      {
+        type: "component",
+        isMandatory: true,
+        component: SelectSlumName,
+        texts: {
+          header: "ES_NEW_APPLICATION_SLUM_NAME"
+        },
+        withoutLabel: true,
+        key: "slum",
+        hideInCitizen: true
+      },
       {
         type: "component",
         route: "street",

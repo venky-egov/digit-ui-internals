@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, CardLabel, Dropdown, RadioButtons } from "@egovernments/digit-ui-react-components";
+import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
-  const cities = value?.pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == value["pincode"])) : allCities;
+  const pincode = value?.pincode || data?.pincode
+  const cities = pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode)) : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
   const [selectedCity, setSelectedCity] = useState(() => {
     const { city_complaint } = value || {};
@@ -61,7 +62,8 @@ const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data })
             className="field"
             style={{ width: "50%" }}
             isMandatory
-            selected={selectedCity}
+            selected={cities?.length === 1 ? cities[0] : selectedCity}
+            disable={cities?.length === 1}
             option={cities}
             select={selectCity}
             optionKey="code"

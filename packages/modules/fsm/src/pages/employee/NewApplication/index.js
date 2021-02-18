@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Dropdown, PitDimension, FormComposer, CheckBox, CardSubHeader, Card } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { newConfig } from "../../config/NewApplication/config";
+import { newConfig } from "../../../config/NewApplication/config";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
@@ -36,6 +36,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  console.log({applicationChannelData})
   // console.log("find vehicle menu", vehicleMenu);
   // const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
   const customizationConfig = {};
@@ -52,6 +53,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   const onFormValueChange = (formData) => {
     setNoOfTrips(formData?.noOfTrips || 1);
+    if (formData?.propertyType && formData?.subtype && formData?.complaint?.city_complaint?.code && formData?.complaint?.locality_complaint?.code) {
+      setSubmitValve(true);
+    } else {
+      setSubmitValve(false);
+    }
   };
 
   useEffect(() => {
@@ -65,6 +71,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   }, [vehicle, noOfTrips, amountPerTrip]);
 
   useEffect(() => {
+    console.log('useEffect', {applicationChannelData})
     if (!applicationChannelData.isLoading) {
       const data = applicationChannelData.data?.map((channel) => ({
         ...channel,
@@ -72,6 +79,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       }));
 
       setChannelMenu(data);
+
     }
   }, [applicationChannelData]);
 
@@ -165,6 +173,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
   function slumCheck(e) {
     setSlumEnable(e.target.checked);
   }
+  useEffect(() => {
+    
+  }, [propertyType, subType, selectedCity, selectedLocality, sanitation]);
 
   const onSubmit = (data) => {
     const applicationChannel = channel?.code;
@@ -177,11 +188,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const landmark = data.landmark;
     const noOfTrips = data.noOfTrips;
     const amount = data.amountPerTrip;
-    const cityCode = data?.city_complaint?.code;
+    const cityCode = data?.complaint?.city_complaint?.code;
     const city = data?.city_complaint?.city.name;
     const state = "Punjab";
-    const localityCode = data?.locality_complaint?.code;
-    const localityName = data?.locality_complaint?.name;
+    const localityCode = data?.complaint?.locality_complaint?.code;
+    const localityName = data?.complaint?.locality_complaint?.name;
     const { name } = subType;
     const formData = {
       fsm: {
@@ -195,8 +206,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
         additionalDetails: {
           tripAmount: amount,
         },
-        propertyUsage: subType.code,
-        vehicleType: vehicle.code,
+        propertyUsage: data?.subType,
+        vehicleType: vehicle?.code,
         pitDetail: {
           ...pitDimension,
           distanceFromRoad: data.distanceFromRoad,
@@ -214,8 +225,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
             name: localityName,
           },
           geoLocation: {
-            latitude: selectedLocality.latitude,
-            longitude: selectedLocality.longitude,
+            latitude: selectedLocality?.latitude,
+            longitude: selectedLocality?.longitude,
           },
         },
         noOfTrips,
@@ -266,12 +277,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
     ],
   };
 
-  useEffect(() => {
-    newConfig.unshift(itemsAtStart);
-    newConfig[newConfig.length - 1].body = newConfig[newConfig.length - 1].body.concat(itemsAtLast);
-  }, [newConfig]);
-
-  const itemsAtLast = [
+  const itemsAtLast = {
+    head:"",
+    body:[
     {
       label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
       type: "dropdown",
@@ -309,20 +317,18 @@ export const NewApplication = ({ parentUrl, heading }) => {
       },
       disable: true,
     },
-  ];
-  // const newBody = newConfig[newConfig.length-1].body.concat(itemsAtLast)
+  ]
+};
 
-  // (()=>{
-  //   newConfig.unshift(itemsAtStart)
-  //   newConfig.push(itemsAtLast)
-  // })();
+  const configs =  [itemsAtStart,...newConfig,itemsAtLast]
+  
 
   return (
     <FormComposer
       heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
-      isDisabled={false}
+      isDisabled={!canSubmit}
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={newConfig.map((config) => {
+      config={configs.map((config) => {
         return {
           ...config,
           body: config.body.filter((a) => !a.hideInEmployee),

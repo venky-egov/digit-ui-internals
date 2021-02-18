@@ -232,6 +232,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
       if (billSlab?.price) {
         setAmountPerTrip(billSlab.price);
+        setSubmitValve(true);
       }
       setSubmitValve(true);
     }
@@ -381,7 +382,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
-
           populators: (
             <Dropdown
               id="propertyType"

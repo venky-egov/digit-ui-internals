@@ -118,13 +118,16 @@ const DesktopInbox = (props) => {
     result = (
       <Card style={{ marginTop: 20 }}>
         {/* TODO Change localization key */}
-        {t("CS_MYCOMPLAINTS_NO_COMPLAINTS")
-          .split("\\n")
-          .map((text, index) => (
-            <p key={index} style={{ textAlign: "center" }}>
-              {text}
-            </p>
-          ))}
+        {
+          // t("CS_MYCOMPLAINTS_NO_COMPLAINTS")
+          t("CS_MYAPPLICATIONS_NO_APPLICATION")
+            .split("\\n")
+            .map((text, index) => (
+              <p key={index} style={{ textAlign: "center" }}>
+                {text}
+              </p>
+            ))
+        }
       </Card>
     );
   } else if (props?.data?.length > 0) {

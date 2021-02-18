@@ -91,6 +91,8 @@ const Hooks = {
   useClickOutside,
   useCoreData,
   useUserSearch,
+  useComponentRegistry,
+  useSetupRegistry,
   pgr,
   fsm,
   pt,

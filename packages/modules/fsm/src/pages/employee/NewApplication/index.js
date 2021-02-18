@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown, PitDimension, FormComposer, CheckBox, CardSubHeader, Card } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
@@ -10,17 +10,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
-  const [menu, setMenu] = useState([]);
-  const [subTypeMenu, setSubTypeMenu] = useState([]);
-  const [propertyType, setPropertyType] = useState({});
-  const [subType, setSubType] = useState({});
   const [channel, setChannel] = useState(null);
   const [channelMenu, setChannelMenu] = useState([]);
   const [sanitation, setSanitation] = useState([]);
   const [sanitationMenu, setSanitationMenu] = useState([]);
   const [pitDimension, setPitDimension] = useState({});
   const [vehicle, setVehicle] = useState(null);
-  const [slum, setSlum] = useState();
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [noOfTrips, setNoOfTrips] = useState(1);
   const [amountPerTrip, setAmountPerTrip] = useState();
@@ -40,22 +35,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const history = useHistory();
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
-  const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
-  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   // console.log("find vehicle menu", vehicleMenu);
   // const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
   const customizationConfig = {};
-  const [slumMenu, setSlumMenu] = useState([
-    { key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" },
-    { key: "PB_AMRITSAR_SUN01_SLUM_B", name: "Slum B" },
-    { key: "PB_AMRITSAR_SUN01_SLUM_C", name: "Slum C" },
-  ]);
-
-  const [slumEnable, setSlumEnable] = useState(false);
-
-  const [canSubmit, setSubmitValve] = useState(false);
-
   const onFormValueChange = (formData) => {
     setNoOfTrips(formData?.noOfTrips || 1);
   };
@@ -90,14 +73,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   }, [sanitationTypeData]);
 
   useEffect(() => {
-    if (propertyType?.code && subType?.code && selectedCity?.code && selectedLocality?.code && sanitation?.code) {
-      setSubmitValve(true);
-    } else {
-      setSubmitValve(false);
-    }
-  }, [propertyType, subType, selectedCity, selectedLocality, sanitation]);
-
-  useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
     if (city?.code === getCities()[0]?.code) {
       setPincodeNotValid(false);
@@ -113,63 +88,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
       setPincodeNotValid(true);
     }
   }, [pincode]);
-
-  function selectedType(value) {
-    setPropertyType(value);
-    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code));
-  }
-
-  function selectSlum(value) {
-    setSlum(value);
-  }
-
   function selectChannel(value) {
     setChannel(value);
-  }
-
-  function selectSanitation(value) {
-    setSanitation(value);
   }
 
   function selectVehicle(value) {
     setVehicle(value);
     setPaymentAmount(noOfTrips * value.amount);
-  }
-
-  function selectedSubType(value) {
-    setSubType(value);
-  }
-
-  // city locality logic
-  const selectCity = async (city) => {
-    setSelectedCity(city);
-    let __localityList = localitiesObj[city.code];
-    setLocalities(__localityList);
-  };
-
-  const handlePitDimension = (event) => {
-    const { name, value } = event.target;
-    if (!isNaN(value)) {
-      setPitDimension({ ...pitDimension, [name]: value });
-    }
-  };
-
-  const handlePincode = (event) => {
-    const { value } = event.target;
-    setPincode(value);
-    if (!value) {
-      setPincodeNotValid(false);
-    }
-  };
-
-  const isPincodeValid = () => !pincodeNotValid;
-
-  function selectLocality(locality) {
-    setSelectedLocality(locality);
-  }
-
-  function slumCheck(e) {
-    setSlumEnable(e.target.checked);
   }
 
   const onSubmit = (data) => {
@@ -178,20 +103,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;
     const pincode = data.pincode;
-    const street = data.streetName;
-    const doorNo = data.doorNo;
+    const street = data?.street?.streetName;
+    const doorNo = data?.street?.doorNo;
     const landmark = data.landmark;
     const noOfTrips = data.noOfTrips;
     const amount = data.amountPerTrip;
-    const cityCode = selectedCity.code;
-    const city = selectedCity.city.name;
-    const district = selectedCity.city.name;
-    const region = selectedCity.city.name;
+    const cityCode = data?.city_complaint?.code;
+    const city = data?.city_complaint?.city.name;
     const state = "Punjab";
-    const localityCode = selectedLocality.code;
-    const localityName = selectedLocality.name;
+    const localityCode = data?.locality_complaint?.code;
+    const localityName = data?.locality_complaint?.name;
     const { name } = subType;
-    const propertyType = name;
     const formData = {
       fsm: {
         citizen: {
@@ -273,8 +195,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
       },
     ],
-  }
-  //newConfig.unshift(itemsAtStart)
+  };
+
+  useEffect(() => {
+    newConfig.unshift(itemsAtStart);
+    newConfig[newConfig.length - 1].body = newConfig[newConfig.length - 1].body.concat(itemsAtLast);
+  }, [newConfig]);
+
   const itemsAtLast = [
     {
       label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
@@ -288,7 +215,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         name: "noOfTrips",
         error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
         validation: { pattern: /^[1-9]{1}$/ },
-        defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
+        // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
       },
       disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
     },
@@ -313,20 +240,24 @@ export const NewApplication = ({ parentUrl, heading }) => {
       },
       disable: true,
     },
-  ]
-  const newBody = newConfig[newConfig.length-1].body.concat(itemsAtLast)
-  //newConfig[newConfig.length-1].body = newBody
+  ];
+  // const newBody = newConfig[newConfig.length-1].body.concat(itemsAtLast)
+
+  // (()=>{
+  //   newConfig.unshift(itemsAtStart)
+  //   newConfig.push(itemsAtLast)
+  // })();
+
   return (
-    
-      <FormComposer
+    <FormComposer
       heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
       isDisabled={false}
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={newConfig.map(config => {
-        return{
+      config={newConfig.map((config) => {
+        return {
           ...config,
-          body: config.body.filter(a => !a.hideInEmployee)
-        }
+          body: config.body.filter((a) => !a.hideInEmployee),
+        };
       })}
       inline={true}
       onSubmit={onSubmit}

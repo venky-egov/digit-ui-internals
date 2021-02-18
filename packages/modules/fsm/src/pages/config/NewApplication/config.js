@@ -220,7 +220,6 @@ export const newConfig = [
   },
   {
     head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
-    inline: true,
     body: [
       {
         label: t("ES_NEW_APPLICATION_PIT_TYPE"),

@@ -12,6 +12,7 @@ const BillDetails = ({ paymentRules }) => {
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || Digit.UserService.getUser().info.tenantId;
 
+  console.log(",,,,,,,,,,,,,,,", state?.bill);
   const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService: "PT", consumerCode });
 
   const billDetails = (bill?.billDetails.length && bill?.billDetails[0]) || [];
@@ -59,7 +60,6 @@ const BillDetails = ({ paymentRules }) => {
   }, [isLoading]);
 
   const onSubmit = () => {
-    console.log(location);
     let paymentAmount = paymentType === t("CS_PAYMENT_FULL_AMOUNT") ? getTotal() : amount;
     history.push(`/digit-ui/citizen/payment/collect/PT/${consumerCode}`, { paymentAmount });
   };

@@ -7,7 +7,6 @@ const MyBill = ({ bill, currentPath }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  console.log(bill);
   onsubmit = () => {
     history.push(`${currentPath}/${bill.consumerCode}`, { bill });
   };
@@ -17,7 +16,7 @@ const MyBill = ({ bill, currentPath }) => {
       <Card>
         <KeyNote
           keyValue={t("CS_COMMON_AMOUNT_DUE")}
-          note={"₹ " + bill.totalAmount?.toFixed(2)}
+          note={"₹ " + (bill.totalAmount?.toFixed(2) || "N/A")}
           noteStyle={{ fontWeight: "bold", fontSize: "24px", paddingTop: "5px" }}
         />
         <KeyNote keyValue={t("PT_PROPERTY_ID")} note={bill.propertyId} />
@@ -25,7 +24,7 @@ const MyBill = ({ bill, currentPath }) => {
         <KeyNote keyValue={t("PT_PROPERTY_ADDRESS")} note={bill.address?.locality?.name || t("CS_APPLICATION_TYPE_DESLUDGING")} />
         <KeyNote keyValue={t("PT_DUE_DATE")} note={t(bill.dueDate)} />
         {/* <Link to={}> */}
-        <SubmitBar onSubmit={onsubmit} label={t("CS_MY_APPLICATION_VIEW_DETAILS")} />
+        <SubmitBar disabled={!bill.totalAmount?.toFixed(2)} onSubmit={onsubmit} label={t("CS_MY_APPLICATION_VIEW_DETAILS")} />
         {/* </Link> */}
       </Card>
     </React.Fragment>

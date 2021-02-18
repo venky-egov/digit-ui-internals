@@ -29,10 +29,12 @@ export const BillListPT = ({ billsList, currentPath }) => {
       billableProps.forEach((prop) => {
         billableObj[prop.propertyId] = prop;
       });
+      console.log("from PT", billableProps);
 
       billsList.forEach((bill) => {
         billsListObj[bill.consumerCode] = bill;
       });
+      console.log("from PT", billsListObj);
 
       const newBillsList = billableIDs.map((e) => ({ ...billsListObj[e], ...billableObj[e] }));
       console.log(newBillsList);
@@ -61,6 +63,7 @@ export const BillListPT = ({ billsList, currentPath }) => {
             <MyBill {...{ bill, currentPath }} />
           </div>
         ))}
+      {!propertyList?.length > 0 && <p>No Bills Found.</p>}
     </React.Fragment>
   );
 };

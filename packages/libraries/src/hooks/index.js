@@ -37,6 +37,7 @@ import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
 import useApplicationAudit from "./fsm/useApplicationAudit";
 import useSearchForAuditData from "./fsm/useSearchForAudit";
+import { useSetupRegistry, useComponentRegistry } from "./useComponentRegistry";
 import useConfig from "./fsm/useConfig";
 
 const pgr = {
@@ -91,6 +92,8 @@ const Hooks = {
   useClickOutside,
   useCoreData,
   useUserSearch,
+  useComponentRegistry,
+  useSetupRegistry,
   pgr,
   fsm,
   pt,

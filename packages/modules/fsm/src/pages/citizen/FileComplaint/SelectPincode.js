@@ -1,4 +1,4 @@
-import { FormStep, TextInput, CardLabel } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 
 const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) => {
@@ -33,13 +33,13 @@ const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) 
   if (userType === "employee") {
     return config?.inputs?.map((input) => {
       return (
-        <React.Fragment>
+        <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <TextInput key={input.name} onChange={onChange} />
-        </React.Fragment>
+          <TextInput style={{ width: "50%" }} key={input.name} onChange={onChange} />
+        </LabelFieldPair>
       );
     });
   }

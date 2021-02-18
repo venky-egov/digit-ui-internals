@@ -11,13 +11,13 @@ const SelectStreet = ({ t, config, onSelect, value, userType, setValue, data }) 
   if (userType === "employee") {
     return config?.inputs?.map((input) => {
       return (
-        <React.Fragment>
+        <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <TextInput id={input.name} key={input.name} onChange={onChange} />
-        </React.Fragment>
+          <TextInput id={input.name} key={input.name} style={{ width: "50%" }} onChange={onChange} />
+        </LabelFieldPair>
       );
     });
   }

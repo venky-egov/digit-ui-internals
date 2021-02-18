@@ -50,7 +50,7 @@ const ApplicationDetails = (props) => {
 
   // console.log("find application details here", applicationDetails)
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
-    tenantId,
+    tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
     moduleCode: "FSM",
     role: "FSM_EMPLOYEE",

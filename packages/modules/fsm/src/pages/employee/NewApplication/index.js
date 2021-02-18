@@ -114,18 +114,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
     }
   }, [pincode]);
 
-  useEffect(async () => {
-    if (propertyType && subType && vehicle) {
-      setSubmitValve(false);
-      const { capacity } = vehicle;
-      const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
+  useEffect(() => {
+    (async () => {
+      if (propertyType && subType && vehicle) {
+        setSubmitValve(false);
+        const { capacity } = vehicle;
+        const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
 
-      const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
-      if (billSlab?.price) {
-        setAmountPerTrip(billSlab.price);
+        const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+        if (billSlab?.price) {
+          setAmountPerTrip(billSlab.price);
+        }
+        setSubmitValve(true);
       }
-      setSubmitValve(true);
-    }
+    })();
   }, [propertyType, subType, vehicle]);
 
   function selectedType(value) {

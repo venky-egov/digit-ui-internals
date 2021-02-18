@@ -18,8 +18,10 @@ export const SubformComposer = ({ _key, ...props }) => {
 
   const formData = watch();
 
-  useEffect(async () => {
-    props.getSubFormValue(await callMiddlewares(formData));
+  useEffect(() => {
+    (async () => {
+      props.getSubFormValue(await callMiddlewares(formData));
+    })();
   }, [formData]);
 
   const callMiddlewares = useCallback(async (data) => {

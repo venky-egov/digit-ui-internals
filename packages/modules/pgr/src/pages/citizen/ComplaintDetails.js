@@ -64,12 +64,14 @@ const ComplaintDetailsPage = (props) => {
 
   const [loader, setLoader] = useState(false);
 
-  useEffect(async () => {
-    if (complaintDetails) {
-      setLoader(true);
-      await revalidate();
-      setLoader(false);
-    }
+  useEffect(() => {
+    (async () => {
+      if (complaintDetails) {
+        setLoader(true);
+        await revalidate();
+        setLoader(false);
+      }
+    })();
   }, []);
 
   function zoomImage(imageSource, index) {

@@ -96,7 +96,7 @@ export const CreateComplaint = () => {
     <Switch>
       {Object.keys(config.routes).map((route, index) => {
         const { component, texts, inputs } = config.routes[route];
-        const Component = typeof component === "string" ? registry.getComponent(component) : component;
+        const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${route}`} key={index}>
             <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} />

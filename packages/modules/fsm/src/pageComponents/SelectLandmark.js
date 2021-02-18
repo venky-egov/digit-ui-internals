@@ -28,6 +28,10 @@ const SelectLandmark = ({ t, config, onSelect, value, userType, setValue }) => {
     return config?.inputs?.map((input) => {
       return (
         <LabelFieldPair>
+          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+            {t(input.label)}
+            {config.isMandatory ? " * " : null}
+          </CardLabel>
           <TextArea style={{ width: "50%" }} id={input.name} onChange={onChange} />
         </LabelFieldPair>
       );

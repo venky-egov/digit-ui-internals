@@ -87,7 +87,7 @@ export const FormComposer = (props) => {
           />
         );
       case "component":
-        const Component = typeof component === "string" ? registry.getComponent(component) : component;
+        const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Controller
             as={<Component userType={"employee"} t={t} setValue={setValue} config={config} data={formData} />}
@@ -105,14 +105,14 @@ export const FormComposer = (props) => {
       props.config?.map((section, index, array) => {
         return (
           <React.Fragment key={index}>
-            {section.head && <CardSectionHeader id={section.headId}>{section.head}</CardSectionHeader>}
+            {section.head && <CardSectionHeader id={section.headId}>{t(section.head)}</CardSectionHeader>}
             {section.body.map((field, index) => {
               if (props.inline)
                 return (
                   <React.Fragment key={index}>
                     {!field.withoutLabel && (
                       <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
-                        {field.label}
+                        {t(field.label)}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
@@ -125,7 +125,7 @@ export const FormComposer = (props) => {
                 <LabelFieldPair key={index}>
                   {!field.withoutLabel && (
                     <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
-                      {field.label}
+                      {t(field.label)}
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}

@@ -32,7 +32,6 @@ import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
 
 import * as comps from "@egovernments/digit-ui-react-components";
 
-import Registry from "./ComponentRegistry";
 import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
@@ -58,7 +57,8 @@ const userInfo = {
 };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
-const registry = new Registry({
+
+Digit.ComponentRegistryService.setupRegistry({
   ...pgrComponents,
   PGRLinks,
   PGRModule,
@@ -131,7 +131,4 @@ subFormRegistry.changeConfig("testForm", async (config) => {
   return config;
 });
 
-ReactDOM.render(
-  <DigitUI stateCode={stateCode} registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />,
-  document.getElementById("root")
-);
+ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));

@@ -8,6 +8,7 @@ const TextArea = (props) => {
     <textarea
       name={props.name}
       ref={props.inputRef}
+      style={props.style}
       id={props.id}
       value={props.value}
       onChange={props.onChange}

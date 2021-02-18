@@ -21,6 +21,35 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import { useTranslation } from "react-i18next";
 import SearchApplication from "./pages/employee/SearchApplication";
 import FstpInbox from "./pages/employee/FstpInbox";
+import SelectPropertySubtype from "./pageComponents/SelectPropertySubtype";
+import SelectPropertyType from "./pageComponents/SelectPropertyType";
+import SelectAddress from "./pageComponents/SelectAddress";
+import SelectStreet from "./pageComponents/SelectStreet";
+import SelectLandmark from "./pageComponents/SelectLandmark";
+import SelectPincode from "./pageComponents/SelectPincode";
+import SelectTankSize from "./pageComponents/SelectTankSize";
+import SelectPitType from "./pageComponents/SelectPitType";
+import SelectGeolocation from "./pageComponents/SelectGeolocation";
+import SelectSlumName from "./pageComponents/SelectSlumName";
+
+const componentsToRegister = {
+  SelectPropertySubtype,
+  SelectPropertyType,
+  SelectAddress,
+  SelectStreet,
+  SelectLandmark,
+  SelectPincode,
+  SelectTankSize,
+  SelectPitType,
+  SelectGeolocation,
+  SelectSlumName,
+};
+
+const addComponentsToRegistry = () => {
+  Object.entries(componentsToRegister).forEach(([key, value]) => {
+    Digit.ComponentRegistryService.setComponent(key, value);
+  });
+};
 
 const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
@@ -68,6 +97,7 @@ const CitizenApp = ({ path }) => {
 
 export const FSMModule = ({ stateCode, userType }) => {
   const moduleCode = "FSM";
+  addComponentsToRegistry();
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;

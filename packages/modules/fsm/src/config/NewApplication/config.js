@@ -1,67 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Dropdown, PitDimension, FormComposer, CheckBox, CardSubHeader, Card } from "@egovernments/digit-ui-react-components";
-import SelectPropertySubtype from "../../pageComponents/SelectPropertySubtype";
-import SelectPropertyType from "../../pageComponents/SelectPropertyType";
-import SelectAddress from "../../pageComponents/SelectAddress";
-import SelectStreet from "../../pageComponents/SelectStreet";
-import SelectLandmark from "../../pageComponents/SelectLandmark";
-import SelectPincode from "../../pageComponents/SelectPincode";
-import SelectTankSize from "../../pageComponents/SelectTankSize";
-import SelectPitType from "../../pageComponents/SelectPitType";
-import SelectGeolocation from "../../pageComponents/SelectGeolocation";
-import SelectSlumName from "../../pageComponents/SelectSlumName"
-import { NewApplication } from "../../pages/employee/NewApplication/index";
-import { useTranslation } from "react-i18next";
-const t = (str) => str;
-
 export const newConfig = [
-  // {
-  //   head: t("ES_TITLE_APPLICATION_DETAILS"),
-  //   body: [
-  //     {
-  //       label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
-  //       type: "dropdown",
-  //       populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel"  t={t} />,
-  //       hideInCitizen: true
-  //     },
-  //     {
-  //       label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
-  //       type: "text",
-  //       isMandatory: true,
-  //       hideInCitizen: true,
-  //       populators: {
-  //         name: "applicantName",
-  //         validation: {
-  //           required: true,
-  //           pattern: /[A-Za-z]/,
-  //         },
-  //       },
-  //     },
-  //     {
-  //       label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
-  //       type: "text",
-  //       isMandatory: true,
-  //       hideInCitizen: true,
-  //       populators: {
-  //         name: "mobileNumber",
-  //         validation: {
-  //           required: true,
-  //           pattern: /^[6-9]\d{9}$/,
-  //         },
-  //       },
-  //     },
-  //   ],
-  // },
   {
-    head: t("ES_NEW_APPLICATION_PROPERTY_DETAILS"),
+    head: "ES_NEW_APPLICATION_PROPERTY_DETAILS",
     body: [
       {
-        label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
+        label: "ES_NEW_APPLICATION_PROPERTY_TYPE",
         isMandatory: true,
         type: "component",
         route: "property-type",
         key: "propertyType",
-        component: SelectPropertyType,
+        component: "SelectPropertyType",
         texts: {
           headerCaption: "",
           header: "CS_FILE_APPLICATION_PROPERTY_LABEL",
@@ -71,12 +18,12 @@ export const newConfig = [
         nextStep: "property-subtype",
       },
       {
-        label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
+        label: "ES_NEW_APPLICATION_PROPERTY_SUB-TYPE",
         isMandatory: true,
         type: "component",
         route: "property-subtype",
         key: "subtype",
-        component: SelectPropertySubtype,
+        component: "SelectPropertySubtype",
         groupKey: "ES_TITLE_APPLICATION_DETAILS",
         texts: {
           headerCaption: "",
@@ -88,18 +35,18 @@ export const newConfig = [
       },
       {
         route: "map",
-        component: SelectGeolocation,
+        component: "SelectGeolocation",
         nextStep: "pincode",
         hideInEmployee: true,
       },
     ],
   },
   {
-    head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
+    head: "ES_NEW_APPLICATION_LOCATION_DETAILS",
     body: [
       {
         route: "pincode",
-        component: SelectPincode,
+        component: "SelectPincode",
         texts: {
           headerCaption: "",
           header: "CS_FILE_APPLICATION_PINCODE_LABEL",
@@ -127,7 +74,7 @@ export const newConfig = [
       },
       {
         route: "address",
-        component: SelectAddress,
+        component: "SelectAddress",
         withoutLabel: true,
         texts: {
           headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
@@ -143,18 +90,18 @@ export const newConfig = [
       {
         type: "component",
         isMandatory: true,
-        component: SelectSlumName,
+        component: "SelectSlumName",
         texts: {
-          header: "ES_NEW_APPLICATION_SLUM_NAME"
+          header: "ES_NEW_APPLICATION_SLUM_NAME",
         },
         withoutLabel: true,
         key: "slum",
-        hideInCitizen: true
+        hideInCitizen: true,
       },
       {
         type: "component",
         route: "street",
-        component: SelectStreet,
+        component: "SelectStreet",
         key: "street",
         withoutLabel: true,
         texts: {
@@ -187,10 +134,10 @@ export const newConfig = [
         nextStep: "landmark",
       },
       {
-        label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
         type: "component",
         route: "landmark",
-        component: SelectLandmark,
+        component: "SelectLandmark",
+        withoutLabel: true,
         texts: {
           headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
           header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE",
@@ -201,7 +148,7 @@ export const newConfig = [
         key: "landmark",
         inputs: [
           {
-            label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL",
+            label: "ES_NEW_APPLICATION_LOCATION_LANDMARK",
             type: "textarea",
             name: "landmark",
             validation: {
@@ -214,15 +161,15 @@ export const newConfig = [
     ],
   },
   {
-    head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
+    head: "CS_CHECK_PIT_SEPTIC_TANK_DETAILS",
     body: [
       {
-        label: t("ES_NEW_APPLICATION_PIT_TYPE"),
+        label: "ES_NEW_APPLICATION_PIT_TYPE",
         isMandatory: true,
         type: "component",
         route: "pit-type",
         key: "pitType",
-        component: SelectPitType,
+        component: "SelectPitType",
         texts: {
           header: "CS_FILE_PROPERTY_PIT_TYPE",
           cardText: "CS_FILE_PROPERTY_PIT_TYPE_TEXT",
@@ -232,7 +179,7 @@ export const newConfig = [
       },
       {
         route: "tank-size",
-        component: SelectTankSize,
+        component: "SelectTankSize",
         texts: {
           headerCaption: "",
           header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",
@@ -243,63 +190,8 @@ export const newConfig = [
         type: "component",
         key: "pitDetail",
         nextStep: null,
-        label: t("ES_NEW_APPLICATION_PIT_DIMENSION"),
+        label: "ES_NEW_APPLICATION_PIT_DIMENSION",
       },
-      //     {
-      //       label: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
-      //       type: "text",
-      //       populators: {
-      //         name: "distanceFromRoad",
-      //       },
-      //     },
-      //     {
-      //       label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-      //       type: "dropdown",
-      //       populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-      //     },
-      //     {
-      //       label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
-      //       type: "text",
-      //       populators: {
-      //         name: "noOfTrips",
-      //         error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-      //         validation: { pattern: /^[1-9]{1}$/ },
-      //         defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
-      //       },
-      //       disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
-      //     },
-      //     {
-      //       label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
-      //       type: "text",
-      //       populators: {
-      //         name: "amountPerTrip",
-      //         error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
-      //         validation: { required: true, pattern: /^[1-9]\d+$/ },
-      //         defaultValue: vehicle?.amount,
-      //       },
-      //       disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
-      //     },
-      //     {
-      //       label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
-      //       type: "text",
-      //       populators: {
-      //         name: "amount",
-      //         validation: { required: true },
-      //         defaultValue: paymentAmount,
-      //       },
-      //       disable: true,
-      //     },
     ],
   },
-  // // {
-  // //   head: t(),
-  // //   body: [
-  // //     {
-  // //       label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
-  // //       isMandatory: true,
-  // //       type: "dropdown",
-  // //       populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />,
-  // //     },
-  // //   ],
-  // // },
 ];

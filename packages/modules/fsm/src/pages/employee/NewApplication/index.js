@@ -18,10 +18,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [vehicle, setVehicle] = useState(null);
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [noOfTrips, setNoOfTrips] = useState(1);
-  const [amountPerTrip, setAmountPerTrip] = useState();
-
+  const [amountPerTrip, setAmountPerTrip] = useState(); 
   const localitiesObj = useSelector((state) => state.common.localities);
-
+  const [propertyType, setPropertyType] = useState({});
+  const [subType, setSubType] = useState({});
   const [localities, setLocalities] = useState(null);
   const [pincode, setPincode] = useState("");
   const [pincodeNotValid, setPincodeNotValid] = useState(false);
@@ -115,15 +115,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
       }
     })();
   }, [propertyType, subType, vehicle]);
-
-  function selectedType(value) {
-    setPropertyType(value);
-    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code));
-  }
-
-  function selectSlum(value) {
-    setSlum(value);
-  }
 
   function selectChannel(value) {
     setChannel(value);

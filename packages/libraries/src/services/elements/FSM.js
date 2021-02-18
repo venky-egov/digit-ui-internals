@@ -31,13 +31,13 @@ export const FSMService = {
       params: { tenantId },
       auth: true,
     }),
-  vendorSearch: (tenantId) =>
+  vendorSearch: (tenantId, filters) =>
     Request({
       url: Urls.fsm.vendorSearch,
       useCache: true,
       userService: true,
       method: "POST",
-      params: { tenantId },
+      params: { tenantId, ...filters },
       auth: true,
     }),
   audit: (tenantId, filters) =>
@@ -47,6 +47,7 @@ export const FSMService = {
       userService: true,
       method: "POST",
       params: { tenantId, ...filters },
+      auth: true,
     }),
   vehicleSearch: (tenantId, details) =>
     Request({
@@ -55,6 +56,15 @@ export const FSMService = {
       userService: true,
       method: "POST",
       params: { tenantId, ...details },
+      auth: true,
+    }),
+  billingSlabSearch: (tenantId, filters) =>
+    Request({
+      url: Urls.fsm.billingSlabSearch,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId, ...filters },
       auth: true,
     }),
   vehicleUpdate: (details) => {

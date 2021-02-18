@@ -14,11 +14,13 @@ const Inbox = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [searchParams, setSearchParams] = useState({ filters: { wfFilters: { assignee: [{ code: uuid }] } }, search: "", sort: {} });
 
-  useEffect(async () => {
-    let response = await Digit.PGRService.count(tenantId, {});
-    if (response?.count) {
-      setTotalRecords(response.count);
-    }
+  useEffect(() => {
+    (async () => {
+      let response = await Digit.PGRService.count(tenantId, {});
+      if (response?.count) {
+        setTotalRecords(response.count);
+      }
+    })();
   }, []);
 
   const fetchNextPage = () => {

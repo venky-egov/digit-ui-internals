@@ -1,5 +1,5 @@
-import React, { useEffect, useState, Fragment } from "react";
-import { FormStep, CardLabel, Dropdown, LabelFieldPair } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
+import { FormStep, CardLabel, Dropdown, RadioButtons } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data }) => {
@@ -69,10 +69,20 @@ const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data })
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} disable={value?.pincode} />
+      {cities?.length < 5 ? (
+        <RadioButtons selectedOption={selectedCity} options={cities} optionsKey="name" onSelect={selectCity} />
+      ) : (
+        <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} disable={value?.pincode} />
+      )}
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
       {selectedCity && localities && (
-        <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />
+        <React.Fragment>
+          {localities?.length < 5 ? (
+            <RadioButtons selectedOption={selectedLocality} options={localities} optionsKey="name" onSelect={selectLocality} />
+          ) : (
+            <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />
+          )}
+        </React.Fragment>
       )}
     </FormStep>
   );

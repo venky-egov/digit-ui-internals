@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CardLabel, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, FormStep, RadioButtons } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value }) => {
@@ -26,19 +26,21 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
   // const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
   //   const __localities = useLocalities({ city: selectedCity });
 
-  useEffect(async () => {
-    if (selectedCity) {
-      //let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
-      //let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-      // console.log("find pincode here", pincode, "find localities", localitiesObj[city_complaint.code].filter( city => city["pincode"] == pincode ))
-      const { city_complaint, pincode } = value;
-      let __localityList = pincode
-        ? localitiesObj[city_complaint.code].filter((city) => city["pincode"] == pincode)
-        : localitiesObj[selectedCity.code];
-      // console.log("address __localityList", __localityList);
-      setLocalities(__localityList);
-      // Digit.SessionStorage.set("selected_localities", __localityList);
-    }
+  useEffect(() => {
+    (async () => {
+      if (selectedCity) {
+        //let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
+        //let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+        // console.log("find pincode here", pincode, "find localities", localitiesObj[city_complaint.code].filter( city => city["pincode"] == pincode ))
+        const { city_complaint, pincode } = value;
+        let __localityList = pincode
+          ? localitiesObj[city_complaint.code].filter((city) => city["pincode"] == pincode)
+          : localitiesObj[selectedCity.code];
+        // console.log("address __localityList", __localityList);
+        setLocalities(__localityList);
+        // Digit.SessionStorage.set("selected_localities", __localityList);
+      }
+    })();
   }, [selectedCity]);
 
   function selectCity(city) {
@@ -71,10 +73,20 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <div>
         <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-        <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="i18nKey" t={t} />
+        {cities?.length < 5 ? (
+          <RadioButtons selectedOption={selectedCity} options={cities} optionsKey="name" onSelect={selectCity} />
+        ) : (
+          <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="i18nKey" t={t} />
+        )}
         {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
         {selectedCity && localities && (
-          <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />
+          <React.Fragment>
+            {localities?.length < 5 ? (
+              <RadioButtons selectedOption={selectedLocality} options={localities} optionsKey="name" onSelect={selectLocality} />
+            ) : (
+              <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />
+            )}
+          </React.Fragment>
         )}
       </div>
     </FormStep>

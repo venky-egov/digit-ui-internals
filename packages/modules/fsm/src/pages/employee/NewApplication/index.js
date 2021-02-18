@@ -39,6 +39,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // console.log("find vehicle menu", vehicleMenu);
   // const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
   const customizationConfig = {};
+  const [slumMenu, setSlumMenu] = useState([
+    { key: "", name: "NONE" },
+    { key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" },
+    { key: "PB_AMRITSAR_SUN01_SLUM_B", name: "Slum B" },
+    { key: "PB_AMRITSAR_SUN01_SLUM_C", name: "Slum C" },
+  ]);
+
+  const [slumEnable, setSlumEnable] = useState(false);
+
+  const [canSubmit, setSubmitValve] = useState(false);
+
   const onFormValueChange = (formData) => {
     setNoOfTrips(formData?.noOfTrips || 1);
   };
@@ -88,6 +99,32 @@ export const NewApplication = ({ parentUrl, heading }) => {
       setPincodeNotValid(true);
     }
   }, [pincode]);
+
+  useEffect(() => {
+    (async () => {
+      if (propertyType && subType && vehicle) {
+        setSubmitValve(false);
+        const { capacity } = vehicle;
+        const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
+
+        const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+        if (billSlab?.price) {
+          setAmountPerTrip(billSlab.price);
+        }
+        setSubmitValve(true);
+      }
+    })();
+  }, [propertyType, subType, vehicle]);
+
+  function selectedType(value) {
+    setPropertyType(value);
+    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code));
+  }
+
+  function selectSlum(value) {
+    setSlum(value);
+  }
+
   function selectChannel(value) {
     setChannel(value);
   }
@@ -95,6 +132,47 @@ export const NewApplication = ({ parentUrl, heading }) => {
   function selectVehicle(value) {
     setVehicle(value);
     setPaymentAmount(noOfTrips * value.amount);
+  }
+
+  function selectedSubType(value) {
+    setSubType(value);
+  }
+
+  function selectPropertyType(value) {
+    setPropertyType(value);
+    setSubTypeMenu(propertySubtypesData?.data?.filter((item) => item.propertyType === value?.code?.toUpperCase()));
+  }
+
+  // city locality logic
+  const selectCity = async (city) => {
+    setSelectedCity(city);
+    let __localityList = localitiesObj[city.code];
+    setLocalities(__localityList);
+  };
+
+  const handlePitDimension = (event) => {
+    const { name, value } = event.target;
+    if (!isNaN(value)) {
+      setPitDimension({ ...pitDimension, [name]: value });
+    }
+  };
+
+  const handlePincode = (event) => {
+    const { value } = event.target;
+    setPincode(value);
+    if (!value) {
+      setPincodeNotValid(false);
+    }
+  };
+
+  const isPincodeValid = () => !pincodeNotValid;
+
+  function selectLocality(locality) {
+    setSelectedLocality(locality);
+  }
+
+  function slumCheck(e) {
+    setSlumEnable(e.target.checked);
   }
 
   const onSubmit = (data) => {

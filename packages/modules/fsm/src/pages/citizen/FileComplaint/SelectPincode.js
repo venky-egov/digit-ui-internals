@@ -53,6 +53,7 @@ const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) 
       onChange={onChange}
       onSkip={onSkip}
       forcedError={t(pincodeServicability)}
+      isDisabled={!pincode}
     ></FormStep>
   );
 };

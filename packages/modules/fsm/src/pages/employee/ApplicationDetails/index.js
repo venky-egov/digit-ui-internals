@@ -39,6 +39,7 @@ const ApplicationDetails = (props) => {
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   // console.log("find DSO here", DSO)
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
+
   const {
     isLoading: updatingApplication,
     isError: updateApplicationError,
@@ -49,7 +50,7 @@ const ApplicationDetails = (props) => {
 
   // console.log("find application details here", applicationDetails)
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
-    tenantId,
+    tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
     moduleCode: "FSM",
     role: "FSM_EMPLOYEE",
@@ -175,7 +176,7 @@ const ApplicationDetails = (props) => {
                 )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => (
-                    <Row key={value.title} label={value.title} text={value.value} last={index === detail?.values?.length - 1} />
+                    <Row key={value.title} label={value.title} text={value.value || "N/A"} last={index === detail?.values?.length - 1} />
                   ))}
                 </StatusTable>
               </React.Fragment>

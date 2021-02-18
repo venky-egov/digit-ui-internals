@@ -14,7 +14,7 @@ const FSMLink = ({ isMobile, data }) => {
       // accessTo: ["CSR"]
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
-    { text: t("ES_TITLE_DASHBOARD"), link: "/digit-ui/employee" },
+    { text: t("ES_TITLE_DASHBOARD"), link: "/employee", hyperlink: true },
   ];
 
   const [links, setLinks] = useState([]);
@@ -65,9 +65,9 @@ const FSMLink = ({ isMobile, data }) => {
       <div className="complaint-links-container">
         {GetLogo()}
         <div className="body">
-          {links.map(({ link, text }, index) => (
+          {links.map(({ link, text, hyperlink = false }, index) => (
             <span className="link" key={index}>
-              <Link to={link}>{text}</Link>
+              {hyperlink ? <a href={link}>{text}</a> : <Link to={link}>{text}</Link>}
             </span>
           ))}
         </div>

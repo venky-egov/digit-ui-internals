@@ -31,6 +31,7 @@ const TextField = (props) => {
       className={`employee-select-wrap--elipses ${props.disable && "disabled"}`}
       type="text"
       value={value}
+      autoComplete={props.autoComplete || "on"}
       onChange={inputChange}
       onClick={props.onClick}
       onFocus={broadcastToOpen}
@@ -47,9 +48,23 @@ const Dropdown = (props) => {
   const [forceSet, setforceSet] = useState(0);
   const optionRef = useRef(null);
   const hasCustomSelector = props.customSelector ? true : false;
+
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
+
+  useEffect(() => {
+    if (!dropdownStatus) {
+      if (selectedOption?.name && filterVal?.length > 0 && filterVal !== selectedOption?.name) {
+        setforceSet(true);
+        setFilter("");
+      }
+    }
+    return () => {
+      setforceSet(0);
+      setFilter("");
+    };
+  }, [dropdownStatus]);
 
   function dropdownSwitch() {
     if (!props.disable) {
@@ -105,6 +120,7 @@ const Dropdown = (props) => {
       {!hasCustomSelector && (
         <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`}>
           <TextField
+            autoComplete={props.autoComplete}
             setFilter={setFilter}
             forceSet={forceSet}
             selectedVal={

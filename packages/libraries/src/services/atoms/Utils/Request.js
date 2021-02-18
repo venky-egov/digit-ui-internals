@@ -26,6 +26,7 @@ window.Digit = window.Digit || {};
 window.Digit = { ...window.Digit, RequestCache: window.Digit.RequestCache || {} };
 export const Request = async ({ method = "POST", url, data = {}, headers = {}, useCache = false, params = {}, auth, userService }) => {
   // console.log("params:", params);
+  // console.log("in request", method);
   // console.log("url:", url);
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {
@@ -51,6 +52,7 @@ export const Request = async ({ method = "POST", url, data = {}, headers = {}, u
   } else {
     params._ = Date.now();
   }
+
   const res = await Axios({ method, url, data, params, headers });
   if (useCache) {
     window.Digit.RequestCache[key] = res.data;

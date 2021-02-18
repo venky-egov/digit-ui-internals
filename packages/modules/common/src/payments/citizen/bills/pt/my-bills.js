@@ -9,7 +9,6 @@ export const BillListPT = ({ billsList, currentPath }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  console.log(currentPath);
   const propertyIds = billsList.map((bill) => bill.consumerCode);
   const { mobileNumber, tenantId } = Digit.UserService.getUser().info;
   const result = Digit.Hooks.pt.usePropertySearch({ tenantId, filters: { mobileNumber } });
@@ -29,13 +28,15 @@ export const BillListPT = ({ billsList, currentPath }) => {
       billableProps.forEach((prop) => {
         billableObj[prop.propertyId] = prop;
       });
+      //console.log("from PT", billableProps);
 
       billsList.forEach((bill) => {
         billsListObj[bill.consumerCode] = bill;
       });
+      //console.log("from PT", billsListObj);
 
       const newBillsList = billableIDs.map((e) => ({ ...billsListObj[e], ...billableObj[e] }));
-      console.log(newBillsList);
+      //console.log(newBillsList);
       setPropertyList(newBillsList);
     }
   }, [result.data]);
@@ -61,6 +62,7 @@ export const BillListPT = ({ billsList, currentPath }) => {
             <MyBill {...{ bill, currentPath }} />
           </div>
         ))}
+      {!propertyList?.length > 0 && <p>No Bills Found.</p>}
     </React.Fragment>
   );
 };

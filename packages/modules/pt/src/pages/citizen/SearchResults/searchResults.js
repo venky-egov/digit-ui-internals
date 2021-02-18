@@ -20,7 +20,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
 
   const onSubmit = (data) => {
     console.log("data from composer", data);
-    history.push(`/digit-ui/citizen/payment/my-bills/PT/${data.property_id}`, { tenantId: "pb" });
+    if (parseFloat(data?.total_due)) history.push(`/digit-ui/citizen/payment/my-bills/PT/${data.property_id}`, { tenantId: "pb" });
   };
 
   const payment = {};

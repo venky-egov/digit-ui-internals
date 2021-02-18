@@ -52,17 +52,35 @@ const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data })
   if (userType === "employee") {
     return (
       <div>
-        <React.Fragment>
+        <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
             {t("MYCITY_CODE_LABEL")}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <Dropdown className="field" isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
-        </React.Fragment>
-        <React.Fragment>
+          <Dropdown
+            className="field"
+            style={{ width: "50%" }}
+            isMandatory
+            selected={selectedCity}
+            option={cities}
+            select={selectCity}
+            optionKey="code"
+            t={t}
+          />
+        </LabelFieldPair>
+        <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>
-          <Dropdown className="field" isMandatory selected={selectedLocality} option={localities} select={selectLocality} optionKey="code" t={t} />
-        </React.Fragment>
+          <Dropdown
+            className="field"
+            style={{ width: "50%" }}
+            isMandatory
+            selected={selectedLocality}
+            option={localities}
+            select={selectLocality}
+            optionKey="code"
+            t={t}
+          />
+        </LabelFieldPair>
       </div>
     );
   }

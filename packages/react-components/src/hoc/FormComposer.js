@@ -125,7 +125,7 @@ export const FormComposer = (props) => {
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}
-                  <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
+                  <div style={field.withoutLabel ? { width: "100%", ...props?.fieldStyle } : {}} className="field">
                     {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                   </div>
                 </LabelFieldPair>

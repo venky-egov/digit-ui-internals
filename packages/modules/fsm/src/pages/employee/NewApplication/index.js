@@ -259,7 +259,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           body: config.body.filter((a) => !a.hideInEmployee),
         };
       })}
-      inline={true}
+      fieldStyle={{ marginRight: 0 }}
       onSubmit={onSubmit}
       onFormValueChange={onFormValueChange}
     />

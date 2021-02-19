@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { FormStep, Dropdown, Loader, CardLabel, RadioButtons, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
 const SelectPitType = ({ t, data, config, onSelect, value, userType, setValue }) => {
-  console.log({ config, onSelect, t, value, userType, setValue });
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
 

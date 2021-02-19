@@ -3,7 +3,6 @@ import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair, RadioOrSel
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data }) => {
-  console.log({ config, onSelect, t, value, userType, setValue, data });
   const allCities = Digit.Hooks.fsm.useTenants();
   const pincode = value?.pincode || data?.pincode;
   const cities = pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode)) : allCities;

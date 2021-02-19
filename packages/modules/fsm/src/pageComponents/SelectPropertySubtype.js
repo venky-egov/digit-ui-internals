@@ -1,18 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Loader, TypeSelectCard, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertySubtype = ({ config, onSelect, t, value, userType, setValue, data }) => {
-  console.log({ config, onSelect, t, value, userType, setValue, data });
+  console.log("asdsdfsd", { config, onSelect, t, value, userType, setValue, data });
   const [subtype, setSubtype] = useState(() => {
-    const { subtype } = value || {};
+    const { subtype } = value || data || {};
     return subtype !== undefined ? subtype : null;
   });
+  const [subtypeOptions, setSubtypeOptions] = useState([]);
   const { propertyType } = value || data;
 
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
-  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertySubtype", { select });
+  const { isLoading: propertySubtypesDataLoading, data: propertySubtypesData } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertySubtype", {
+    select,
+  });
+
+  useEffect(() => {
+    console.log("proptype chagned", propertyType, propertySubtypesDataLoading, propertySubtypesData);
+    setSubtypeOptions([]);
+    setSubtype(null);
+    if (!propertySubtypesDataLoading && propertyType) {
+      const subTypes = propertySubtypesData.filter((item) => item.propertyType === (propertyType?.code || propertyType));
+      setSubtypeOptions(subTypes);
+    }
+  }, [propertyType, propertySubtypesDataLoading, propertySubtypesData]);
 
   const selectedValue = (value) => {
     setSubtype(value);
@@ -26,18 +39,21 @@ const SelectPropertySubtype = ({ config, onSelect, t, value, userType, setValue,
     setValue(config.key, value.code);
   }
 
-  if (propertySubtypesData.isLoading) {
+  if (propertySubtypesDataLoading) {
     return <Loader />;
   }
 
-  const menu = propertySubtypesData.data.filter((item) => item.propertyType === (propertyType?.code || propertyType));
+  // const subtypeOptions = useMemo(() => {
+  //   return propertySubtypesData.filter((item) => item.propertyType === (propertyType?.code || propertyType));
+  // }, [propertyType])
+
   if (userType === "employee") {
-    return <Dropdown option={menu} optionKey="i18nKey" id="propertySubType" selected={subtype} select={selectedSubType} t={t} />;
+    return <Dropdown option={subtypeOptions} optionKey="i18nKey" id="propertySubType" selected={subtype} select={selectedSubType} t={t} />;
   } else {
     return (
       <FormStep config={config} onSelect={goNext} isDisabled={!propertyType} t={t}>
         <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_LABEL")} *`}</CardLabel>
-        <RadioOrSelect options={menu} selectedOption={subtype} optionKey="i18nKey" onSelect={selectedValue} t={t} />
+        <RadioOrSelect options={subtypeOptions} selectedOption={subtype} optionKey="i18nKey" onSelect={selectedValue} t={t} />
       </FormStep>
     );
   }

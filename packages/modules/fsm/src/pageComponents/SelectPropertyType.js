@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { CitizenInfoLabel, Loader, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertyType = ({ config, onSelect, t, value, userType, setValue, data }) => {
-  console.log({ config, onSelect, t, value, userType, setValue, data });
   const [propertyType, setPropertyType] = useState(() => {
     const { propertyType } = value || {};
     return propertyType !== undefined ? propertyType : null;

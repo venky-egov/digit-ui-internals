@@ -9,6 +9,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = tenantId.split(".")[0];
+  const [channel, setChannel] = useState(null);
+  const [channelMenu, setChannelMenu] = useState([]);
+  const [vehicle, setVehicle] = useState(null);
+  const [paymentAmount, setPaymentAmount] = useState(0);
 
   const { t } = useTranslation();
   const history = useHistory();
@@ -16,14 +21,37 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   const [canSubmit, setSubmitValve] = useState(false);
 
+  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+
   const onFormValueChange = (formData) => {
-    setNoOfTrips(formData?.noOfTrips || 1);
+    // setNoOfTrips(formData?.noOfTrips || 1);
     if (formData?.propertyType && formData?.subtype && formData?.complaint?.city_complaint?.code && formData?.complaint?.locality_complaint?.code) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
     }
   };
+
+  useEffect(() => {
+    console.log("useEffect", { applicationChannelData });
+    if (!applicationChannelData.isLoading) {
+      const data = applicationChannelData.data?.map((channel) => ({
+        ...channel,
+        i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}`,
+      }));
+
+      setChannelMenu(data);
+    }
+  }, [applicationChannelData]);
+
+  function selectChannel(value) {
+    setChannel(value);
+  }
+  function selectVehicle(value) {
+    setVehicle(value);
+    // setPaymentAmount(noOfTrips * value.amount);
+  }
 
   // useEffect(() => {
   //   (async () => {

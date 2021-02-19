@@ -19,7 +19,7 @@ const SelectTankSize = ({ config, onSelect, t, value = {}, userType, setValue, d
   });
 
   useEffect(() => {
-    if (!value?.pitType) {
+    if (!value?.pitType && userType !== "employee") {
       onSelect({}, true);
     }
   }, []);

@@ -11,7 +11,6 @@ import TextInput from "../atoms/TextInput";
 
 const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], inputRef, onNext, onSkip, isDisable }) => {
   // TODO: inputs handle
-  console.log("FIND ME", isDisable);
   return (
     <Card>
       {texts.headerCaption && <CardCaption>{t(texts.headerCaption)}</CardCaption>}
@@ -19,7 +18,7 @@ const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], input
       <CardText>{t(texts.cardText)}</CardText>
       {children}
       <SubmitBar disabled={isDisable} submit={submit} label={t(texts.nextText)} onSubmit={onNext} />
-      {texts.skipText ? <LinkButton label={t(texts.skipText)} onClick={onSkip} /> : null}
+      {onSkip && texts.skipText ? <LinkButton label={t(texts.skipText)} onClick={onSkip} /> : null}
     </Card>
   );
 };

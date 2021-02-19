@@ -28,7 +28,7 @@ const SelectPitType = ({ t, config, onSelect, value }) => {
   }
 
   return (
-    <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!pitType} t={t}>
+    <FormStep config={config} onSelect={onSubmit} isDisabled={!pitType} t={t} onSkip={onSkip}>
       <CardLabel>{`${t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")} *`}</CardLabel>
 
       {sanitationMenu?.length < 5 ? (

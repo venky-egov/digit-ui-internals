@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState } from "react";
 import { Loader, RadioButtons, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertySubtype = ({ config, onSelect, t, value }) => {

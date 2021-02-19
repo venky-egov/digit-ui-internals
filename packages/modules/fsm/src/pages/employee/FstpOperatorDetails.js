@@ -8,11 +8,13 @@ import {
   ActionBar,
   SubmitBar,
   Loader,
+  Toast,
   StatusTable,
   Row,
   LabelFieldPair,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 
 const config = {
   select: (data) => {
@@ -22,11 +24,13 @@ const config = {
 
 const FstpOperatorDetails = () => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   let { id: applicationNos } = useParams();
   const [filters, setFilters] = useState({ applicationNos });
   const [isVehicleSearchCompleted, setIsVehicleSearchCompleted] = useState(false);
   const [searchParams, setSearchParams] = useState({});
+  const [showToast, setShowToast] = useState(null);
   const [wasteCollected, setWasteCollected] = useState(null);
   const [tripTime, setTripTime] = useState(null);
 
@@ -65,9 +69,15 @@ const FstpOperatorDetails = () => {
     });
   };
 
+  const closeToast = () => {
+    setShowToast(null);
+  };
+
   const handleSuccess = () => {
     /* Show Toast on success */
-    console.log("success");
+    queryClient.invalidateQueries("FSM_VEHICLE_DATA");
+    setShowToast({ key: "success", action: `ES_FSM_DISPOSE_UPDATE_SUCCESS` });
+    setTimeout(closeToast, 5000);
   };
 
   const handleChange = (event) => {
@@ -97,13 +107,9 @@ const FstpOperatorDetails = () => {
       value: vehicle.vehicle.registrationNumber,
     },
     {
-      title: t("ES_VEHICLE CAPACITY"),
+      title: `${t("ES_VEHICLE CAPACITY")} (ltrs)`,
       value: vehicle.vehicle.tankCapacity,
-    },
-    {
-      title: t("ES_VEHICLE_WASTE_COLLECTED"),
-      value: vehicle.volumeCarried,
-    },
+    }
   ];
 
   return (
@@ -142,13 +148,20 @@ const FstpOperatorDetails = () => {
                     label={t("ES_INBOX_LOCALITY")}
                     text={t(`${trip?.tenantId?.toUpperCase()?.split(".")?.join("_")}_ADMIN_${trip?.address?.locality?.code}`)}
                   />
-                  <Row key={index} label={t("ES_USAGE")} text={t(trip.propertyUsage)} />
-                  <Row key={index} label={t("ES_WASTE_RECIEVED")} text={trip.wasteCollected} />
+                  <Row key={index} label={t("ES_USAGE")} text={t(`PROPERTYTYPE_MASTERS_${trip.propertyUsage}`)} />
+                  <Row key={index} label={t("ES_WASTE_RECIEVED")} text={vehicle.tripDetails[index].volume} />
                 </>
               );
             })}
           </StatusTable>
         </Card>
+      )}
+      {showToast && (
+        <Toast
+          error={showToast.key === "error" ? true : false}
+          label={t(showToast.key === "success" ? showToast.action : `ES_FSM_DISPOSE_UPDATE_FAILURE`)}
+          onClose={closeToast}
+        />
       )}
       <ActionBar>
         <SubmitBar label={t("ES_COMMON_SUBMIT")} submit onSubmit={handleSubmit} />

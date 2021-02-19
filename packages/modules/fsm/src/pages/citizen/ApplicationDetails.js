@@ -152,7 +152,6 @@ const ApplicationDetails = () => {
                           keyValue={index}
                           isCompleted={index === 0}
                           label={t("CS_COMMON_" + checkpoint.status)}
-                          // customChild={getTimelineCaptions(checkpoint)}
                         />
                       </React.Fragment>
                     );

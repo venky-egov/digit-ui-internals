@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Card, DetailsCard, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
+import { Card, DetailsCard, Loader, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
 import { FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
 import SearchApplication from "./search";
@@ -13,6 +13,7 @@ export const ApplicationCard = ({
   onSort,
   serviceRequestIdKey,
   isFstpOperator,
+  isLoading,
   searchParams,
   searchFields,
   linkPrefix,
@@ -48,6 +49,37 @@ export const ApplicationCard = ({
     setSelectedComponent(null);
   };
 
+  if (isLoading) {
+    return (
+      <Loader />
+    )
+  }
+
+  let result;
+  if (data && data?.length === 0) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {
+          t("CS_MYAPPLICATIONS_NO_APPLICATION")
+            .split("\\n")
+            .map((text, index) => (
+              <p key={index} style={{ textAlign: "center" }}>
+                {text}
+              </p>
+            ))
+        }
+      </Card>
+    );
+  } else if (data && data?.length > 0) {
+    result = (
+      <DetailsCard
+        data={data}
+        serviceRequestIdKey={serviceRequestIdKey}
+        linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
+      />
+    )
+  }
+
   return (
     <React.Fragment>
       <div className="searchBox">
@@ -55,11 +87,7 @@ export const ApplicationCard = ({
         {onFilterChange && <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />}
         <FilterAction text="SORT" handleActionClick={() => handlePopupAction("SORT")} />
       </div>
-      <DetailsCard
-        data={data}
-        serviceRequestIdKey={serviceRequestIdKey}
-        linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
-      />
+      {result}
       {popup && (
         <PopUp>
           <div className="popup-module">{selectedComponent}</div>

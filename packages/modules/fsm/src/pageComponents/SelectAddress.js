@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair } from "@egovernments/digit-ui-react-components";
+import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data }) => {
+  console.log({ config, onSelect, t, value, userType, setValue, data });
   const allCities = Digit.Hooks.fsm.useTenants();
-  const pincode = value?.pincode || data?.pincode
+  const pincode = value?.pincode || data?.pincode;
   const cities = pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode)) : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
   const [selectedCity, setSelectedCity] = useState(() => {
@@ -89,20 +90,17 @@ const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data })
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-      {cities?.length < 5 ? (
-        <RadioButtons selectedOption={selectedCity} options={cities} optionsKey="name" onSelect={selectCity} />
-      ) : (
-        <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} disable={value?.pincode} />
-      )}
+      <RadioOrSelect options={cities} selectedOption={selectedCity} optionKey="code" onSelect={selectCity} t={t} />
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
       {selectedCity && localities && (
-        <React.Fragment>
-          {localities?.length < 5 ? (
-            <RadioButtons selectedOption={selectedLocality} options={localities} optionsKey="name" onSelect={selectLocality} />
-          ) : (
-            <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />
-          )}
-        </React.Fragment>
+        <RadioOrSelect
+          isMandatory={config.isMandatory}
+          options={localities}
+          selectedOption={selectedLocality}
+          optionKey="code"
+          onSelect={selectLocality}
+          t={t}
+        />
       )}
     </FormStep>
   );

@@ -16,22 +16,26 @@ const FileComplaint = ({ parentRoute }) => {
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
 
-  const goNext = () => {
+  const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
-    if (nextStep === null) {
-      return history.push(`${parentRoute}/new-application/check`);
+    let redirectWithHistory = history.push;
+    if (skipStep) {
+      redirectWithHistory = history.replace;
     }
-    history.push(`${match.path}/${nextStep}`);
+    if (nextStep === null) {
+      return redirectWithHistory(`${parentRoute}/new-application/check`);
+    }
+    redirectWithHistory(`${match.path}/${nextStep}`);
   };
 
   const submitComplaint = async () => {
     history.push(`${parentRoute}/new-application/response`);
   };
 
-  function handleSelect(data) {
+  function handleSelect(data, skipStep) {
     setParams({ ...params, ...data, ...{ source: "ONLINE" } });
-    goNext();
+    goNext(skipStep);
   }
 
   const handleSkip = () => {};
@@ -51,7 +55,7 @@ const FileComplaint = ({ parentRoute }) => {
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} />
+            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} data={params} />
           </Route>
         );
       })}

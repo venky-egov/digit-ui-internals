@@ -38,7 +38,7 @@ export const config = {
       route: "map",
       component: SelectGeolocation,
       nextStep: "pincode",
-      hideInEmployee: true
+      hideInEmployee: true,
     },
     {
       route: "pincode",

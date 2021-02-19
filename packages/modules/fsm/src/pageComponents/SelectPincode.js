@@ -2,6 +2,7 @@ import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/di
 import React, { useState } from "react";
 
 const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) => {
+  console.log({ config, onSelect, t, value, userType, setValue });
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => {
     const { pincode } = value;

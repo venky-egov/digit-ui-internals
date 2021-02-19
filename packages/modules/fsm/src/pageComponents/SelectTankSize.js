@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, PitDimension } from "@egovernments/digit-ui-react-components";
 
+const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 const SelectTankSize = ({ config, onSelect, t, value = {}, userType, setValue, data }) => {
-  const tankType = value?.pitType?.code;
-  const isConventionalSpecticTank = tankType === "CONVENTIONAL_SPECTIC_TANK";
-  const isSepticTankWithSoakPit = tankType === "SEPTIC_TANK_WITH_SOAK_PIT";
+  console.log({ config, onSelect, t, value, userType, setValue });
+  const tankDimension = value?.pitType?.dimension;
+  const [disable, setDisable] = useState(true);
+
   const [size, setSize] = useState(() => {
     let data;
     const { pitDetail } = value;
     if (pitDetail) {
-      data = getPitDetail(pitDetail, isConventionalSpecticTank, isSepticTankWithSoakPit);
+      data = getPitDetail(pitDetail, tankDimension);
     } else {
-      data = getPitDetail({}, isConventionalSpecticTank, isSepticTankWithSoakPit);
+      data = getPitDetail({}, tankDimension);
     }
     return data;
   });
-  const [disable, setDisable] = useState(true);
+
+  useEffect(() => {
+    if (!value?.pitType) {
+      onSelect({}, true);
+    }
+  }, []);
 
   useEffect(() => {
     const pitDetailValues = Object.values(size).filter((value) => value > 0);
-    if (isConventionalSpecticTank && pitDetailValues?.length >= 3) {
+    if (isConventionalSpecticTank(tankDimension) && pitDetailValues?.length >= 3) {
       setDisable(false);
-    } else if (isSepticTankWithSoakPit && pitDetailValues?.length >= 2) {
+    } else if (!isConventionalSpecticTank(tankDimension) && pitDetailValues?.length >= 2) {
       setDisable(false);
     } else {
       setDisable(true);
@@ -35,7 +42,6 @@ const SelectTankSize = ({ config, onSelect, t, value = {}, userType, setValue, d
       if (userType === "employee") {
         setTimeout(setValue(config.key, { ...size, [name]: value }));
       }
-      
     }
   };
 
@@ -55,18 +61,18 @@ const SelectTankSize = ({ config, onSelect, t, value = {}, userType, setValue, d
   );
 };
 
-function getPitDetail(pitDetail = {}, isConventionalSpecticTank, isSepticTankWithSoakPit) {
+function getPitDetail(pitDetail = {}, tankDimension) {
   let detail = { ...pitDetail };
   if (pitDetail) {
-    if (isConventionalSpecticTank) {
+    if (tankDimension === "lbd") {
       detail = { length: pitDetail?.length || "", width: pitDetail?.width || "", height: pitDetail?.height || "" };
-    } else if (isSepticTankWithSoakPit) {
+    } else {
       detail = { diameter: pitDetail?.diameter || "", height: pitDetail?.height || "" };
     }
   } else {
-    if (isConventionalSpecticTank) {
+    if (tankDimension === "lbd") {
       detail = { length: "", width: "", height: "" };
-    } else if (isSepticTankWithSoakPit) {
+    } else {
       detail = { diameter: "", height: "" };
     }
   }

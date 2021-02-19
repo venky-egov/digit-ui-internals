@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
+  console.log("asd", props);
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
 
   useEffect(() => {
@@ -185,7 +186,7 @@ Dropdown.propTypes = {
   style: PropTypes.object,
   option: PropTypes.array,
   optionKey: PropTypes.any,
-  select: PropTypes.func,
+  select: PropTypes.any,
   t: PropTypes.func,
 };
 

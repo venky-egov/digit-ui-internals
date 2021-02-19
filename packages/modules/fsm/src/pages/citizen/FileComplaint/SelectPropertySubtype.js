@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
+import React, { useState, useLayoutEffect } from "react";
+import { Loader, RadioButtons, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
   const [subtype, setSubtype] = useState(() => {
@@ -27,16 +27,13 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
   const menu = propertySubtypesData.data.filter((item) => item.propertyType === propertyType?.code);
 
   return (
-    <TypeSelectCard
-      {...config.texts}
-      disabled={subtype ? false : true}
-      menu={menu}
-      optionsKey="i18nKey"
-      selected={selectedValue}
-      selectedOption={subtype}
-      onSave={goNext}
-      t={t}
-    />
+    <FormStep config={config} onSelect={goNext} t={t} isDisabled={!subtype}>
+      {menu?.length < 5 ? (
+        <RadioButtons selectedOption={subtype} options={menu} optionsKey="i18nKey" onSelect={selectedValue} />
+      ) : (
+        <Dropdown isMandatory selected={subtype} optionKey="i18nKey" option={menu} select={selectedValue} t={t} />
+      )}
+    </FormStep>
   );
 };
 

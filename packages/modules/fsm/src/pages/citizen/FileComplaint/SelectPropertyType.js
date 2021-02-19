@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { CitizenInfoLabel, Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
+import { CitizenInfoLabel, Loader, RadioButtons, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertyType = ({ config, onSelect, t, value }) => {
   const [propertyType, setPropertyType] = useState(() => {
@@ -25,19 +25,14 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
   }
 
   return (
-    <Fragment>
-      <TypeSelectCard
-        {...config.texts}
-        disabled={propertyType ? false : true}
-        menu={propertyTypesData.data}
-        optionsKey="i18nKey"
-        selected={selectedValue}
-        selectedOption={propertyType}
-        onSave={goNext}
-        t={t}
-      />
+    <FormStep config={config} onSelect={goNext} t={t} isDisabled={propertyType ? false : true}>
+      {propertyTypesData?.data?.length < 5 ? (
+        <RadioButtons selectedOption={propertyType} options={propertyTypesData.data} optionsKey="i18nKey" onSelect={selectedValue} />
+      ) : (
+        <Dropdown isMandatory selected={propertyType} optionKey="i18nKey" option={propertyTypesData.data} select={selectedValue} t={t} />
+      )}
       <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT")} />
-    </Fragment>
+    </FormStep>
   );
 };
 

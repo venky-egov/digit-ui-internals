@@ -90,26 +90,28 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const [selectedReopenReason, setSelectedReopenReason] = useState(null);
 
-  useEffect(async () => {
-    setError(null);
-    if (file) {
-      if (file.size >= 5242880) {
-        setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-      } else {
-        try {
-          // TODO: change module in file storage
-          const response = await Digit.UploadServices.Filestorage("property-upload", file, cityDetails.code);
-          if (response?.data?.files?.length > 0) {
-            setUploadedFile(response?.data?.files[0]?.fileStoreId);
-          } else {
+  useEffect(() => {
+    (async () => {
+      setError(null);
+      if (file) {
+        if (file.size >= 5242880) {
+          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else {
+          try {
+            // TODO: change module in file storage
+            const response = await Digit.UploadServices.Filestorage("property-upload", file, cityDetails.code);
+            if (response?.data?.files?.length > 0) {
+              setUploadedFile(response?.data?.files[0]?.fileStoreId);
+            } else {
+              setError(t("CS_FILE_UPLOAD_ERROR"));
+            }
+          } catch (err) {
+            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
-        } catch (err) {
-          console.error("Modal -> err ", err);
-          setError(t("CS_FILE_UPLOAD_ERROR"));
         }
       }
-    }
+    })();
   }, [file]);
 
   const reopenReasonMenu = [t(`CS_REOPEN_OPTION_ONE`), t(`CS_REOPEN_OPTION_TWO`), t(`CS_REOPEN_OPTION_THREE`), t(`CS_REOPEN_OPTION_FOUR`)];
@@ -233,12 +235,14 @@ export const ComplaintDetails = (props) => {
     await revalidateComplaintDetails();
   };
 
-  useEffect(async () => {
-    if (complaintDetails) {
-      setLoader(true);
-      await refreshData();
-      setLoader(false);
-    }
+  useEffect(() => {
+    (async () => {
+      if (complaintDetails) {
+        setLoader(true);
+        await refreshData();
+        setLoader(false);
+      }
+    })();
   }, []);
 
   // useEffect(() => {
@@ -355,7 +359,7 @@ export const ComplaintDetails = (props) => {
                   text={
                     Array.isArray(complaintDetails?.details[k])
                       ? complaintDetails?.details[k].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
-                      : t(complaintDetails?.details[k])
+                      : t(complaintDetails?.details[k]) || "N/A"
                   }
                   last={arr.length - 1 === i}
                 />

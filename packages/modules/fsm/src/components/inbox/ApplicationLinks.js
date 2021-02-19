@@ -12,7 +12,7 @@ const ApplicationLinks = ({ isMobile, data }) => {
       link: "/digit-ui/employee/fsm/new-application",
       // accessTo: ["CSR"]
     },
-    { text: t("ES_TITLE_REPORTS"), link: "/employee" },
+    // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
     { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },
   ];
 

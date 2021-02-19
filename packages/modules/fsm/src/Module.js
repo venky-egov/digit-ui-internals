@@ -30,6 +30,7 @@ import SelectTankSize from "./pageComponents/SelectTankSize";
 import SelectPitType from "./pageComponents/SelectPitType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectSlumName from "./pageComponents/SelectSlumName";
+import CheckSlum from "./pageComponents/CheckSlum";
 
 const componentsToRegister = {
   SelectPropertySubtype,
@@ -42,6 +43,7 @@ const componentsToRegister = {
   SelectPitType,
   SelectGeolocation,
   SelectSlumName,
+  CheckSlum,
 };
 
 const addComponentsToRegistry = () => {

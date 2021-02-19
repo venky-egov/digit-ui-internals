@@ -9,12 +9,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
-  const [menu, setMenu] = useState([]);
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
   const [subType, setSubType] = useState({});
-  const [channel, setChannel] = useState(null);
-  const [channelMenu, setChannelMenu] = useState([]);
   const [sanitation, setSanitation] = useState([]);
   const [sanitationMenu, setSanitationMenu] = useState([]);
   const [pitDimension, setPitDimension] = useState({});
@@ -32,21 +29,16 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const [selectedLocality, setSelectedLocality] = useState(null);
 
   const { t } = useTranslation();
-  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
-  const cities = Digit.Hooks.fsm.useTenants();
-  const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
   const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
   const history = useHistory();
-  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
-  const propertyTypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertyType", { select });
   const propertySubtypesData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PropertySubtype", { select });
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   // console.log("find vehicle menu", vehicleMenu);
   // const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
   const customizationConfig = {};
   const [slumMenu, setSlumMenu] = useState([
-    { key: "", name: "NONE" },
+    { key: "", name: "ES_APPLICATION_SLUM_AREA_TEXT" },
     { key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" },
     { key: "PB_AMRITSAR_SUN01_SLUM_B", name: "Slum B" },
     { key: "PB_AMRITSAR_SUN01_SLUM_C", name: "Slum C" },
@@ -69,17 +61,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
       }
     }
   }, [vehicle, noOfTrips, amountPerTrip]);
-
-  useEffect(() => {
-    if (!applicationChannelData.isLoading) {
-      const data = applicationChannelData.data?.map((channel) => ({
-        ...channel,
-        i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}`,
-      }));
-
-      setChannelMenu(data);
-    }
-  }, [applicationChannelData]);
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
@@ -137,10 +118,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   function selectSlum(value) {
     setSlum(value);
-  }
-
-  function selectChannel(value) {
-    setChannel(value);
   }
 
   function selectSanitation(value) {
@@ -263,139 +240,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   const config = [
-    {
-      head: t("ES_TITLE_APPLICATION_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
-          type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} t={t} />,
-        },
-        {
-          label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
-          type: "text",
-          isMandatory: true,
-          populators: {
-            name: "applicantName",
-            validation: {
-              required: true,
-              pattern: /[A-Za-z]/,
-            },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
-          type: "text",
-          isMandatory: true,
-          populators: {
-            name: "mobileNumber",
-            validation: {
-              required: true,
-              pattern: /^[6-9]\d{9}$/,
-            },
-          },
-        },
-      ],
-    },
-    {
-      head: t("ES_NEW_APPLICATION_PROPERTY_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
-          isMandatory: true,
-
-          populators: (
-            <Dropdown
-              id="propertyType"
-              selected={propertyType}
-              select={selectPropertyType}
-              {...{ option: propertyTypesData.data, optionKey: "i18nKey", t }}
-            />
-          ),
-        },
-        {
-          label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
-          isMandatory: true,
-          populators: <Dropdown id="propertySubType" selected={subType} select={setSubType} {...{ option: subTypeMenu, t, optionKey: "i18nKey" }} />,
-        },
-      ],
-    },
-    {
-      head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
-      body: [
-        {
-          label: t("ES_NEW_APPLICATION_PINCODE"),
-          type: "text",
-          populators: {
-            name: "pincode",
-            error: t("CORE_COMMON_PINCODE_INVALID"),
-            onChange: handlePincode,
-            validation: { pattern: /^[1-9][0-9]{5}$/, validate: isPincodeValid },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown isMandatory freeze={true} selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />
-          ),
-        },
-        // {
-        //   label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
-        //   type: "checkbox",
-        //   populators: (
-        //     <CheckBox
-        //       label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
-        //       onChange={slumCheck}
-        //       disable={customizationConfig ? !customizationConfig?.slumName?.override : true}
-        //     />
-        //   ),
-        // },
-
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
-          isMandatory: true,
-          type: "dropdown",
-          populators: (
-            <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
-          ),
-        },
-        {
-          label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-          type: "dropdown",
-          isMandatory: true,
-          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
-        },
-        {
-          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
-          type: "text",
-          populators: {
-            name: "streetName",
-            error: t("CORE_COMMON_STREET_INVALID"),
-            validation: { pattern: /^[\w\s]{1,256}$/ },
-          },
-        },
-        {
-          label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"),
-          type: "text",
-          populators: {
-            name: "doorNo",
-            error: t("CORE_COMMON_DOOR_INVALID"),
-            validation: {
-              pattern: /^[\w]([\w\/,\s])*$/,
-            },
-          },
-        },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
-          type: "textarea",
-          populators: {
-            name: "landmark",
-          },
-        },
-      ],
-    },
     {
       head: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
       body: [

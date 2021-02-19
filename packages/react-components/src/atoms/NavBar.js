@@ -18,7 +18,7 @@ const MenuItem = ({ item }) => {
 const NavBar = ({ open, profileItem, menuItems, onClose }) => {
   const node = useRef();
   Digit.Hooks.useClickOutside(node, onClose);
-  const isDesktop = window.innerWidth > 640;
+  const isDesktop = window.innerWidth >= 780;
 
   return (
     <React.Fragment>

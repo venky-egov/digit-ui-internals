@@ -33,17 +33,18 @@ export const newConfig = [
         },
         nextStep: "map",
       },
-      {
-        route: "map",
-        component: "SelectGeolocation",
-        nextStep: "pincode",
-        hideInEmployee: true,
-      },
     ],
   },
   {
     head: "ES_NEW_APPLICATION_LOCATION_DETAILS",
     body: [
+      {
+        route: "map",
+        component: "SelectGeolocation",
+        nextStep: "pincode",
+        hideInEmployee: true,
+        key: "address",
+      },
       {
         route: "pincode",
         component: "SelectPincode",

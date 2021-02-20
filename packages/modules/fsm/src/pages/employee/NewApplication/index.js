@@ -9,7 +9,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
+  const state = tenantId?.split(".")[0] || "pb";
   const [channel, setChannel] = useState(null);
   const [channelMenu, setChannelMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
@@ -113,7 +113,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           state,
           pincode,
           locality: {
-            code: localityCode.split("_").pop(),
+            code: localityCode?.split("_").pop(),
             name: localityName,
           },
           geoLocation: {

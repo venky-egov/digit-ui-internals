@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 
-const SelectLandmark = ({ t, config, onSelect, value, userType, setValue }) => {
+const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
   const [landmark, setLandmark] = useState(() => {
-    const { landmark } = value || {};
+    const { landmark } = formData || {};
     return landmark ? landmark : "";
   });
 
@@ -19,7 +19,7 @@ const SelectLandmark = ({ t, config, onSelect, value, userType, setValue }) => {
         const value = e?.target?.value;
         const key = e?.target?.id;
         console.log({ key, value });
-        setValue(key, value);
+        onSelect(key, value);
       }
     }
   }
@@ -44,7 +44,7 @@ const SelectLandmark = ({ t, config, onSelect, value, userType, setValue }) => {
       config={config}
       value={landmark}
       onChange={onChange}
-      onSelect={(data) => onSelect(data)}
+      onSelect={(data) => onSelect(config.key, { landmark })}
       onSkip={onSkip}
       t={t}
       forcedError={t(error)}

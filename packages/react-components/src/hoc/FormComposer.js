@@ -90,7 +90,7 @@ export const FormComposer = (props) => {
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Controller
-            as={<Component userType={"employee"} t={t} setValue={setValue} config={config} data={formData} />}
+            as={<Component userType={"employee"} t={t} onSelect={setValue} config={config} formData={formData} />}
             name={config.key}
             control={control}
           />

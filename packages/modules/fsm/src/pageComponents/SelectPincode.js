@@ -1,30 +1,26 @@
 import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 
-const SelectPincode = ({ t, config, onSelect, value = {}, userType, setValue }) => {
+const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => {
-    const { pincode } = value;
+    const { pincode } = formData;
     return pincode;
   });
   const [pincodeServicability, setPincodeServicability] = useState(null);
-  console.log({ value }, "pindocde");
+  console.log({ formData }, "pindocde");
   function onChange(e) {
     setPincode(e.target.value);
     setPincodeServicability(null);
     if (userType === "employee") {
-      setValue(config.key, e.target.value);
+      onSelect(config.key, e.target.value);
     }
   }
 
   const goNext = async (data) => {
     const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item == data?.pincode));
     if (foundValue) {
-      let response = await Digit.LocationService.getLocalities({ tenantId: foundValue.code });
-      let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-      const filteredLocalities = __localityList.filter((obj) => obj.pincode?.find((item) => item == data.pincode));
-      // Digit.SessionStorage.set("selected_localities", filteredLocalities?.length > 0 ? filteredLocalities : __localityList);
-      onSelect({ ...data, city_complaint: foundValue });
+      onSelect(config.key, { pincode });
     } else {
       setPincodeServicability("CS_COMMON_PINCODE_NOT_SERVICABLE");
     }

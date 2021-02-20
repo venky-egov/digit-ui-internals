@@ -1,12 +1,12 @@
 import React from "react";
 import { FormStep, TextInput, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 
-const SelectStreet = ({ t, config, onSelect, value, userType, setValue, data }) => {
+const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
   const onChange = (e) => {
     const value = e?.target?.value;
     const key = e?.target?.id;
-    setValue(config.key, { ...data[config.key], [key]: value });
+    onSelect(config.key, { ...formData[config.key], [key]: value });
   };
   if (userType === "employee") {
     return config?.inputs?.map((input) => {
@@ -24,8 +24,8 @@ const SelectStreet = ({ t, config, onSelect, value, userType, setValue, data }) 
   return (
     <FormStep
       config={config}
-      _defaultValues={{ street: value?.street, doorNo: value?.doorNo }}
-      onSelect={(data) => onSelect(data)}
+      _defaultValues={{ street: formData?.street, doorNo: formData?.doorNo }}
+      onSelect={(data) => onSelect(config.key, data)}
       onSkip={onSkip}
       t={t}
     />

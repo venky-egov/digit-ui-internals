@@ -46,6 +46,13 @@ export const UserService = {
   setUser: (data) => {
     return Digit.SessionStorage.set("User", data);
   },
+  setExtraRoleDetails: (data) => {
+    const userDetails = Digit.SessionStorage.get("User");
+    return Digit.SessionStorage.set("User", { ...userDetails, extraRoleInfo: data });
+  },
+  getExtraRoleDetails: () => {
+    return Digit.SessionStorage.get('User')?.extraRoleInfo
+  },
   registerUser: (details, stateCode) =>
     ServiceRequest({
       serviceName: "registerUser",

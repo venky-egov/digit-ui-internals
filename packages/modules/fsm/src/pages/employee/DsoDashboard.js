@@ -1,5 +1,5 @@
-import React from 'react';
-import { DashboardBox } from "@egovernments/digit-ui-react-components";
+import React, { useEffect } from 'react';
+import { DashboardBox, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from 'react-i18next';
 
 const svgIcon = (
@@ -26,7 +26,20 @@ const links = [
 
 const DsoDashboard = () => {
   const { t } = useTranslation();
-  const {} = Digit.Hooks.fsm.useVendorDetail();
+  const { isLoading, data } = Digit.Hooks.fsm.useVendorDetail();
+
+  useEffect(() => {
+    if (data?.vendor) {
+      const { vendor } = data;
+      Digit.UserService.setExtraRoleDetails(vendor[0]);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <Loader />
+    )
+  }
   return (
     <div>
       <DashboardBox svgIcon={svgIcon}

@@ -5,7 +5,7 @@ export const ULBService = {
   getCurrentTenantId: () => {
     // TODO: change when setter is done.
     const user = UserService.getUser();
-    if (user.extraRoleInfo) {
+    if (user?.extraRoleInfo) {
       // Check if route is employee route
       if (window.location.pathname.split('/').includes('employee')) return user.extraRoleInfo.tenantId;
     }

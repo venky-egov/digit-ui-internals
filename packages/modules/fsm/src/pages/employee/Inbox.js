@@ -14,6 +14,7 @@ const Inbox = ({ parentRoute }) => {
   const { t } = useTranslation();
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [sortParams, setSortParams] = useState({ key: "createdTime", sortOrder: "DESC" });
   const [searchParams, setSearchParams] = useState({
     applicationStatus: [],
     locality: [],
@@ -23,6 +24,8 @@ const Inbox = ({ parentRoute }) => {
     ...searchParams,
     limit: pageSize + 1,
     offset: pageOffset,
+    sortBy: sortParams?.key,
+    sortOrder: sortParams.sortOrder,
   });
 
   const fetchNextPage = () => {
@@ -36,6 +39,12 @@ const Inbox = ({ parentRoute }) => {
   const handleFilterChange = (filterParam) => {
     // console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     setSearchParams({ ...searchParams, ...filterParam });
+  };
+
+  const handleSort = (args) => {
+    if (args.length === 0) return;
+    const [sortBy] = args;
+    setSortParams({ key: sortBy.id, sortOrder: sortBy.desc ? "DESC" : "ASC" });
   };
 
   const handlePageSizeChange = (e) => {
@@ -82,6 +91,7 @@ const Inbox = ({ parentRoute }) => {
           searchFields={getSearchFields(userRoles)}
           onFilterChange={handleFilterChange}
           onSearch={onSearch}
+          onSort={handleSort}
           searchParams={searchParams}
           linkPrefix={"/digit-ui/employee/fsm/application-details/"}
         />
@@ -96,10 +106,12 @@ const Inbox = ({ parentRoute }) => {
             onFilterChange={handleFilterChange}
             searchFields={getSearchFields(userRoles)}
             onSearch={onSearch}
+            onSort={handleSort}
             onNextPage={fetchNextPage}
             onPrevPage={fetchPrevPage}
             currentPage={Math.floor(pageOffset / pageSize)}
             pageSizeLimit={pageSize}
+            disableSort={false}
             onPageSizeChange={handlePageSizeChange}
             parentRoute={parentRoute}
           />

@@ -85,6 +85,8 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       if (!err) {
         history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui", role: location.state?.role });
         return;
+      } else {
+        history.push(`/digit-ui/citizen/register/name`, { from: location.state?.from || "/digit-ui" });
       }
       if (location.state?.role) {
         setError("User not registered.");
@@ -183,7 +185,14 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
           />
         </Route>
         <Route path={`${path}/otp`}>
-          <SelectOtp config={stepItems[1]} onOtpChange={handleOtpChange} onResend={resendOtp} onSelect={selectOtp} otp={params.otp} t={t} />
+          <SelectOtp
+            config={{ ...stepItems[1], texts: { ...stepItems[1].texts, cardText: `${stepItems[1].texts.cardText} ${params.mobileNumber || ""}` } }}
+            onOtpChange={handleOtpChange}
+            onResend={resendOtp}
+            onSelect={selectOtp}
+            otp={params.otp}
+            t={t}
+          />
         </Route>
         <Route path={`${path}/name`}>
           <SelectName config={stepItems[2]} onSelect={selectName} t={t} />

@@ -30,7 +30,17 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
         {
           label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
           type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} autoComplete="off" optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} />,
+          populators: (
+            <Dropdown
+              option={vehicleMenu}
+              autoComplete="off"
+              optionKey="i18nKey"
+              id="vehicle"
+              selected={vehicle}
+              select={selectVehicle}
+              disable={vehicle ? true : false}
+            />
+          ),
         },
         {
           label: t("ES_FSM_ACTION_DSO_NAME"),

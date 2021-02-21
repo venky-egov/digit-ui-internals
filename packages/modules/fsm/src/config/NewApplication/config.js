@@ -24,7 +24,6 @@ export const newConfig = [
         route: "property-subtype",
         key: "subtype",
         component: "SelectPropertySubtype",
-        groupKey: "ES_TITLE_APPLICATION_DETAILS",
         texts: {
           headerCaption: "",
           header: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL",
@@ -55,19 +54,6 @@ export const newConfig = [
           submitBarLabel: "CS_COMMON_NEXT",
           skipText: "CORE_COMMON_SKIP_CONTINUE",
         },
-        inputs: [
-          {
-            label: "CORE_COMMON_PINCODE",
-            type: "text",
-            name: "pincode",
-            validation: {
-              pattern: /^([1-9])(\d{5})$/,
-              minLength: 6,
-              maxLength: 7,
-            },
-            error: "CORE_COMMON_PINCODE_INVALID",
-          },
-        ],
         withoutLabel: true,
         key: "address",
         nextStep: "address",
@@ -130,26 +116,6 @@ export const newConfig = [
           submitBarLabel: "CS_COMMON_NEXT",
           skipText: "CORE_COMMON_SKIP_CONTINUE",
         },
-        inputs: [
-          {
-            label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL",
-            type: "text",
-            name: "street",
-            validation: {
-              pattern: /^[\w\s]{1,256}$/,
-            },
-            error: "CORE_COMMON_STREET_INVALID",
-          },
-          {
-            label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL",
-            type: "text",
-            name: "doorNo",
-            validation: {
-              pattern: /^[\w]([\w\/,\s])*$/,
-            },
-            error: "CORE_COMMON_DOOR_INVALID",
-          },
-        ],
         nextStep: "landmark",
       },
       {
@@ -165,16 +131,6 @@ export const newConfig = [
           skipText: "CORE_COMMON_SKIP_CONTINUE",
         },
         key: "address",
-        inputs: [
-          {
-            label: "ES_NEW_APPLICATION_LOCATION_LANDMARK",
-            type: "textarea",
-            name: "landmark",
-            validation: {
-              maxLength: 1024,
-            },
-          },
-        ],
         nextStep: "pit-type",
       },
     ],

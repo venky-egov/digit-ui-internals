@@ -3,11 +3,22 @@ import { FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/dig
 
 const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
   const [landmark, setLandmark] = useState(() => {
-    const { landmark } = formData || {};
+    const { landmark } = formData?.address || {};
     return landmark ? landmark : "";
   });
 
   const [error, setError] = useState("");
+
+  const inputs = [
+    {
+      label: "ES_NEW_APPLICATION_LOCATION_LANDMARK",
+      type: "textarea",
+      name: "landmark",
+      validation: {
+        maxLength: 1024,
+      },
+    },
+  ];
 
   function onChange(e) {
     if (e.target.value.length > 1024) {
@@ -25,7 +36,7 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
   }
 
   if (userType === "employee") {
-    return config?.inputs?.map((input) => {
+    return inputs?.map((input) => {
       return (
         <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
@@ -41,7 +52,7 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
 
   return (
     <FormStep
-      config={config}
+      config={{ ...config, inputs }}
       value={landmark}
       onChange={onChange}
       onSelect={(data) => onSelect(config.key, { landmark })}

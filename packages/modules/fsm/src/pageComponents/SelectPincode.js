@@ -4,9 +4,22 @@ import React, { useState } from "react";
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => {
-    const { pincode } = formData;
+    const { pincode } = formData?.address;
     return pincode;
   });
+  const inputs = [
+    {
+      label: "CORE_COMMON_PINCODE",
+      type: "text",
+      name: "pincode",
+      validation: {
+        pattern: /^([1-9])(\d{5})$/,
+        minLength: 6,
+        maxLength: 7,
+      },
+      error: "CORE_COMMON_PINCODE_INVALID",
+    },
+  ];
   const [pincodeServicability, setPincodeServicability] = useState(null);
   console.log({ formData }, "pindocde");
   function onChange(e) {
@@ -27,7 +40,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   };
 
   if (userType === "employee") {
-    return config?.inputs?.map((input) => {
+    return inputs?.map((input) => {
       return (
         <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
@@ -43,7 +56,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   return (
     <FormStep
       t={t}
-      config={config}
+      config={{ ...config, inputs }}
       onSelect={goNext}
       _defaultValues={{ pincode }}
       onChange={onChange}

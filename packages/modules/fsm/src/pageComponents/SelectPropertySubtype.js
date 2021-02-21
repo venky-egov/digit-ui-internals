@@ -20,7 +20,6 @@ const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
   useEffect(() => {
     console.log("find proptype here", propertyType, propertySubtypesDataLoading, propertySubtypesData);
     setSubtypeOptions([]);
-    setSubtype(null);
     if (userType === "employee") onSelect(config.key, undefined);
     if (!propertySubtypesDataLoading && propertyType) {
       const subTypes = propertySubtypesData.filter((item) => item.propertyType === (propertyType?.code || propertyType));

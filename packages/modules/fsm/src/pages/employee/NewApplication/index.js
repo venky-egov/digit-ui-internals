@@ -46,6 +46,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const { data: customizationConfig } = Digit.Hooks.fsm.useConfig(state, { staleTime: Infinity });
   const customizationConfig = {};
   const [slumMenu, setSlumMenu] = useState([
+    { key: "", name: "NONE" },
     { key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" },
     { key: "PB_AMRITSAR_SUN01_SLUM_B", name: "Slum B" },
     { key: "PB_AMRITSAR_SUN01_SLUM_C", name: "Slum C" },
@@ -113,18 +114,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
     }
   }, [pincode]);
 
-  useEffect(async () => {
-    if (propertyType && subType && vehicle) {
-      setSubmitValve(false);
-      const { capacity } = vehicle;
-      const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
+  useEffect(() => {
+    (async () => {
+      if (propertyType && subType && vehicle) {
+        setSubmitValve(false);
+        const { capacity } = vehicle;
+        const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
 
-      const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
-      if (billSlab?.price) {
-        setAmountPerTrip(billSlab.price);
+        const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+        if (billSlab?.price) {
+          setAmountPerTrip(billSlab.price);
+        }
+        setSubmitValve(true);
       }
-      setSubmitValve(true);
-    }
+    })();
   }, [propertyType, subType, vehicle]);
 
   function selectedType(value) {
@@ -151,6 +154,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   function selectedSubType(value) {
     setSubType(value);
+  }
+
+  function selectPropertyType(value) {
+    setPropertyType(value);
+    setSubTypeMenu(propertySubtypesData?.data?.filter((item) => item.propertyType === value?.code?.toUpperCase()));
   }
 
   // city locality logic
@@ -300,7 +308,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             <Dropdown
               id="propertyType"
               selected={propertyType}
-              select={setPropertyType}
+              select={selectPropertyType}
               {...{ option: propertyTypesData.data, optionKey: "i18nKey", t }}
             />
           ),
@@ -333,17 +341,18 @@ export const NewApplication = ({ parentUrl, heading }) => {
             <Dropdown isMandatory freeze={true} selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />
           ),
         },
-        {
-          label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
-          type: "checkbox",
-          populators: (
-            <CheckBox
-              label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
-              onChange={slumCheck}
-              disable={customizationConfig ? !customizationConfig?.slumName?.override : true}
-            />
-          ),
-        },
+        // {
+        //   label: t("ES_NEW_APPLICATION_LOCATION_SLUM_"),
+        //   type: "checkbox",
+        //   populators: (
+        //     <CheckBox
+        //       label={t(`ES_NEW_APPLICATION_SLUM_ENABLED`)}
+        //       onChange={slumCheck}
+        //       disable={customizationConfig ? !customizationConfig?.slumName?.override : true}
+        //     />
+        //   ),
+        // },
+
         {
           label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
           isMandatory: true,
@@ -352,12 +361,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
             <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
           ),
         },
-        // {
-        //   label: t("ES_NEW_APPLICATION_SLUM_NAME"),
-        //   type: "dropdown",
-        //   isMandatory: true,
-        //   populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} disable={!slumEnable} />,
-        // },
+        {
+          label: t("ES_NEW_APPLICATION_SLUM_NAME"),
+          type: "dropdown",
+          isMandatory: true,
+          populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
+        },
         {
           label: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
           type: "text",

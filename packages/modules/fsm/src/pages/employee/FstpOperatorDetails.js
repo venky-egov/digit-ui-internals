@@ -111,7 +111,7 @@ const FstpOperatorDetails = () => {
       <Card>
         <StatusTable>
           {vehicleData.map((row, index) => (
-            <Row key={row.title} label={row.title} text={row.value} last={index === vehicleData.length - 1} />
+            <Row key={row.title} label={row.title} text={row.value || "N/A"} last={index === vehicleData.length - 1} />
           ))}
           <LabelFieldPair>
             <CardLabel>{t("ES_VEHICLE_WASTE_RECIEVED")}</CardLabel>

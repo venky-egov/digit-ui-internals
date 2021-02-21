@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import {
   Card,
   CardLabel,
@@ -24,6 +24,7 @@ const config = {
 
 const FstpOperatorDetails = () => {
   const { t } = useTranslation();
+  const history = useHistory();
   const queryClient = useQueryClient();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   let { id: applicationNos } = useParams();
@@ -77,7 +78,10 @@ const FstpOperatorDetails = () => {
     /* Show Toast on success */
     queryClient.invalidateQueries("FSM_VEHICLE_DATA");
     setShowToast({ key: "success", action: `ES_FSM_DISPOSE_UPDATE_SUCCESS` });
-    setTimeout(closeToast, 5000);
+    setTimeout(() => {
+      closeToast();
+      history.push(`/digit-ui/employee/fsm/fstp-inbox`);
+    }, 5000);
   };
 
   const handleChange = (event) => {
@@ -109,7 +113,7 @@ const FstpOperatorDetails = () => {
     {
       title: `${t("ES_VEHICLE CAPACITY")} (ltrs)`,
       value: vehicle.vehicle.tankCapacity,
-    }
+    },
   ];
 
   return (

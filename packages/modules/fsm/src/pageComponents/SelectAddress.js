@@ -4,10 +4,18 @@ import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
-  const { pincode } = formData?.address;
-  const cities = pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode)) : allCities;
+  let tenantId = Digit.ULBService.getCurrentTenantId();
+
+  const { pincode } = formData?.address || "";
+  const cities =
+    userType === "employee"
+      ? allCities.filter((city) => city.code === tenantId)
+      : pincode
+      ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
+      : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
   const [selectedCity, setSelectedCity] = useState(() => {
+    if (userType === "employee") return allCities.filter((city) => city.code === tenantId)[0];
     const { city } = formData?.address || {};
     return city ? city : null;
   });

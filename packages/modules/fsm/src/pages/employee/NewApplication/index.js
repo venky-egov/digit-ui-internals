@@ -26,7 +26,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   const onFormValueChange = (formData) => {
     // setNoOfTrips(formData?.noOfTrips || 1);
-    if (formData?.propertyType && formData?.subtype && formData?.complaint?.city_complaint?.code && formData?.complaint?.locality_complaint?.code) {
+    if (formData?.propertyType && formData?.subtype && formData?.address?.city?.code && formData?.address?.locality?.code) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);

@@ -27,7 +27,21 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: id },
-    { staleTime: Infinity }
+    {
+      staleTime: Infinity,
+      select: (details) => {
+        let { additionalDetails } = details;
+
+        const parseTillObject = (str) => {
+          if (typeof str === "object") return str;
+          else return parseTillObject(JSON.parse(str));
+        };
+
+        additionalDetails = parseTillObject(additionalDetails);
+        console.log("in select >>>>>", additionalDetails);
+        return { ...details, additionalDetails };
+      },
+    }
   );
   // console.log("find application details here", applicationData)
   const stateCode = tenantId.split(".")[0];
@@ -104,6 +118,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
 
     if (dso) applicationData.dsoId = dso.id;
     if (vehicleNo && action === "ACCEPT") applicationData.vehicleId = vehicleNo.id;
+    if (vehicleNo && action === "DSO_ACCEPT") applicationData.vehicleId = vehicleNo.id;
     if (vehicle && action === "ASSIGN") applicationData.vehicleType = vehicle.code;
     if (data.date) applicationData.possibleServiceDate = new Date(data.date).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;

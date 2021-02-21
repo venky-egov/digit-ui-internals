@@ -7,6 +7,7 @@ import MobileInbox from "../../components/MobileInbox";
 
 const Inbox = ({ parentRoute }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  console.log("current TenantId in ", tenantId);
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo.info.roles;
 

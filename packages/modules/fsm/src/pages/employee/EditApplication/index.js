@@ -33,9 +33,25 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: applicationNumber, uuid: userInfo.uuid },
-    { staleTime: Infinity }
+    {
+      staleTime: Infinity,
+      select: (details) => {
+        let { additionalDetails } = details;
+
+        const parseTillObject = (str) => {
+          if (typeof str === "object") return str;
+          else return parseTillObject(JSON.parse(str));
+        };
+
+        additionalDetails = parseTillObject(additionalDetails);
+        console.log("in select >>>>>", additionalDetails);
+        return { ...details, additionalDetails };
+      },
+    }
   );
   const [defaultValues, setDefaultValues] = useState();
+
+  // console.log("find application details and workflow data here", applicationData, workflowDetails);
 
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
@@ -59,10 +75,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [amountPerTrip, setAmountPerTrip] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
-
-  const cityProperty = Digit.SessionStorage.get("city_property");
-  const selectedLocalities = Digit.SessionStorage.get("selected_localities");
-  const localityProperty = Digit.SessionStorage.get("locality_property");
 
   const [selectedCity, setSelectedCity] = useState(() => cities.filter((city) => city.code === tenantId)[0]);
   const [localities, setLocalities] = useState(() => localitiesObj[tenantId]);

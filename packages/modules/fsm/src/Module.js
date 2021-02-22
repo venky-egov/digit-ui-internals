@@ -17,6 +17,8 @@ import Response from "./pages/Response";
 import {EditApplication} from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
+import DsoDashboard from "./pages/employee/DsoDashboard";
+
 import SearchApplication from "./pages/employee/SearchApplication";
 import FstpInbox from "./pages/employee/FstpInbox";
 
@@ -75,6 +77,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
         <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
         <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />
+        <PrivateRoute path={`${path}/dso-dashboard`} component={() => <DsoDashboard parentRoute={path} />} />
       </div>
     </Switch>
   );
@@ -125,6 +128,15 @@ export const FSMLinks = ({ matchPath, userType }) => {
     clearParams();
   }, []);
 
+  const roleBasedLoginRoutes = [
+    {
+      role: "FSM_DSO",
+      from: "/digit-ui/employee/fsm/dso-dashboard",
+      dashoardLink: "CS_LINK_DSO_DASHBOARD",
+      loginLink: "CS_LINK_LOGIN_DSO",
+    },
+  ];
+
   if (userType === "citizen") {
     return (
       <React.Fragment>
@@ -133,6 +145,22 @@ export const FSMLinks = ({ matchPath, userType }) => {
         <div className="d-flex">
           <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
           <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+          {/* <HomeLink to={{ pathname: `/digit-ui/citizen/login`, state: { role: "FSM_DSO", from: "" } }}>{t("Login as DSO")}</HomeLink> */}
+          {roleBasedLoginRoutes.map(({ role, from, loginLink, dashoardLink }, index) => {
+            if (Digit.UserService.hasAccess(role)) {
+              return (
+                <HomeLink key={index} to={{ pathname: from }}>
+                  {t(dashoardLink)}
+                </HomeLink>
+              );
+            } else {
+              return (
+                <HomeLink key={index} to={{ pathname: `/digit-ui/citizen/login`, state: { role: "FSM_DSO", from } }}>
+                  {t(loginLink)}
+                </HomeLink>
+              );
+            }
+          })}
         </div>
       </React.Fragment>
     );

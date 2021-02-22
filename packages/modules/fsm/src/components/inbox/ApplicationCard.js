@@ -1,12 +1,23 @@
 import React, { useState } from "react";
 
-import { Card, DetailsCard, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
+import { Card, DetailsCard, Loader, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
 import { FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
 import SearchApplication from "./search";
 import SortBy from "./SortBy";
 
-export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey, isFstpOperator, searchParams, searchFields, linkPrefix }) => {
+export const ApplicationCard = ({
+  data,
+  onFilterChange,
+  onSearch,
+  onSort,
+  serviceRequestIdKey,
+  isFstpOperator,
+  isLoading,
+  searchParams,
+  searchFields,
+  linkPrefix,
+}) => {
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
 
@@ -28,7 +39,7 @@ export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequest
     } else if (type === "FILTER") {
       setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" searchParams={searchParams} />);
     } else if (type === "SORT") {
-      setSelectedComponent(<SortBy type="mobile" onClose={handlePopupClose} type="mobile" />);
+      setSelectedComponent(<SortBy type="mobile" onClose={handlePopupClose} type="mobile" onSort={onSort} />);
     }
     setPopup(true);
   };
@@ -38,6 +49,33 @@ export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequest
     setSelectedComponent(null);
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  let result;
+  if (data && data?.length === 0) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t("CS_MYAPPLICATIONS_NO_APPLICATION")
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  } else if (data && data?.length > 0) {
+    result = (
+      <DetailsCard
+        data={data}
+        serviceRequestIdKey={serviceRequestIdKey}
+        linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
+      />
+    );
+  }
+
   return (
     <React.Fragment>
       <div className="searchBox">
@@ -45,11 +83,7 @@ export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequest
         {onFilterChange && <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />}
         <FilterAction text="SORT" handleActionClick={() => handlePopupAction("SORT")} />
       </div>
-      <DetailsCard
-        data={data}
-        serviceRequestIdKey={serviceRequestIdKey}
-        linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
-      />
+      {result}
       {popup && (
         <PopUp>
           <div className="popup-module">{selectedComponent}</div>

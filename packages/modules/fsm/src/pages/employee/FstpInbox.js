@@ -14,7 +14,7 @@ const config = {
 const FstpInbox = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [searchParams, setSearchParams] = useState({});
+  const [searchParams, setSearchParams] = useState({ applicationStatus: "WAITING_FOR_DISPOSAL" });
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const { isLoading, data: vehicleLog, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters: searchParams, config });

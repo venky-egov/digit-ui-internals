@@ -107,10 +107,6 @@
   }
 }
 
-.d-flex {
-  @apply flex;
-}
-
 @media (min-width: 640px) {
   .employee {
     .main {
@@ -140,5 +136,15 @@
 
   .disposal-action-bar {
     @apply flex justify-between items-center;
+  }
+}
+
+@screen dt {
+  .d-grid {
+    display: grid;
+    grid-template-columns: 250px 250px 250px 250px;
+    column-gap: 10px;
+    row-gap: 2px;
+    margin-left: -12px;
   }
 }

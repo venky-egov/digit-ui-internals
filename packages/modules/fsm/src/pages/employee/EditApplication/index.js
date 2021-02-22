@@ -3,10 +3,10 @@ import { useTranslation } from "react-i18next";
 import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import { newConfig } from "../../../config/NewApplication/config";
-import TripDetails from "./configs/TripDetails";
-import ApplicantDetails from "./configs/ApplicantDetails";
+import TripDetails from "../configs/TripDetails";
+import ApplicantDetails from "../configs/ApplicantDetails";
 
-export const NewApplication = ({ parentUrl, heading }) => {
+export const EditApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();

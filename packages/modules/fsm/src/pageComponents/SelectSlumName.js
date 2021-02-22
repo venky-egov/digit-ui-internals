@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { CardLabel, LabelFieldPair, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 
 const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
-  console.log("find config here", { t, config, onSelect, userType, formData });
-  console.log("find slum here ");
 
   const [slum, setSlum] = useState(formData?.address?.slum);
   const [slumMenu, setSlumMenu] = useState([

@@ -30,7 +30,6 @@ export const EditApplication = ({ parentUrl, heading }) => {
   const onFormValueChange = (setValue, formData) => {
     // setNoOfTrips(formData?.noOfTrips || 1);
     (async () => {
-      // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
       if (formData?.propertyType && formData?.subtype && vehicle?.code && !kill) {
         const { capacity } = vehicle;
@@ -43,15 +42,11 @@ export const EditApplication = ({ parentUrl, heading }) => {
         const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
         if (billSlab?.price) {
           setKill(true);
-          console.log("find bill slab here", billSlab.price);
           setValue("amountPerTrip", billSlab.price);
           setValue("amount", billSlab.price * formData.noOfTrips);
         }
       }
     })();
-    // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
-
-    console.log("find form data here", formData);
     if (formData?.propertyType && formData?.subtype && formData?.address?.locality?.code) {
       setSubmitValve(true);
     } else {
@@ -66,7 +61,6 @@ export const EditApplication = ({ parentUrl, heading }) => {
   // }, [propertyType, subType, vehicle]);
 
   const onSubmit = (data) => {
-    console.log("find submit data", data);
     const applicationChannel = channel;
     const sanitationtype = data.pitType.code;
     const pitDimension = data?.pitDetail;
@@ -128,7 +122,6 @@ export const EditApplication = ({ parentUrl, heading }) => {
     Digit.SessionStorage.set("city_property", null);
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
-    // console.log("find form data here", formData);
     history.push("/digit-ui/employee/fsm/response", formData);
   };
 

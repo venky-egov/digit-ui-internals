@@ -4,7 +4,6 @@ import { FormStep, PitDimension } from "@egovernments/digit-ui-react-components"
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 
 const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
-  console.log({ config, onSelect, t, formData, userType });
   const tankDimension = formData?.pitType?.dimension;
   const [disable, setDisable] = useState(true);
 

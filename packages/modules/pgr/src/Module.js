@@ -42,7 +42,7 @@ export const PGRLinks = ({ matchPath }) => {
     <React.Fragment>
       <div>
         <Header>Complaints</Header>
-        <div className="d-flex">
+        <div className="d-grid">
           <HomeLink to={`${matchPath}/create-complaint/complaint-type`}>{t("CS_COMMON_FILE_A_COMPLAINT")}</HomeLink>
           <HomeLink to={`${matchPath}/complaints`}>{t(LOCALE.MY_COMPLAINTS)}</HomeLink>
         </div>

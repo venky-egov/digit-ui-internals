@@ -240,7 +240,11 @@ const GetSanitationType = (MdmsRes) => MdmsRes["FSM"].SanitationType.filter((typ
 const GetPitType = (MdmsRes) =>
   MdmsRes["FSM"].PitType.filter((item) => item.active).map((type) => ({ ...type, i18nKey: `PITTYPE_MASTERS_${type.code}` }));
 
-const GetApplicationChannel = (MdmsRes) => MdmsRes["FSM"].ApplicationChannel.filter((type) => type.active);
+const GetApplicationChannel = (MdmsRes) =>
+  MdmsRes["FSM"].ApplicationChannel.filter((type) => type.active).map((channel) => ({
+    ...channel,
+    i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}`,
+  }));
 
 const GetPropertyType = (MdmsRes) =>
   MdmsRes["FSM"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({

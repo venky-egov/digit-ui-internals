@@ -46,6 +46,13 @@ export const UserService = {
   setUser: (data) => {
     return Digit.SessionStorage.set("User", data);
   },
+  setExtraRoleDetails: (data) => {
+    const userDetails = Digit.SessionStorage.get("User");
+    return Digit.SessionStorage.set("User", { ...userDetails, extraRoleInfo: data });
+  },
+  getExtraRoleDetails: () => {
+    return Digit.SessionStorage.get("User")?.extraRoleInfo;
+  },
   registerUser: (details, stateCode) =>
     ServiceRequest({
       serviceName: "registerUser",
@@ -66,7 +73,9 @@ export const UserService = {
       params: { tenantId: stateCode },
     }),
   hasAccess: (accessTo) => {
-    const { roles } = Digit.UserService.getUser().info;
+    const user = Digit.UserService.getUser();
+    if (!user) return false;
+    const { roles } = user.info;
     return roles.filter((role) => accessTo.includes(role.code)).length;
   },
 

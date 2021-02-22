@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import EditForm from "./EditForm";
 
-const ModifyApplication = ({ parentUrl, heading }) => {
+const EditApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -26,4 +26,4 @@ const ModifyApplication = ({ parentUrl, heading }) => {
     <EditForm applicationData={applicationData} vehicleMenu={vehicleMenu} channelMenu={channelMenu} tenantId={tenantId} />
   ) : null;
 };
-export default ModifyApplication;
+export default EditApplication;

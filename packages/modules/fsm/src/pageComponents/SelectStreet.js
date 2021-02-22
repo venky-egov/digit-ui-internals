@@ -42,6 +42,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
             value={formData && formData.address ? formData.address[input.name] : null}
             style={{ width: "50%" }}
             onChange={onChange}
+            {...input.validation}
           />
         </LabelFieldPair>
       );

@@ -6,12 +6,14 @@ import { useTranslation } from "react-i18next";
 
 const FSMLink = ({ isMobile, data }) => {
   const { t } = useTranslation();
+  const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
 
   const allLinks = [
     {
       text: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
       link: "/digit-ui/employee/fsm/new-application",
       // accessTo: ["CSR"]
+      notAccessTo: [COLLECTOR],
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
     { text: t("ES_TITLE_DASHBOARD"), link: "/employee", hyperlink: true },
@@ -65,11 +67,15 @@ const FSMLink = ({ isMobile, data }) => {
       <div className="complaint-links-container">
         {GetLogo()}
         <div className="body">
-          {links.map(({ link, text, hyperlink = false }, index) => (
-            <span className="link" key={index}>
-              {hyperlink ? <a href={link}>{text}</a> : <Link to={link}>{text}</Link>}
-            </span>
-          ))}
+          {links.map(({ link, text, hyperlink = false, notAccessTo = [] }, index) => {
+            if (!notAccessTo?.includes(COLLECTOR)) {
+              return (
+                <span className="link" key={index}>
+                  {hyperlink ? <a href={link}>{text}</a> : <Link to={link}>{text}</Link>}
+                </span>
+              );
+            }
+          })}
         </div>
       </div>
     </Card>

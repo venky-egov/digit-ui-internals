@@ -18,6 +18,7 @@ const MenuItem = ({ item }) => {
 const NavBar = ({ open, profileItem, menuItems, onClose }) => {
   const node = useRef();
   Digit.Hooks.useClickOutside(node, onClose);
+  const isDesktop = window.innerWidth >= 780;
 
   return (
     <React.Fragment>
@@ -51,8 +52,8 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
             transition: "transform 0.3s ease-in-out",
             background: "#fff",
             zIndex: "1999",
-            width: "300px",
-            transform: `${open ? "translateX(0)" : "translateX(-310px)"}`,
+            width: isDesktop ? "300px" : "100%",
+            transform: `${open ? "translateX(0)" : "translateX(-450px)"}`,
           }}
         >
           {profileItem}

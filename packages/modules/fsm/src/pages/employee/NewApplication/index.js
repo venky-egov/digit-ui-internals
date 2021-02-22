@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown, PitDimension, FormComposer, CheckBox, CardSubHeader, Card } from "@egovernments/digit-ui-react-components";
-import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { FormComposer } from "@egovernments/digit-ui-react-components";
+import { useHistory } from "react-router-dom";
 import { newConfig } from "../../../config/NewApplication/config";
-import TripDetails from "./configs/TripDetails";
-import ApplicantDetails from "./configs/ApplicantDetails";
+import TripDetails from "../configs/TripDetails";
+import ApplicantDetails from "../configs/ApplicantDetails";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");

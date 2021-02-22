@@ -109,7 +109,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
       sanitationtype: sanitationtype,
       source: applicationChannel.code,
       additionalDetails: {
-        ...JSON.parse(applicationData.additionalDetails),
+        ...applicationData.additionalDetails,
         tripAmount: amount,
       },
       propertyUsage,

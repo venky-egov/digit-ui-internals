@@ -18,7 +18,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
 
   function selectSlum(value) {
     setSlum(value);
-    onSelect(config.key, { slum: value });
+    onSelect(config.key, { ...formData[config.key], slum: value });
   }
 
   function onSkip() {
@@ -26,7 +26,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   }
 
   function goNext() {
-    onSelect(config.key, { slum });
+    onSelect(config.key, { ...formData[config.key], slum });
   }
 
   return userType === "employee" ? (

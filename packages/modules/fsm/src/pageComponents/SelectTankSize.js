@@ -30,7 +30,7 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
   }, [formData?.pitDetails]);
 
   useEffect(() => {
-    const pitDetailValues = Object.values(size).filter((value) => value > 0);
+    const pitDetailValues = size ? Object.values(size).filter((value) => value > 0) : null;
     if (isConventionalSpecticTank(tankDimension) && pitDetailValues?.length >= 3) {
       setDisable(false);
     } else if (!isConventionalSpecticTank(tankDimension) && pitDetailValues?.length >= 2) {

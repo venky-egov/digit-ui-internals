@@ -59,7 +59,7 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
       config={{ ...config, inputs }}
       value={landmark}
       onChange={onChange}
-      onSelect={(data) => onSelect(config.key, { landmark: data })}
+      onSelect={(data) => onSelect(config.key, { ...data })}
       onSkip={onSkip}
       t={t}
       forcedError={t(error)}

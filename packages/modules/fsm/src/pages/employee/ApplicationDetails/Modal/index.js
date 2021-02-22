@@ -126,8 +126,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
 
     if (rejectionReason) workflow.comments = rejectionReason.code;
 
-    console.log('submitting');
-    // submitAction({ fsm: applicationData, workflow });
+    submitAction({ fsm: applicationData, workflow });
   }
 
   useEffect(() => {

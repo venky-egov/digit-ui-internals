@@ -126,7 +126,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
 
     if (rejectionReason) workflow.comments = rejectionReason.code;
 
-    submitAction({ fsm: applicationData, workflow });
+    console.log('submitting');
+    // submitAction({ fsm: applicationData, workflow });
   }
 
   useEffect(() => {
@@ -180,7 +181,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(configCompleteApplication({ t }));
+        return setConfig(configCompleteApplication({ t, vehicle }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);

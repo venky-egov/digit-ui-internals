@@ -4,6 +4,7 @@ import TimePicker from 'react-time-picker';
 import {
   Card,
   CardLabel,
+  CardLabelError,
   DetailsCard,
   TextInput,
   ActionBar,
@@ -34,6 +35,7 @@ const FstpOperatorDetails = () => {
   const [searchParams, setSearchParams] = useState({});
   const [showToast, setShowToast] = useState(null);
   const [wasteCollected, setWasteCollected] = useState(null);
+  const [errors, setErrors] = useState({});
   const [tripTime, setTripTime] = useState(null);
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
@@ -55,6 +57,14 @@ const FstpOperatorDetails = () => {
     if (!tripTime || !wasteCollected) {
       return;
     }
+    const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
+    if (wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
+      setErrors({ wasteRecieved: 'ES_FSTP_INVALID_WASTE_AMOUNT' });
+      return;
+    }
+
+    setErrors({});
+
     const d = new Date();
     const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) / 1000;
     vehicle.tripEndTime = timeStamp;
@@ -129,6 +139,7 @@ const FstpOperatorDetails = () => {
             <div className="field-container">
               <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
             </div>
+            {errors.wasteRecieved && <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>}
           </LabelFieldPair>
           <LabelFieldPair>
             <CardLabel>{t("ES_COMMON_TIME")}</CardLabel>

@@ -18,6 +18,7 @@ const TextInput = (props) => {
           defaultValue={props.defaultValue}
           minLength={props.minlength}
           maxLength={props.maxlength}
+          max={props.max}
           pattern={props.pattern}
         />
       ) : (
@@ -33,6 +34,7 @@ const TextInput = (props) => {
           defaultValue={props.defaultValue}
           minLength={props.minlength}
           maxLength={props.maxlength}
+          max={props.max}
           required={props.isRequired}
           pattern={props.pattern}
         />

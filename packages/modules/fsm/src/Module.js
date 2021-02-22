@@ -142,7 +142,7 @@ export const FSMLinks = ({ matchPath, userType }) => {
       <React.Fragment>
         {/* TODO: change */}
         <Header>{t("CS_HOME_FSM_SERVICES")}</Header>
-        <div className="d-flex">
+        <div className="d-grid">
           <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
           <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
           {/* <HomeLink to={{ pathname: `/digit-ui/citizen/login`, state: { role: "FSM_DSO", from: "" } }}>{t("Login as DSO")}</HomeLink> */}

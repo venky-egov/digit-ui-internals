@@ -81,8 +81,8 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
               name: "date",
               validation: {
                 required: true,
-                min: todayDate(),
               },
+              min: todayDate(),
             },
           },
         ],

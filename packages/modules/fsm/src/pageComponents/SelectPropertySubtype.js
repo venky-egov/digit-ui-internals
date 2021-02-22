@@ -2,13 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Loader, TypeSelectCard, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
-  console.log("asdsdfsd", { config, onSelect, t, userType, formData });
-  const [subtype, setSubtype] = useState(() => {
-    const { subtype } = formData || {};
-    return subtype !== undefined ? subtype : null;
-  });
-  const [subtypeOptions, setSubtypeOptions] = useState([]);
-  const { propertyType } = formData || {};
+  // console.log("find subtype here", { config, onSelect, t, userType, formData });
 
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -17,10 +11,26 @@ const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
     select,
   });
 
+  const [subtype, setSubtype] = useState(() => {
+    const { subtype } = formData || {};
+    return subtype !== undefined && propertySubtypesData ? propertySubtypesData.filter((subType) => subType.code === formData?.subtype)[0] : null;
+  });
+
+  const [subtypeOptions, setSubtypeOptions] = useState([]);
+  const { propertyType } = formData || {};
+
   useEffect(() => {
-    console.log("find proptype here", propertyType, propertySubtypesDataLoading, propertySubtypesData);
-    setSubtypeOptions([]);
-    if (userType === "employee") onSelect(config.key, undefined);
+    if (!propertySubtypesDataLoading && propertySubtypesData) {
+      const preFillSubtype = propertySubtypesData?.filter((subType) => subType.code === formData?.subtype)[0];
+      // console.log("find pre fill subtype here", preFillSubtype)
+      setSubtype(preFillSubtype);
+    }
+  }, [formData?.subtype, propertySubtypesData]);
+
+  useEffect(() => {
+    // console.log("find proptype here", propertyType, propertySubtypesDataLoading, propertySubtypesData);
+    // setSubtypeOptions([]);
+    // if (userType === "employee") onSelect(config.key, undefined);
     if (!propertySubtypesDataLoading && propertyType) {
       const subTypes = propertySubtypesData.filter((item) => item.propertyType === (propertyType?.code || propertyType));
       setSubtypeOptions(subTypes);

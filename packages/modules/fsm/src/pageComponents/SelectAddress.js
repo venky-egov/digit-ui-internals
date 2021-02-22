@@ -25,11 +25,15 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     return locality ? locality : null;
   });
 
-
   useEffect(() => {
     if (selectedCity) {
       let __localityList = localitiesObj[selectedCity.code];
       let filteredLocalityList = [];
+
+      if (formData?.address?.locality) {
+        setSelectedLocality(formData.address.locality);
+      }
+
       if (formData?.address?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
       }

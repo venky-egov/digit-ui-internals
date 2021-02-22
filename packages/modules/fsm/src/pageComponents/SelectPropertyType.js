@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CitizenInfoLabel, Loader, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
-  const [propertyType, setPropertyType] = useState(() => {
-    const { propertyType } = formData || {};
-    return propertyType !== undefined ? propertyType : null;
-  });
-  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
+  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertyType", { select });
+
+  const [propertyType, setPropertyType] = useState(() => {
+    const { propertyType } = formData || {};
+    return propertyType !== undefined && propertyTypesData.data
+      ? propertyTypesData.data.filter((propertyType) => propertyType.code === formData?.propertyType)[0]
+      : null;
+  });
+
+  useEffect(() => {
+    if (!propertyTypesData.isLoading && propertyTypesData.data) {
+      const preFilledPropertyType = propertyTypesData.data.filter((propertyType) => propertyType.code === formData?.propertyType)[0];
+      setPropertyType(preFilledPropertyType);
+    }
+  }, [formData?.propertyType, propertyTypesData]);
+
   const goNext = () => {
     onSelect(config.key, propertyType);
   };

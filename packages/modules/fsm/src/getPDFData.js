@@ -42,10 +42,13 @@ const getPDFData = (application, tenantInfo, t) => {
         values: [
           { title: t("CS_APPLICATION_DETAILS_PINCODE"), value: application?.address?.pincode || "NA" },
           { title: t("CS_APPLICATION_DETAILS_CITY"), value: application?.address?.city || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_MOHALLA"), value: application?.address?.locality?.name || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_STREET"), value: application.address?.street || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_DOOR_NO"), value: application.address?.doorNo || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application.address?.landmark || "NA" },
+          {
+            title: t("CS_APPLICATION_DETAILS_MOHALLA"),
+            value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_ADMIN_${application?.address?.locality?.code}`) || "NA",
+          },
+          { title: t("CS_APPLICATION_DETAILS_STREET"), value: application?.address?.street || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_DOOR_NO"), value: application?.address?.doorNo || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application?.address?.landmark || "NA" },
         ],
       },
       {

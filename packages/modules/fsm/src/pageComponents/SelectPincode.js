@@ -1,5 +1,5 @@
 import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
@@ -13,7 +13,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
       type: "text",
       name: "pincode",
       validation: {
-        pattern: /^([1-9])(\d{5})$/,
+        // pattern: /^([1-9])(\d{5})$/,
         minLength: 6,
         maxLength: 7,
       },
@@ -21,6 +21,14 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
     },
   ];
   const [pincodeServicability, setPincodeServicability] = useState(null);
+
+  useEffect(() => {
+    // console.log("find pincode datahere", formData?.address?.pincode)
+    if (formData?.address?.pincode) {
+      setPincode(formData.address.pincode);
+    }
+  }, [formData?.address?.pincode]);
+
   function onChange(e) {
     setPincode(e.target.value);
     setPincodeServicability(null);
@@ -46,7 +54,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <TextInput style={{ width: "50%" }} key={input.name} onChange={onChange} {...input.validation} />
+          <TextInput style={{ width: "50%" }} key={input.name} value={pincode} onChange={onChange} {...input.validation} />
         </LabelFieldPair>
       );
     });

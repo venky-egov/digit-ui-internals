@@ -1,7 +1,19 @@
 import React from "react";
 import { Table } from "@egovernments/digit-ui-react-components";
 
-const ApplicationTable = ({ t, currentPage, columns, data, getCellProps, onNextPage, onPrevPage, onPageSizeChange, pageSizeLimit }) => {
+const ApplicationTable = ({
+  t,
+  currentPage,
+  columns,
+  data,
+  getCellProps,
+  disableSort,
+  onSort,
+  onNextPage,
+  onPrevPage,
+  onPageSizeChange,
+  pageSizeLimit,
+}) => {
   return (
     <Table
       t={t}
@@ -12,7 +24,9 @@ const ApplicationTable = ({ t, currentPage, columns, data, getCellProps, onNextP
       onNextPage={onNextPage}
       onPrevPage={onPrevPage}
       pageSizeLimit={pageSizeLimit}
+      disableSort={disableSort}
       onPageSizeChange={onPageSizeChange}
+      onSort={onSort}
     />
   );
 };

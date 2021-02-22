@@ -26,6 +26,11 @@ import FSM_FSTP from "./userInfo/fsm-fstp.json";
 import FSM_DSO from "./userInfo/fsm-dso.json";
 import FSM_ADMIN from "./userInfo/fsm-admin.json";
 import FSM_CREATOR from "./userInfo/fsm-creator.json";
+import QA_FSM_CREATOR from "./userInfo/QACE.json";
+import QA_FSM_EDITOR from "./userInfo/QAEE.json";
+import QA_FSM_COLLECTOR from "./userInfo/QACOLL.json";
+import QA_FSM_DSO from "./userInfo/QADSO.json";
+import QA_FSM_FSTP from "./userInfo/QAFSTPO.json";
 
 import QAFSTP from "./userInfo/fstp.json";
 import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
@@ -54,6 +59,11 @@ const userInfo = {
   FSM_FSTP,
   FSM_DSO,
   NAWANSHAHR_QA_GRO,
+  QA_FSM_COLLECTOR,
+  QA_FSM_CREATOR,
+  QA_FSM_DSO,
+  QA_FSM_EDITOR,
+  QA_FSM_FSTP,
 };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
@@ -100,7 +110,7 @@ window.Digit.SessionStorage.set("userType", userTypeInfo);
 if (userType !== "CITIZEN") {
   window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
 } else {
-  window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+  if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
 }
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);

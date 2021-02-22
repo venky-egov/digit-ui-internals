@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
   const { t } = useTranslation();
-  const paymentAmount = 123;
+
   return {
     head: "",
     body: [
@@ -19,7 +19,7 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
         populators: {
           name: "noOfTrips",
           error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-          validation: { pattern: /^[1-9]{1}$/ },
+          validation: { required: true },
           // defaultValue: 1
           // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
         },
@@ -31,7 +31,7 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
         populators: {
           name: "amountPerTrip",
           error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
-          validation: { required: true, pattern: /^[1-9]\d+$/ },
+          validation: { required: true },
           // defaultValue: vehicle?.amount,
         },
         // disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,

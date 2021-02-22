@@ -1,6 +1,6 @@
 import React from "react";
 
-export const configCompleteApplication = ({ t }) => ({
+export const configCompleteApplication = ({ t, vehicle }) => ({
   label: {
     heading: "ES_FSM_ACTION_TITLE_COMPLETE_REQUEST",
     submit: "CS_COMMON_COMPLETE",
@@ -14,6 +14,7 @@ export const configCompleteApplication = ({ t }) => ({
           type: "date",
           populators: {
             name: "desluged",
+            max: new Date().toISOString().split("T")[0],
           },
         },
         {
@@ -21,6 +22,10 @@ export const configCompleteApplication = ({ t }) => ({
           type: "text",
           populators: {
             name: "wasteCollected",
+            validation: {
+              required: true,
+              validate: (value) => value <= vehicle.capacity,
+            },
           },
         },
       ],

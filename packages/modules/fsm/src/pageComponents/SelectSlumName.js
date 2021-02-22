@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { CardLabel, LabelFieldPair, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 
 const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
-
   const [slum, setSlum] = useState(formData?.address?.slum);
   const [slumMenu, setSlumMenu] = useState([
     { key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" },
@@ -16,6 +15,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
 
   function selectSlum(value) {
     setSlum(value);
+    onSelect(config.key, { ...formData[config.key], slum: value });
   }
 
   function onSkip() {
@@ -23,7 +23,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   }
 
   function goNext() {
-    onSelect(config.key, { slum });
+    onSelect(config.key, { ...formData[config.key], slum });
   }
 
   return userType === "employee" ? (

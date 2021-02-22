@@ -30,6 +30,7 @@ const displayPitDimension = (pitDeminsion) => {
 };
 
 const displayServiceDate = (timeStamp) => {
+  if (timeStamp === 0) return "N/A";
   const date = new Date(timeStamp);
   return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 };
@@ -57,7 +58,7 @@ export const Search = {
         vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
       }
     }
-    const amountPerTrip = isJsonString(response?.additionalDetails) ? JSON.parse(response.additionalDetails).tripAmount : "N/A";
+    const amountPerTrip = response?.additionalDetails && response?.additionalDetails.tripAmount ? response.additionalDetails.tripAmount : "N/A";
     const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
     return [
       {

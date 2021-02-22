@@ -1,5 +1,5 @@
-import React from "react";
-import { useTable, useRowSelect, usePagination } from "react-table";
+import React, { useEffect } from "react";
+import { useTable, useRowSelect, usePagination, useSortBy } from "react-table";
 import { ArrowBack, ArrowForward } from "./svgindex";
 
 // const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
@@ -17,7 +17,22 @@ import { ArrowBack, ArrowForward } from "./svgindex";
 //   );
 // });
 
-const Table = ({ t, data, columns, getCellProps, currentPage = 0, pageSizeLimit = 10, totalRecords, onNextPage, onPrevPage, onPageSizeChange }) => {
+const noop = () => {};
+
+const Table = ({
+  t,
+  data,
+  columns,
+  getCellProps,
+  currentPage = 0,
+  pageSizeLimit = 10,
+  disableSort = true,
+  totalRecords,
+  onNextPage,
+  onPrevPage,
+  onSort = noop,
+  onPageSizeChange,
+}) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -33,7 +48,7 @@ const Table = ({ t, data, columns, getCellProps, currentPage = 0, pageSizeLimit 
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy },
   } = useTable(
     {
       columns,
@@ -41,8 +56,12 @@ const Table = ({ t, data, columns, getCellProps, currentPage = 0, pageSizeLimit 
       initialState: { pageIndex: currentPage, pageSize: pageSizeLimit },
       pageCount: totalRecords > 0 ? Math.ceil(totalRecords / pageSizeLimit) : -1,
       manualPagination: true,
+      disableMultiSort: false,
+      disableSortBy: disableSort,
+      manualSortBy: true,
       autoResetPage: false,
     },
+    useSortBy,
     usePagination,
     useRowSelect
     // (hooks) => {
@@ -67,6 +86,10 @@ const Table = ({ t, data, columns, getCellProps, currentPage = 0, pageSizeLimit 
     // }
   );
 
+  useEffect(() => {
+    onSort(sortBy);
+  }, [onSort, sortBy]);
+
   return (
     <React.Fragment>
       <table className="table" {...getTableProps()}>
@@ -74,7 +97,10 @@ const Table = ({ t, data, columns, getCellProps, currentPage = 0, pageSizeLimit 
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render("Header")}
+                  <span>{column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}</span>
+                </th>
               ))}
             </tr>
           ))}

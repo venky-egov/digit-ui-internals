@@ -27,7 +27,20 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: id },
-    { staleTime: Infinity }
+    {
+      staleTime: Infinity,
+      select: (details) => {
+        let { additionalDetails } = details;
+
+        const parseTillObject = (str) => {
+          if (typeof str === "object") return str;
+          else return parseTillObject(JSON.parse(str));
+        };
+
+        additionalDetails = parseTillObject(additionalDetails);
+        return { ...details, additionalDetails };
+      },
+    }
   );
   // console.log("find application details here", applicationData)
   const stateCode = tenantId.split(".")[0];
@@ -45,10 +58,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
   const [rejectMenu, setRejectMenu] = useState([
-    "ES_FSM_REJECTION_OPTION_A",
-    "ES_FSM_REJECTION_OPTION_B",
-    "ES_FSM_REJECTION_OPTION_C",
-    "ES_FSM_REJECTION_OPTION_D",
+    { code: "ES_FSM_REJECTION_OPTION_A", name: "Vehicle under maintenance" },
+    { code: "ES_FSM_REJECTION_OPTION_B", name: "Cannot service within provided service date, multiple request in pipeline" },
   ]);
   const [reassignReasonMenu, setReassignReasonMenu] = useState([
     "ES_FSM_REASSIGN_OPTION_A",
@@ -56,7 +67,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     "ES_FSM_REASSIGN_OPTION_C",
     "ES_FSM_REASSIGN_OPTION_D",
   ]);
-  const [rejectionReason, selectReason] = useState(null);
+  const [rejectionReason, setReason] = useState(null);
   const [reassignReason, selectReassignReason] = useState(null);
   const [formValve, setFormValve] = useState(false);
 
@@ -98,17 +109,22 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     setVehicle(value);
   }
 
+  function selectReason(value) {
+    setReason(value);
+  }
+
   function submit(data) {
     // console.log("find submit here",data);
     const workflow = { action: action };
 
     if (dso) applicationData.dsoId = dso.id;
     if (vehicleNo && action === "ACCEPT") applicationData.vehicleId = vehicleNo.id;
+    if (vehicleNo && action === "DSO_ACCEPT") applicationData.vehicleId = vehicleNo.id;
     if (vehicle && action === "ASSIGN") applicationData.vehicleType = vehicle.code;
     if (data.date) applicationData.possibleServiceDate = new Date(data.date).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
 
-    if (rejectionReason) workflow.comments = rejectionReason;
+    if (rejectionReason) workflow.comments = rejectionReason.code;
 
     submitAction({ fsm: applicationData, workflow });
   }
@@ -171,8 +187,19 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "CANCEL":
       case "DECLINE":
       case "SENDBACK":
+      case "DSO_REJECT":
+        setFormValve(rejectionReason ? true : false);
+        return setConfig(
+          configRejectApplication({
+            t,
+            rejectMenu,
+            selectReason,
+            rejectionReason,
+          })
+        );
       case "REJECT":
         setFormValve(rejectionReason ? true : false);
+
         return setConfig(
           configRejectApplication({
             t,

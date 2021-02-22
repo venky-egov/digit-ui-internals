@@ -8,7 +8,7 @@ const useInbox = (tenantId, filters) => {
   const fetchApplications = ({ queryKey }) => {
     const [_key, filters] = queryKey;
     let filtersObj = {};
-    const { applicationNos, mobileNumber, limit, offset } = filters;
+    const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;
     if (filters.applicationStatus) {
       filtersObj.applicationStatus = filters.applicationStatus.map((status) => status.code).join(",");
     }
@@ -24,6 +24,12 @@ const useInbox = (tenantId, filters) => {
     if (applicationNos) {
       filtersObj.applicationNos = applicationNos;
     }
+    if (sortBy) {
+      filtersObj.sortBy = sortBy;
+    }
+    if (sortOrder) {
+      filtersObj.sortOrder = sortOrder;
+    }
     return Search.all(tenantId, { ...filtersObj, limit, offset });
   };
   const { isLoading, isError, data: applicationsList } = useSearchAll(tenantId, filters, fetchApplications);
@@ -35,10 +41,10 @@ const useInbox = (tenantId, filters) => {
     const serviceIds = applicationsList.map((application) => application.applicationNo);
     const serviceIdParams = serviceIds.join();
     const workflowInstances = await Digit.WorkflowService.getByBusinessId(tenantId, serviceIdParams, {}, false);
-    if (workflowInstances.ProcessInstances.length) {
+    if (workflowInstances.ProcessInstances) {
       result = combineResponses(applicationsList, workflowInstances).map((data) => ({
         ...data,
-        sla: Math.round(data.sla / (24 * 60 * 60 * 1000)),
+        sla: Math.round(data.sla / (24 * 60 * 60 * 1000)) || "-",
       }));
 
       return result;

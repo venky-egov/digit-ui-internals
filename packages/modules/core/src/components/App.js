@@ -170,7 +170,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           </div>
         )} */}
         <CitizenSidebar isOpen={isSidebarOpen} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
-        <div className="main">
+        <div className="main" style={{ position: isSidebarOpen ? "fixed" : "revert" }}>
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
       </Route>

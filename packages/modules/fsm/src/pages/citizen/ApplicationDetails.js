@@ -148,12 +148,7 @@ const ApplicationDetails = () => {
                   workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
                     return (
                       <React.Fragment key={index}>
-                        <CheckPoint
-                          keyValue={index}
-                          isCompleted={index === 0}
-                          label={t("CS_COMMON_" + checkpoint.status)}
-                          // customChild={getTimelineCaptions(checkpoint)}
-                        />
+                        <CheckPoint keyValue={index} isCompleted={index === 0} label={t("CS_COMMON_" + checkpoint.status)} />
                       </React.Fragment>
                     );
                   })}

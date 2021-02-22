@@ -7,7 +7,7 @@ export const ULBService = {
     const user = UserService.getUser();
     if (user?.extraRoleInfo) {
       // Check if route is employee route
-      if (window.location.pathname.split('/').includes('employee')) return user.extraRoleInfo.tenantId;
+      if (window.location.pathname.split("/").includes("employee")) return user.extraRoleInfo.tenantId;
     }
     //TODO: fix tenant id from userinfo
     const tenantId =

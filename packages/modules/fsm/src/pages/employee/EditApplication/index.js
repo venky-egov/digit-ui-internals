@@ -14,10 +14,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const cities = Digit.Hooks.fsm.useTenants();
   console.log("find cities here", cities);
 
-  const FSM_CREATOR_EMP = Digit.UserService.hasAccess("FSM_CREATOR_EMP");
-
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
-
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(state, "FSM", "ApplicationChannel");
   // console.log("find application channel data", applicationChannelData);
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
@@ -36,15 +33,26 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const { isLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: applicationNumber, uuid: userInfo.uuid },
-    { staleTime: Infinity }
+    {
+      staleTime: Infinity,
+      select: (details) => {
+        let { additionalDetails } = details;
+
+        const parseTillObject = (str) => {
+          if (typeof str === "object") return str;
+          else return parseTillObject(JSON.parse(str));
+        };
+
+        additionalDetails = parseTillObject(additionalDetails);
+        console.log("in select >>>>>", additionalDetails);
+        return { ...details, additionalDetails };
+      },
+    }
   );
-  const workflowDetails = Digit.Hooks.fsm.useWorkflowData(tenantId, applicationNumber);
   const [defaultValues, setDefaultValues] = useState();
-  let setFormValue;
 
   // console.log("find application details and workflow data here", applicationData, workflowDetails);
 
-  const [menu, setMenu] = useState([]);
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
   const [subType, setSubType] = useState({});
@@ -67,10 +75,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const [amountPerTrip, setAmountPerTrip] = useState();
 
   const localitiesObj = useSelector((state) => state.common.localities);
-
-  const cityProperty = Digit.SessionStorage.get("city_property");
-  const selectedLocalities = Digit.SessionStorage.get("selected_localities");
-  const localityProperty = Digit.SessionStorage.get("locality_property");
 
   const [selectedCity, setSelectedCity] = useState(() => cities.filter((city) => city.code === tenantId)[0]);
   const [localities, setLocalities] = useState(() => localitiesObj[tenantId]);
@@ -224,20 +228,21 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   //   setAmountPerTrip(formData?.amountPerTrip);
   // };
 
-  useEffect(async () => {
-    if (propertyType && subType && vehicle) {
-      setSubmitValve(false);
-      const { capacity } = vehicle;
-      const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
-      const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
-      if (billSlab?.price) {
-        setAmountPerTrip(billSlab.price);
+  useEffect(() => {
+    (async () => {
+      if (propertyType && subType && vehicle) {
+        setSubmitValve(false);
+        const { capacity } = vehicle;
+        const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, { propertyType: subType.key, capacity, slum: "YES" });
+        const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+        if (billSlab?.price) {
+          setAmountPerTrip(billSlab.price);
+          setSubmitValve(true);
+        }
+        setSubmitValve(true);
       }
-      setSubmitValve(true);
-    }
+    })();
   }, [propertyType, subType, vehicle]);
-
-  const onFormValueChange = async (formData) => {};
 
   const onSubmit = (data) => {
     const applicationChannel = channel.code;
@@ -264,23 +269,27 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     // const additionalCharges  = data.additionalCharges
     // const reasonForAdditionalCharges  = data.reasonForAdditionalCharges
     // const additionalAmount  = data.additionalAmount
-
-    (applicationData.tenantId = cityCode),
-      (applicationData.sanitationtype = sanitationtype),
-      (applicationData.source = applicationChannel),
-      (applicationData.additionalDetails = {
+    const formData = {
+      ...applicationData,
+      tenantId: cityCode,
+      sanitationtype: sanitationtype,
+      source: applicationChannel,
+      additionalDetails: {
+        ...applicationData.additionalDetails,
         tripAmount: amount,
-      }),
-      (applicationData.propertyUsage = subType.code),
-      (applicationData.vehicleType = vehicle.code),
-      (applicationData.noOfTrips = noOfTrips),
-      (applicationData.pitDetail = {
+      },
+      propertyUsage: subType.code,
+      vehicleType: vehicle.code,
+      noOfTrips,
+      pitDetail: {
+        ...applicationData.pitDetail,
         distanceFromRoad: data.distanceFromRoad,
         height,
         length,
         width,
-      }),
-      (applicationData.address = {
+      },
+      address: {
+        ...applicationData.address,
         tenantId: cityCode,
         landmark,
         doorNo,
@@ -289,23 +298,26 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         state,
         pincode,
         locality: {
+          ...applicationData.address.locality,
           code: localityCode.split("_").pop(),
           name: localityName,
         },
         geoLocation: {
+          ...applicationData.address.geoLocation,
           latitude: selectedLocality.latitude,
           longitude: selectedLocality.longitude,
         },
-      }),
-      // TODO: To be added after approval
-      // (applicationData.additionalTrip = additionalTrip ),
-      // (applicationData.additionalCharges = additionalCharges ),
-      // (applicationData.reasonForAdditionalCharges = reasonForAdditionalCharges ),
-      // (applicationData.additionalAmount = additionalAmount )
-      // (applicationData.workflow = {
-      //   action: "SUBMIT",
-      // }),
-      delete applicationData["responseInfo"];
+      },
+    };
+    // TODO: To be added after approval
+    // (applicationData.additionalTrip = additionalTrip ),
+    // (applicationData.additionalCharges = additionalCharges ),
+    // (applicationData.reasonForAdditionalCharges = reasonForAdditionalCharges ),
+    // (applicationData.additionalAmount = additionalAmount )
+    // (applicationData.workflow = {
+    //   action: "SUBMIT",
+    // }),
+    delete formData["responseInfo"];
     // console.log(
     //   "%c: onSubmit -> formData ",
     //   "font-size:16px;background-color:#3dd445;color:white;",
@@ -320,7 +332,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
     Digit.SessionStorage.set("locality_property", null);
 
     history.push("/digit-ui/employee/fsm/response", {
-      applicationData,
+      applicationData: formData,
       key: "update",
       action: "SUBMIT",
     });
@@ -381,7 +393,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
-
           populators: (
             <Dropdown
               id="propertyType"
@@ -530,7 +541,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           populators: {
             name: "distanceFromRoad",
             error: t("ES_NEW_APPLICATION_DISTANCE_INVALID"),
-            validation: { pattern: /^[0-9]\d?(\.\d{1,2})?$/ },
           },
           disable: isDisabled("pitDetail") ? isDisabled("pitDetail") : false,
         },
@@ -637,7 +647,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         config={config}
         onSubmit={onSubmit}
         defaultValues={defaultValues}
-        onFormValueChange={onFormValueChange}
       ></FormComposer>
     );
   } else {

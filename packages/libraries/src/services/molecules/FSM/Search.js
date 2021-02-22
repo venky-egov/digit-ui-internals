@@ -30,6 +30,7 @@ const displayPitDimension = (pitDeminsion) => {
 };
 
 const displayServiceDate = (timeStamp) => {
+  if (timeStamp === 0) return "N/A";
   const date = new Date(timeStamp);
   return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 };

@@ -64,12 +64,14 @@ const ComplaintDetailsPage = (props) => {
 
   const [loader, setLoader] = useState(false);
 
-  useEffect(async () => {
-    if (complaintDetails) {
-      setLoader(true);
-      await revalidate();
-      setLoader(false);
-    }
+  useEffect(() => {
+    (async () => {
+      if (complaintDetails) {
+        setLoader(true);
+        await revalidate();
+        setLoader(false);
+      }
+    })();
   }, []);
 
   function zoomImage(imageSource, index) {
@@ -131,7 +133,7 @@ const ComplaintDetailsPage = (props) => {
                   text={
                     Array.isArray(complaintDetails.details[flag])
                       ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
-                      : t(complaintDetails.details[flag])
+                      : t(complaintDetails.details[flag]) || "N/A"
                   }
                   last={index === arr.length - 1}
                 />

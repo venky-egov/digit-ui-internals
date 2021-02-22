@@ -39,6 +39,11 @@ const ApplicationDetails = (props) => {
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   // console.log("find DSO here", DSO)
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
+  const { isLoading: isDataLoading, isSuccess, data: applicationData } = Digit.Hooks.fsm.useSearch(
+    tenantId,
+    { applicationNos: applicationNumber },
+    { staleTime: Infinity }
+  );
 
   const {
     isLoading: updatingApplication,
@@ -50,7 +55,7 @@ const ApplicationDetails = (props) => {
 
   // console.log("find application details here", applicationDetails)
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
-    tenantId,
+    tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
     moduleCode: "FSM",
     role: "FSM_EMPLOYEE",
@@ -75,7 +80,7 @@ const ApplicationDetails = (props) => {
         {data.date && <p>{data.date}</p>}
         <p>{data.name}</p>
         <p>{data.mobileNumber}</p>
-        {data.source && <p>{t("ES_COMMON_FILED_VIA_" + data.source.toUpperCase())}</p>}
+        {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
       </div>
     );
   };
@@ -93,6 +98,7 @@ const ApplicationDetails = (props) => {
       case "COMPLETED":
       case "CANCEL":
       case "SENDBACK":
+      case "DSO_REJECT":
       case "REJECT":
       case "DECLINE":
         return setShowModal(true);
@@ -149,6 +155,20 @@ const ApplicationDetails = (props) => {
     closeModal();
   };
 
+  const getTimelineCaptions = (checkpoint) => {
+    // console.log("tl", checkpoint);
+    if (checkpoint.status === "APPLICATION_FILED") {
+      const caption = {
+        date: Digit.DateUtils.ConvertTimestampToDate(applicationData.citizen.createdDate),
+        name: applicationData.citizen.name,
+        mobileNumber: applicationData.citizen.mobileNumber,
+        source: applicationData.source || "",
+      };
+      return <TLCaption data={caption} />;
+    }
+    return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
+  };
+
   if (isLoading) {
     return <Loader />;
   }
@@ -176,21 +196,25 @@ const ApplicationDetails = (props) => {
                 )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => (
-                    <Row key={value.title} label={value.title} text={value.value} last={index === detail?.values?.length - 1} />
+                    <Row key={value.title} label={value.title} text={value.value || "N/A"} last={index === detail?.values?.length - 1} />
                   ))}
                 </StatusTable>
               </React.Fragment>
             ))}
 
             <BreakLine />
-            {workflowDetails?.isLoading && <Loader />}
-            {!workflowDetails?.isLoading && (
+            {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
+            {!workflowDetails?.isLoading && !isDataLoading && (
               <Fragment>
                 <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
                   {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
                 </CardSectionHeader>
                 {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
-                  <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
+                  <CheckPoint
+                    isCompleted={true}
+                    label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)}
+                    customChild={getTimelineCaptions(workflowDetails?.data?.timeline[0]?.status)}
+                  />
                 ) : (
                   <ConnectingCheckPoints>
                     {workflowDetails?.data?.timeline &&
@@ -201,7 +225,7 @@ const ApplicationDetails = (props) => {
                               keyValue={index}
                               isCompleted={index === 0}
                               label={t("CS_COMMON_FSM_" + checkpoint.status)}
-                              // customChild={getTimelineCaptions(checkpoint)}
+                              customChild={getTimelineCaptions(checkpoint)}
                             />
                           </React.Fragment>
                         );

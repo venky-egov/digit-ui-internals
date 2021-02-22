@@ -59,7 +59,6 @@ const DesktopInbox = (props) => {
         return [
           {
             Header: t("CS_FILE_DESLUDGING_APPLICATION_NO"),
-            accessor: "applicationNo",
             Cell: ({ row }) => {
               return (
                 <div>
@@ -96,7 +95,6 @@ const DesktopInbox = (props) => {
           },
           {
             Header: t("ES_INBOX_STATUS"),
-            accessor: "status",
             Cell: (row) => {
               return GetCell(t(`CS_COMMON_FSM_${row.row.original["status"]}`));
             },
@@ -118,13 +116,16 @@ const DesktopInbox = (props) => {
     result = (
       <Card style={{ marginTop: 20 }}>
         {/* TODO Change localization key */}
-        {t("CS_MYCOMPLAINTS_NO_COMPLAINTS")
-          .split("\\n")
-          .map((text, index) => (
-            <p key={index} style={{ textAlign: "center" }}>
-              {text}
-            </p>
-          ))}
+        {
+          // t("CS_MYCOMPLAINTS_NO_COMPLAINTS")
+          t("CS_MYAPPLICATIONS_NO_APPLICATION")
+            .split("\\n")
+            .map((text, index) => (
+              <p key={index} style={{ textAlign: "center" }}>
+                {text}
+              </p>
+            ))
+        }
       </Card>
     );
   } else if (props?.data?.length > 0) {
@@ -150,6 +151,8 @@ const DesktopInbox = (props) => {
         onNextPage={props.onNextPage}
         onPrevPage={props.onPrevPage}
         pageSizeLimit={props.pageSizeLimit}
+        onSort={props.onSort}
+        disableSort={props.disableSort}
         onPageSizeChange={props.onPageSizeChange}
       />
     );

@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { ActionBar, RadioButtons } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 
 const SortBy = (props) => {
   const { t } = useTranslation();
+  const [selectedOption, setSelectedOption] = useState(null);
 
   function clearAll() {}
+
+  function onSort(option) {
+    setSelectedOption(option);
+    props.onSort([{ id: "createdTime", desc: option.code === "DESC" ? true : false }]);
+  }
 
   return (
     <React.Fragment>
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">{t("FILTER_BY")}:</div>
+            <div className="filter-label">{t("SORT_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
               {t("ES_COMMON_CLEAR_ALL")}
             </div>
@@ -26,12 +32,12 @@ const SortBy = (props) => {
           </div>
           <div>
             <RadioButtons
-              onSelect={() => {}}
-              selectedOption={() => {}}
+              onSelect={onSort}
+              selectedOption={selectedOption}
               optionsKey="name"
               options={[
-                { code: "DATE_LATEST_FIRST", name: t("ES_INBOX_DATE_LATEST_FIRST") },
-                { code: "DATE_LATEST_LAST", name: t("ES_INBOX_DATE_LATEST_LAST") },
+                { code: "DESC", name: t("ES_INBOX_DATE_LATEST_FIRST") },
+                { code: "ASC", name: t("ES_INBOX_DATE_LATEST_LAST") },
               ]}
             />
           </div>

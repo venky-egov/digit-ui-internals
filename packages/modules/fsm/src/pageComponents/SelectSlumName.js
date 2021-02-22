@@ -18,6 +18,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
 
   function selectSlum(value) {
     setSlum(value);
+    onSelect(config.key, { slum: value });
   }
 
   function onSkip() {

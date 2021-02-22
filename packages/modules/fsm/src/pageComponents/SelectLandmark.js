@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 
 const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
@@ -19,6 +19,10 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
       },
     },
   ];
+
+  useEffect(() => {
+    setLandmark(formData?.address?.landmark);
+  }, [formData?.address?.landmark]);
 
   function onChange(e) {
     if (e.target.value.length > 1024) {
@@ -43,7 +47,7 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <TextArea style={{ width: "50%" }} id={input.name} onChange={onChange} />
+          <TextArea style={{ width: "50%" }} id={input.name} value={landmark} onChange={onChange} />
         </LabelFieldPair>
       );
     });

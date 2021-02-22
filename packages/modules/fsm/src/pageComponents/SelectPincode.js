@@ -1,5 +1,5 @@
 import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   console.log("find pincode properties here", config, onSelect, formData, userType);
@@ -22,6 +22,14 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
     },
   ];
   const [pincodeServicability, setPincodeServicability] = useState(null);
+
+  useEffect(() => {
+    // console.log("find pincode datahere", formData?.address?.pincode)
+    if (formData?.address?.pincode) {
+      setPincode(formData.address.pincode);
+    }
+  }, [formData?.address?.pincode]);
+
   console.log({ formData }, "pindocde");
   function onChange(e) {
     setPincode(e.target.value);
@@ -48,7 +56,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <TextInput style={{ width: "50%" }} key={input.name} onChange={onChange} />
+          <TextInput style={{ width: "50%" }} key={input.name} value={pincode} onChange={onChange} />
         </LabelFieldPair>
       );
     });

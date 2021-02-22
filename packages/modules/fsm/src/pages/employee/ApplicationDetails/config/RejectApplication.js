@@ -16,7 +16,7 @@ export const configRejectApplication = ({ t, rejectMenu, rejectionReason, select
           {
             label: t("ES_FSM_ACTION_DECLINE_REASON"),
             type: "dropdown",
-            populators: <Dropdown option={rejectMenu} id="reason" selected={rejectionReason} select={selectReason} />,
+            populators: <Dropdown t={t} option={rejectMenu} id="reason" optionKey='code' selected={rejectionReason} select={selectReason} />,
           },
           {
             label: t("ES_FSM_ACTION_COMMENTS"),

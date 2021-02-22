@@ -59,10 +59,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
   const [rejectMenu, setRejectMenu] = useState([
-    "ES_FSM_REJECTION_OPTION_A",
-    "ES_FSM_REJECTION_OPTION_B",
-    "ES_FSM_REJECTION_OPTION_C",
-    "ES_FSM_REJECTION_OPTION_D",
+    { code: "ES_FSM_REJECTION_OPTION_A", name: "Vehicle under maintenance" },
+    { code: "ES_FSM_REJECTION_OPTION_B", name: "Cannot service within provided service date, multiple request in pipeline" },
   ]);
   const [reassignReasonMenu, setReassignReasonMenu] = useState([
     "ES_FSM_REASSIGN_OPTION_A",
@@ -129,7 +127,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     if (data.date) applicationData.possibleServiceDate = new Date(data.date).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
 
-    if (rejectionReason) workflow.comments = rejectionReason;
+    if (rejectionReason) workflow.comments = rejectionReason.code;
 
     submitAction({ fsm: applicationData, workflow });
   }
@@ -194,7 +192,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "DECLINE":
       case "SENDBACK":
       case "DSO_REJECT":
-        debugger;
         setFormValve(rejectionReason ? true : false);
         return setConfig(
           configRejectApplication({

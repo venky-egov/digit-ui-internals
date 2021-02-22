@@ -20,6 +20,7 @@ const TextInput = (props) => {
           maxLength={props.maxlength}
           max={props.max}
           pattern={props.pattern}
+          min={props.min}
         />
       ) : (
         <input
@@ -37,6 +38,7 @@ const TextInput = (props) => {
           max={props.max}
           required={props.isRequired}
           pattern={props.pattern}
+          min={props.min}
         />
       )}
     </React.Fragment>

@@ -70,6 +70,7 @@ export const FormComposer = (props) => {
               isRequired={isMandatory}
               type={type}
               disable={disable}
+              min={populators?.min}
             />
           </div>
         );

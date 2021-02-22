@@ -166,7 +166,6 @@ const ApplicationDetails = (props) => {
       };
       return <TLCaption data={caption} />;
     }
-    return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
   };
 
   if (isLoading) {

@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
+import TimePicker from 'react-time-picker';
 import {
   Card,
   CardLabel,
@@ -132,7 +133,7 @@ const FstpOperatorDetails = () => {
           <LabelFieldPair>
             <CardLabel>{t("ES_COMMON_TIME")}</CardLabel>
             <div className="field-container">
-              <TextInput name="tripTime" type="time" value={tripTime} onChange={handleChange} />
+              <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US"  />
             </div>
           </LabelFieldPair>
         </StatusTable>

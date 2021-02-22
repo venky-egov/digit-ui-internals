@@ -75,6 +75,7 @@ import RatingCard from "./molecules/RatingCard";
 import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
 import PitDimension from "./molecules/PitDimension";
+import DashboardBox from "./molecules/DashboardBox";
 
 import { FormComposer } from "./hoc/FormComposer";
 import ResponseComposer from "./hoc/ResponseComposer";
@@ -103,6 +104,7 @@ export {
   CardLabelError,
   CardTextButton,
   RadioButtons,
+  DashboardBox,
   Dropdown,
   TextInput,
   TextArea,

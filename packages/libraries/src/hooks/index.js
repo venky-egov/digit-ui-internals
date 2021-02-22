@@ -38,6 +38,7 @@ import useApplicationActions from "./fsm/useApplicationActions";
 import useApplicationAudit from "./fsm/useApplicationAudit";
 import useSearchForAuditData from "./fsm/useSearchForAudit";
 import useConfig from "./fsm/useConfig";
+import useVendorDetail from "./fsm/useVendorDetail";
 
 const pgr = {
   useComplaintDetails,
@@ -71,6 +72,7 @@ const fsm = {
   useSearchForAuditData,
   useVehicleSearch,
   useVehicleUpdate,
+  useVendorDetail,
   useConfig,
 };
 

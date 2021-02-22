@@ -44,7 +44,6 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
         };
 
         additionalDetails = parseTillObject(additionalDetails);
-        console.log("in select >>>>>", additionalDetails);
         return { ...details, additionalDetails };
       },
     }

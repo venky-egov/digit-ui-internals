@@ -38,7 +38,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
         };
 
         additionalDetails = parseTillObject(additionalDetails);
-        console.log("in select >>>>>", additionalDetails);
         return { ...details, additionalDetails };
       },
     }
@@ -91,7 +90,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     if (isSuccess && isDsoSuccess && applicationData.dsoId) {
       const [dso] = dsoData.filter((dso) => dso.id === applicationData.dsoId);
       const vehicleNoList = dso.vehicles.filter((vehicle) => vehicle.type === applicationData.vehicleType);
-      console.log("jhdsajksd", vehicleNoList);
       setVehicleNoList(vehicleNoList);
     }
   }, [isSuccess, isDsoSuccess]);
@@ -112,7 +110,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   }
 
   function selectReason(value) {
-    console.log(value);
     setReason(value);
   }
 
@@ -133,7 +130,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   }
 
   useEffect(() => {
-    console.log("action here", action);
     switch (action) {
       case "DSO_ACCEPT":
       case "ACCEPT":

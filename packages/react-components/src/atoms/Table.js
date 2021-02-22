@@ -86,9 +86,9 @@ const Table = ({
     // }
   );
 
-  // useEffect(() => {
-  //   onSort(sortBy);
-  // }, [onSort, sortBy]);
+  useEffect(() => {
+    onSort(sortBy);
+  }, [onSort, sortBy]);
 
   return (
     <React.Fragment>

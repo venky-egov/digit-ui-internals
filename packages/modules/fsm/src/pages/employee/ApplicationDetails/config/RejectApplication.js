@@ -2,8 +2,6 @@ import React from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 
 export const configRejectApplication = ({ t, rejectMenu, rejectionReason, selectReason }) => {
-  debugger;
-  console.log({ selectReason });
   return {
     label: {
       heading: "ES_FSM_ACTION_TITLE_DECLINE_REQUEST",

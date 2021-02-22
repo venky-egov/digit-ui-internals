@@ -132,7 +132,7 @@ const FstpOperatorDetails = () => {
           </LabelFieldPair>
           <LabelFieldPair>
             <CardLabel>{t("ES_COMMON_TIME")}</CardLabel>
-            <div className="field-container">
+            <div>
               <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US"  />
             </div>
           </LabelFieldPair>

@@ -15,7 +15,7 @@ const CitizenHome = ({ modules }) => {
     <React.Fragment>
       {moduleArray.map(({ code }, index) => {
         //console.log("in module map", code);
-        const Links = registry.getComponent(`${code}Links`) || (() => <React.Fragment />);
+        const Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
         return <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />;
       })}
     </React.Fragment>

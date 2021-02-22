@@ -75,6 +75,7 @@ import RatingCard from "./molecules/RatingCard";
 import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
 import PitDimension from "./molecules/PitDimension";
+import RadioOrSelect from "./molecules/RadioOrSelect";
 import DashboardBox from "./molecules/DashboardBox";
 
 import { FormComposer } from "./hoc/FormComposer";
@@ -168,6 +169,7 @@ export {
   FilterAction,
   ApplyFilterBar,
   RemoveableTag,
+  RadioOrSelect,
   // hoc
   FormComposer,
   ResponseComposer,

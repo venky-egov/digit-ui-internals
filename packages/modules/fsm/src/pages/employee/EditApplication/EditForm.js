@@ -1,34 +1,51 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { FormComposer } from "@egovernments/digit-ui-react-components";
-import { useHistory } from "react-router-dom";
 import { newConfig } from "../../../config/NewApplication/config";
+import { useHistory } from "react-router-dom";
+import { FormComposer } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 import TripDetails from "../configs/TripDetails";
 import ApplicantDetails from "../configs/ApplicantDetails";
 
-export const NewApplication = ({ parentUrl, heading }) => {
-  // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
-  // const __initSubType__ = window.Digit.SessionStorage.get("subType");
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId?.split(".")[0] || "pb";
-
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
-  const { data: channelMenu } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
-
+const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const [vehicle, setVehicle] = useState();
+  const [vehicle, setVehicle] = useState(applicationData.vehicleType || null);
   const [canSubmit, setSubmitValve] = useState(false);
-  const [channel, setChannel] = useState(null);
+  const [channel, setChannel] = useState(() => channelMenu.filter((channel) => channel.code === applicationData.source)[0]);
+  const [kill, setKill] = useState(false);
+
+  function selectVehicle(data) {
+    setVehicle(data);
+    setKill(false);
+  }
 
   const defaultValues = {
-    noOfTrips: 1,
+    applicantName: applicationData.citizen.name,
+    mobileNumber: applicationData.citizen.mobileNumber,
+    noOfTrips: applicationData.noOfTrips,
+    amountPerTrip: applicationData.additionalDetails.tripAmount,
+    amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount,
+    propertyType: applicationData.propertyUsage.split(".")[0],
+    subtype: applicationData.propertyUsage,
+    address: {
+      pincode: applicationData.address.pincode,
+      locality: {
+        ...applicationData.address.locality,
+        code: `${applicationData.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${applicationData.address.locality.code}`,
+      },
+      slum: {},
+      street: applicationData.address.street,
+      doorNo: applicationData.address.doorNo,
+      landmark: applicationData.address.landmark,
+    },
+    pitType: { code: applicationData.sanitationtype, i18nKey: `PITTYPE_MASTERS_${applicationData.sanitationtype}` },
+    pitDetail: applicationData.pitDetail,
   };
-  const [kill, setKill] = useState(false);
 
   const onFormValueChange = (setValue, formData) => {
     // setNoOfTrips(formData?.noOfTrips || 1);
+
     (async () => {
       // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
@@ -83,45 +100,50 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const state = data?.address?.city?.state;
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
+    const propertyUsage = data?.subtype;
+    const { height, length, width } = pitDimension;
+
     const formData = {
-      fsm: {
-        citizen: {
-          name: applicantName,
-          mobileNumber,
-        },
-        tenantId: cityCode,
-        sanitationtype: sanitationtype,
-        source: applicationChannel.code,
-        additionalDetails: {
-          tripAmount: amount,
-        },
-        propertyUsage: data?.subtype,
-        vehicleType: vehicle?.code,
-        pitDetail: {
-          ...pitDimension,
-          distanceFromRoad: data?.distanceFromRoad,
-        },
-        address: {
-          tenantId: cityCode,
-          landmark,
-          doorNo,
-          street,
-          city,
-          state,
-          pincode,
-          locality: {
-            code: localityCode?.split("_").pop(),
-            name: localityName,
-          },
-          geoLocation: {
-            latitude: data?.address?.latitude,
-            longitude: data?.address?.longitude,
-          },
-        },
-        noOfTrips,
+      ...applicationData,
+      tenantId: cityCode,
+      sanitationtype: sanitationtype,
+      source: applicationChannel.code,
+      additionalDetails: {
+        ...applicationData.additionalDetails,
+        tripAmount: amount,
       },
-      workflow: null,
+      propertyUsage,
+      vehicleType: vehicle.code,
+      noOfTrips,
+      pitDetail: {
+        ...applicationData.pitDetail,
+        distanceFromRoad: data.distanceFromRoad,
+        height,
+        length,
+        width,
+      },
+      address: {
+        ...applicationData.address,
+        tenantId: cityCode,
+        landmark,
+        doorNo,
+        street,
+        city,
+        state,
+        pincode,
+        locality: {
+          ...applicationData.address.locality,
+          code: localityCode.split("_").pop(),
+          name: localityName,
+        },
+        geoLocation: {
+          ...applicationData.address.geoLocation,
+          latitude: data?.address?.latitude,
+          longitude: data?.address?.longitude,
+        },
+      },
     };
+    delete formData["responseInfo"];
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -129,10 +151,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
     // console.log("find form data here", formData);
-    history.push("/digit-ui/employee/fsm/response", formData);
+    history.push("/digit-ui/employee/fsm/response", {
+      applicationData: formData,
+      key: "update",
+      action: "SUBMIT",
+    });
   };
 
-  const configs = [ApplicantDetails(channelMenu, channel, setChannel), ...newConfig, TripDetails(vehicleMenu, vehicle, setVehicle)];
+  const configs = [ApplicantDetails(channelMenu, channel, setChannel), ...newConfig, TripDetails(vehicleMenu, vehicle, selectVehicle)];
 
   return (
     <FormComposer
@@ -152,3 +178,5 @@ export const NewApplication = ({ parentUrl, heading }) => {
     />
   );
 };
+
+export default EditForm;

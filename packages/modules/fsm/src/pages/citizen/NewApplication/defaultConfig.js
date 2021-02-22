@@ -9,9 +9,11 @@ import SelectPitType from "./SelectPitType";
 import SelectGeolocation from "./SelectGeolocation";
 
 export const config = {
-  routes: {
-    "property-type": {
+  routes: [
+    {
+      route: "property-type",
       component: SelectPropertyType,
+      groupKey: "ES_TITLE_APPLICATION_DETAILS",
       texts: {
         headerCaption: "",
         header: "CS_FILE_APPLICATION_PROPERTY_LABEL",
@@ -20,8 +22,10 @@ export const config = {
       },
       nextStep: "property-subtype",
     },
-    "property-subtype": {
+    {
+      route: "property-subtype",
       component: SelectPropertySubtype,
+      groupKey: "ES_TITLE_APPLICATION_DETAILS",
       texts: {
         headerCaption: "",
         header: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL",
@@ -30,12 +34,16 @@ export const config = {
       },
       nextStep: "map",
     },
-    map: {
+    {
+      route: "map",
       component: SelectGeolocation,
       nextStep: "pincode",
+      hideInEmployee: true,
     },
-    pincode: {
+    {
+      route: "pincode",
       component: SelectPincode,
+      groupKey: "ES_NEW_APPLICATION_LOCATION_DETAILS",
       texts: {
         headerCaption: "",
         header: "CS_FILE_APPLICATION_PINCODE_LABEL",
@@ -58,8 +66,10 @@ export const config = {
       ],
       nextStep: "address",
     },
-    address: {
+    {
+      route: "address",
       component: SelectAddress,
+      groupKey: "ES_NEW_APPLICATION_LOCATION_DETAILS",
       texts: {
         headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
         header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_ADDRESS_TEXT",
@@ -68,8 +78,10 @@ export const config = {
       },
       nextStep: "street",
     },
-    street: {
+    {
+      route: "street",
       component: SelectStreet,
+      groupKey: "ES_NEW_APPLICATION_LOCATION_DETAILS",
       texts: {
         headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
         header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_ADDRESS_TEXT",
@@ -99,8 +111,10 @@ export const config = {
       ],
       nextStep: "landmark",
     },
-    landmark: {
+    {
+      route: "landmark",
       component: SelectLandmark,
+      groupKey: "ES_NEW_APPLICATION_LOCATION_DETAILS",
       texts: {
         headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
         header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE",
@@ -120,8 +134,10 @@ export const config = {
       ],
       nextStep: "pit-type",
     },
-    "pit-type": {
+    {
+      route: "pit-type",
       component: SelectPitType,
+      groupKey: "CS_CHECK_PIT_SEPTIC_TANK_DETAILS",
       texts: {
         header: "CS_FILE_PROPERTY_PIT_TYPE",
         cardText: "CS_FILE_PROPERTY_PIT_TYPE_TEXT",
@@ -129,8 +145,10 @@ export const config = {
       },
       nextStep: "tank-size",
     },
-    "tank-size": {
+    {
+      route: "tank-size",
       component: SelectTankSize,
+      groupKey: "CS_CHECK_PIT_SEPTIC_TANK_DETAILS",
       texts: {
         headerCaption: "",
         header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",
@@ -140,6 +158,6 @@ export const config = {
       },
       nextStep: null,
     },
-  },
+  ],
   indexRoute: "property-type",
 };

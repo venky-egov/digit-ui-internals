@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
 
-const SelectGeolocation = ({ onSelect, value, t }) => {
+const SelectGeolocation = ({ onSelect, t }) => {
   const [pincode, setPincode] = useState("");
 
   const onSkip = () => onSelect();
@@ -13,7 +13,7 @@ const SelectGeolocation = ({ onSelect, value, t }) => {
       nextText={t("CS_COMMON_NEXT")}
       skipAndContinueText={t("CORE_COMMON_SKIP_CONTINUE")}
       skip={onSkip}
-      onSave={() => onSelect({ pincode })}
+      onSave={() => onSelect(config.key, { geolocation: {}, pincode })}
       onChange={(code) => setPincode(code)}
       disabled={pincode === ""}
     />

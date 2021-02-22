@@ -38,7 +38,7 @@ LocationSearchCard.propTypes = {
   cardText: PropTypes.string,
   nextText: PropTypes.string,
   skipAndContinueText: PropTypes.string,
-  skip: PropTypes.bool,
+  skip: PropTypes.func,
   onSave: PropTypes.func,
   onChange: PropTypes.func,
 };
@@ -48,7 +48,7 @@ LocationSearchCard.defaultProps = {
   cardText: "",
   nextText: "",
   skipAndContinueText: "",
-  skip: false,
+  skip: () => {},
   onSave: null,
   onChange: () => {},
 };

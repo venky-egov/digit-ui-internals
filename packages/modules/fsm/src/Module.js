@@ -1,14 +1,15 @@
 import React, { useMemo, useEffect } from "react";
 import { Route, BrowserRouter as Router, Switch, useRouteMatch, useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import SelectRating from "./pages/citizen/Rating/SelectRating";
-
 import { BackButton, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
-import FileComplaint from "./pages/citizen/FileComplaint/index";
+import { useTranslation } from "react-i18next";
 
-import { NewApplication } from "./pages/employee/NewApplication";
+import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
+import SelectRating from "./pages/citizen/Rating/SelectRating";
 import { MyApplications } from "./pages/citizen/MyApplications";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
+
+import { NewApplication } from "./pages/employee/NewApplication";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
 import CollectPayment from "./pages/employee/CollectPayment";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
@@ -18,9 +19,40 @@ import Inbox from "./pages/employee/Inbox";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import DsoDashboard from "./pages/employee/DsoDashboard";
 
-import { useTranslation } from "react-i18next";
 import SearchApplication from "./pages/employee/SearchApplication";
 import FstpInbox from "./pages/employee/FstpInbox";
+
+import SelectPropertySubtype from "./pageComponents/SelectPropertySubtype";
+import SelectPropertyType from "./pageComponents/SelectPropertyType";
+import SelectAddress from "./pageComponents/SelectAddress";
+import SelectStreet from "./pageComponents/SelectStreet";
+import SelectLandmark from "./pageComponents/SelectLandmark";
+import SelectPincode from "./pageComponents/SelectPincode";
+import SelectTankSize from "./pageComponents/SelectTankSize";
+import SelectPitType from "./pageComponents/SelectPitType";
+import SelectGeolocation from "./pageComponents/SelectGeolocation";
+import SelectSlumName from "./pageComponents/SelectSlumName";
+import CheckSlum from "./pageComponents/CheckSlum";
+
+const componentsToRegister = {
+  SelectPropertySubtype,
+  SelectPropertyType,
+  SelectAddress,
+  SelectStreet,
+  SelectLandmark,
+  SelectPincode,
+  SelectTankSize,
+  SelectPitType,
+  SelectGeolocation,
+  SelectSlumName,
+  CheckSlum,
+};
+
+const addComponentsToRegistry = () => {
+  Object.entries(componentsToRegister).forEach(([key, value]) => {
+    Digit.ComponentRegistryService.setComponent(key, value);
+  });
+};
 
 const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
@@ -57,7 +89,7 @@ const CitizenApp = ({ path }) => {
     <React.Fragment>
       {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
       <Switch>
-        <PrivateRoute path={`${path}/new-application`} component={() => <FileComplaint parentRoute={path} />} />
+        <PrivateRoute path={`${path}/new-application`} component={() => <NewApplicationCitizen parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
         <PrivateRoute path={`${path}/application-details/:id`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
@@ -69,6 +101,7 @@ const CitizenApp = ({ path }) => {
 
 export const FSMModule = ({ stateCode, userType }) => {
   const moduleCode = "FSM";
+  addComponentsToRegistry();
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import BreakLine from "../atoms/BreakLine";
 import Card from "../atoms/Card";
@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next";
 export const FormComposer = (props) => {
   const { register, handleSubmit, setValue, getValues, watch, control, formState } = useForm({ defaultValues: props.defaultValues });
   const { t } = useTranslation();
-
   const formData = watch();
 
   useEffect(() => {
@@ -25,6 +24,7 @@ export const FormComposer = (props) => {
   }, []);
 
   function onSubmit(data) {
+    console.log({ data });
     props.onSubmit(data);
   }
 
@@ -33,10 +33,11 @@ export const FormComposer = (props) => {
   }
 
   useEffect(() => {
-    props.onFormValueChange && props.onFormValueChange(formData, formState);
+    console.log({ formData });
+    props.onFormValueChange && props.onFormValueChange(setValue, formData, formState);
   }, [formData]);
 
-  const fieldSelector = (type, populators, isMandatory, disable = false) => {
+  const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
     switch (type) {
       case "text":
       case "date":
@@ -85,6 +86,15 @@ export const FormComposer = (props) => {
             control={control}
           />
         );
+      case "component":
+        const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
+        return (
+          <Controller
+            as={<Component userType={"employee"} t={t} setValue={setValue} onSelect={setValue} config={config} data={formData} formData={formData} />}
+            name={config.key}
+            control={control}
+          />
+        );
       default:
         return populators.dependency !== false ? populators : null;
     }
@@ -95,19 +105,19 @@ export const FormComposer = (props) => {
       props.config?.map((section, index, array) => {
         return (
           <React.Fragment key={index}>
-            {section.head && <CardSectionHeader id={section.headId}>{section.head}</CardSectionHeader>}
+            {section.head && <CardSectionHeader id={section.headId}>{t(section.head)}</CardSectionHeader>}
             {section.body.map((field, index) => {
               if (props.inline)
                 return (
                   <React.Fragment key={index}>
                     {!field.withoutLabel && (
                       <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
-                        {field.label}
+                        {t(field.label)}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
                     <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                      {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable)}
+                      {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                     </div>
                   </React.Fragment>
                 );
@@ -115,12 +125,12 @@ export const FormComposer = (props) => {
                 <LabelFieldPair key={index}>
                   {!field.withoutLabel && (
                     <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
-                      {field.label}
+                      {t(field.label)}
                       {field.isMandatory ? " * " : null}
                     </CardLabel>
                   )}
-                  <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                    {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable)}
+                  <div style={field.withoutLabel ? { width: "100%", ...props?.fieldStyle } : {}} className="field">
+                    {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                   </div>
                 </LabelFieldPair>
               );
@@ -129,7 +139,7 @@ export const FormComposer = (props) => {
           </React.Fragment>
         );
       }),
-    [props.config]
+    [props.config, formData]
   );
 
   const getCardStyles = () => {

@@ -185,7 +185,7 @@ Dropdown.propTypes = {
   style: PropTypes.object,
   option: PropTypes.array,
   optionKey: PropTypes.any,
-  select: PropTypes.func,
+  select: PropTypes.any,
   t: PropTypes.func,
 };
 

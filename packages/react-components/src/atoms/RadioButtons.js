@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import isEqual from "lodash/isEqual";
+import { useTranslation } from "react-i18next";
 
 const RadioButtons = (props) => {
+  const { t } = useTranslation();
   var selected = props.selectedOption;
   function selectOption(value) {
     selected = value;
@@ -25,7 +27,7 @@ const RadioButtons = (props) => {
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label>{option[props.optionsKey]}</label>
+              <label>{t(option[props.optionsKey])}</label>
             </div>
           );
         } else {
@@ -41,7 +43,7 @@ const RadioButtons = (props) => {
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label>{option}</label>
+              <label>{t(option)}</label>
             </div>
           );
         }

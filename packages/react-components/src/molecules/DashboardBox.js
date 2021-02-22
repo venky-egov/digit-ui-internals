@@ -1,9 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-const DashboardBox = ({ svgIcon, header, info, subHeader, links  }) => {
+const DashboardBox = ({ svgIcon, header, info, subHeader, links }) => {
   return (
-    <div className="employeeCard card-home" style={{ width: '270px' }}>
+    <div className="employeeCard card-home" style={{ width: "270px" }}>
       <div className="complaint-links-container">
         <div className="header">
           <span className="logo">
@@ -21,10 +21,10 @@ const DashboardBox = ({ svgIcon, header, info, subHeader, links  }) => {
         <div className="body" style={{ marginLeft: 0 }}>
           <div className="employeeCard-info-box" style={{ display: "flex", justifyContent: "flex-end" }}>
             {Object.keys(info).map((key, index) => {
-              return ( 
+              return (
                 <div key={index} style={{ display: "flex", flexDirection: "column" }}>
-                  <span>{ info[key] }</span>
-                  <span>{ key }</span>
+                  <span>{info[key]}</span>
+                  <span>{key}</span>
                 </div>
               );
             })}
@@ -32,13 +32,13 @@ const DashboardBox = ({ svgIcon, header, info, subHeader, links  }) => {
           <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
           <div className="employeeCard-footer">
             {links.map((link, index) => (
-              <Link to={link.pathname}>{ link.label }</Link>
+              <Link to={link.pathname}>{link.label}</Link>
             ))}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default DashboardBox;

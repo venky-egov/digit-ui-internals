@@ -34,7 +34,7 @@ export const FormComposer = (props) => {
 
   useEffect(() => {
     console.log({ formData });
-    props.onFormValueChange && props.onFormValueChange(formData, formState);
+    props.onFormValueChange && props.onFormValueChange(setValue, formData, formState);
   }, [formData]);
 
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
@@ -90,7 +90,7 @@ export const FormComposer = (props) => {
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Controller
-            as={<Component userType={"employee"} t={t} setValue={setValue} config={config} data={formData} />}
+            as={<Component userType={"employee"} t={t} setValue={setValue} onSelect={setValue} config={config} data={formData} formData={formData} />}
             name={config.key}
             control={control}
           />

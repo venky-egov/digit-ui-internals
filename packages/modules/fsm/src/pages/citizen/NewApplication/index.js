@@ -33,8 +33,9 @@ const FileComplaint = ({ parentRoute }) => {
     history.push(`${parentRoute}/new-application/response`);
   };
 
-  function handleSelect(data, skipStep) {
-    setParams({ ...params, ...data, ...{ source: "ONLINE" } });
+  function handleSelect(key, data, skipStep) {
+    console.log("find saving data here", key, data, params);
+    setParams({ ...params, ...{ [key]: { ...params[key], ...data } }, ...{ source: "ONLINE" } });
     goNext(skipStep);
   }
 
@@ -51,11 +52,11 @@ const FileComplaint = ({ parentRoute }) => {
   return (
     <Switch>
       {config.map((routeObj, index) => {
-        const { component, texts, inputs } = routeObj;
+        const { component, texts, inputs, key } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} data={params} />
+            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} />
           </Route>
         );
       })}

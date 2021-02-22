@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { CitizenInfoLabel, Loader, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
-const SelectPropertyType = ({ config, onSelect, t, value, userType, setValue, data }) => {
+const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
+  console.log("find config property here ", config);
   const [propertyType, setPropertyType] = useState(() => {
-    const { propertyType } = value || {};
+    const { propertyType } = formData || {};
     return propertyType !== undefined ? propertyType : null;
   });
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
@@ -12,14 +13,17 @@ const SelectPropertyType = ({ config, onSelect, t, value, userType, setValue, da
 
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertyType", { select });
   const goNext = () => {
-    onSelect({ propertyType: propertyType });
+    console.log("find config key here", config.key);
+    onSelect(config.key, propertyType);
   };
   function selectedValue(value) {
     setPropertyType(value);
   }
   function selectedType(value) {
-    setValue(config.key, value.code);
+    onSelect(config.key, value.code);
   }
+
+  console.log("find me here");
 
   if (propertyTypesData.isLoading) {
     return <Loader />;

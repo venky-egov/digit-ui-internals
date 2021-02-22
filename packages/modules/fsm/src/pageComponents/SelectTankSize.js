@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import { FormStep, PitDimension } from "@egovernments/digit-ui-react-components";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
-const SelectTankSize = ({ config, onSelect, t, value = {}, userType, setValue, data }) => {
-  console.log({ config, onSelect, t, value, userType, setValue });
-  const tankDimension = value?.pitType?.dimension;
+
+const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
+  console.log({ config, onSelect, t, formData, userType });
+  const tankDimension = formData?.pitType?.dimension;
   const [disable, setDisable] = useState(true);
 
   const [size, setSize] = useState(() => {
     let data;
-    const { pitDetail } = value;
+    const { pitDetail } = formData;
     if (pitDetail) {
       data = getPitDetail(pitDetail, tankDimension);
     } else {
@@ -19,7 +20,7 @@ const SelectTankSize = ({ config, onSelect, t, value = {}, userType, setValue, d
   });
 
   useEffect(() => {
-    if (!value?.pitType && userType !== "employee") {
+    if (!formData?.pitType && userType !== "employee") {
       onSelect({}, true);
     }
   }, []);
@@ -40,23 +41,23 @@ const SelectTankSize = ({ config, onSelect, t, value = {}, userType, setValue, d
     if (!isNaN(value)) {
       setSize((prev) => ({ ...prev, [name]: value }));
       if (userType === "employee") {
-        setTimeout(setValue(config.key, { ...size, [name]: value }));
+        setTimeout(onSelect(config.key, { ...size, [name]: value }));
       }
     }
   };
 
   const handleSubmit = () => {
-    onSelect({ pitDetail: size });
+    onSelect(config.key, size);
   };
 
   const onSkip = () => onSelect();
   if (userType === "employee") {
-    return <PitDimension sanitationType={data.pitType} size={size} handleChange={handleChange} t={t} />;
+    return <PitDimension sanitationType={formData.pitType} size={size} handleChange={handleChange} t={t} />;
   }
 
   return (
     <FormStep config={config} onSkip={onSkip} onSelect={handleSubmit} isDisabled={disable} t={t}>
-      <PitDimension sanitationType={value.pitType} size={size} handleChange={handleChange} t={t} />
+      <PitDimension sanitationType={formData.pitType} size={size} handleChange={handleChange} t={t} />
     </FormStep>
   );
 };

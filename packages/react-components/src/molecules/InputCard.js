@@ -18,7 +18,7 @@ const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], input
       <CardHeader>{t(texts.header)}</CardHeader>
       <CardText>{t(texts.cardText)}</CardText>
       {children}
-      <SubmitBar disabled={isDisable} submit={submit} label={t(texts.nextText)} onSubmit={onNext} />
+      <SubmitBar disabled={isDisable} submit={submit} label={t(texts.submitBarLabel)} onSubmit={onNext} />
       {texts.skipText ? <LinkButton label={t(texts.skipText)} onClick={onSkip} /> : null}
     </Card>
   );

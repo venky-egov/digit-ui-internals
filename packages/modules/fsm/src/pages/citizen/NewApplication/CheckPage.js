@@ -30,7 +30,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { city_complaint, locality_complaint, street, doorNo, landmark, propertyType, subtype, pitType, pitDetail } = value;
+  const { address, propertyType, subtype, pitType, pitDetail } = value;
 
   const pitDetailValues = pitDetail ? Object.values(pitDetail) : null;
 
@@ -60,13 +60,15 @@ const CheckPage = ({ onSubmit, value }) => {
         />
         <Row
           label={t("CS_CHECK_ADDRESS")}
-          text={`${doorNo ? `${doorNo} ` : ""} ${street ? `${street}, ` : ""}${t(locality_complaint.code)}, ${t(city_complaint.code)}`}
+          text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
+            address?.city.code
+          )}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />}
         />
-        {landmark && (
+        {address?.landmark && (
           <Row
             label={t("CS_CHECK_LANDMARK")}
-            text={landmark}
+            text={address?.landmark}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/landmark" />}
           />
         )}

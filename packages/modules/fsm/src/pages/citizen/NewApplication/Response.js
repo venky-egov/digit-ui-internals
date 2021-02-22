@@ -25,33 +25,33 @@ const Response = ({ data, onSuccess }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   console.log("data---------->", data);
-  const mutation = Digit.Hooks.fsm.useDesludging(data.city_complaint ? data.city_complaint.code : tenantId);
+  const mutation = Digit.Hooks.fsm.useDesludging(data.city ? data.city.code : tenantId);
   const coreData = Digit.Hooks.useCoreData();
   // console.log("%c ⚖️: Response -> mutation ", "font-size:16px;background-color:#a9ecf3;color:black;", mutation);
   useEffect(() => {
     try {
-      const { subtype, landmark, pincode, pitDetail, city_complaint, locality_complaint, pitType, source, street, doorNo } = data;
-
+      const { subtype, pitDetail, address, pitType, source } = data;
+      const { city, locality, pincode, street, doorNo, landmark } = address;
       const formdata = {
         fsm: {
-          tenantId: city_complaint.code,
+          tenantId: city.code,
           additionalDetails: {},
           propertyUsage: subtype.code,
           address: {
-            tenantId: city_complaint.code,
+            tenantId: city.code,
             additionalDetails: null,
             street,
             doorNo,
             landmark,
-            city: city_complaint.name,
+            city: city.name,
             pincode,
             locality: {
-              code: locality_complaint.code.split("_").pop(),
-              name: locality_complaint.name,
+              code: locality.code.split("_").pop(),
+              name: locality.name,
             },
             geoLocation: {
-              latitude: locality_complaint.latitude,
-              longitude: locality_complaint.longitude,
+              latitude: locality.latitude,
+              longitude: locality.longitude,
               additionalDetails: {},
             },
           },

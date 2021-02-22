@@ -1,15 +1,35 @@
 import React from "react";
 import { FormStep, TextInput, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 
-const SelectStreet = ({ t, config, onSelect, value, userType, setValue, data }) => {
+const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
   const onChange = (e) => {
     const value = e?.target?.value;
     const key = e?.target?.id;
-    setValue(config.key, { ...data[config.key], [key]: value });
+    onSelect(config.key, { ...formData[config.key], [key]: value });
   };
+  const inputs = [
+    {
+      label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL",
+      type: "text",
+      name: "street",
+      validation: {
+        pattern: /^[\w\s]{1,256}$/,
+      },
+      error: "CORE_COMMON_STREET_INVALID",
+    },
+    {
+      label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL",
+      type: "text",
+      name: "doorNo",
+      validation: {
+        pattern: /^[\w]([\w\/,\s])*$/,
+      },
+      error: "CORE_COMMON_DOOR_INVALID",
+    },
+  ];
   if (userType === "employee") {
-    return config?.inputs?.map((input) => {
+    return inputs?.map((input) => {
       return (
         <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
@@ -23,9 +43,9 @@ const SelectStreet = ({ t, config, onSelect, value, userType, setValue, data }) 
   }
   return (
     <FormStep
-      config={config}
-      _defaultValues={{ street: value?.street, doorNo: value?.doorNo }}
-      onSelect={(data) => onSelect(data)}
+      config={{ ...config, inputs }}
+      _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}
+      onSelect={(data) => onSelect(config.key, data)}
       onSkip={onSkip}
       t={t}
     />

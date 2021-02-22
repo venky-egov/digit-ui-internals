@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { FormStep, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
-const CheckSlum = ({ t, config, onSelect, value, userType, setValue, data }) => {
-  console.log("find config here", { t, config, onSelect, value, userType, setValue, data });
-  const [slumArea, setSlumArea] = useState(data.slumArea);
+const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
+  console.log("find config here", { t, config, onSelect, userType, formData });
+  console.log("find check slum here");
+  const [slumArea, setSlumArea] = useState(formData?.address?.slumArea);
   const onSkip = () => onSelect();
   function goNext() {
-    onSelect({ slumArea: slumArea });
+    onSelect(config.key, { slumArea });
   }
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>

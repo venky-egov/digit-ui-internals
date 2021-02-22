@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, Dropdown, Loader, CardLabel, RadioButtons, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
-const SelectPitType = ({ t, data, config, onSelect, value, userType, setValue }) => {
+const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
 
   const [pitType, setPitType] = useState(() => {
-    const { pitType } = value || {};
+    const { pitType } = formData || {};
     return pitType !== undefined ? pitType : null;
   });
   const { data: sanitationMenu, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PitType");
@@ -14,7 +14,7 @@ const SelectPitType = ({ t, data, config, onSelect, value, userType, setValue })
   const selectPitType = (value) => {
     setPitType(value);
     if (userType === "employee") {
-      setValue(config.key, value);
+      onSelect(config.key, value);
     }
   };
 
@@ -23,7 +23,7 @@ const SelectPitType = ({ t, data, config, onSelect, value, userType, setValue })
   };
 
   const onSubmit = () => {
-    onSelect({ pitType });
+    onSelect(config.key, pitType);
   };
 
   if (isLoading) {

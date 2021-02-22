@@ -1,13 +1,24 @@
 import React, { useState } from "react";
 import { FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 
-const SelectLandmark = ({ t, config, onSelect, value, userType, setValue }) => {
+const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
   const [landmark, setLandmark] = useState(() => {
-    const { landmark } = value || {};
+    const { landmark } = formData?.address || {};
     return landmark ? landmark : "";
   });
 
   const [error, setError] = useState("");
+
+  const inputs = [
+    {
+      label: "ES_NEW_APPLICATION_LOCATION_LANDMARK",
+      type: "textarea",
+      name: "landmark",
+      validation: {
+        maxLength: 1024,
+      },
+    },
+  ];
 
   function onChange(e) {
     if (e.target.value.length > 1024) {
@@ -19,13 +30,13 @@ const SelectLandmark = ({ t, config, onSelect, value, userType, setValue }) => {
         const value = e?.target?.value;
         const key = e?.target?.id;
         console.log({ key, value });
-        setValue(key, value);
+        onSelect(key, value);
       }
     }
   }
 
   if (userType === "employee") {
-    return config?.inputs?.map((input) => {
+    return inputs?.map((input) => {
       return (
         <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
@@ -41,10 +52,10 @@ const SelectLandmark = ({ t, config, onSelect, value, userType, setValue }) => {
 
   return (
     <FormStep
-      config={config}
+      config={{ ...config, inputs }}
       value={landmark}
       onChange={onChange}
-      onSelect={(data) => onSelect(data)}
+      onSelect={(data) => onSelect(config.key, { landmark: data })}
       onSkip={onSkip}
       t={t}
       forcedError={t(error)}

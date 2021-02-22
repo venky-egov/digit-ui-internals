@@ -2,53 +2,63 @@ import React, { useEffect, useState } from "react";
 import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
-const SelectAddress = ({ t, config, onSelect, value, userType, setValue, data }) => {
+const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
-  const pincode = value?.pincode || data?.pincode;
-  const cities = pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode)) : allCities;
+  let tenantId = Digit.ULBService.getCurrentTenantId();
+
+  const { pincode } = formData?.address || "";
+  const cities =
+    userType === "employee"
+      ? allCities.filter((city) => city.code === tenantId)
+      : pincode
+      ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
+      : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
   const [selectedCity, setSelectedCity] = useState(() => {
-    const { city_complaint } = value || {};
-    return city_complaint ? city_complaint : null;
+    if (userType === "employee") return allCities.filter((city) => city.code === tenantId)[0];
+    const { city } = formData?.address || {};
+    return city ? city : null;
   });
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(() => {
-    const { locality_complaint } = value || {};
-    return locality_complaint ? locality_complaint : null;
+    const { locality } = formData?.address || {};
+    return locality ? locality : null;
   });
+
+  console.log("find address here");
 
   useEffect(() => {
     if (selectedCity) {
       let __localityList = localitiesObj[selectedCity.code];
       let filteredLocalityList = [];
-      if (value?.pincode) {
-        filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == value.pincode));
+      if (formData?.address?.pincode) {
+        filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
       }
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
       if (filteredLocalityList.length === 1) {
         setSelectedLocality(filteredLocalityList[0]);
       }
     }
-  }, [selectedCity, value?.pincode]);
+  }, [selectedCity, formData?.address?.pincode]);
 
   function selectCity(city) {
     setSelectedLocality(null);
     setLocalities(null);
     setSelectedCity(city);
     if (userType === "employee") {
-      setValue(config.key, { ...data[config.key], city_complaint: city });
+      onSelect(config.key, { ...formData[config.key], city: city });
     }
   }
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
     if (userType === "employee") {
-      setValue(config.key, { ...data[config.key], locality_complaint: locality });
+      onSelect(config.key, { ...formData[config.key], locality: locality });
     }
   }
 
   function onSubmit() {
-    onSelect({ city_complaint: selectedCity, locality_complaint: selectedLocality });
+    onSelect(config.key, { city: selectedCity, locality: selectedLocality });
   }
   if (userType === "employee") {
     return (

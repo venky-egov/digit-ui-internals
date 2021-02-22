@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { CardLabel, LabelFieldPair, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 
-const SelectSlumName = ({ config, onSelect, t, value, userType, setValue, data }) => {
-  console.log("find config here", { t, config, onSelect, value, userType, setValue, data });
+const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
+  console.log("find config here", { t, config, onSelect, userType, formData });
+  console.log("find slum here ");
 
-  const [slum, setSlum] = useState(data.slumName);
+  const [slum, setSlum] = useState(formData?.address?.slum);
   const [slumMenu, setSlumMenu] = useState([
     { key: "PB_AMRITSAR_SUN01_SLUM_NJAGBANDHU", name: "NJagbandhu" },
     { key: "PB_AMRITSAR_SUN01_SLUM_B", name: "Slum B" },
@@ -12,8 +13,8 @@ const SelectSlumName = ({ config, onSelect, t, value, userType, setValue, data }
   ]);
 
   useEffect(() => {
-    if (data.slumArea.code === false) onSelect({}, true);
-  }, [data?.slumArea]);
+    if (userType !== "employee" && formData?.address?.slumArea?.code === false) onSelect(config.key, {}, true);
+  }, [formData?.address?.slumArea]);
 
   function selectSlum(value) {
     setSlum(value);
@@ -24,7 +25,7 @@ const SelectSlumName = ({ config, onSelect, t, value, userType, setValue, data }
   }
 
   function goNext() {
-    onSelect({ slumName: slum });
+    onSelect(config.key, { slum });
   }
 
   return userType === "employee" ? (

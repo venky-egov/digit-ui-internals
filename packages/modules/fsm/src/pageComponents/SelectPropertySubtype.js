@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Loader, TypeSelectCard, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
-const SelectPropertySubtype = ({ config, onSelect, t, value, userType, setValue, data }) => {
-  console.log("asdsdfsd", { config, onSelect, t, value, userType, setValue, data });
+const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
+  console.log("asdsdfsd", { config, onSelect, t, userType, formData });
   const [subtype, setSubtype] = useState(() => {
-    const { subtype } = value || data || {};
+    const { subtype } = formData || {};
     return subtype !== undefined ? subtype : null;
   });
   const [subtypeOptions, setSubtypeOptions] = useState([]);
-  const { propertyType } = value || data;
+  const { propertyType } = formData || {};
 
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -18,9 +18,9 @@ const SelectPropertySubtype = ({ config, onSelect, t, value, userType, setValue,
   });
 
   useEffect(() => {
-    console.log("proptype chagned", propertyType, propertySubtypesDataLoading, propertySubtypesData);
+    console.log("find proptype here", propertyType, propertySubtypesDataLoading, propertySubtypesData);
     setSubtypeOptions([]);
-    setSubtype(null);
+    if (userType === "employee") onSelect(config.key, undefined);
     if (!propertySubtypesDataLoading && propertyType) {
       const subTypes = propertySubtypesData.filter((item) => item.propertyType === (propertyType?.code || propertyType));
       setSubtypeOptions(subTypes);
@@ -32,11 +32,11 @@ const SelectPropertySubtype = ({ config, onSelect, t, value, userType, setValue,
   };
 
   const goNext = () => {
-    onSelect({ subtype: subtype });
+    onSelect(config.key, subtype);
   };
 
   function selectedSubType(value) {
-    setValue(config.key, value.code);
+    onSelect(config.key, value.code);
   }
 
   if (propertySubtypesDataLoading) {

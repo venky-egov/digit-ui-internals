@@ -209,7 +209,7 @@ export const CollectPayment = (props) => {
         config={getFormConfig()}
         onSubmit={onSubmit}
         formState={formState}
-        onFormValueChange={(formValue) => {
+        onFormValueChange={(setValue, formValue) => {
           if (!isEqual(formValue.paymentMode, selectedPaymentMode)) {
             setFormState(formValue);
             setPaymentMode(formState.paymentMode);

@@ -14,7 +14,7 @@ import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
 import CollectPayment from "./pages/employee/CollectPayment";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
-import {EditApplication} from "./pages/employee/EditApplication";
+import EditApplication from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import DsoDashboard from "./pages/employee/DsoDashboard";

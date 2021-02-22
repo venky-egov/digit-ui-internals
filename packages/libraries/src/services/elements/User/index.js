@@ -51,7 +51,7 @@ export const UserService = {
     return Digit.SessionStorage.set("User", { ...userDetails, extraRoleInfo: data });
   },
   getExtraRoleDetails: () => {
-    return Digit.SessionStorage.get('User')?.extraRoleInfo
+    return Digit.SessionStorage.get("User")?.extraRoleInfo;
   },
   registerUser: (details, stateCode) =>
     ServiceRequest({

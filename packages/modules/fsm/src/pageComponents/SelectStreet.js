@@ -36,7 +36,14 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <TextInput id={input.name} key={input.name} style={{ width: "50%" }} onChange={onChange} {...input.validation} />
+          <TextInput
+            id={input.name}
+            key={input.name}
+            value={formData && formData.address ? formData.address[input.name] : null}
+            style={{ width: "50%" }}
+            onChange={onChange}
+            {...input.validation}
+          />
         </LabelFieldPair>
       );
     });

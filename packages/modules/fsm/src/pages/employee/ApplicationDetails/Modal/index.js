@@ -70,7 +70,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     "ES_FSM_REASSIGN_OPTION_C",
     "ES_FSM_REASSIGN_OPTION_D",
   ]);
-  const [rejectionReason, selectReason] = useState(null);
+  const [rejectionReason, setReason] = useState(null);
   const [reassignReason, selectReassignReason] = useState(null);
   const [formValve, setFormValve] = useState(false);
 
@@ -93,6 +93,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     if (isSuccess && isDsoSuccess && applicationData.dsoId) {
       const [dso] = dsoData.filter((dso) => dso.id === applicationData.dsoId);
       const vehicleNoList = dso.vehicles.filter((vehicle) => vehicle.type === applicationData.vehicleType);
+      console.log("jhdsajksd", vehicleNoList);
       setVehicleNoList(vehicleNoList);
     }
   }, [isSuccess, isDsoSuccess]);
@@ -112,6 +113,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     setVehicle(value);
   }
 
+  function selectReason(value) {
+    console.log(value);
+    setReason(value);
+  }
+
   function submit(data) {
     // console.log("find submit here",data);
     const workflow = { action: action };
@@ -129,6 +135,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   }
 
   useEffect(() => {
+    console.log("action here", action);
     switch (action) {
       case "DSO_ACCEPT":
       case "ACCEPT":
@@ -186,8 +193,20 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "CANCEL":
       case "DECLINE":
       case "SENDBACK":
+      case "DSO_REJECT":
+        debugger;
+        setFormValve(rejectionReason ? true : false);
+        return setConfig(
+          configRejectApplication({
+            t,
+            rejectMenu,
+            selectReason,
+            rejectionReason,
+          })
+        );
       case "REJECT":
         setFormValve(rejectionReason ? true : false);
+
         return setConfig(
           configRejectApplication({
             t,

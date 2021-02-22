@@ -38,14 +38,12 @@ const ApplicationDetails = (props) => {
   const [showToast, setShowToast] = useState(null);
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   // console.log("find DSO here", DSO)
-  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber, {
-    staleTime: Infinity,
-    select: (details) => {
-      let { additionalDetails } = details;
-      console.log(details);
-      return details;
-    },
-  });
+  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
+  const { isLoading: isDataLoading, isSuccess, data: applicationData } = Digit.Hooks.fsm.useSearch(
+    tenantId,
+    { applicationNos: applicationNumber },
+    { staleTime: Infinity }
+  );
 
   const {
     isLoading: updatingApplication,
@@ -100,6 +98,7 @@ const ApplicationDetails = (props) => {
       case "COMPLETED":
       case "CANCEL":
       case "SENDBACK":
+      case "DSO_REJECT":
       case "REJECT":
       case "DECLINE":
         return setShowModal(true);

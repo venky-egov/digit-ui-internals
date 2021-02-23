@@ -146,12 +146,18 @@ function TopBar(props) {
     logoUrl,
   } = props;
 
+  const updateSidebar = () => {
+    if (!isSidebarOpen) {
+      toggleSidebar(true);
+    }
+  };
+
   if (CITIZEN) {
     return (
       <TopBarComponent
         img={stateInfo?.logoUrlWhite}
-        isMobile={mobileView}
-        toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
+        isMobile={true}
+        toggleSidebar={updateSidebar}
         logoUrl={stateInfo?.logoUrlWhite}
         onLogout={handleLogout}
         userDetails={userDetails}
@@ -192,7 +198,7 @@ function TopBar(props) {
 function SideBar(props) {
   const { t, CITIZEN, isSidebarOpen, toggleSidebar, handleLogout, mobileView, userDetails } = props;
   if (CITIZEN) {
-    return <CitizenSidebar isOpen={mobileView ? isSidebarOpen : true} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />;
+    return <CitizenSidebar isOpen={isSidebarOpen} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />;
   }
   return (
     <React.Fragment>

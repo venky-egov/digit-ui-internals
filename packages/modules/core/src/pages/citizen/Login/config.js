@@ -23,6 +23,7 @@ export const loginSteps = [
       header: "CS_LOGIN_OTP",
       cardText: "CS_LOGIN_OTP_TEXT",
       nextText: "PT_COMMONS_NEXT",
+      submitBarLabel: "PT_COMMONS_NEXT",
     },
   },
   {
@@ -30,6 +31,7 @@ export const loginSteps = [
       header: "CS_LOGIN_PROVIDE_NAME",
       cardText: "CS_LOGIN_NAME_TEXT",
       nextText: "PT_COMMONS_NEXT",
+      submitBarLabel: "PT_COMMONS_NEXT",
     },
     inputs: [
       {

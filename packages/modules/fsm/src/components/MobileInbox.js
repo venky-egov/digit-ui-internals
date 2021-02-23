@@ -58,6 +58,7 @@ const MobileInbox = ({ data, vehicleLog, isLoading, onFilterChange, onSearch, on
         <div className="filters-container">
           {!DSO && !isFstpOperator && <ApplicationLinks isMobile={true} />}
           <ApplicationCard
+            t={t}
             data={isFstpOperator ? fstpOperatorData : DSO ? dsoData : localizedData}
             onFilterChange={!isFstpOperator ? onFilterChange : false}
             serviceRequestIdKey={isFstpOperator ? "Vehicle Log" : DSO ? "Application No." : t("ES_INBOX_APPLICATION_NO")}

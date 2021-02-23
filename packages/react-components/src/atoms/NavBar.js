@@ -36,7 +36,7 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
             transition: "transform 0.3s ease-in-out",
             background: "#fff",
             zIndex: "1999",
-            width: isDesktop ? "300px" : "100%",
+            width: "300px",
             transform: `${open ? "translateX(0)" : "translateX(-450px)"}`,
           }}
         >

@@ -70,7 +70,6 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
               validation: {
                 required: true,
               },
-              defaultValue: vehicle?.capacity,
             },
             disable: true,
           },

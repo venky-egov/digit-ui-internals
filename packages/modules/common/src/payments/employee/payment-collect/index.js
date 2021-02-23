@@ -198,6 +198,11 @@ export const CollectPayment = (props) => {
     },
   ];
 
+  const getDefaultValues = () => ({
+    payerName: bill?.payerName || formState?.payerName || "",
+    payerMobile: bill?.mobileNumber || formState?.payerMobile || "",
+  });
+
   const getFormConfig = () => config.concat(formConfigMap[formState?.paymentMode?.code] || []);
 
   return (
@@ -209,6 +214,7 @@ export const CollectPayment = (props) => {
         config={getFormConfig()}
         onSubmit={onSubmit}
         formState={formState}
+        defaultValues={getDefaultValues()}
         onFormValueChange={(setValue, formValue) => {
           if (!isEqual(formValue.paymentMode, selectedPaymentMode)) {
             setFormState(formValue);

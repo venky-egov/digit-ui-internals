@@ -129,6 +129,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     submitAction({ fsm: applicationData, workflow });
   }
 
+  let defaultValues = { capacity: vehicle?.capacity };
+
   useEffect(() => {
     switch (action) {
       case "DSO_ACCEPT":
@@ -146,6 +148,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
             selectVehicleNo,
           })
         );
+
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
@@ -180,6 +183,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
+        defaultValues = { capacity: vehicle?.capacity };
         return setConfig(configCompleteApplication({ t, vehicle }));
       case "SUBMIT":
       case "FSM_SUBMIT":
@@ -199,7 +203,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
         );
       case "REJECT":
         setFormValve(rejectionReason ? true : false);
-
         return setConfig(
           configRejectApplication({
             t,
@@ -216,7 +219,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
         console.log("default case");
         break;
     }
-  }, [action, isDsoLoading, dso, vehicle, rejectionReason, vehicleNo, vehicleNoList]);
+  }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList]);
+
   return action && config.form && !isDsoLoading ? (
     <Modal
       headerBarMain={<Heading label={t(config.label.heading)} />}
@@ -228,7 +232,15 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       formId="modal-action"
       isDisabled={!formValve}
     >
-      <FormComposer config={config.form} noBoxShadow inline childrenAtTheBottom onSubmit={submit} formId="modal-action" />
+      <FormComposer
+        config={config.form}
+        noBoxShadow
+        inline
+        childrenAtTheBottom
+        onSubmit={submit}
+        defaultValues={defaultValues}
+        formId="modal-action"
+      />
     </Modal>
   ) : (
     <Loader />

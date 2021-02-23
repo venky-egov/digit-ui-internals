@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
 
-const SelectGeolocation = ({ onSelect, t }) => {
+const SelectGeolocation = ({ onSelect, t, config }) => {
   const [pincode, setPincode] = useState("");
 
   const onSkip = () => onSelect();

@@ -6,6 +6,10 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
 
+  // const cityWiseLocalities = useSelector((state) => state.common.localities);
+
+  // const localities = cityWiseLocalities[city]
+
   const { pincode } = formData?.address || "";
   const cities =
     userType === "employee"
@@ -14,16 +18,17 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
       : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
-  const [selectedCity, setSelectedCity] = useState(() => {
-    if (userType === "employee") return allCities.filter((city) => city.code === tenantId)[0];
-    const { city } = formData?.address || {};
-    return city ? city : null;
-  });
+  const [selectedCity, setSelectedCity] = useState();
   const [localities, setLocalities] = useState(null);
-  const [selectedLocality, setSelectedLocality] = useState(() => {
-    const { locality } = formData?.address || {};
-    return locality ? locality : null;
-  });
+  const [selectedLocality, setSelectedLocality] = useState();
+
+  useEffect(() => {
+    if (userType === "employee" && cities) {
+      if (cities.length === 1) {
+        setSelectedCity(cities[0]);
+      }
+    }
+  }, [cities]);
 
   useEffect(() => {
     if (selectedCity) {
@@ -63,6 +68,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   function onSubmit() {
     onSelect(config.key, { city: selectedCity, locality: selectedLocality });
   }
+
   if (userType === "employee") {
     return (
       <div>

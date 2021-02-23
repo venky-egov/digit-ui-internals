@@ -38,6 +38,7 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
             zIndex: "1999",
             width: "300px",
             transform: `${open ? "translateX(0)" : "translateX(-450px)"}`,
+            boxShadow: "rgb(0 0 0 / 16%) 8px 0px 16px",
           }}
         >
           {profileItem}

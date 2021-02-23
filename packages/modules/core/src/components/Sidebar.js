@@ -67,7 +67,15 @@ export const CitizenSidebar = ({ isOpen, isMobile, toggleSidebar, onLogout }) =>
   }
   return (
     <div>
-      <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={() => toggleSidebar(false)} />
+      <NavBar
+        open={isOpen}
+        profileItem={profileItem}
+        menuItems={menuItems}
+        onClose={() => {
+          Digit.clikOusideFired = true;
+          toggleSidebar(false);
+        }}
+      />
     </div>
   );
 };

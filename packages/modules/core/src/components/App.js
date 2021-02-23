@@ -75,7 +75,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main" style={{ position: isSidebarOpen ? "fixed" : "revert" }}>
+        <div className="main" style={{ position: "fixed" }}>
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
       </Route>
@@ -147,8 +147,10 @@ function TopBar(props) {
   } = props;
 
   const updateSidebar = () => {
-    if (!isSidebarOpen) {
+    if (!Digit.clikOusideFired) {
       toggleSidebar(true);
+    } else {
+      Digit.clikOusideFired = false;
     }
   };
 

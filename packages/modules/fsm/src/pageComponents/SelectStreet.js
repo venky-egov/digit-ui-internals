@@ -14,7 +14,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
       type: "text",
       name: "street",
       validation: {
-        pattern: /^[\w\s]{1,256}$/,
+        pattern: "^[\\w\\s]{1,256}$",
       },
       error: "CORE_COMMON_STREET_INVALID",
     },
@@ -23,7 +23,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
       type: "text",
       name: "doorNo",
       validation: {
-        pattern: /^[\w]([\w\/,\s])*$/,
+        pattern: "^[\\w]([\\w\\/,\\s])*$",
       },
       error: "CORE_COMMON_DOOR_INVALID",
     },

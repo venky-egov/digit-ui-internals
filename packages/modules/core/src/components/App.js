@@ -24,7 +24,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
-  const CITIZEN = userDetails?.info?.type === "CITIZEN";
+  const CITIZEN = window.location.pathname.split("/").includes('employee') ? false : true
 
   const handleLogout = () => {
     toggleSidebar(false);
@@ -75,7 +75,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main" style={{ position: "fixed" }}>
+        <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
       </Route>

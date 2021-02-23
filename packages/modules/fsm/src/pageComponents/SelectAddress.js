@@ -24,9 +24,9 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
 
   useEffect(() => {
     if (userType === "employee" && cities) {
-      const preSelectedCity = cities.filter((city) => city.code === tenantId)[0];
-      onSelect(config.key, { ...formData[config.key], city: preSelectedCity });
-      return preSelectedCity;
+      if (cities.length === 1) {
+        setSelectedCity(cities[0]);
+      }
     }
   }, [cities]);
 
@@ -68,6 +68,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   function onSubmit() {
     onSelect(config.key, { city: selectedCity, locality: selectedLocality });
   }
+
   if (userType === "employee") {
     return (
       <div>

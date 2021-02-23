@@ -51,7 +51,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     })();
     // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
 
-    console.log("find form data here", formData);
+    // console.log("find form data here helllo", formData);
     if (formData?.propertyType && formData?.subtype && formData?.address?.locality?.code) {
       setSubmitValve(true);
     } else {

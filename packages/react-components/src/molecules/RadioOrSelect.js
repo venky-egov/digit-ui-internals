@@ -3,7 +3,6 @@ import RadioButtons from "../atoms/RadioButtons";
 import Dropdown from "../atoms/Dropdown";
 
 const RadioOrSelect = ({ options, onSelect, optionKey, selectedOption, isMandatory, t }) => {
-  console.log("muahahaha", { options, onSelect, optionKey, selectedOption, isMandatory, t });
   return (
     <React.Fragment>
       {options?.length < 5 ? (

@@ -10,10 +10,12 @@ import SelectPincode from "./Steps/SelectPincode";
 import SelectAddress from "./Steps/SelectAddress";
 import SelectStreet from "./Steps/SelectStreet";
 import SelectLandmark from "./Steps/SelectLandmark";
+import Proof from "./Steps/Proof";
+import CheckPage from "./Steps/CheckPage";
 
 export const config = {
   routes: {
-    "map": {
+    map: {
       component: SelectGeolocation,
       nextStep: "pincode",
     },
@@ -24,7 +26,7 @@ export const config = {
         header: "Do you know the pincode?",
         cardText:
           "if you know the pincode of the property address, provide below. It will help us identify the property location easily or you can skip and continue.",
-        nextText: "Next",
+        submitBarLabel: "PT_COMMONS_NEXT",
         skipText: "Skip and Continue",
       },
       inputs: [
@@ -48,7 +50,7 @@ export const config = {
         headerCaption: "Property's Location",
         header: "Provide Property Address",
         cardText: "Choose the locality of the property from the list given below",
-        nextText: "Next",
+        submitBarLabel: "PT_COMMONS_NEXT",
       },
       nextStep: "street",
     },
@@ -88,7 +90,7 @@ export const config = {
         headerCaption: "Property's Location",
         header: "Provide Landmark",
         cardText: "Provide the landmarkto help us reach the property's location easily.",
-        nextText: "Next",
+        submitBarLabel: "PT_COMMONS_NEXT",
         skipText: "Skip and Coninue",
       },
       inputs: [
@@ -101,6 +103,17 @@ export const config = {
           },
         },
       ],
+      nextStep: "proof",
+    },
+    proof: {
+      component: Proof,
+      texts: {
+        headerCaption: "Property's Location",
+        header: "Proof Of address",
+        cardText: "Adhaar Card, Voter ID, Driving Licence File Type: jpg, PNG OR PDF (less than 2MB)",
+        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "PT_COMMONS_NEXT",
+      },
       nextStep: "owner-ship-details",
     },
     "owner-ship-details": {
@@ -115,7 +128,7 @@ export const config = {
         "Individual / Single Owner": "owner-details",
         "Joint / Multiple Owners": "owner-details",
         "Institutional - Private": "inistitution-details",
-        "Institutional - Private": "inistitution-details"
+        "Institutional - Private": "inistitution-details",
       },
     },
     "owner-details": {
@@ -192,7 +205,10 @@ export const config = {
         nextText: "PT_COMMONS_NEXT",
         submitBarLabel: "PT_COMMONS_NEXT",
       },
-      nextStep: null,
+      nextStep: "check",
+    },
+    check: {
+      component: CheckPage,
     },
   },
   indexRoute: "map",

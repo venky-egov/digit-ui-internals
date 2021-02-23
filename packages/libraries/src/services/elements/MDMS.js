@@ -302,6 +302,15 @@ export const MdmsService = {
       useCache: true,
       params: { tenantId: stateCode },
     }),
+
+  fetchMDMSRoleBasedAction: (tenantId, roleCodes) => {
+    Request({
+      method: "POST",
+      auth: true,
+      data: { roleCodes, tenantId, actionMaster: "actions-test", enabled: true },
+      useCache: true,
+    });
+  },
   call: (tenantId, details) =>
     ServiceRequest({
       serviceName: "mdmsCall",

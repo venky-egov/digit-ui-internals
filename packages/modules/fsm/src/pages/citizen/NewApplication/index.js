@@ -34,7 +34,6 @@ const FileComplaint = ({ parentRoute }) => {
   };
 
   function handleSelect(key, data, skipStep) {
-    console.log("find saving data here", key, data, params);
     setParams({ ...params, ...{ [key]: { ...params[key], ...data } }, ...{ source: "ONLINE" } });
     goNext(skipStep);
   }

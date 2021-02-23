@@ -14,7 +14,7 @@ export const configCompleteApplication = ({ t, vehicle }) => ({
           type: "date",
           populators: {
             name: "desluged",
-            max: new Date().toISOString().split("T")[0]
+            max: new Date().toISOString().split("T")[0],
           },
         },
         {
@@ -24,7 +24,7 @@ export const configCompleteApplication = ({ t, vehicle }) => ({
             name: "wasteCollected",
             validation: {
               required: true,
-              validate: value => value <= vehicle.capacity
+              validate: (value) => value <= vehicle.capacity,
             },
           },
         },

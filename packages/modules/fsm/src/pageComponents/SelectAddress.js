@@ -25,8 +25,6 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     return locality ? locality : null;
   });
 
-  console.log("find address here");
-
   useEffect(() => {
     if (selectedCity) {
       let __localityList = localitiesObj[selectedCity.code];

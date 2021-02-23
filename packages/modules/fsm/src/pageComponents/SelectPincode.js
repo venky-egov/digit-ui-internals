@@ -2,7 +2,6 @@ import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/di
 import React, { useState, useEffect } from "react";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
-  console.log("find pincode properties here", config, onSelect, formData, userType);
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => {
     const { pincode } = formData?.address || "";
@@ -30,7 +29,6 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
     }
   }, [formData?.address?.pincode]);
 
-  console.log({ formData }, "pindocde");
   function onChange(e) {
     setPincode(e.target.value);
     setPincodeServicability(null);

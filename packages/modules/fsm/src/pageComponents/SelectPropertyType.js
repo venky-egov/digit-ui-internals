@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { CitizenInfoLabel, Loader, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
-  console.log("find config property here ", config);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
@@ -24,7 +23,6 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
   }, [formData?.propertyType, propertyTypesData]);
 
   const goNext = () => {
-    console.log("find config key here", config.key);
     onSelect(config.key, propertyType);
   };
   function selectedValue(value) {
@@ -33,8 +31,6 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
   function selectedType(value) {
     onSelect(config.key, value.code);
   }
-
-  console.log("find me here");
 
   if (propertyTypesData.isLoading) {
     return <Loader />;

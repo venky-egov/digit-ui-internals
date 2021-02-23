@@ -33,7 +33,6 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
       if (userType === "employee") {
         const value = e?.target?.value;
         const key = e?.target?.id;
-        console.log({ key, value });
         onSelect(key, value);
       }
     }

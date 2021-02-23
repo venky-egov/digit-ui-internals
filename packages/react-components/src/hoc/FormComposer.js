@@ -24,7 +24,6 @@ export const FormComposer = (props) => {
   }, []);
 
   function onSubmit(data) {
-    console.log({ data });
     props.onSubmit(data);
   }
 
@@ -33,7 +32,6 @@ export const FormComposer = (props) => {
   }
 
   useEffect(() => {
-    console.log({ formData });
     props.onFormValueChange && props.onFormValueChange(setValue, formData, formState);
   }, [formData]);
 

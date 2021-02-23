@@ -15,12 +15,13 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
       const preFilledPropertyType = propertyTypesData.data.filter((propertyType) => propertyType.code === formData?.propertyType)[0];
       setPropertyType(preFilledPropertyType);
     }
-  }, [formData?.propertyType, propertyTypesData]);
+  }, [formData?.propertyType, propertyTypesData.data]);
 
   const goNext = () => {
     onSelect(config.key, propertyType);
   };
   function selectedValue(value) {
+    console.log("find propertyType here", value);
     setPropertyType(value);
   }
   function selectedType(value) {

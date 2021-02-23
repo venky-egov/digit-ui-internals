@@ -152,6 +152,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
+        // console.log("find vehicle menu here", vehicleMenu)
         setFormValve(dso && vehicle ? true : false);
         return setConfig(
           configAssignDso({

@@ -24,7 +24,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
-  const CITIZEN = userDetails?.info?.type === "CITIZEN" || window.location.pathname.split("/").includes('citizen') ? true : false
+  const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes('employee') ? true : false
 
   const handleLogout = () => {
     toggleSidebar(false);

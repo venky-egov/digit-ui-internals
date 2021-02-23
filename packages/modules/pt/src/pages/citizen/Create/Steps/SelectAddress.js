@@ -7,12 +7,12 @@ const SelectAddress = ({ t, config, onSelect, value = {} }) => {
   const cities = value?.pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == value["pincode"])) : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
   const [selectedCity, setSelectedCity] = useState(() => {
-    const { city_complaint } = value;
+    const { city_complaint } = ""; //value;
     return city_complaint ? city_complaint : null;
   });
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(() => {
-    const { locality_complaint } = value;
+    const { locality_complaint } = ""; //value;
     return locality_complaint ? locality_complaint : null;
   });
 

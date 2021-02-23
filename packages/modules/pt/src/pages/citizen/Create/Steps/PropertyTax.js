@@ -5,8 +5,13 @@ import { PropertyTaxRegistration } from "@egovernments/digit-ui-react-components
 
 export const PropertyTax = (onSave) => {
   function onSave() {
-    // history.push(`http://localhost:3000/digit-ui/citizen/pt/property/test/location`);
+    //history.push(`http://localhost:3000/digit-ui/citizen/pt/property/test/location`);
+    //onclick();
   }
+
+  /*  const goNext = () => {
+    onSelect();
+  }; */
   return (
     <React.Fragment>
       <PropertyTaxRegistration

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { createComplaint } from "../../../redux/actions/index";
 // import { PGR_CITIZEN_COMPLAINT_CONFIG, PGR_CITIZEN_CREATE_COMPLAINT } from "../../../constants/Citizen";
 import Response from "./Response";
+import CheckPage from "./Steps/CheckPage";
 
 import { config } from "./defaultConfig";
 import { Redirect, Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
@@ -36,14 +37,17 @@ export const CreateProperty = () => {
     }
   }, [params, nextStep]);
 
+  const submitComplaint = async () => {
+    history.push(`${parentRoute}/new-application/response`);
+  };
   const goNext = () => {
-    debugger;
+    //debugger;
     const currentPath = pathname.split("/").pop();
 
     let { nextStep } = config.routes[currentPath];
-    if(typeof nextStep == "object") {
+    if (typeof nextStep == "object") {
       let ownerType = sessionStorage.getItem("ownerType");
-      nextStep = nextStep[ownerType]
+      nextStep = nextStep[ownerType];
     }
     if (nextStep === null) {
       return history.push(`${parentRoute}/test/check`);
@@ -106,6 +110,9 @@ export const CreateProperty = () => {
           </Route>
         );
       })}
+      <Route path={`${match.path}/check`}>
+        <CheckPage onSubmit={submitComplaint} value={params} />
+      </Route>
       <Route path={`${match.path}/response`}>
         <Response match={match} />
       </Route>

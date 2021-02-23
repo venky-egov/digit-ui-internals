@@ -12,9 +12,15 @@ import SelectStreet from "./Steps/SelectStreet";
 import SelectLandmark from "./Steps/SelectLandmark";
 import Proof from "./Steps/Proof";
 import CheckPage from "./Steps/CheckPage";
+import Response from "./Steps/Response";
+import { PropertyTax } from "./Steps/PropertyTax";
 
 export const config = {
   routes: {
+    info: {
+      component: PropertyTax,
+      nextStep: "map",
+    },
     map: {
       component: SelectGeolocation,
       nextStep: "pincode",
@@ -50,7 +56,7 @@ export const config = {
         headerCaption: "Property's Location",
         header: "Provide Property Address",
         cardText: "Choose the locality of the property from the list given below",
-        submitBarLabel: "PT_COMMONS_NEXT",
+        submitBarLabel: "Next",
       },
       nextStep: "street",
     },
@@ -60,7 +66,7 @@ export const config = {
         headerCaption: "Property's Location",
         header: "Provide Property Address",
         cardText: "Enter your street name",
-        nextText: "Next",
+        submitBarLabel: "Next",
       },
       inputs: [
         {
@@ -90,7 +96,7 @@ export const config = {
         headerCaption: "Property's Location",
         header: "Provide Landmark",
         cardText: "Provide the landmarkto help us reach the property's location easily.",
-        submitBarLabel: "PT_COMMONS_NEXT",
+        submitBarLabel: "Next",
         skipText: "Skip and Coninue",
       },
       inputs: [
@@ -183,7 +189,7 @@ export const config = {
         nextText: "PT_COMMONS_NEXT",
         submitBarLabel: "PT_COMMONS_NEXT",
       },
-      nextStep: "null",
+      nextStep: "check",
     },
     "inistitution-details": {
       component: SelectInistitutionOwnerDetails,
@@ -209,7 +215,12 @@ export const config = {
     },
     check: {
       component: CheckPage,
+      nextStep: null,
     },
+    /* response: {
+      component: Response,
+      nextStep: null,
+    }, */
   },
   indexRoute: "map",
 };

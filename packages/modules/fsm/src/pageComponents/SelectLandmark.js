@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 
 const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
-  const [landmark, setLandmark] = useState(() => {
-    const { landmark } = formData?.address || {};
-    return landmark ? landmark : "";
-  });
+  const [landmark, setLandmark] = useState();
 
   const [error, setError] = useState("");
 

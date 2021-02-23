@@ -75,7 +75,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main" style={{ position: isSidebarOpen ? "fixed" : "revert" }}>
+        <div className="main" style={{ position: "fixed" }}>
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
       </Route>
@@ -146,12 +146,20 @@ function TopBar(props) {
     logoUrl,
   } = props;
 
+  const updateSidebar = () => {
+    if (!Digit.clikOusideFired) {
+      toggleSidebar(true);
+    } else {
+      Digit.clikOusideFired = false;
+    }
+  };
+
   if (CITIZEN) {
     return (
       <TopBarComponent
         img={stateInfo?.logoUrlWhite}
-        isMobile={mobileView}
-        toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
+        isMobile={true}
+        toggleSidebar={updateSidebar}
         logoUrl={stateInfo?.logoUrlWhite}
         onLogout={handleLogout}
         userDetails={userDetails}
@@ -192,7 +200,7 @@ function TopBar(props) {
 function SideBar(props) {
   const { t, CITIZEN, isSidebarOpen, toggleSidebar, handleLogout, mobileView, userDetails } = props;
   if (CITIZEN) {
-    return <CitizenSidebar isOpen={mobileView ? isSidebarOpen : true} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />;
+    return <CitizenSidebar isOpen={isSidebarOpen} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />;
   }
   return (
     <React.Fragment>

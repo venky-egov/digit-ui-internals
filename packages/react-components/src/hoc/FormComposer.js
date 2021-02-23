@@ -40,7 +40,7 @@ export const FormComposer = (props) => {
       case "text":
       case "date":
       case "password":
-        if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
+        // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (
           <div
             className="field-container"
@@ -73,7 +73,7 @@ export const FormComposer = (props) => {
           </div>
         );
       case "textarea":
-        if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
+        // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return <TextArea className="field" {...populators} inputRef={register(populators.validation)} disable={disable} />;
       case "custom":
         return (

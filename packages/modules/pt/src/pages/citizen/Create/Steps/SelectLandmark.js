@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FormStep } from "@egovernments/digit-ui-react-components";
 
-const SelectLandmark = ({ t, config, onSelect, value }) => {
+const SelectLandmark = ({ t, config, onSelect, value = {} }) => {
   const [landmark, setLandmark] = useState(() => {
     const { landmark } = value;
     return landmark ? landmark : "";

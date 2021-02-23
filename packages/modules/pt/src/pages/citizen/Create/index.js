@@ -45,11 +45,9 @@ export const CreateProperty = () => {
       let ownerType = sessionStorage.getItem("ownerType");
       nextStep = nextStep[ownerType]
     }
-    // // let compType = Digit.SessionStorage.get(PGR_CITIZEN_CREATE_COMPLAINT);
-    // if (nextStep === "sub-type" && compType.complaintType.key === "Others") {
-    //   setParams({ ...params, complaintType: { key: "Others", name: "Others" }, subType: { key: "Others", name: "Others" } });
-    //   nextStep = config.routes[nextStep].nextStep;
-    // }
+    if (nextStep === null) {
+      return history.push(`${parentRoute}/test/check`);
+    }
     setNextStep(nextStep);
   };
 

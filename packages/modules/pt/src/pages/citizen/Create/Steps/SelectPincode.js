@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const SelectPincode = ({ t, config, onSelect, value }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => {
-    const { pincode } = value;
+    const { pincode } = ""; //value;
     return pincode;
   });
   const [pincodeServicability, setPincodeServicability] = useState(null);

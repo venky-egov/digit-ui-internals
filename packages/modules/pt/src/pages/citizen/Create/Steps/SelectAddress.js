@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormStep, CardLabel, Dropdown, RadioButtons } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
-const SelectAddress = ({ t, config, onSelect, value }) => {
+const SelectAddress = ({ t, config, onSelect, value = {} }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   const cities = value?.pincode ? allCities.filter((city) => city?.pincode?.some((pin) => pin == value["pincode"])) : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);

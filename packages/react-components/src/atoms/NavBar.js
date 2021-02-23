@@ -30,7 +30,7 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
             flexDirection: "column",
             marginTop: "56px",
             height: "calc(100vh - 56px)",
-            position: "absolute",
+            position: "fixed",
             top: 0,
             left: 0,
             transition: "transform 0.3s ease-in-out",

@@ -11,10 +11,7 @@ const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
     select,
   });
 
-  const [subtype, setSubtype] = useState(() => {
-    const { subtype } = formData || {};
-    return subtype !== undefined && propertySubtypesData ? propertySubtypesData.filter((subType) => subType.code === formData?.subtype)[0] : null;
-  });
+  const [subtype, setSubtype] = useState();
 
   const [subtypeOptions, setSubtypeOptions] = useState([]);
   const { propertyType } = formData || {};

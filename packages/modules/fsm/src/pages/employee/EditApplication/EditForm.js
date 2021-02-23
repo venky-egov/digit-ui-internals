@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import TripDetails from "../configs/TripDetails";
 import ApplicantDetails from "../configs/ApplicantDetails";
 
-const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
+const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitationMenu }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
@@ -39,7 +39,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
       doorNo: applicationData.address.doorNo,
       landmark: applicationData.address.landmark,
     },
-    pitType: { code: applicationData.sanitationtype, i18nKey: `PITTYPE_MASTERS_${applicationData.sanitationtype}` },
+    pitType: sanitationMenu.filter((type) => type.code === applicationData.sanitationtype)[0],
     pitDetail: applicationData.pitDetail,
   };
 
@@ -105,7 +105,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
 
     const formData = {
       ...applicationData,
-      tenantId: cityCode,
       sanitationtype: sanitationtype,
       source: applicationChannel.code,
       additionalDetails: {

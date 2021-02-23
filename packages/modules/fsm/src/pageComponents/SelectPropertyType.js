@@ -8,12 +8,7 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
 
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertyType", { select });
 
-  const [propertyType, setPropertyType] = useState(() => {
-    const { propertyType } = formData || {};
-    return propertyType !== undefined && propertyTypesData.data
-      ? propertyTypesData.data.filter((propertyType) => propertyType.code === formData?.propertyType)[0]
-      : null;
-  });
+  const [propertyType, setPropertyType] = useState();
 
   useEffect(() => {
     if (!propertyTypesData.isLoading && propertyTypesData.data) {

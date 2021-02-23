@@ -89,7 +89,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           name: applicantName,
           mobileNumber,
         },
-        tenantId: cityCode,
+        tenantId: tenantId,
         sanitationtype: sanitationtype,
         source: applicationChannel.code,
         additionalDetails: {

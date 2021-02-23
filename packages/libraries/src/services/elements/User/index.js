@@ -74,7 +74,7 @@ export const UserService = {
     }),
   hasAccess: (accessTo) => {
     const user = Digit.UserService.getUser();
-    if (!user) return false;
+    if (!user || !user.info) return false;
     const { roles } = user.info;
     return roles.filter((role) => accessTo.includes(role.code)).length;
   },

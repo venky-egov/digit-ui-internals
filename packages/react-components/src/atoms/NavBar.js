@@ -17,7 +17,7 @@ const MenuItem = ({ item }) => {
 
 const NavBar = ({ open, profileItem, menuItems, onClose }) => {
   const node = useRef();
-  Digit.Hooks.useClickOutside(node, onClose);
+  Digit.Hooks.useClickOutside(node, open ? onClose : null);
   const isDesktop = window.innerWidth >= 780;
 
   return (
@@ -30,7 +30,7 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
             flexDirection: "column",
             marginTop: "56px",
             height: "calc(100vh - 56px)",
-            position: !isDesktop ? "absolute" : "revert",
+            position: "absolute",
             top: 0,
             left: 0,
             transition: "transform 0.3s ease-in-out",

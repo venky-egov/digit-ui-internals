@@ -20,7 +20,7 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
 
   useEffect(() => {
     if (!formData?.pitType && userType !== "employee") {
-      onSelect({}, true);
+      onSelect(config.key, {}, true);
     }
   }, []);
 

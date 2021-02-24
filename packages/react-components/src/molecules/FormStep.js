@@ -40,6 +40,8 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
               name={input.name}
               value={value}
               onChange={onChange}
+              minlength={input.validation.minlength}
+              maxlength={input.validation.maxlength}
               inputRef={register(input.validation)}
               isMandatory={errors[input.name]}
             />

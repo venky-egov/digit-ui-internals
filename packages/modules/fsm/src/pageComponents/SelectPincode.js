@@ -11,9 +11,9 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
       type: "text",
       name: "pincode",
       validation: {
-        // pattern: /^([1-9])(\d{5})$/,
-        minLength: 6,
-        maxLength: 7,
+        pattern: "^[1-9][0-9]{5}$",
+        minlength: 6,
+        maxlength: 6,
       },
       error: "CORE_COMMON_PINCODE_INVALID",
     },

@@ -173,29 +173,28 @@ function TopBar(props) {
   return (
     <div className="topbar">
       <img className="city" src={cityDetails?.logoId} />
-      <span className="ulb">
+      <span className="ulb" style={mobileView? {fontSize: "14px"}: {} }>
         {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
       </span>
-      {!mobileView && (
-        <div className="flex-right w-80 right column-gap-15">
-          <div className="left">
+        <div className={ mobileView ? "right" : "flex-right right w-80 column-gap-15"}>
+          {!mobileView && <div className="left">
             <ChangeLanguage dropdown={true} />
-          </div>
+          </div>}
           {userDetails?.access_token && (
-            <div className="left ">
+            <div className="left">
               <Dropdown
                 option={userOptions}
                 optionKey={"name"}
                 select={handleUserDropdownSelection}
                 showArrow={false}
                 freeze={true}
+                style={ mobileView ? {right: 0} : {} }
                 customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
               />
             </div>
           )}
-          <img className="state" src={logoUrl} />
+          {!mobileView && <img className="state" src={logoUrl} />}
         </div>
-      )}
     </div>
   );
 }

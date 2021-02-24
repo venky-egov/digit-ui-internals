@@ -3,8 +3,20 @@ import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
 
 const SelectGeolocation = ({ onSelect, t, config }) => {
   const [pincode, setPincode] = useState("");
+   const tenants = Digit.Hooks.fsm.useTenants();
+   const [pincodeServicability, setPincodeServicability] = useState(null);
 
   const onSkip = () => onSelect();
+  const onChange = (code )=> {
+    setPincodeServicability(null);
+    const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item == code));
+    if(!foundValue){
+      setPincodeServicability("CS_COMMON_PINCODE_NOT_SERVICABLE");
+      setPincode("");
+    }else {
+      setPincode(code);
+    }
+  }
 
   return (
     <LocationSearchCard
@@ -13,9 +25,11 @@ const SelectGeolocation = ({ onSelect, t, config }) => {
       nextText={t("CS_COMMON_NEXT")}
       skipAndContinueText={t("CORE_COMMON_SKIP_CONTINUE")}
       skip={onSkip}
+      t={t}
       onSave={() => onSelect(config.key, { geolocation: {}, pincode })}
-      onChange={(code) => setPincode(code)}
+      onChange={(code) => onChange(code)}
       disabled={pincode === ""}
+      forcedError={t(pincodeServicability)}
     />
   );
 };

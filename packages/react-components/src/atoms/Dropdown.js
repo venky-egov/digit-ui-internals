@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
-import useOnClickOutside from "../../../libraries/src/hooks/useClickOutside";
 
 const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
   const wrapperRef = useRef(null);
-  useOnClickOutside(wrapperRef, () => props.setOutsideClicked(true));
+  Digit.Hooks.useClickOutside(wrapperRef, function () {
+    return props.setOutsideClicked(true);
+  });
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");

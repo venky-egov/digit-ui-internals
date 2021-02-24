@@ -18,7 +18,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
       : allCities;
   const localitiesObj = useSelector((state) => state.common.localities);
-  const [selectedCity, setSelectedCity] = useState();
+  const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || null);
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState();
 

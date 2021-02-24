@@ -12,7 +12,7 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
 
   useEffect(() => {
     if (!propertyTypesData.isLoading && propertyTypesData.data) {
-      const preFilledPropertyType = propertyTypesData.data.filter((propertyType) => propertyType.code === formData?.propertyType)[0];
+      const preFilledPropertyType = propertyTypesData.data.filter((propertyType) => propertyType.code === (formData?.propertyType?.code || formData?.propertyType))[0];
       setPropertyType(preFilledPropertyType);
     }
   }, [formData?.propertyType, propertyTypesData.data]);

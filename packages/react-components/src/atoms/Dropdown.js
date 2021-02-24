@@ -5,9 +5,7 @@ import { ArrowDown } from "./svgindex";
 const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
   const wrapperRef = useRef(null);
-  Digit.Hooks.useClickOutside(wrapperRef, function () {
-    return props.setOutsideClicked(true);
-  });
+  Digit.Hooks.useClickOutside(wrapperRef, () => props.setOutsideClicked(true));
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");

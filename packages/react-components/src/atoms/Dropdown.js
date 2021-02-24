@@ -4,6 +4,8 @@ import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
+  const wrapperRef = useRef(null);
+  useOutsideClick(wrapperRef, () => props.setOutsideClicked(true));
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");
@@ -28,6 +30,7 @@ const TextField = (props) => {
 
   return (
     <input
+      ref={wrapperRef}
       className={`employee-select-wrap--elipses ${props.disable && "disabled"}`}
       type="text"
       value={value}
@@ -48,23 +51,26 @@ const Dropdown = (props) => {
   const [forceSet, setforceSet] = useState(0);
   const optionRef = useRef(null);
   const hasCustomSelector = props.customSelector ? true : false;
+  const [outsideClicked, setOutsideClicked] = useState(false);
 
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
 
   useEffect(() => {
-    if (!dropdownStatus) {
+    if (setOutsideClicked) {
       if (selectedOption?.name && filterVal?.length > 0 && filterVal !== selectedOption?.name) {
+        setDropdownStatus(false);
         setforceSet(true);
         setFilter("");
       }
     }
     return () => {
-      setforceSet(0);
+      setforceSet(false);
       setFilter("");
+      setOutsideClicked(false);
     };
-  }, [dropdownStatus]);
+  }, [outsideClicked]);
 
   function dropdownSwitch() {
     if (!props.disable) {
@@ -137,6 +143,7 @@ const Dropdown = (props) => {
             dropdownDisplay={dropdownOn}
             disable={props.disable}
             freeze={props.freeze ? true : false}
+            setOutsideClicked={setOutsideClicked}
           />
           <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
@@ -177,6 +184,25 @@ const Dropdown = (props) => {
     </div>
   );
 };
+
+function useOutsideClick(ref, doSomething) {
+  useEffect(() => {
+    /**
+     * do something if clicked on outside of element
+     */
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        doSomething();
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
+}
 
 Dropdown.propTypes = {
   customSelector: PropTypes.any,

@@ -12,7 +12,16 @@ export const LastRow = (props) => {
 export const Row = (props) => {
   let value = props.text;
   if (Array.isArray(props.text)) {
-    value = props.text.map((val, index) => <p key={index}>{val}</p>);
+    value = props.text.map((val, index) => {
+      if (val?.className) {
+        return (
+          <p className={val?.className} key={index}>
+            {val?.value}
+          </p>
+        );
+      }
+      return <p key={index}>{val}</p>;
+    });
   }
 
   return (

@@ -8,24 +8,20 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
 
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertyType", { select });
 
-  const [propertyType, setPropertyType] = useState(() => {
-    const { propertyType } = formData || {};
-    return propertyType !== undefined && propertyTypesData.data
-      ? propertyTypesData.data.filter((propertyType) => propertyType.code === formData?.propertyType)[0]
-      : null;
-  });
+  const [propertyType, setPropertyType] = useState();
 
   useEffect(() => {
     if (!propertyTypesData.isLoading && propertyTypesData.data) {
-      const preFilledPropertyType = propertyTypesData.data.filter((propertyType) => propertyType.code === formData?.propertyType)[0];
+      const preFilledPropertyType = propertyTypesData.data.filter((propertyType) => propertyType.code === (formData?.propertyType?.code || formData?.propertyType))[0];
       setPropertyType(preFilledPropertyType);
     }
-  }, [formData?.propertyType, propertyTypesData]);
+  }, [formData?.propertyType, propertyTypesData.data]);
 
   const goNext = () => {
     onSelect(config.key, propertyType);
   };
   function selectedValue(value) {
+    console.log("find propertyType here", value);
     setPropertyType(value);
   }
   function selectedType(value) {

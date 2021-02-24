@@ -19,9 +19,23 @@ const EditApplication = ({ parentUrl, heading }) => {
 
   const { isLoading: isVehicleMenuLoading, data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const { isLoading: isChannelMenuLoading, data: channelMenu } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
+  const { data: sanitationMenu, isLoading: sanitationTypeloading } = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
 
-  return applicationData && !applicationLoading && vehicleMenu && !isVehicleMenuLoading && channelMenu && !isChannelMenuLoading ? (
-    <EditForm applicationData={applicationData} vehicleMenu={vehicleMenu} channelMenu={channelMenu} tenantId={tenantId} />
+  return applicationData &&
+    !applicationLoading &&
+    vehicleMenu &&
+    !isVehicleMenuLoading &&
+    channelMenu &&
+    !isChannelMenuLoading &&
+    !sanitationTypeloading &&
+    sanitationMenu ? (
+    <EditForm
+      applicationData={applicationData}
+      vehicleMenu={vehicleMenu}
+      channelMenu={channelMenu}
+      sanitationMenu={sanitationMenu}
+      tenantId={tenantId}
+    />
   ) : null;
 };
 export default EditApplication;

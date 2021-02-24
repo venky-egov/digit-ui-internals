@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
-  const [pincode, setPincode] = useState(formData?.address?.pincode);
+  const [pincode, setPincode] = useState(() => formData?.address?.pincode || '');
 
   const inputs = [
     {

@@ -151,9 +151,9 @@ const Table = ({
           </select>
           <span>
             <span>
-              {currentPage * 10 + 1}
+              {currentPage * pageSizeLimit + 1}
               {"-"}
-              {(currentPage + 1) * 10} {totalRecords ? `of ${totalRecords}` : ""}
+              {(currentPage + 1) * pageSizeLimit} {totalRecords ? `of ${totalRecords}` : ""}
             </span>{" "}
           </span>
           {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>

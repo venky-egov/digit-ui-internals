@@ -25,7 +25,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     localitiesObj[city?.code] = filteredLocalityList.length ? filteredLocalityList : allLocalities[city?.code];
   }
   
-  const [selectedCity, setSelectedCity] = useState();
+  const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || null);
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState();
 

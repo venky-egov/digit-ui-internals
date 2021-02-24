@@ -44,7 +44,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             address?.city.code
           )}`} */
           //text="002/62 Kayian Mohalla, Nawanshar, Punjab, 144, 514"
-          actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />}
+          actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/pincode" />}
         />
         <Row
           label={t("Proof of Address")}
@@ -59,8 +59,8 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       <StatusTable>
         <Row
           label={t("type of ownership")}
-          text={`${ownerType ? `${t(ownerType.code)}` : ""}`}
-          //text="Single Owner"
+          //text = {`${ownerType ? `${t(ownerType.code)}` : ""}`}
+          text="Single Owner"
           actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
         />
       </StatusTable>

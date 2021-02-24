@@ -55,13 +55,14 @@ const addComponentsToRegistry = () => {
 };
 
 const EmployeeApp = ({ path, url, userType }) => {
+  const { t } = useTranslation();
   const location = useLocation();
   return (
     <Switch>
       <div className="ground-container">
-        <p style={{ marginBottom: "24px" }}>
+        <p className="breadcrumb">
           <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
-            Home
+            {t("ES_COMMON_HOME")}
           </Link>{" "}
           / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
         </p>

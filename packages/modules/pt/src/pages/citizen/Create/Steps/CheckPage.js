@@ -39,8 +39,11 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       <StatusTable>
         <Row
           label={t("CS_CHECK_ADDRESS")}
-          //text={`${doorNo ? `${doorNo} ` : ""} ${street ? `${street}, ` : ""}${t(locality_complaint.code)}, ${t(city_complaint.code)}`}
-          text="002/62 Kayian Mohalla, Nawanshar, Punjab, 144, 514"
+          text={`${doorNo ? `${doorNo} ` : ""} ${street ? `${street}, ` : ""}${t(locality_complaint.code)}, ${t(city_complaint.code)}`}
+          /* text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
+            address?.city.code
+          )}`} */
+          //text="002/62 Kayian Mohalla, Nawanshar, Punjab, 144, 514"
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />}
         />
         <Row
@@ -56,8 +59,8 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       <StatusTable>
         <Row
           label={t("type of ownership")}
-          //text = {`${ownerType ? `${ownerType}` : ""}`}
-          text="Single Owner"
+          text={`${ownerType ? `${t(ownerType.code)}` : ""}`}
+          //text="Single Owner"
           actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
         />
       </StatusTable>

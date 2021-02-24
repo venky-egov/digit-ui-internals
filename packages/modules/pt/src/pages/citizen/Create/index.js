@@ -20,12 +20,13 @@ export const CreateProperty = () => {
   const registry = useContext(ComponentProvider);
   const dispatch = useDispatch();
   const common = useSelector((state) => state.common);
-  const [params, setParams, clearParams] = []; //Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {}); //Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
   // const [customConfig, setConfig] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_COMPLAINT_CONFIG, {});
   // const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PT.complaintConfig), [Digit.Customizations.PT.complaintConfig]);
   const [paramState, setParamState] = useState(params);
   const [nextStep, setNextStep] = useState("");
   const [rerender, setRerender] = useState(0);
+  //const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
   const client = useQueryClient();
 
   useEffect(() => {
@@ -90,9 +91,18 @@ export const CreateProperty = () => {
 
   const handleSelect = (data) => {
     // console.clear();
+    //setParamState(params);
     console.log("DATA selected", data);
-    // setParams({ ...params, ...data });
+    setParams({ ...params, ...data });
+    // setParamsState({ ...params, ...data, ...{ source: "ONLINE" } });
+    //useEffect();
     goNext();
+    // goNext();
+  };
+
+  const handleSUccess = () => {
+    clearParams();
+    queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
   };
 
   const handleSkip = () => {
@@ -114,7 +124,7 @@ export const CreateProperty = () => {
         <CheckPage onSubmit={submitComplaint} value={params} />
       </Route>
       <Route path={`${match.path}/response`}>
-        <Response match={match} />
+        <Response data={params} onSuccess={handleSUccess} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />

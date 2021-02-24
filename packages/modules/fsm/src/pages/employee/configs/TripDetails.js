@@ -11,6 +11,7 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
       {
         label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
         type: "dropdown",
+        isMandatory: true,
         populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={setVehicle} t={t} />,
       },
       {

@@ -18,11 +18,26 @@ const MenuItem = ({ item }) => {
 const NavBar = ({ open, profileItem, menuItems, onClose }) => {
   const node = useRef();
   Digit.Hooks.useClickOutside(node, open ? onClose : null);
-  const isDesktop = window.innerWidth >= 780;
 
   return (
     <React.Fragment>
       <div>
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: `${open ? "0px" : "-100%"}`,
+            opacity: "1",
+            backgroundColor: "rgba(0, 0, 0, 0.54)",
+            willChange: "opacity",
+            transform: "translateZ(0px)",
+            transition: "left 0ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, opacity 400ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
+            zIndex: "1200",
+            pointerzevents: "auto",
+          }}
+        ></div>
         <div
           ref={node}
           style={{
@@ -36,8 +51,9 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
             transition: "transform 0.3s ease-in-out",
             background: "#fff",
             zIndex: "1999",
-            width: isDesktop ? "300px" : "100%",
+            width: "300px",
             transform: `${open ? "translateX(0)" : "translateX(-450px)"}`,
+            boxShadow: "rgb(0 0 0 / 16%) 8px 0px 16px",
           }}
         >
           {profileItem}

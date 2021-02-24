@@ -3,10 +3,8 @@ import React, { useState, useEffect } from "react";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
-  const [pincode, setPincode] = useState(() => {
-    const { pincode } = formData?.address || "";
-    return pincode;
-  });
+  const [pincode, setPincode] = useState(() => formData?.address?.pincode || '');
+
   const inputs = [
     {
       label: "CORE_COMMON_PINCODE",
@@ -31,9 +29,18 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
 
   function onChange(e) {
     setPincode(e.target.value);
+
     setPincodeServicability(null);
     if (userType === "employee") {
-      onSelect(config.key, { pincode: e.target.value });
+      const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item === e.target.value));
+
+      if (foundValue) {
+        const city = tenants.filter((obj) => obj.pincode?.find((item) => item == data?.pincode))[0];
+        onSelect(config.key, { pincode: e.target.value });
+        onSelect(config.key, { city });
+      } else {
+        setPincodeServicability("CS_COMMON_PINCODE_NOT_SERVICABLE");
+      }
     }
   }
 

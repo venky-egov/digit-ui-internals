@@ -7,20 +7,11 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
   const tankDimension = formData?.pitType?.dimension;
   const [disable, setDisable] = useState(true);
 
-  const [size, setSize] = useState(() => {
-    let data;
-    const { pitDetail } = formData;
-    if (pitDetail) {
-      data = getPitDetail(pitDetail, tankDimension);
-    } else {
-      data = getPitDetail({}, tankDimension);
-    }
-    return data;
-  });
+  const [size, setSize] = useState();
 
   useEffect(() => {
     if (!formData?.pitType && userType !== "employee") {
-      onSelect({}, true);
+      onSelect(config.key, {}, true);
     }
   }, []);
 

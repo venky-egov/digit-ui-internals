@@ -20,12 +20,13 @@ const Inbox = ({ parentRoute }) => {
     locality: [],
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
   });
+
+  let isMobile = window.Digit.Utils.browser.isMobile;
+  let paginationParms = isMobile ? {} : { limit: pageSize + 1, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
+
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
     ...searchParams,
-    limit: pageSize + 1,
-    offset: pageOffset,
-    sortBy: sortParams?.key,
-    sortOrder: sortParams.sortOrder,
+    ...paginationParms,
   });
 
   const fetchNextPage = () => {
@@ -81,7 +82,6 @@ const Inbox = ({ parentRoute }) => {
     }
   };
 
-  let isMobile = window.Digit.Utils.browser.isMobile;
   if (applications?.length !== null) {
     if (isMobile) {
       return (

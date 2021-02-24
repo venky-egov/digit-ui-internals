@@ -1,12 +1,17 @@
 /* TODO: convert using tailwind */
 .employee {
+  .breadcrumb {
+    @apply ml-sm mb-lg;
+  }
+  .ground-container {
+    @apply flex flex-col;
+  }
   .card-home {
     font-size: 16px;
     padding: 0 0 16px 0;
-    width: 270px;
+    width: 92vw;
     display: inline-block;
-    margin-right: 16px;
-    margin-bottom: 16px;
+    margin: 8px auto;
   }
   .topbar {
     position: fixed;
@@ -109,6 +114,18 @@
 
 @media (min-width: 640px) {
   .employee {
+    .ground-container {
+      @apply block;
+    }
+    .breadcrumb {
+      @apply mb-lg;
+      margin-left: 0;
+    }
+    .card-home {
+      width: 270px;
+      margin-right: 16px;
+      margin-bottom: 16px;
+    }
     .main {
       padding-top: 80px;
       margin-left: 88px;

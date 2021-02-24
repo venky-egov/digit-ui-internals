@@ -30,6 +30,7 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
           // defaultValue: 1
           // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
         },
+        disable: true,
         // disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
       },
       {
@@ -41,6 +42,7 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
           validation: { required: true },
           // defaultValue: vehicle?.amount,
         },
+        disable: true,
         // disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
       },
       {

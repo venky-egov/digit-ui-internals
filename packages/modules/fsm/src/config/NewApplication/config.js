@@ -95,7 +95,7 @@ export const newConfig = [
         isMandatory: true,
         component: "SelectSlumName",
         texts: {
-          header: "ES_NEW_APPLICATION_SLUM_NAME",
+          header: "CS_NEW_APPLICATION_SLUM_NAME",
           cardText: "CS_NEW_APPLICATION_SLUM_TEXT",
           submitBarLabel: "CS_COMMON_NEXT",
         },
@@ -156,6 +156,7 @@ export const newConfig = [
       {
         route: "tank-size",
         component: "SelectTankSize",
+        isMandatory: true,
         texts: {
           headerCaption: "",
           header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",

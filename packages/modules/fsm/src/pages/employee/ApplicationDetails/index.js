@@ -195,7 +195,13 @@ const ApplicationDetails = (props) => {
                 )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => (
-                    <Row key={value.title} label={value.title} text={value.value || "N/A"} last={index === detail?.values?.length - 1} />
+                    <Row
+                      key={value.title}
+                      label={value.title}
+                      text={value.value || "N/A"}
+                      last={index === detail?.values?.length - 1}
+                      caption={value.caption}
+                    />
                   ))}
                 </StatusTable>
               </React.Fragment>

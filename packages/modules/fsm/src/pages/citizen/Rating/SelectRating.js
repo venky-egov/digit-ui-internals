@@ -25,7 +25,7 @@ const SelectRating = ({ parentRoute }) => {
     }, []);
 
     application.additionalDetails = {
-      CHECKLIST: checklist,
+      CheckList: checklist,
     };
 
     history.push("/digit-ui/employee/fsm/response", {

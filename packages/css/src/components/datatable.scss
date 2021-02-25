@@ -18,6 +18,12 @@
       width: 70%;
       @apply text-heading-s;
     }
+    .caption {
+      width: 70%;
+      margin-top: 16px;
+      margin-left: calc(30% -16px);
+      @apply absolute text-heading-s text-text-secondary
+    }
   }
 
   .last {
@@ -44,6 +50,13 @@
     .value {
       width: 70%;
       @apply text-heading-s;
+    }
+
+    .caption {
+      width: 70%;
+      margin-top: 16px;
+      margin-left: calc(30% -16px);
+      @apply absolute text-heading-s text-text-secondary
     }
   }
 

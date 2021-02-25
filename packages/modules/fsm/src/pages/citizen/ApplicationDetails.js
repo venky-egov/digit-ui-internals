@@ -28,6 +28,11 @@ const displayPitDimension = (pitDeminsion) => {
     .join(" x ");
 };
 
+const getPitDimensionCaption = (diameter, t) => {
+  if (diameter && diameter > 0) return `(${t("CS_COMMON_DEPTH")}X${t("CS_COMMON_DIAMETER")})`;
+  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} X ${t("CS_COMMON_BREADTH")} X ${t("CS_COMMON_DEPTH")})`;
+};
+
 const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -132,6 +137,7 @@ const ApplicationDetails = () => {
             height: application.pitDetail.height,
             diameter: application.pitDetail.diameter,
           })}
+          caption={getPitDimensionCaption(application?.pitDetail?.diameter, t)}
         />
         {!workflowDetails?.isLoading && (
           <Fragment>

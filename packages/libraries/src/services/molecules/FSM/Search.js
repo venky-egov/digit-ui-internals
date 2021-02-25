@@ -21,6 +21,11 @@ const displayPitDimension = (pitDeminsion) => {
     .join(" x ");
 };
 
+const getPitDimensionCaption = (sanitationtype, diameter, t) => {
+  if (diameter && diameter > 0) return `(${t("CS_COMMON_DEPTH")}X${t("CS_COMMON_DIAMETER")})`;
+  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} X ${t("CS_COMMON_BREADTH")} X ${t("CS_COMMON_DEPTH")})`;
+};
+
 const displayServiceDate = (timeStamp) => {
   if (timeStamp === 0) return "N/A";
   const date = new Date(timeStamp);
@@ -109,6 +114,7 @@ export const Search = {
               height: response?.pitDetail?.height,
               diameter: response?.pitDetail?.diameter,
             }),
+            caption: getPitDimensionCaption(response?.sanitationtype, response?.pitDetail?.diameter, t),
           },
           {
             title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),

@@ -156,6 +156,7 @@ export const newConfig = [
       {
         route: "tank-size",
         component: "SelectTankSize",
+        isMandatory: true,
         texts: {
           headerCaption: "",
           header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",

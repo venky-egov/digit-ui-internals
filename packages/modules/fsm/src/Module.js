@@ -95,7 +95,7 @@ const CitizenApp = ({ path }) => {
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
         <PrivateRoute path={`${path}/application-details/:id`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
-        <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
+        <PrivateRoute path={`${path}/response`} component={(props) => <Response parentRoute={path} {...props} />} />
       </Switch>
     </React.Fragment>
   );

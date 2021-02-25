@@ -31,6 +31,7 @@ const EmployeeHome = () => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
+  const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   return (
@@ -85,7 +86,7 @@ const EmployeeHome = () => {
                 <span className="link">
                   <Link to={`/digit-ui/employee/fsm/inbox`}>{t("ES_TITLE_INBOX")}</Link>
                 </span>
-                {!DSO && !COLLECTOR && (
+                {!DSO && !COLLECTOR && !FSM_EDITOR && (
                   <React.Fragment>
                     <span className="link">
                       <Link to={`/digit-ui/employee/fsm/new-application`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>

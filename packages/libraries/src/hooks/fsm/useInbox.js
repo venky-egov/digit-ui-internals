@@ -40,7 +40,10 @@ const useInbox = (tenantId, filters) => {
     // const tenantId = Digit.ULBService.getCurrentTenantId();
     const serviceIds = applicationsList.map((application) => application.applicationNo);
     const serviceIdParams = serviceIds.join();
-    const workflowInstances = await Digit.WorkflowService.getByBusinessId(tenantId, serviceIdParams, {}, false);
+    if (filters.uuid && Object.keys(filters.uuid).length > 0) {
+      uuid = filters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
+    }
+    const workflowInstances = await Digit.WorkflowService.getByBusinessId(tenantId, serviceIdParams, { uuid }, false);
     if (workflowInstances.ProcessInstances) {
       result = combineResponses(applicationsList, workflowInstances).map((data) => ({
         ...data,

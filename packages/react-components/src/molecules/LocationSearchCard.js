@@ -1,21 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
-// import { Card, CardHeader, CardText, LocationSearch, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import CardText from "../atoms/CardText";
+import CardLabelError from "../atoms/CardLabelError";
 import LocationSearch from "../atoms/LocationSearch";
 import SubmitBar from "../atoms/SubmitBar";
 import LinkButton from "../atoms/LinkButton";
 
-const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, skip, onSave, onChange, disabled }) => {
+const LocationSearchCard = ({ header, cardText, nextText,t, skipAndContinueText, forcedError, skip, onSave, onChange, disabled }) => {
   let isDisabled = false || disabled;
   const onLocationChange = (val) => {
     isDisabled = val ? false : true;
     onChange(val);
   };
+  
   return (
     <Card>
       <CardHeader>{header}</CardHeader>
@@ -26,7 +27,7 @@ const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, s
       </CardText>
 
       <LocationSearch onChange={onLocationChange} />
-
+       {forcedError && <CardLabelError>{t(forcedError)}</CardLabelError>}
       <SubmitBar label={nextText} onSubmit={onSave} disabled={isDisabled} />
       {skip ? <LinkButton onClick={skip} label={skipAndContinueText} /> : null}
     </Card>

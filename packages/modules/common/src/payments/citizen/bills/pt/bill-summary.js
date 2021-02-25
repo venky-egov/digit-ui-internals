@@ -1,8 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const BillSumary = ({ billAccountDetails }) => {
   const total = billAccountDetails.reduce((total, tax) => total + tax.amount, 0);
-
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <div
@@ -18,7 +19,7 @@ const BillSumary = ({ billAccountDetails }) => {
         {billAccountDetails.map((amountDetails, index) => {
           return (
             <div key={index} style={{ padding: "5px", display: "flex", marginBottom: "16px" }}>
-              <div style={{ width: "50%", fontWeight: "bold" }}>{amountDetails.taxHeadCode}</div>
+              <div style={{ width: "50%", fontWeight: "bold" }}>{t(amountDetails.taxHeadCode)}</div>
               <div style={{ width: "50%", textAlign: "right" }}>{amountDetails.amount?.toFixed(2)}</div>
             </div>
           );

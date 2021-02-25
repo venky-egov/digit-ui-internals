@@ -1,17 +1,9 @@
+import { PaymentService } from "../../elements/Payment";
 import { FSMService } from "../../elements/FSM";
 import DsoDetails from "./DsoDetails";
 
 const getPropertyTypeLocale = (value) => {
   return `PROPERTYTYPE_MASTERS_${value?.split(".")[0]}`;
-};
-
-const isJsonString = (str) => {
-  try {
-    JSON.parse(str);
-  } catch (err) {
-    return true;
-  }
-  return true;
 };
 
 const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
@@ -58,8 +50,13 @@ export const Search = {
         vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
       }
     }
+
+    const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
+    // console.log("find demand detail here", demandDetails)
     const amountPerTrip = response?.additionalDetails && response?.additionalDetails.tripAmount ? response.additionalDetails.tripAmount : "N/A";
-    const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
+    // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
+    const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
+
     return [
       {
         title: t("ES_TITLE_APPLICATION_DETAILS"),

@@ -95,7 +95,7 @@ export const newConfig = [
         isMandatory: true,
         component: "SelectSlumName",
         texts: {
-          header: "ES_NEW_APPLICATION_SLUM_NAME",
+          header: "CS_NEW_APPLICATION_SLUM_NAME",
           cardText: "CS_NEW_APPLICATION_SLUM_TEXT",
           submitBarLabel: "CS_COMMON_NEXT",
         },

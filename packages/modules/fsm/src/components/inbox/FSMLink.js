@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 const FSMLink = ({ isMobile, data }) => {
   const { t } = useTranslation();
   const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
 
   const allLinks = [
     {
@@ -16,7 +17,7 @@ const FSMLink = ({ isMobile, data }) => {
       notAccessTo: [COLLECTOR],
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
-    { text: t("ES_TITLE_DASHBOARD"), link: "/employee", hyperlink: true },
+    { text: t("ES_TITLE_DASHBOARD"), link: DSO ? "/digit-ui/employee/fsm/dso-dashboard" : "/employee", hyperlink: !DSO },
   ];
 
   const [links, setLinks] = useState([]);

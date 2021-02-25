@@ -10,20 +10,27 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
 
   // const localities = cityWiseLocalities[city]
 
-  const { pincode } = formData?.address || "";
+  const { pincode, city } = formData?.address || "";
   const cities =
     userType === "employee"
       ? allCities.filter((city) => city.code === tenantId)
       : pincode
       ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
       : allCities;
-  const localitiesObj = useSelector((state) => state.common.localities);
+  const allLocalities = useSelector((state) => state.common.localities);
+  const localitiesObj = JSON.parse(JSON.stringify(allLocalities));
+
+  if(pincode && city){
+    const filteredLocalityList = localitiesObj[city?.code].filter(locality => locality?.pincode?.some(item => item.toString() == pincode));
+    localitiesObj[city?.code] = filteredLocalityList.length ? filteredLocalityList : allLocalities[city?.code];
+  }
+  
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || null);
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState();
 
   useEffect(() => {
-    if (userType === "employee" && cities) {
+    if (cities) {
       if (cities.length === 1) {
         setSelectedCity(cities[0]);
       }
@@ -42,6 +49,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       if (formData?.address?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
       }
+      
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
       if (filteredLocalityList.length === 1) {
         setSelectedLocality(filteredLocalityList[0]);

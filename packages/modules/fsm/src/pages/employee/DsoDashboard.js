@@ -17,7 +17,7 @@ const info = {
 const links = [
   {
     pathname: "/digit-ui/employee/fsm/inbox",
-    label: "ES_COMMON_INBOX",
+    label: "ES_TITLE_INBOX",
   },
 ];
 
@@ -37,7 +37,7 @@ const DsoDashboard = () => {
   }
   return (
     <div>
-      <DashboardBox svgIcon={svgIcon} header={t("ES_TITLE_FAECAL_SLUDGE_MGMT")} info={info} links={links} />
+      <DashboardBox t={t} svgIcon={svgIcon} header={t("ES_TITLE_FAECAL_SLUDGE_MGMT")} info={info} links={links} />
     </div>
   );
 };

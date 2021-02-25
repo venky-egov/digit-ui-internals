@@ -142,8 +142,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         },
         geoLocation: {
           ...applicationData.address.geoLocation,
-          latitude: data?.address?.latitude,
-          longitude: data?.address?.longitude,
+          latitude: data?.address?.latitude ? data?.address?.latitude : applicationData.address.geoLocation.latitude,
+          longitude: data?.address?.longitude ? data?.address?.longitude : applicationData.address.geoLocation.longitude,
         },
       },
     };

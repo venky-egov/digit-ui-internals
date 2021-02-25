@@ -194,15 +194,27 @@ const ApplicationDetails = (props) => {
                   <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{detail.title}</CardSectionHeader>
                 )}
                 <StatusTable>
-                  {detail?.values?.map((value, index) => (
-                    <Row
-                      key={value.title}
-                      label={value.title}
-                      text={value.value || "N/A"}
-                      last={index === detail?.values?.length - 1}
-                      caption={value.caption}
-                    />
-                  ))}
+                  {detail?.values?.map((value, index) => {
+                    if (value.map === true && value.value !== 'N/A') {
+                      return (
+                        <div className="row">
+                          <h2>{value.title}</h2>
+                          <div className="value">
+                            <img src={value.value} alt="" />
+                          </div>
+                        </div>
+                      );
+                    }
+                    return (
+                      <Row
+                        key={value.title}
+                        label={value.title}
+                        text={value.value || "N/A"}
+                        last={index === detail?.values?.length - 1}
+                        caption={value.caption}
+                      />
+                    );
+                  })}
                 </StatusTable>
               </React.Fragment>
             ))}

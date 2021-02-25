@@ -18,6 +18,7 @@ const updateDefaultBounds = (center) => {
   };
 };
 const GetPinCode = (places) => {
+  console.log(places, places.geometry.location.lat(), '---------places');
   let postalCode = null;
   places?.address_components?.forEach((place) => {
     let hasPostalCode = place.types.includes("postal_code");
@@ -106,7 +107,12 @@ const LocationSearch = (props) => {
           } // Clear out the old markers.
           let pincode = GetPinCode(place);
           if (pincode) {
-            props.onChange(pincode);
+            const { geometry } = place;
+            const geoLocation = {
+              latitude: geometry.location.lat(),
+              longitude: geometry.location.lng(),
+            }
+            props.onChange(pincode, geoLocation);
           }
           markers.forEach((marker) => {
             marker.setMap(null);
@@ -157,7 +163,7 @@ const LocationSearch = (props) => {
             if (status === "OK") {
               if (results[0]) {
                 let pincode = GetPinCode(results[0]);
-                props.onChange(pincode);
+                props.onChange(pincode, { longitude: location.lng, latitude: location.lat });
                 const infoWindowContent = document.getElementById("pac-input");
                 infoWindowContent.value = getName(results[0]);
               } else {

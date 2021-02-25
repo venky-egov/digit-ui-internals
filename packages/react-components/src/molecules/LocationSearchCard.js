@@ -12,9 +12,10 @@ import LinkButton from "../atoms/LinkButton";
 
 const LocationSearchCard = ({ header, cardText, nextText,t, skipAndContinueText, forcedError, skip, onSave, onChange, disabled }) => {
   let isDisabled = false || disabled;
-  const onLocationChange = (val) => {
+  const onLocationChange = (val, location) => {
+    console.log('location-------------', location);
     isDisabled = val ? false : true;
-    onChange(val);
+    onChange(val, location);
   };
   
   return (

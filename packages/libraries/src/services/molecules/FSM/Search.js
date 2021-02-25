@@ -8,6 +8,10 @@ const getPropertyTypeLocale = (value) => {
 
 const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
 
+const getMapUrl = (latitude = 40.714728, longitude = -73.998672) => (
+  `https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C${latitude},${longitude}&zoom=15&size=400x400&key=AIzaSyA3kg7YWugGl1lTXmAmaBGPNhDW9pEh5bo`
+);
+
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
     .reduce((acc, current) => {
@@ -96,7 +100,10 @@ export const Search = {
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"), value: response?.address?.street },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: response?.address?.doorNo },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: response?.address?.landmark },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"),
+            value: (response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude) ? getMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude) : 'N/A',
+            map: true
+          },
         ],
       },
       {

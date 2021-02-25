@@ -33,7 +33,7 @@ const MobileInbox = ({ data, vehicleLog, isLoading, onFilterChange, onSearch, on
     [t("ES_INBOX_VEHICLE_LOG")]: vehicle.applicationNo,
     [t("ES_INBOX_VEHICLE_NO")]: vehicle.vehicle.registrationNumber,
     [t("ES_INBOX_DSO_NAME")]: vehicle.tripOwner.name,
-    [t("ES_INBOX_WASTE_COLLECTED")]: vehicle.volumeCarried,
+    [t("ES_INBOX_WASTE_COLLECTED")]: vehicle.tripDetails[0]?.volume,
   }));
 
   // TODO: below line is hard coded, it should come from server

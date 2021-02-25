@@ -128,6 +128,12 @@ const ApplicationDetails = () => {
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL")}
           note={application.address.landmark ? application.address.landmark : "NA"}
         />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION")}>
+          {(application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude) ? 
+            <img src={`https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C${application.address?.geoLocation?.latitude},${application.address?.geoLocation?.longitude}&zoom=15&size=400x400&key=AIzaSyDHVGCHFr-kGZA7dKFpGmF1uQafwaEkDus`} /> :
+            'NA'
+          }
+        </KeyNote>
         <KeyNote keyValue={t("CS_COMMON_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
         <KeyNote
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}

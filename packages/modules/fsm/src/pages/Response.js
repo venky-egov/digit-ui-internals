@@ -60,6 +60,7 @@ const Response = (props) => {
           fsm: state.applicationData,
           workflow: {
             action: state.action,
+            ...state.actionData,
           },
         },
         {

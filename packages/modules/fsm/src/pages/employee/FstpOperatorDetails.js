@@ -58,7 +58,7 @@ const FstpOperatorDetails = () => {
       return;
     }
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
-    if (wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
+    if (wasteCollected < 1 || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
       setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
       return;
     }

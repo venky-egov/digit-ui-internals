@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RadioButtons, FormComposer, Dropdown, CardSectionHeader } from "@egovernments/digit-ui-react-components";
+import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { useCardPaymentDetails } from "./card";
@@ -15,7 +15,7 @@ export const CollectPayment = (props) => {
   const { path: currentPath } = useRouteMatch();
   const { consumerCode, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
+  const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const { cardConfig } = useCardPaymentDetails(props);
@@ -204,6 +204,12 @@ export const CollectPayment = (props) => {
   });
 
   const getFormConfig = () => config.concat(formConfigMap[formState?.paymentMode?.code] || []);
+
+  if (isLoading) {
+    return (
+      <Loader />
+    );
+  }
 
   return (
     <React.Fragment>

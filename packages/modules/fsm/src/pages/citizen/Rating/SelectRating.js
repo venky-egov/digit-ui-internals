@@ -32,6 +32,7 @@ const SelectRating = ({ parentRoute }) => {
       applicationData: application,
       key: "update",
       action: "SUBMIT_FEEDBACK",
+      actionData: { rating }
     });
   }
 

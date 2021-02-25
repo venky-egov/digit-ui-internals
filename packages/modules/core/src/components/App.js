@@ -25,6 +25,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
   const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
 
   const handleLogout = () => {
     toggleSidebar(false);
@@ -39,7 +40,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
 
   const mobileView = innerWidth <= 640;
 
-  const employeeRouteStyles = CITIZEN ? { width: "unset", paddingTop: "unset", paddingLeft: "unset", marginLeft: "88px" } : {};
+  const employeeRouteStyles = CITIZEN && !DSO ? { width: "unset", paddingTop: "unset", paddingLeft: "unset", marginLeft: "88px" } : {};
   const sideBarOpenStyles = isSidebarOpen ? { width: "100%", position: "fixed" } : { width: "", position: "" };
 
   return (

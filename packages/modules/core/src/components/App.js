@@ -39,7 +39,6 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
 
   const mobileView = innerWidth <= 640;
 
-  const employeeRouteStyles = CITIZEN ? { width: "unset", paddingTop: "unset", paddingLeft: "unset", marginLeft: "88px" } : {};
   const sideBarOpenStyles = isSidebarOpen ? { width: "100%", position: "fixed" } : { width: "", position: "" };
 
   return (
@@ -59,7 +58,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main" style={{ ...employeeRouteStyles, ...sideBarOpenStyles }}>
+        <div className="main" style={{ ...sideBarOpenStyles }}>
           <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
         </div>
       </Route>
@@ -173,28 +172,30 @@ function TopBar(props) {
   return (
     <div className="topbar">
       <img className="city" src={cityDetails?.logoId} />
-      <span className="ulb" style={mobileView? {fontSize: "14px"}: {} }>
+      <span className="ulb" style={mobileView ? { fontSize: "14px" } : {}}>
         {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
       </span>
-        <div className={ mobileView ? "right" : "flex-right right w-80 column-gap-15"}>
-          {!mobileView && <div className="left">
+      <div className={mobileView ? "right" : "flex-right right w-80 column-gap-15"}>
+        {!mobileView && (
+          <div className="left">
             <ChangeLanguage dropdown={true} />
-          </div>}
-          {userDetails?.access_token && (
-            <div className="left">
-              <Dropdown
-                option={userOptions}
-                optionKey={"name"}
-                select={handleUserDropdownSelection}
-                showArrow={false}
-                freeze={true}
-                style={ mobileView ? {right: 0} : {} }
-                customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
-              />
-            </div>
-          )}
-          {!mobileView && <img className="state" src={logoUrl} />}
-        </div>
+          </div>
+        )}
+        {userDetails?.access_token && (
+          <div className="left">
+            <Dropdown
+              option={userOptions}
+              optionKey={"name"}
+              select={handleUserDropdownSelection}
+              showArrow={false}
+              freeze={true}
+              style={mobileView ? { right: 0 } : {}}
+              customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
+            />
+          </div>
+        )}
+        {!mobileView && <img className="state" src={logoUrl} />}
+      </div>
     </div>
   );
 }

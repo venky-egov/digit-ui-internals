@@ -21,7 +21,7 @@ const Inbox = ({ parentRoute }) => {
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
   });
 
-  let isMobile = window.Digit.Utils.browser.isMobile;
+  let isMobile = window.Digit.Utils.browser.isMobile();
   let paginationParms = isMobile ? {} : { limit: pageSize + 1, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
 
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {

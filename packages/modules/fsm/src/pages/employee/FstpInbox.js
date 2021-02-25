@@ -48,7 +48,7 @@ const FstpInbox = () => {
     },
   ];
 
-  let isMobile = window.Digit.Utils.browser.isMobile;
+  let isMobile = window.Digit.Utils.browser.isMobile();
   // if (isSuccess) {
   if (isMobile) {
     return (

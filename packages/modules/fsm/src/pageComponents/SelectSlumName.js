@@ -4,7 +4,6 @@ import { CardLabel, LabelFieldPair, Dropdown, FormStep, Loader } from "@egovernm
 const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
-  const locality = formData?.address?.locality?.code.split("_")[3];
   const [slum, setSlum] = useState();
   const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "Slum");
   // console.log("find slum data here", locality,slumData && slumData[locality]), formData?.address?.locality;
@@ -23,7 +22,10 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   }, [formData?.address?.slum, slumMenu]);
 
   useEffect(() => {
+    const locality = formData?.address?.locality?.code.split("_")[3];
+    // console.log("find locality code here", locality)
     if (userType === "employee" && !slumDataLoading && slumData) {
+      // console.log("find slum data here", slumData[locality])
       const optionalSlumData = slumData[locality]
         ? [
             {
@@ -41,15 +43,23 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
               name: "Not residing in slum area",
               i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
             },
+            ...Object.keys(slumData)
+              .map((key) => slumData[key])
+              .reduce((prev, curr) => [...prev, ...curr]),
           ];
       // console.log("find slum dta here", optionalSlumData)
       setSlumMenu(optionalSlumData);
     }
     if (userType !== "employee" && !slumDataLoading && slumData) {
       // console.log("find citizen slum menu here", slumData, slumData[locality], formData)
-      setSlumMenu(slumData[locality]);
+      const allSlum = Object.keys(slumData)
+        .map((key) => slumData[key])
+        .reduce((prev, curr) => [...prev, ...curr]);
+      // console.log("find slum data here", slumData, allSlum)
+      slumData[locality] ? setSlumMenu(slumData[locality]) : setSlumMenu(allSlum);
     }
-  }, [slumDataLoading]);
+  }, [slumDataLoading, formData?.address?.locality?.code]);
+
   function selectSlum(value) {
     setSlum(value);
     onSelect(config.key, { ...formData[config.key], slum: value.code });
@@ -75,7 +85,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
     </LabelFieldPair>
   ) : (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
-      <Dropdown option={slumMenu} optionKey="name" id="i18nKey" selected={slum} select={selectSlum} />
+      <Dropdown option={slumMenu} optionKey="name" id="i18nKey" selected={slum} select={setSlum} />
     </FormStep>
   );
 };

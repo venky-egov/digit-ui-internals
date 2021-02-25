@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useMemo, useEffect } from "react";
+import { Route, BrowserRouter as Router, Switch, useRouteMatch, useLocation, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { BackButton, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
+
 import CitizenApp from "./pages/citizen";
+import SelectOwnerShipDetails from "./pageComponents/SelectOwnerShipDetails";
+import SelectOwnerDetails from "./pageComponents/SelectOwnerDetails";
+import SelectSpecialOwnerCategoryType from "./pageComponents/SelectSpecialOwnerCategoryType";
+
+const componentsToRegister = {
+  SelectOwnerShipDetails,
+  SelectOwnerDetails,
+  SelectSpecialOwnerCategoryType
+};
+
+const addComponentsToRegistry = () => {
+  Object.entries(componentsToRegister).forEach(([key, value]) => {
+    Digit.ComponentRegistryService.setComponent(key, value);
+  });
+};
+
 
 export const PTModule = ({ userType }) => {
   const moduleCode = "PT";
+  addComponentsToRegistry();
   console.log(moduleCode, "module integrated");
 
   if (userType === "citizen") {
@@ -12,6 +34,20 @@ export const PTModule = ({ userType }) => {
   }
 };
 
-export const PTLinks = () => {
-  return <React.Fragment></React.Fragment>;
+export const PTLinks = ({ matchPath, userType }) => {
+  const { t } = useTranslation();
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
+
+  useEffect(() => {
+    clearParams();
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Header>{t("ACTION_TEST_PROPERTY_TAX")}</Header>
+      <div className="d-grid">
+        <HomeLink to={`${matchPath}/property/new-application`}>{t("PT_CREATE_PROPERTY ")}</HomeLink>
+      </div>
+    </React.Fragment>
+  );
 };

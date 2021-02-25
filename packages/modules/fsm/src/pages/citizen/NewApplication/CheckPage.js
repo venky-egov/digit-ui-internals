@@ -39,7 +39,7 @@ const CheckPage = ({ onSubmit, value }) => {
     if (index === array.length - 1) {
       return previous + current + "m";
     } else {
-      return previous + current + "m X ";
+      return previous + current + "m x ";
     }
   }, "");
 

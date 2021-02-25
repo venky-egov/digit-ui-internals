@@ -33,6 +33,7 @@ import SelectPitType from "./pageComponents/SelectPitType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectSlumName from "./pageComponents/SelectSlumName";
 import CheckSlum from "./pageComponents/CheckSlum";
+import FSMCard from "./components/FsmCard";
 
 const componentsToRegister = {
   SelectPropertySubtype,
@@ -45,10 +46,11 @@ const componentsToRegister = {
   SelectPitType,
   SelectGeolocation,
   SelectSlumName,
-  CheckSlum
+  CheckSlum,
+  FSMCard,
 };
 
-const addComponentsToRegistry = () => {
+export const initFSMComponents = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {
     Digit.ComponentRegistryService.setComponent(key, value);
   });
@@ -90,10 +92,13 @@ const CitizenApp = ({ path }) => {
     <React.Fragment>
       {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
       <Switch>
-        <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
+        {Digit.UserService.hasAccess("FSM_DSO") && <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />}
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplicationCitizen parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
-        <PrivateRoute path={`${path}/application-details/:id`} component={Digit.UserService.hasAccess("FSM_DSO") ? <EmployeeApplicationDetails parentRoute={path} /> : ApplicationDetails} />
+        <PrivateRoute
+          path={`${path}/application-details/:id`}
+          component={Digit.UserService.hasAccess("FSM_DSO") ? <EmployeeApplicationDetails parentRoute={path} /> : ApplicationDetails}
+        />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
         <PrivateRoute path={`${path}/dso-dashboard`} component={() => <DsoDashboard parentRoute={path} />} />
@@ -104,7 +109,6 @@ const CitizenApp = ({ path }) => {
 
 export const FSMModule = ({ stateCode, userType }) => {
   const moduleCode = "FSM";
-  addComponentsToRegistry();
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;

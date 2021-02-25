@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
-import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
+import { FSMModule, FSMLinks, initFSMComponents } from "@egovernments/digit-ui-module-fsm";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
@@ -79,6 +79,8 @@ Digit.ComponentRegistryService.setupRegistry({
   PTModule,
   PTLinks,
 });
+
+initFSMComponents();
 
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),

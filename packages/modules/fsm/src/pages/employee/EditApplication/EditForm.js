@@ -34,7 +34,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         ...applicationData.address.locality,
         code: `${applicationData.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${applicationData.address.locality.code}`,
       },
-      slum: {},
+      slum: applicationData.address.slumName,
       street: applicationData.address.street,
       doorNo: applicationData.address.doorNo,
       landmark: applicationData.address.landmark,
@@ -49,12 +49,15 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     (async () => {
       // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
-      if (formData?.propertyType && formData?.subtype && vehicle?.code && !kill) {
+      if (formData?.propertyType && formData?.subtype && formData?.address && vehicle?.code && !kill) {
         const { capacity } = vehicle;
+        // console.log("find bill slab form data", formData)
+        const { slum: slumDetails } = formData.address;
+        const slum = slumDetails ? "YES" : "NO";
         const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-          propertyType: formData?.subtype.key,
+          propertyType: formData?.subtype,
           capacity,
-          slum: "YES",
+          slum,
         });
 
         const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
@@ -92,6 +95,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     const pincode = data?.address?.pincode;
     const street = data?.address?.street;
     const doorNo = data?.address?.doorNo;
+    const slum = data?.address?.slum;
     const landmark = data?.address?.landmark;
     const noOfTrips = data.noOfTrips;
     const amount = data.amountPerTrip;
@@ -130,6 +134,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         city,
         state,
         pincode,
+        slumName: slum,
         locality: {
           ...applicationData.address.locality,
           code: localityCode.split("_").pop(),
@@ -137,8 +142,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         },
         geoLocation: {
           ...applicationData.address.geoLocation,
-          latitude: data?.address?.latitude,
-          longitude: data?.address?.longitude,
+          latitude: data?.address?.latitude ? data?.address?.latitude : applicationData.address.geoLocation.latitude,
+          longitude: data?.address?.longitude ? data?.address?.longitude : applicationData.address.geoLocation.longitude,
         },
       },
     };

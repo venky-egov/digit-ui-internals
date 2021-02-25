@@ -38,6 +38,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
     return useQuery("FSM_VEHICLE_TYPE", () => MdmsService.getVehicleType(tenantId, moduleCode, type), config);
   };
 
+  const useSlumLocality = () => {
+    return useQuery("SLUM_LOCALITY_MAPPING", () => MdmsService.getSlumLocalityMapping(tenantId, moduleCode, type));
+  };
+
   switch (type) {
     case "SanitationType":
       return useSanitationType();
@@ -62,6 +66,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
 
     case "Checklist":
       return useChecklist();
+
+    case "Slum":
+      return useSlumLocality();
   }
 };
 

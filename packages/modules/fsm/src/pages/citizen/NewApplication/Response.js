@@ -31,7 +31,7 @@ const Response = ({ data, onSuccess }) => {
   useEffect(() => {
     try {
       const { subtype, pitDetail, address, pitType, source } = data;
-      const { city, locality, pincode, street, doorNo, landmark } = address;
+      const { city, locality, pincode, street, doorNo, landmark, slum } = address;
       const formdata = {
         fsm: {
           tenantId: city.code,
@@ -43,6 +43,7 @@ const Response = ({ data, onSuccess }) => {
             street,
             doorNo,
             landmark,
+            slumName: slum,
             city: city.name,
             pincode,
             locality: {

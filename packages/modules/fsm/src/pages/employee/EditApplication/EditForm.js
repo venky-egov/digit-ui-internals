@@ -51,8 +51,10 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
 
       if (formData?.propertyType && formData?.subtype && vehicle?.code && !kill) {
         const { capacity } = vehicle;
+        // console.log("find bill slab form data", formData)
+
         const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-          propertyType: formData?.subtype.key,
+          propertyType: formData?.subtype,
           capacity,
           slum: "YES",
         });

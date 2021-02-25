@@ -31,7 +31,7 @@ const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
   }
   return (
     <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!pitType} t={t}>
-      <CardLabel>{`${t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")}`}</CardLabel>
+      <CardLabel>{t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")}</CardLabel>
       <RadioOrSelect
         isMandatory={config.isMandatory}
         options={sanitationMenu}

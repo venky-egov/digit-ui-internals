@@ -1,17 +1,9 @@
+import { PaymentService } from "../../elements/Payment";
 import { FSMService } from "../../elements/FSM";
 import DsoDetails from "./DsoDetails";
 
 const getPropertyTypeLocale = (value) => {
   return `PROPERTYTYPE_MASTERS_${value?.split(".")[0]}`;
-};
-
-const isJsonString = (str) => {
-  try {
-    JSON.parse(str);
-  } catch (err) {
-    return true;
-  }
-  return true;
 };
 
 const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
@@ -27,6 +19,11 @@ const displayPitDimension = (pitDeminsion) => {
       }
     }, [])
     .join(" x ");
+};
+
+const getPitDimensionCaption = (sanitationtype, diameter, t) => {
+  if (diameter && diameter > 0) return `(${t("CS_COMMON_DEPTH")}X${t("CS_COMMON_DIAMETER")})`;
+  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} X ${t("CS_COMMON_BREADTH")} X ${t("CS_COMMON_DEPTH")})`;
 };
 
 const displayServiceDate = (timeStamp) => {
@@ -58,8 +55,13 @@ export const Search = {
         vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
       }
     }
+
+    const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
+    // console.log("find demand detail here", demandDetails)
     const amountPerTrip = response?.additionalDetails && response?.additionalDetails.tripAmount ? response.additionalDetails.tripAmount : "N/A";
-    const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
+    // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
+    const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
+
     return [
       {
         title: t("ES_TITLE_APPLICATION_DETAILS"),
@@ -112,6 +114,7 @@ export const Search = {
               height: response?.pitDetail?.height,
               diameter: response?.pitDetail?.diameter,
             }),
+            caption: getPitDimensionCaption(response?.sanitationtype, response?.pitDetail?.diameter, t),
           },
           {
             title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),

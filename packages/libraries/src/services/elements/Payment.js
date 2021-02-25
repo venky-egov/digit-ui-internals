@@ -74,4 +74,14 @@ export const PaymentService = {
       userService: true,
       params: { transactionId },
     }),
+
+  demandSearch: (tenantId, consumerCode, businessService) =>
+    Request({
+      url: Urls.payment.demandSearch,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId, consumerCode, businessService },
+    }),
 };

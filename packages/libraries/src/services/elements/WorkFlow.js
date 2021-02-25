@@ -76,4 +76,14 @@ export const WorkflowService = {
     }
     return {};
   },
+
+  getDetailsByUser: (tenantId, uuid, filters) => {
+    return Request({
+      url: Urls.WorkFlowProcessSearch,
+      useCache: false,
+      method: "POST",
+      params: { tenantId, uuid, ...filters },
+      auth: true,
+    });
+  },
 };

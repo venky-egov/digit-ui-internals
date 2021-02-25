@@ -51,6 +51,7 @@ export const Search = {
     if (response?.dsoId) {
       const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
       [dsoDetails] = await DsoDetails(tenantId, dsoFilters);
+
       if (response?.vehicleId) {
         vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
       }
@@ -131,7 +132,8 @@ export const Search = {
       {
         title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: dsoDetails?.name || "N/A" },
+          { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: dsoDetails?.name + " - " + (dsoDetails?.username || "") || "N/A" },
+          { title: t("ES_APPLICATION_DETAILS_VEHICLE_MAKE"), value: t(vehicle?.type) || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: vehicle?.registrationNumber || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: vehicle?.capacity || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: displayServiceDate(response?.possibleServiceDate) || "N/A" },

@@ -68,6 +68,10 @@ const ApplicationDetails = (props) => {
     }
   }, [showToast]);
 
+  useEffect(() => {
+    console.log("applicationDetails here", applicationDetails);
+  }, [applicationDetails]);
+
   function onActionSelect(action) {
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -197,7 +201,7 @@ const ApplicationDetails = (props) => {
                   {detail?.values?.map((value, index) => (
                     <Row
                       key={value.title}
-                      label={value.title}
+                      label={t(value.title)}
                       text={value.value || "N/A"}
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}

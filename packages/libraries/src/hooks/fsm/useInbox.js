@@ -5,8 +5,15 @@ import useSearchAll from "./useSearchAll";
 const useInbox = (tenantId, filters) => {
   const client = useQueryClient();
   let { uuid } = Digit.UserService.getUser().info;
-  const fetchApplications = ({ queryKey }) => {
-    const [_key, filters] = queryKey;
+
+  console.log("inside fetchInbox", filters);
+  // const fetchFilters = ({ queryKey }) => {
+
+  const fetchFilters = () => {
+    // const [_key, filters] = queryKey;
+    filters["applicationStatus"];
+    filters["locality"];
+
     let filtersObj = {};
     const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;
     if (filters.applicationStatus) {
@@ -30,31 +37,34 @@ const useInbox = (tenantId, filters) => {
     if (sortOrder) {
       filtersObj.sortOrder = sortOrder;
     }
-    return Search.all(tenantId, { ...filtersObj, limit, offset });
+    // return Search.all(tenantId, { ...filtersObj, limit, offset });
+    return { limit, offset, sortBy, sortOrder, ...filtersObj };
   };
-  const { isLoading, isError, data: applicationsList } = useSearchAll(tenantId, filters, fetchApplications);
+  // const { isLoading, isError, data: applicationsList } = useSearchAll(tenantId, filters, fetchApplications);
   // console.log("find inbox application here", applicationsList)
 
   const fetchInboxData = async () => {
     let result = [];
     // const tenantId = Digit.ULBService.getCurrentTenantId();
-    const serviceIds = applicationsList.map((application) => application.applicationNo);
-    const serviceIdParams = serviceIds.join();
+    // const serviceIdParams = serviceIds.join();
     if (filters.uuid && Object.keys(filters.uuid).length > 0) {
       uuid = filters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
     }
-    const workflowInstances = await Digit.WorkflowService.getByBusinessId(tenantId, serviceIdParams, { uuid }, false);
-    if (workflowInstances.ProcessInstances) {
-      result = combineResponses(applicationsList, workflowInstances).map((data) => ({
-        ...data,
-        sla: Math.round(data.sla / (24 * 60 * 60 * 1000)) || "-",
-      }));
 
-      return result;
-    }
+    console.log(filters["applicationStatus"]);
+    const applicationStatus = filters["applicationStatus"].map((e) => e.code).join();
+    const locality = filters["locality"].map((item) => item.code.split("_").pop()).join(",");
+
+    const workflowInstances = await Digit.WorkflowService.getDetailsByUser(tenantId, uuid, { ...fetchFilters(), businessService: "FSM" });
+    let applicationList = workflowInstances?.ProcessInstances;
+    const applicationNos = applicationList.map((application) => application.businessId).join();
+    const appList = await Search.all(tenantId, { applicationNos, applicationStatus, locality });
+    if (workflowInstances.ProcessInstances && appList) return combineResponses(appList, workflowInstances);
+    return [];
   };
 
-  const result = useQuery(["FSM_INBOX", applicationsList], fetchInboxData, { enabled: !!applicationsList });
+  // const result = useQuery(["FSM_INBOX", ""], fetchInboxData, { enabled: !!applicationsList });
+  const result = useQuery(["FSM_INBOX", { ...filters }], fetchInboxData, {});
   return { ...result, revalidate: () => client.refetchQueries(["FSM_INBOX"]) };
 };
 

@@ -27,6 +27,11 @@ const DsoDashboard = () => {
 
   const { data: applications, isLoading: inboxLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+
+    sortBy: "createdTime",
+    sortOrder: "DESC",
+    limit: 11,
+    offset: 0,
   });
 
   const { isLoading, data } = Digit.Hooks.fsm.useVendorDetail();

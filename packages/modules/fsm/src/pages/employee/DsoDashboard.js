@@ -9,11 +9,6 @@ const svgIcon = (
   </svg>
 );
 
-const info = {
-  ES_PENDING: 15,
-  ES_NEARING_SLA: 20,
-};
-
 const links = [
   {
     pathname: "/digit-ui/employee/fsm/inbox",
@@ -22,7 +17,18 @@ const links = [
 ];
 
 const DsoDashboard = () => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
+
+  const info = {
+    ES_PENDING: 15,
+    ES_NEARING_SLA: 20,
+  };
+
+  const { data: applications, isLoading: inboxLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
+    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+  });
+
   const { isLoading, data } = Digit.Hooks.fsm.useVendorDetail();
 
   useEffect(() => {
@@ -31,6 +37,10 @@ const DsoDashboard = () => {
       Digit.UserService.setExtraRoleDetails(vendor[0]);
     }
   }, [data]);
+
+  useEffect(() => {
+    console.log("find here....", applications);
+  }, [applications]);
 
   if (isLoading) {
     return <Loader />;

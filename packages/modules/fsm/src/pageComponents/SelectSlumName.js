@@ -24,15 +24,24 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
 
   useEffect(() => {
     if (userType === "employee" && !slumDataLoading && slumData) {
-      const optionalSlumData = [
-        {
-          code: null,
-          active: true,
-          name: "Not residing in slum area",
-          i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
-        },
-        ...slumData[locality],
-      ];
+      const optionalSlumData = slumData[locality]
+        ? [
+            {
+              code: null,
+              active: true,
+              name: "Not residing in slum area",
+              i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
+            },
+            ...slumData[locality],
+          ]
+        : [
+            {
+              code: null,
+              active: true,
+              name: "Not residing in slum area",
+              i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
+            },
+          ];
       // console.log("find slum dta here", optionalSlumData)
       setSlumMenu(optionalSlumData);
     }

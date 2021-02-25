@@ -42,7 +42,7 @@ const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, link
         <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
         <div className="body" style={{ marginLeft: "56px" }}>
           {links.map((link, index) => (
-            <span className="link">
+            <span key={index} className="link">
               <Link to={link.pathname}>{t(link.label)}</Link>
             </span>
           ))}

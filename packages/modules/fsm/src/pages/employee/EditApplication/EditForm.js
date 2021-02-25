@@ -131,7 +131,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         landmark,
         doorNo,
         street,
-        city,
         state,
         pincode,
         slumName: slum,

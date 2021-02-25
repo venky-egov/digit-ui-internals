@@ -85,7 +85,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
     </LabelFieldPair>
   ) : (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
-      <Dropdown option={slumMenu} optionKey="name" id="i18nKey" selected={slum} select={setSlum} />
+      <Dropdown option={slumMenu} optionKey="i18nKey" id="i18nKey" selected={slum} select={setSlum} />
     </FormStep>
   );
 };

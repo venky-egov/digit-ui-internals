@@ -6,6 +6,7 @@ import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
 import { useFetchPayment, usePaymentUpdate, useFetchCitizenBillsForBuissnessService, useGetPaymentRulesForBusinessServices } from "./payment";
 import { useUserSearch } from "./userSearch";
+import { useTemplateTranslations } from "./useTemplateTranslation";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -93,6 +94,7 @@ const Hooks = {
   useClickOutside,
   useCoreData,
   useUserSearch,
+  useTemplateTranslations,
   pgr,
   fsm,
   pt,

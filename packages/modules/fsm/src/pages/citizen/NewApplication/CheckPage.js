@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardCaption,
@@ -28,10 +28,25 @@ const ActionButton = ({ jumpTo }) => {
 
 const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
-  const history = useHistory();
+  let { address, propertyType, subtype, pitType } = value;
 
-  const { address, propertyType, subtype, pitType, pitDetail } = value;
-  // console.log("find values here ", value)
+  const [pitDetail, setPitDetail] = useState(value?.pitDetail);
+  const tankDimension = value?.pitType?.dimension;
+
+  useEffect(() => {
+    if (tankDimension === "lbd") {
+      setPitDetail({
+        length: pitDetail?.length,
+        width: pitDetail?.width,
+        height: pitDetail?.height,
+      });
+    } else if (tankDimension === "dd") {
+      setPitDetail({
+        diameter: pitDetail?.diameter,
+        height: pitDetail?.height,
+      });
+    }
+  }, [tankDimension]);
 
   const pitDetailValues = pitDetail ? Object.values(pitDetail) : null;
 

@@ -56,22 +56,4 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
   );
 };
 
-function getPitDetail(pitDetail = {}, tankDimension) {
-  let detail = { ...pitDetail };
-  if (pitDetail) {
-    if (tankDimension === "lbd") {
-      detail = { length: pitDetail?.length || "", width: pitDetail?.width || "", height: pitDetail?.height || "" };
-    } else {
-      detail = { diameter: pitDetail?.diameter || "", height: pitDetail?.height || "" };
-    }
-  } else {
-    if (tankDimension === "lbd") {
-      detail = { length: "", width: "", height: "" };
-    } else {
-      detail = { diameter: "", height: "" };
-    }
-  }
-  return detail;
-}
-
 export default SelectTankSize;

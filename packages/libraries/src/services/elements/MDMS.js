@@ -217,6 +217,23 @@ const getChecklistCriteria = (tenantId, moduleCode) => ({
   },
 });
 
+const getSlumLocalityCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "Slum",
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getBillingServiceForBusinessServiceCriteria = () => ({
   moduleDetails: [
     {
@@ -268,6 +285,31 @@ const GetVehicleType = (MdmsRes) =>
     };
   });
 
+const GetSlumLocalityMapping = (MdmsRes) =>
+  MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {
+    // console.log("find prev",prev, curr)
+    return prev[curr.locality]
+      ? {
+          ...prev,
+          [curr.locality]: [
+            ...prev[curr.locality],
+            {
+              ...curr,
+              i18nKey: `${curr.locality}_${curr.code}`,
+            },
+          ],
+        }
+      : {
+          ...prev,
+          [curr.locality]: [
+            {
+              ...curr,
+              i18nKey: `${curr.locality}_${curr.code}`,
+            },
+          ],
+        };
+  }, {});
+
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
     case "citymodule":
@@ -288,6 +330,8 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetPitType(MdmsRes);
     case "VehicleType":
       return GetVehicleType(MdmsRes);
+    case "Slum":
+      return GetSlumLocalityMapping(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -349,4 +393,6 @@ export const MdmsService = {
   getCustomizationConfig: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getConfig(tenantId, moduleCode), moduleCode);
   },
+  getSlumLocalityMapping: (tenantId, moduleCode, type) =>
+    MdmsService.getDataByCriteria(tenantId, getSlumLocalityCriteria(tenantId, moduleCode, type), moduleCode),
 };

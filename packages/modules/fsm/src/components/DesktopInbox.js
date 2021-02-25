@@ -52,7 +52,7 @@ const DesktopInbox = (props) => {
           },
           {
             Header: t("ES_INBOX_WASTE_COLLECTED"),
-            accessor: (row) => row.volumeCarried,
+            accessor: (row) => row.tripDetails[0]?.volume,
           },
         ];
       default:

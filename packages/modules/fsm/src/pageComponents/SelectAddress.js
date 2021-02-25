@@ -98,7 +98,10 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
           />
         </LabelFieldPair>
         <LabelFieldPair>
-          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>
+          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+            {t("CS_CREATECOMPLAINT_MOHALLA")}
+            {config.isMandatory ? " * " : null}
+          </CardLabel>
           <Dropdown
             className="field"
             style={{ width: "50%" }}
@@ -115,9 +118,15 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   }
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
-      <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
+      <CardLabel>
+        {`${t("MYCITY_CODE_LABEL")} *`}
+      </CardLabel>
       <RadioOrSelect options={cities} selectedOption={selectedCity} optionKey="code" onSelect={selectCity} t={t} />
-      {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
+      {selectedCity && localities &&
+        <CardLabel>
+          {`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}
+        </CardLabel>
+      }
       {selectedCity && localities && (
         <RadioOrSelect
           isMandatory={config.isMandatory}

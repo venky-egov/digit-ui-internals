@@ -27,7 +27,7 @@ const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
     return <Loader />;
   }
   if (userType === "employee") {
-    return <Dropdown isMandatory={config.isMandatory} option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} t={t} />;
+    return <Dropdown isMandatory={true} option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} t={t} />;
   }
   return (
     <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!pitType} t={t}>

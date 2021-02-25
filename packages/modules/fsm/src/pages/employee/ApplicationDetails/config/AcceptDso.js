@@ -13,6 +13,7 @@ export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoLis
         body: [
           {
             label: t("ES_FSM_ACTION_VEHICLE_REGISTRATION_NO"),
+            isMandatory: true,
             type: "dropdown",
             populators: (
               <Dropdown

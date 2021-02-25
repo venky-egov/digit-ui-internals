@@ -206,9 +206,7 @@ export const CollectPayment = (props) => {
   const getFormConfig = () => config.concat(formConfigMap[formState?.paymentMode?.code] || []);
 
   if (isLoading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   return (

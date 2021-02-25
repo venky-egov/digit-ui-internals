@@ -12,7 +12,9 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
 
   useEffect(() => {
     if (!propertyTypesData.isLoading && propertyTypesData.data) {
-      const preFilledPropertyType = propertyTypesData.data.filter((propertyType) => propertyType.code === (formData?.propertyType?.code || formData?.propertyType))[0];
+      const preFilledPropertyType = propertyTypesData.data.filter(
+        (propertyType) => propertyType.code === (formData?.propertyType?.code || formData?.propertyType)
+      )[0];
       setPropertyType(preFilledPropertyType);
     }
   }, [formData?.propertyType, propertyTypesData.data]);
@@ -35,11 +37,13 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
     return <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />;
   } else {
     return (
-      <FormStep config={config} onSelect={goNext} isDisabled={!propertyType} t={t}>
-        <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_LABEL")} *`}</CardLabel>
-        <RadioOrSelect options={propertyTypesData.data} selectedOption={propertyType} optionKey="i18nKey" onSelect={selectedValue} t={t} />
-        <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT")} />
-      </FormStep>
+      <React.Fragment>
+        <FormStep config={config} onSelect={goNext} isDisabled={!propertyType} t={t}>
+          <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_LABEL")} *`}</CardLabel>
+          <RadioOrSelect options={propertyTypesData.data} selectedOption={propertyType} optionKey="i18nKey" onSelect={selectedValue} t={t} />
+        </FormStep>
+        {propertyType && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT", propertyType)} />}
+      </React.Fragment>
     );
   }
 };

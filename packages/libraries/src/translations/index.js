@@ -31,11 +31,14 @@ const i18nextConfig = {
   },
 };
 
-function replaceLiterals(text, dynamicValues = {}) {
+function replaceLiterals(text = "", dynamicValues = {}) {
   let returnText = text;
-  Object.keys(dynamicValues).forEach((key) => {
-    returnText = returnText.replace(`{${key.toUpperCase()}}`, dynamicValues[key]);
-  });
+  const regex = /[^\{\{][\{]\w+/;
+  if (regex.exec(text) !== null) {
+    Object.keys(dynamicValues).forEach((key) => {
+      returnText = returnText.replace(`{${key.toUpperCase()}}`, dynamicValues[key]);
+    });
+  }
   return returnText;
 }
 

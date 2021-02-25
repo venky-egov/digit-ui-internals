@@ -15,7 +15,7 @@ const i18nextConfig = {
     escapeValue: false,
     formatSeparator: ",",
   },
-  postProcess: [`reactPostprocessor`],
+  postProcess: [`reactPostprocessor`, "templatePostprocessor"],
   react: {
     wait: true,
     useSuspense: true,
@@ -31,6 +31,22 @@ const i18nextConfig = {
   },
 };
 
+function replaceLiterals(text, dynamicValues = {}) {
+  let returnText = text;
+  Object.keys(dynamicValues).forEach((key) => {
+    returnText = returnText.replace(`{${key.toUpperCase()}}`, dynamicValues[key]);
+  });
+  return returnText;
+}
+
+const templatePostprocessor = {
+  type: "postProcessor",
+  name: "templatePostprocessor",
+  process: function (value, key, options, translator) {
+    return replaceLiterals(value, options);
+  },
+};
+
 export const initI18n = () => {
-  return i18next.use(new ReactPostprocessor()).use(initReactI18next).init(i18nextConfig);
+  return i18next.use(new ReactPostprocessor()).use(templatePostprocessor).use(initReactI18next).init(i18nextConfig);
 };

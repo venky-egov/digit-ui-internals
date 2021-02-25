@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { CitizenInfoLabel, Loader, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
-  const { tt } = Digit.Hooks.useTemplateTranslations();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
@@ -38,11 +37,13 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
     return <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />;
   } else {
     return (
-      <FormStep config={config} onSelect={goNext} isDisabled={!propertyType} t={t}>
-        <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_LABEL")} *`}</CardLabel>
-        <RadioOrSelect options={propertyTypesData.data} selectedOption={propertyType} optionKey="i18nKey" onSelect={selectedValue} t={t} />
-        {propertyType && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={tt("CS_FILE_APPLICATION_INFO_TEXT", propertyType)} />}
-      </FormStep>
+      <React.Fragment>
+        <FormStep config={config} onSelect={goNext} isDisabled={!propertyType} t={t}>
+          <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_LABEL")} *`}</CardLabel>
+          <RadioOrSelect options={propertyTypesData.data} selectedOption={propertyType} optionKey="i18nKey" onSelect={selectedValue} t={t} />
+        </FormStep>
+        {propertyType && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT", propertyType)} />}
+      </React.Fragment>
     );
   }
 };

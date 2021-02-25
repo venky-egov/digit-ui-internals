@@ -28,7 +28,7 @@ const SelectRating = ({ parentRoute }) => {
       CheckList: checklist,
     };
 
-    history.push("/digit-ui/employee/fsm/response", {
+    history.push(`${parentRoute}/response`, {
       applicationData: application,
       key: "update",
       action: "SUBMIT_FEEDBACK",

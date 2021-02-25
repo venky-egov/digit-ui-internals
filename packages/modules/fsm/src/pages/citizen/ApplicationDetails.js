@@ -29,7 +29,7 @@ const displayPitDimension = (pitDeminsion) => {
 };
 
 const getPitDimensionCaption = (diameter, t) => {
-  if (diameter && diameter > 0) return `(${t("CS_COMMON_DEPTH")}X${t("CS_COMMON_DIAMETER")})`;
+  if (diameter && diameter > 0) return `(${t("CS_COMMON_DIAMETER")}X${t("CS_COMMON_DEPTH")})`;
   if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} X ${t("CS_COMMON_BREADTH")} X ${t("CS_COMMON_DEPTH")})`;
 };
 

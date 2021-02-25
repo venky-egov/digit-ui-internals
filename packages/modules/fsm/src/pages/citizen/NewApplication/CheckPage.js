@@ -91,6 +91,7 @@ const CheckPage = ({ onSubmit, value }) => {
                     ? `${t(`CS_COMMON_LENGTH`)} x ${t(`CS_COMMON_BREADTH`)} x ${t(`CS_COMMON_DEPTH`)}`
                     : `${t(`CS_COMMON_DIAMETER`)} x ${t(`CS_COMMON_DEPTH`)}`,
                 className: "card-text",
+                style: { fontSize: "16px" },
               },
             ]}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}

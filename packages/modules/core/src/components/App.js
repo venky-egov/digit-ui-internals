@@ -190,6 +190,7 @@ function TopBar(props) {
               showArrow={false}
               freeze={true}
               style={mobileView ? { right: 0 } : {}}
+              optionCardStyles={{ overflow: "revert" }}
               customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
             />
           </div>

@@ -20,11 +20,11 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allLocalities = useSelector((state) => state.common.localities);
   const localitiesObj = JSON.parse(JSON.stringify(allLocalities));
 
-  if(pincode && city){
-    const filteredLocalityList = localitiesObj[city?.code].filter(locality => locality?.pincode?.some(item => item.toString() == pincode));
+  if (pincode && city) {
+    const filteredLocalityList = localitiesObj[city?.code].filter((locality) => locality?.pincode?.some((item) => item.toString() == pincode));
     localitiesObj[city?.code] = filteredLocalityList.length ? filteredLocalityList : allLocalities[city?.code];
   }
-  
+
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || null);
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState();
@@ -49,10 +49,13 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       if (formData?.address?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
       }
-      
+
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
       if (filteredLocalityList.length === 1) {
         setSelectedLocality(filteredLocalityList[0]);
+        if (userType === "employee") {
+          onSelect(config.key, { ...formData[config.key], locality: filteredLocalityList[0] });
+        }
       }
     }
   }, [selectedCity, formData?.address?.pincode]);
@@ -118,15 +121,9 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   }
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
-      <CardLabel>
-        {`${t("MYCITY_CODE_LABEL")} *`}
-      </CardLabel>
+      <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
       <RadioOrSelect options={cities} selectedOption={selectedCity} optionKey="code" onSelect={selectCity} t={t} />
-      {selectedCity && localities &&
-        <CardLabel>
-          {`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}
-        </CardLabel>
-      }
+      {selectedCity && localities && <CardLabel>{`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}</CardLabel>}
       {selectedCity && localities && (
         <RadioOrSelect
           isMandatory={config.isMandatory}

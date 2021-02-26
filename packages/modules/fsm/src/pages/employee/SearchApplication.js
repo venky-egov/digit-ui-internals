@@ -8,7 +8,7 @@ import ApplicationTable from "../../components/inbox/ApplicationTable";
 const SearchApplication = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, data, error } = Digit.Hooks.fsm.useSearch(tenantId, {});
+  const { isLoading, isError, data, error } = Digit.Hooks.fsm.useSearchAll(tenantId, {});
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
   const columns = React.useMemo(
     () => [
@@ -86,6 +86,7 @@ const SearchApplication = () => {
   } else {
     result = (
       <ApplicationTable
+        t={t}
         data={data}
         columns={columns}
         getCellProps={(cellInfo) => {

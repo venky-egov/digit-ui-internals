@@ -22,8 +22,8 @@ const displayPitDimension = (pitDeminsion) => {
 };
 
 const getPitDimensionCaption = (sanitationtype, diameter, t) => {
-  if (diameter && diameter > 0) return `(${t("CS_COMMON_DEPTH")}X${t("CS_COMMON_DIAMETER")})`;
-  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} X ${t("CS_COMMON_BREADTH")} X ${t("CS_COMMON_DEPTH")})`;
+  if (diameter && diameter > 0) return `(${t("CS_COMMON_DIAMETER")} x ${t("CS_COMMON_DEPTH")})`;
+  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
 };
 
 const displayServiceDate = (timeStamp) => {
@@ -96,6 +96,7 @@ export const Search = {
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"), value: response?.address?.street },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: response?.address?.doorNo },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: response?.address?.landmark },
+          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL"), value: response?.address?.slumName },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
         ],
       },
@@ -116,10 +117,10 @@ export const Search = {
             }),
             caption: getPitDimensionCaption(response?.sanitationtype, response?.pitDetail?.diameter, t),
           },
-          {
-            title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
-            value: response?.pitDetail?.distanceFromRoad,
-          },
+          // {
+          //   title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
+          //   value: response?.pitDetail?.distanceFromRoad,
+          // },
           { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
             title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),

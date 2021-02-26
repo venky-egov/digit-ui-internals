@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
-  const [pincode, setPincode] = useState(() => formData?.address?.pincode || '');
+  const [pincode, setPincode] = useState(() => formData?.address?.pincode || "");
 
   const inputs = [
     {
@@ -11,9 +11,8 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
       type: "text",
       name: "pincode",
       validation: {
-        pattern: "^[1-9][0-9]{5}$",
         minlength: 6,
-        maxlength: 6,
+        maxlength: 7,
       },
       error: "CORE_COMMON_PINCODE_INVALID",
     },

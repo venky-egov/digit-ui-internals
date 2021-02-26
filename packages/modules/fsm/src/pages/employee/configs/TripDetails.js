@@ -11,14 +11,16 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
       {
         label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
         type: "dropdown",
-        populators: <Dropdown
-          option={vehicleMenu?.map(vehicle => ({ ...vehicle, label: `${t(vehicle.i18nKey)} - ${vehicle.capacity || ''}`}))}
-          optionKey="label"
-          id="vehicle"
-          selected={vehicle}
-          select={setVehicle}
-          t={t}
-        />,
+        populators: (
+          <Dropdown
+            option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: `${t(vehicle.i18nKey)} - ${vehicle.capacity + " Ltrs" || ""}` }))}
+            optionKey="label"
+            id="vehicle"
+            selected={vehicle}
+            select={setVehicle}
+            t={t}
+          />
+        ),
       },
       {
         label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),

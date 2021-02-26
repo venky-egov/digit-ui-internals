@@ -36,14 +36,12 @@ const FstpOperatorDetails = () => {
   const [showToast, setShowToast] = useState(null);
   const [wasteCollected, setWasteCollected] = useState(null);
   const [errors, setErrors] = useState({});
-  const [tripTime, setTripTime] = useState("10:00");
-
-  useEffect(() => {
+  const [tripTime, setTripTime] = useState(() => {
     const today = new Date();
     const hour = today.getHours();
     const minutes = today.getMinutes();
-    setTripTime(`${hour}:${minutes}`);
-  }, []);
+    return `${hour}:${minutes}` || "10:00";
+  });
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
   const { isLoading: isSearchLoading, isIdle, data: tripDetails } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {

@@ -8,6 +8,11 @@ const getPropertyTypeLocale = (value) => {
 
 const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
 
+const getMapUrl = (latitude, longitude) => {
+  const key = globalConfigs?.getConfig('GMAPS_API_KEY');
+  return `https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C${latitude},${longitude}&zoom=15&size=400x400&key=${key}`
+};
+
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
     .reduce((acc, current) => {
@@ -97,7 +102,10 @@ export const Search = {
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: response?.address?.doorNo },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: response?.address?.landmark },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL"), value: response?.address?.slumName },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"),
+            value: (response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude) ? Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude) : 'N/A',
+            map: true
+          },
         ],
       },
       {

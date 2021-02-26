@@ -31,7 +31,7 @@ const Response = ({ data, onSuccess }) => {
   useEffect(() => {
     try {
       const { subtype, pitDetail, address, pitType, source } = data;
-      const { city, locality, pincode, street, doorNo, landmark, slum } = address;
+      const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
       const formdata = {
         fsm: {
           tenantId: city.code,
@@ -51,8 +51,8 @@ const Response = ({ data, onSuccess }) => {
               name: locality.name,
             },
             geoLocation: {
-              latitude: locality.latitude,
-              longitude: locality.longitude,
+              latitude: geoLocation?.latitude,
+              longitude: geoLocation?.longitude,
               additionalDetails: {},
             },
           },

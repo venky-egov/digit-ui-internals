@@ -132,9 +132,23 @@ const FstpOperatorDetails = () => {
       <Card>
         <StatusTable>
           {vehicleData.map((row, index) => (
-            <Row key={row.title} label={row.title} text={row.value || "N/A"} last={index === vehicleData.length - 1} />
+            <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
-          <LabelFieldPair>
+          <Row key={t("ES_VEHICLE_WASTE_RECIEVED")} label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `} 
+            text={
+              <div style={{ width: "25%" }}>
+                <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
+              </div>
+            }
+          />
+          <Row key={t("ES_COMMON_TIME")} label={`${t("ES_COMMON_TIME")} * `}
+            text={
+              <div>
+                <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" />
+              </div>
+            }
+          />
+          {/* <LabelFieldPair>
             <CardLabel>{t("ES_VEHICLE_WASTE_RECIEVED")}</CardLabel>
             <div className="field-container">
               <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
@@ -146,7 +160,7 @@ const FstpOperatorDetails = () => {
             <div>
               <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" />
             </div>
-          </LabelFieldPair>
+          </LabelFieldPair> */}
         </StatusTable>
       </Card>
       <h2 style={{ fontWeight: "bold", fontSize: "16px", marginLeft: "8px", marginTop: "16px" }}>{t("ES_FSTP_OPERATOR_DETAILS_WASTE_GENERATORS")}</h2>

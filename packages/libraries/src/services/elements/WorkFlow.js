@@ -77,12 +77,12 @@ export const WorkflowService = {
     return {};
   },
 
-  getDetailsByUser: (tenantId, uuid, filters) => {
+  getAllApplication: (tenantId, filters) => {
     return Request({
       url: Urls.WorkFlowProcessSearch,
       useCache: false,
       method: "POST",
-      params: { tenantId, uuid, ...filters },
+      params: { tenantId, ...filters },
       auth: true,
     });
   },

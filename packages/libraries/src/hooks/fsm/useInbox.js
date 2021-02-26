@@ -7,13 +7,8 @@ const useInbox = (tenantId, filters) => {
   let { uuid } = Digit.UserService.getUser().info;
 
   console.log("inside fetchInbox", filters);
-  // const fetchFilters = ({ queryKey }) => {
 
   const fetchFilters = () => {
-    // const [_key, filters] = queryKey;
-    filters["applicationStatus"];
-    filters["locality"];
-
     let filtersObj = {};
     const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;
     if (filters.applicationStatus) {
@@ -23,7 +18,7 @@ const useInbox = (tenantId, filters) => {
       filtersObj.locality = filters.locality.map((item) => item.code.split("_").pop()).join(",");
     }
     if (filters.uuid && Object.keys(filters.uuid).length > 0) {
-      filtersObj.uuid = filters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
+      filtersObj.assignee = filters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
     }
     if (mobileNumber) {
       filtersObj.mobileNumber = mobileNumber;
@@ -37,35 +32,25 @@ const useInbox = (tenantId, filters) => {
     if (sortOrder) {
       filtersObj.sortOrder = sortOrder;
     }
-    // return Search.all(tenantId, { ...filtersObj, limit, offset });
     return { limit, offset, sortBy, sortOrder, ...filtersObj };
   };
-  // const { isLoading, isError, data: applicationsList } = useSearchAll(tenantId, filters, fetchApplications);
-  // console.log("find inbox application here", applicationsList)
 
-  const fetchInboxData = async () => {
-    let result = [];
-    // const tenantId = Digit.ULBService.getCurrentTenantId();
-    // const serviceIdParams = serviceIds.join();
-    if (filters.uuid && Object.keys(filters.uuid).length > 0) {
-      uuid = filters.uuid.code === "ASSIGNED_TO_ME" ? uuid : "";
-    }
+  const workflowFilters = fetchFilters().assignee ? { assignee: uuid } : {};
 
-    console.log(filters["applicationStatus"]);
-    const applicationStatus = filters["applicationStatus"].map((e) => e.code).join();
-    const locality = filters["locality"].map((item) => item.code.split("_").pop()).join(",");
+  const workFlowInstances = useQuery(
+    ["WORKFLOW", { uuid: fetchFilters().uuid }],
+    () => Digit.WorkflowService.getAllApplication(tenantId, { ...workflowFilters, businesssService: "FSM" }),
+    { select: (data) => data.ProcessInstances }
+  );
 
-    const workflowInstances = await Digit.WorkflowService.getDetailsByUser(tenantId, uuid, { ...fetchFilters(), businessService: "FSM" });
-    let applicationList = workflowInstances?.ProcessInstances;
-    const applicationNos = applicationList.map((application) => application.businessId).join();
-    const appList = await Search.all(tenantId, { applicationNos, applicationStatus, locality });
-    if (workflowInstances.ProcessInstances && appList) return combineResponses(appList, workflowInstances);
-    return [];
-  };
+  const { data: processInstances, isLoading: workflowLoading, isFetching: wfFetching, isSuccess: wfSuccess } = workFlowInstances;
+  let applicationNos = !wfFetching && wfSuccess ? { applicationNos: processInstances.map((e) => e.businessId).join() } : {};
 
-  // const result = useQuery(["FSM_INBOX", ""], fetchInboxData, { enabled: !!applicationsList });
-  const result = useQuery(["FSM_INBOX", { ...filters }], fetchInboxData, {});
-  return { ...result, revalidate: () => client.refetchQueries(["FSM_INBOX"]) };
+  const appList = useQuery(["FSM_SEARCH", { ...fetchFilters(), ...applicationNos }], () => Search.all(tenantId, { ...fetchFilters() }), {
+    enabled: !wfFetching && wfSuccess,
+    select: (data) => combineResponses(data, processInstances),
+  });
+  return appList;
 };
 
 const mapWfBybusinessId = (wfs) => {

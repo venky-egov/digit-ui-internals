@@ -15,6 +15,7 @@ const GetActionMessage = (action, isSuccess) => {
       case "PENDING_APPL_FEE_PAYMENT":
         return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
       case "SUBMIT_FEEDBACK":
+      case "COMPLETED":
         return t("CS_APPLICATION_FEEDBACK_SUCCESSFUL");
       default:
         return t(`ES_PAYMENT_COLLECTED`);

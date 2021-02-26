@@ -278,12 +278,14 @@ const GetPropertySubtype = (MdmsRes) =>
   }));
 
 const GetVehicleType = (MdmsRes) =>
-  MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
-    return {
-      ...vehicleDetails,
-      i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
-    };
-  });
+  MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active)
+    .filter((vehicle) => vehicle.make)
+    .map((vehicleDetails) => {
+      return {
+        ...vehicleDetails,
+        i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
+      };
+    });
 
 const GetSlumLocalityMapping = (MdmsRes) =>
   MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {

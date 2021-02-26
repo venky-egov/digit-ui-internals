@@ -21,3 +21,9 @@
     @apply text-body-s-dt text-white;
   }
 }
+
+@screen dt {
+  .toast-success {
+    left: 30%
+  }
+}

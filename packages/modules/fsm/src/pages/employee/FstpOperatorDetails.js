@@ -135,14 +135,14 @@ const FstpOperatorDetails = () => {
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={index === vehicleData.length - 1} />
           ))}
           <LabelFieldPair>
-            <CardLabel>{t("ES_VEHICLE_WASTE_RECIEVED")}</CardLabel>
+            <CardLabel style={{ fontSize: "16px" }}>{t("ES_VEHICLE_WASTE_RECIEVED")}</CardLabel>
             <div className="field-container">
               <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
             </div>
-            {errors.wasteRecieved && <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>}
+            {errors.wasteRecieved && <CardLabelError style={{ fontSize: "16px" }}>{t(errors.wasteRecieved)}</CardLabelError>}
           </LabelFieldPair>
           <LabelFieldPair>
-            <CardLabel>{t("ES_COMMON_TIME")}</CardLabel>
+            <CardLabel style={{ fontSize: "16px" }}>{t("ES_COMMON_TIME")}</CardLabel>
             <div>
               <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" />
             </div>

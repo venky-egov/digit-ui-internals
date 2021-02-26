@@ -46,6 +46,7 @@ const getPDFData = (application, tenantInfo, t) => {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
             value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_ADMIN_${application?.address?.locality?.code}`) || "NA",
           },
+          // slum details come here
           { title: t("CS_APPLICATION_DETAILS_STREET"), value: application?.address?.street || "NA" },
           { title: t("CS_APPLICATION_DETAILS_DOOR_NO"), value: application?.address?.doorNo || "NA" },
           { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application?.address?.landmark || "NA" },
@@ -68,10 +69,8 @@ const getPDFData = (application, tenantInfo, t) => {
                 : "NA",
           },
           {
-            title: t("CS_APPLICATION_DETAILS_DISTANCE_FROM_ROAD"),
-            value: application?.pitDetail?.distanceFromRoad
-              ? application?.pitDetail?.distanceFromRoad !== 0 && `${application?.pitDetail?.distanceFromRoad}m`
-              : "NA",
+            title: t("CS_APPLICATION_DETAILS_VEHICLE_TYPE"), //vehicle type should be here
+            value: "mahindra - bolero - 5000 ltrs", // TODO: hard coded, value should come from application
           },
           { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "NA" },
           {

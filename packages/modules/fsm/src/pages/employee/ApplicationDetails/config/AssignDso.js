@@ -45,6 +45,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
                 selected={vehicle}
                 select={selectVehicle}
                 disable={vehicle ? true : false}
+                t={t}
               />
             ),
           },

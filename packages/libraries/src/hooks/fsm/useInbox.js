@@ -38,18 +38,23 @@ const useInbox = (tenantId, filters) => {
   const workflowFilters = fetchFilters().assignee ? { assignee: uuid } : {};
 
   const workFlowInstances = useQuery(
-    ["WORKFLOW", { uuid: fetchFilters().uuid }],
+    ["WORKFLOW", { ...workflowFilters }],
     () => Digit.WorkflowService.getAllApplication(tenantId, { ...workflowFilters, businesssService: "FSM" }),
     { select: (data) => data.ProcessInstances }
   );
 
   const { data: processInstances, isLoading: workflowLoading, isFetching: wfFetching, isSuccess: wfSuccess } = workFlowInstances;
   let applicationNos = !wfFetching && wfSuccess ? { applicationNos: processInstances.map((e) => e.businessId).join() } : {};
-
-  const appList = useQuery(["FSM_SEARCH", { ...fetchFilters(), ...applicationNos }], () => Search.all(tenantId, { ...fetchFilters() }), {
-    enabled: !wfFetching && wfSuccess,
-    select: (data) => combineResponses(data, processInstances),
-  });
+  // console.log("find applicationNos here", applicationNos)
+  applicationNos = applicationNos.applicationNos ? applicationNos : { applicationNos: "null" };
+  const appList = useQuery(
+    ["FSM_SEARCH", { ...fetchFilters(), ...applicationNos }],
+    () => Search.all(tenantId, { ...fetchFilters(), ...applicationNos }),
+    {
+      enabled: !wfFetching && wfSuccess,
+      select: (data) => combineResponses(data, processInstances),
+    }
+  );
   return appList;
 };
 
@@ -60,16 +65,19 @@ const mapWfBybusinessId = (wfs) => {
 };
 
 const combineResponses = (applicationDetails, workflowInstances) => {
-  let wfMap = mapWfBybusinessId(workflowInstances.ProcessInstances);
-  return applicationDetails.map((application) => ({
+  let wfMap = mapWfBybusinessId(workflowInstances);
+  const response = applicationDetails.map((application) => ({
     applicationNo: application.applicationNo,
     createdTime: new Date(application.auditDetails.createdTime),
     locality: application.address.locality.code,
     status: application.applicationStatus,
     taskOwner: wfMap[application.applicationNo]?.assigner?.name,
-    sla: wfMap[application.applicationNo]?.businesssServiceSla,
+    sla: Math.round(wfMap[application.applicationNo]?.businesssServiceSla / (24 * 60 * 60 * 1000)) || "-",
     tenantId: application.tenantId,
   }));
+  // console.log("find combine Response here", applicationDetails, workflowInstances, response)
+
+  return response;
 };
 
 export default useInbox;

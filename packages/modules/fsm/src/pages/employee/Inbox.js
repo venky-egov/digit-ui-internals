@@ -22,9 +22,8 @@ const Inbox = ({ parentRoute }) => {
   });
 
   let isMobile = window.Digit.Utils.browser.isMobile();
-  let paginationParms = isMobile ? {} : { limit: pageSize + 1, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
+  let paginationParms = isMobile ? {} : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
 
-  debugger;
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
     ...searchParams,
     ...paginationParms,

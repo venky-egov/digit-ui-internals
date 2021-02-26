@@ -159,7 +159,7 @@ const ApplicationDetails = (props) => {
     // console.log("tl", checkpoint);
     if (checkpoint.status === "APPLICATION_FILED") {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(applicationData.citizen.createdDate),
+        date: Digit.DateUtils.ConvertTimestampToDate(applicationData.auditDetails.createdTime),
         name: applicationData.citizen.name,
         mobileNumber: applicationData.citizen.mobileNumber,
         source: applicationData.source || "",

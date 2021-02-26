@@ -25,7 +25,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     mobileNumber: applicationData.citizen.mobileNumber,
     noOfTrips: applicationData.noOfTrips,
     amountPerTrip: applicationData.additionalDetails.tripAmount,
-    amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount,
+    amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || "",
     propertyType: applicationData.propertyUsage.split(".")[0],
     subtype: applicationData.propertyUsage,
     address: {
@@ -131,7 +131,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         landmark,
         doorNo,
         street,
-        city,
         state,
         pincode,
         slumName: slum,

@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { SearchIconSvg } from "./svgindex";
 import { Loader } from "@googlemaps/js-api-loader";
 
-//API key
-const key = globalConfigs?.getConfig('GMAPS_API_KEY');
 let defaultBounds = {};
 
 const updateDefaultBounds = (center) => {
@@ -18,7 +16,6 @@ const updateDefaultBounds = (center) => {
   };
 };
 const GetPinCode = (places) => {
-  console.log(places, places.geometry.location.lat(), '---------places');
   let postalCode = null;
   places?.address_components?.forEach((place) => {
     let hasPostalCode = place.types.includes("postal_code");
@@ -39,6 +36,7 @@ const getName = (places) => {
 };
 
 const loadGoogleMaps = (callback) => {
+  const key = globalConfigs?.getConfig('GMAPS_API_KEY');
   const loader = new Loader({
     apiKey: key,
     version: "weekly",

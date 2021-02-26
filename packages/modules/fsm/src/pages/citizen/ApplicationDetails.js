@@ -131,7 +131,7 @@ const ApplicationDetails = () => {
         />
         <KeyNote keyValue={t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION")}>
           {(application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude) ? 
-            <img src={`https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C${application.address?.geoLocation?.latitude},${application.address?.geoLocation?.longitude}&zoom=15&size=400x400&key=${key}`} /> :
+            <img src={Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude)} /> :
             'NA'
           }
         </KeyNote>

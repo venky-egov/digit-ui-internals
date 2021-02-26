@@ -81,11 +81,11 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
         {t("ES_NEW_APPLICATION_SLUM_NAME")}
         {config.isMandatory ? " * " : null}
       </CardLabel>
-      <Dropdown option={slumMenu} style={{ width: "50%" }} optionKey="i18nKey" id="slum" selected={slum} select={selectSlum} />
+      <Dropdown option={slumMenu} style={{ width: "50%" }} optionKey="i18nKey" id="slum" selected={slum} select={selectSlum} t={t} />
     </LabelFieldPair>
   ) : (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
-      <Dropdown option={slumMenu} optionKey="i18nKey" id="i18nKey" selected={slum} select={setSlum} />
+      <Dropdown option={slumMenu} optionKey="i18nKey" id="i18nKey" selected={slum} select={setSlum} t={t} />
     </FormStep>
   );
 };

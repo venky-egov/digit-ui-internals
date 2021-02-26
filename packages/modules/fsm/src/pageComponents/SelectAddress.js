@@ -53,7 +53,8 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
       if (filteredLocalityList.length === 1) {
         setSelectedLocality(filteredLocalityList[0]);
-        onSelect(config.key, { ...formData[config.key], locality: filteredLocalityList[0] });
+
+        userType === "employee" ? onSelect(config.key, { ...formData[config.key], locality: filteredLocalityList[0] }) : null;
       }
     }
   }, [selectedCity, formData?.address?.pincode]);

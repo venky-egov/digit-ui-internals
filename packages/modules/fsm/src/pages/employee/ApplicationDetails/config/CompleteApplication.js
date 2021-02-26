@@ -15,7 +15,7 @@ export const configCompleteApplication = ({ t, vehicle }) => ({
           populators: {
             name: "desluged",
             max: new Date().toISOString().split("T")[0],
-            value: new Date().toISOString().split("T")[0],
+            defaultValue: new Date().toISOString().split("T")[0],
           },
         },
         {

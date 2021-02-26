@@ -35,27 +35,6 @@ import SelectSlumName from "./pageComponents/SelectSlumName";
 import CheckSlum from "./pageComponents/CheckSlum";
 import FSMCard from "./components/FsmCard";
 
-const componentsToRegister = {
-  SelectPropertySubtype,
-  SelectPropertyType,
-  SelectAddress,
-  SelectStreet,
-  SelectLandmark,
-  SelectPincode,
-  SelectTankSize,
-  SelectPitType,
-  SelectGeolocation,
-  SelectSlumName,
-  CheckSlum,
-  FSMCard,
-};
-
-export const initFSMComponents = () => {
-  Object.entries(componentsToRegister).forEach(([key, value]) => {
-    Digit.ComponentRegistryService.setComponent(key, value);
-  });
-};
-
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -107,7 +86,7 @@ const CitizenApp = ({ path }) => {
   );
 };
 
-export const FSMModule = ({ stateCode, userType }) => {
+const FSMModule = ({ stateCode, userType }) => {
   const moduleCode = "FSM";
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
@@ -127,7 +106,7 @@ export const FSMModule = ({ stateCode, userType }) => {
   }
 };
 
-export const FSMLinks = ({ matchPath, userType }) => {
+const FSMLinks = ({ matchPath, userType }) => {
   const { t } = useTranslation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
 
@@ -206,4 +185,27 @@ export const FSMLinks = ({ matchPath, userType }) => {
       </div>
     );
   }
+};
+
+const componentsToRegister = {
+  SelectPropertySubtype,
+  SelectPropertyType,
+  SelectAddress,
+  SelectStreet,
+  SelectLandmark,
+  SelectPincode,
+  SelectTankSize,
+  SelectPitType,
+  SelectGeolocation,
+  SelectSlumName,
+  CheckSlum,
+  FSMCard,
+  FSMModule,
+  FSMLinks,
+};
+
+export const initFSMComponents = () => {
+  Object.entries(componentsToRegister).forEach(([key, value]) => {
+    Digit.ComponentRegistryService.setComponent(key, value);
+  });
 };

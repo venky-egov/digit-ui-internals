@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Loader } from "@egovernments/digit-ui-react-components";
+import { Loader, Card } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Search from "../../components/inbox/search";
@@ -11,13 +11,14 @@ const SearchApplication = () => {
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [searchParams, setSearchParams] = useState({});
+  const [shouldSearch, setShouldSearch] = useState(false);
   const { isLoading, isIdle, isError, data, error } = Digit.Hooks.fsm.useSearchAll(tenantId, {
     limit: pageSize + 1,
     offset: pageOffset,
     ...searchParams,
     fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
     toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined
-  });
+  }, null, { enabled: shouldSearch });
 
   const fetchNextPage = () => {
     setPageOffset((prevState) => prevState + pageSize);
@@ -80,6 +81,7 @@ const SearchApplication = () => {
 
   const handleSearch = (params) => {
     setSearchParams({ ...params });
+    setShouldSearch(true);
   };
 
   const searchFields = [
@@ -104,8 +106,21 @@ const SearchApplication = () => {
   ];
 
   let result;
-
-  if (isLoading || isError) {
+  if (!shouldSearch) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {
+          t("CS_MYAPPLICATIONS_NO_APPLICATION")
+            .split("\\n")
+            .map((text, index) => (
+              <p key={index} style={{ textAlign: "center" }}>
+                {text}
+              </p>
+            ))
+        }
+      </Card>
+    )
+  } else if (isLoading || isError) {
     result = <Loader />;
   } else {
     result = (

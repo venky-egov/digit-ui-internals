@@ -69,7 +69,6 @@ const FSMLink = ({ isMobile, data }) => {
         <div className="body">
           {links.map(({ link, text, hyperlink = false, accessTo = [] }, index) => {
             let access = false;
-            if (accessTo?.length === 0) access = true;
             accessTo.forEach((role) => {
               if (roleCodes?.includes(role)) access = true;
             });

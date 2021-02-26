@@ -1,5 +1,9 @@
+body {
+  @apply bg-grey-bg;
+}
+
 .body-container {
-  @apply bg-grey-bg h-full min-h-screen;
+  @apply bg-grey-bg h-full min-h-screen overflow-x-hidden;
 }
 
 .navbar {
@@ -106,9 +110,5 @@
 
   .back-btn2 {
     margin-left: 0;
-  }
-
-  .body-container {
-    @apply flex;
   }
 }

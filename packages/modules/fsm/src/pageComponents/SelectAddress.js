@@ -6,24 +6,36 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
 
-  const { pincode } = formData?.address || "";
+  // const cityWiseLocalities = useSelector((state) => state.common.localities);
+
+  // const localities = cityWiseLocalities[city]
+
+  const { pincode, city } = formData?.address || "";
   const cities =
     userType === "employee"
       ? allCities.filter((city) => city.code === tenantId)
       : pincode
       ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
       : allCities;
-  const localitiesObj = useSelector((state) => state.common.localities);
-  const [selectedCity, setSelectedCity] = useState(() => {
-    if (userType === "employee") return allCities.filter((city) => city.code === tenantId)[0];
-    const { city } = formData?.address || {};
-    return city ? city : null;
-  });
+  const allLocalities = useSelector((state) => state.common.localities);
+  const localitiesObj = JSON.parse(JSON.stringify(allLocalities));
+
+  if (pincode && city) {
+    const filteredLocalityList = localitiesObj[city?.code].filter((locality) => locality?.pincode?.some((item) => item.toString() == pincode));
+    localitiesObj[city?.code] = filteredLocalityList.length ? filteredLocalityList : allLocalities[city?.code];
+  }
+
+  const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || null);
   const [localities, setLocalities] = useState(null);
-  const [selectedLocality, setSelectedLocality] = useState(() => {
-    const { locality } = formData?.address || {};
-    return locality ? locality : null;
-  });
+  const [selectedLocality, setSelectedLocality] = useState();
+
+  useEffect(() => {
+    if (cities) {
+      if (cities.length === 1) {
+        setSelectedCity(cities[0]);
+      }
+    }
+  }, [cities]);
 
   useEffect(() => {
     if (selectedCity) {
@@ -37,9 +49,13 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       if (formData?.address?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
       }
+
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
       if (filteredLocalityList.length === 1) {
         setSelectedLocality(filteredLocalityList[0]);
+        if (userType === "employee") {
+          onSelect(config.key, { ...formData[config.key], locality: filteredLocalityList[0] });
+        }
       }
     }
   }, [selectedCity, formData?.address?.pincode]);
@@ -63,6 +79,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   function onSubmit() {
     onSelect(config.key, { city: selectedCity, locality: selectedLocality });
   }
+
   if (userType === "employee") {
     return (
       <div>
@@ -84,7 +101,10 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
           />
         </LabelFieldPair>
         <LabelFieldPair>
-          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>
+          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+            {t("CS_CREATECOMPLAINT_MOHALLA")}
+            {config.isMandatory ? " * " : null}
+          </CardLabel>
           <Dropdown
             className="field"
             style={{ width: "50%" }}
@@ -101,9 +121,9 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   }
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
-      <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
+      <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
       <RadioOrSelect options={cities} selectedOption={selectedCity} optionKey="code" onSelect={selectCity} t={t} />
-      {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
+      {selectedCity && localities && <CardLabel>{`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}</CardLabel>}
       {selectedCity && localities && (
         <RadioOrSelect
           isMandatory={config.isMandatory}

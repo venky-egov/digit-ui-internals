@@ -24,7 +24,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
-  const CITIZEN = userDetails?.info?.type === "CITIZEN";
+  const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
 
   const handleLogout = () => {
     toggleSidebar(false);
@@ -38,6 +38,8 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userOptions = [{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
 
   const mobileView = innerWidth <= 640;
+
+  const sideBarOpenStyles = isSidebarOpen ? { width: "100%", position: "fixed" } : { width: "", position: "" };
 
   return (
     <Switch>
@@ -56,7 +58,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main">
+        <div className="main" style={{ ...sideBarOpenStyles }}>
           <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
         </div>
       </Route>
@@ -75,7 +77,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main" style={{ position: isSidebarOpen ? "fixed" : "revert" }}>
+        <div className="main" style={{ ...sideBarOpenStyles }}>
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
       </Route>
@@ -146,12 +148,20 @@ function TopBar(props) {
     logoUrl,
   } = props;
 
+  const updateSidebar = () => {
+    if (!Digit.clikOusideFired) {
+      toggleSidebar(true);
+    } else {
+      Digit.clikOusideFired = false;
+    }
+  };
+
   if (CITIZEN) {
     return (
       <TopBarComponent
         img={stateInfo?.logoUrlWhite}
-        isMobile={mobileView}
-        toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
+        isMobile={true}
+        toggleSidebar={updateSidebar}
         logoUrl={stateInfo?.logoUrlWhite}
         onLogout={handleLogout}
         userDetails={userDetails}
@@ -162,29 +172,31 @@ function TopBar(props) {
   return (
     <div className="topbar">
       <img className="city" src={cityDetails?.logoId} />
-      <span className="ulb">
+      <span className="ulb" style={mobileView ? { fontSize: "14px" } : {}}>
         {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
       </span>
-      {!mobileView && (
-        <div className="flex-right w-80 right column-gap-15">
+      <div className={mobileView ? "right" : "flex-right right w-80 column-gap-15"}>
+        {!mobileView && (
           <div className="left">
             <ChangeLanguage dropdown={true} />
           </div>
-          {userDetails?.access_token && (
-            <div className="left ">
-              <Dropdown
-                option={userOptions}
-                optionKey={"name"}
-                select={handleUserDropdownSelection}
-                showArrow={false}
-                freeze={true}
-                customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
-              />
-            </div>
-          )}
-          <img className="state" src={logoUrl} />
-        </div>
-      )}
+        )}
+        {userDetails?.access_token && (
+          <div className="left">
+            <Dropdown
+              option={userOptions}
+              optionKey={"name"}
+              select={handleUserDropdownSelection}
+              showArrow={false}
+              freeze={true}
+              style={mobileView ? { right: 0 } : {}}
+              optionCardStyles={{ overflow: "revert" }}
+              customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
+            />
+          </div>
+        )}
+        {!mobileView && <img className="state" src={logoUrl} />}
+      </div>
     </div>
   );
 }
@@ -192,7 +204,7 @@ function TopBar(props) {
 function SideBar(props) {
   const { t, CITIZEN, isSidebarOpen, toggleSidebar, handleLogout, mobileView, userDetails } = props;
   if (CITIZEN) {
-    return <CitizenSidebar isOpen={mobileView ? isSidebarOpen : true} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />;
+    return <CitizenSidebar isOpen={isSidebarOpen} isMobile={true} toggleSidebar={toggleSidebar} onLogout={handleLogout} />;
   }
   return (
     <React.Fragment>

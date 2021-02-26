@@ -7,6 +7,7 @@ import SearchApplication from "./search";
 import SortBy from "./SortBy";
 
 export const ApplicationCard = ({
+  t,
   data,
   onFilterChange,
   onSearch,

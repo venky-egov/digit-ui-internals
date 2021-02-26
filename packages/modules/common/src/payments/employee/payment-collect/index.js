@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RadioButtons, FormComposer, Dropdown, CardSectionHeader } from "@egovernments/digit-ui-react-components";
+import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { useCardPaymentDetails } from "./card";
@@ -15,8 +15,9 @@ export const CollectPayment = (props) => {
   const { path: currentPath } = useRouteMatch();
   const { consumerCode, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
+  const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
+  const [disablePayerDetails, setDisablePayerDetails] = useState(paymentdetails?.Bill[0]);
 
   const { cardConfig } = useCardPaymentDetails(props);
   const { chequeConfig, date } = useChequeDetails(props);
@@ -127,9 +128,11 @@ export const CollectPayment = (props) => {
                   if (isEqual(d, paidByMenu[0])) {
                     props.setValue("payerName", bill?.payerName);
                     props.setValue("payerMobile", bill?.mobileNumber);
+                    setDisablePayerDetails(true);
                   } else {
                     props.setValue("payerName", "");
                     props.setValue("payerMobile", "");
+                    setDisablePayerDetails(false);
                   }
                   props.onChange(d);
                 }}
@@ -151,6 +154,7 @@ export const CollectPayment = (props) => {
             error: "a valid name required",
             defaultValue: bill?.payerName || formState?.payerName || "",
           },
+          disable: disablePayerDetails,
         },
         {
           label: "Payer Mobile",
@@ -165,6 +169,7 @@ export const CollectPayment = (props) => {
             error: "a valid mobile no. required",
             defaultValue: bill?.mobileNumber || formState?.payerMobile || "",
           },
+          disable: disablePayerDetails,
         },
       ],
     },
@@ -198,7 +203,16 @@ export const CollectPayment = (props) => {
     },
   ];
 
+  const getDefaultValues = () => ({
+    payerName: bill?.payerName || formState?.payerName || "",
+    payerMobile: bill?.mobileNumber || formState?.payerMobile || "",
+  });
+
   const getFormConfig = () => config.concat(formConfigMap[formState?.paymentMode?.code] || []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <React.Fragment>
@@ -209,6 +223,7 @@ export const CollectPayment = (props) => {
         config={getFormConfig()}
         onSubmit={onSubmit}
         formState={formState}
+        defaultValues={getDefaultValues()}
         onFormValueChange={(setValue, formValue) => {
           if (!isEqual(formValue.paymentMode, selectedPaymentMode)) {
             setFormState(formValue);

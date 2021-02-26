@@ -33,7 +33,7 @@ const MobileInbox = ({ data, vehicleLog, isLoading, onFilterChange, onSearch, on
     [t("ES_INBOX_VEHICLE_LOG")]: vehicle.applicationNo,
     [t("ES_INBOX_VEHICLE_NO")]: vehicle.vehicle.registrationNumber,
     [t("ES_INBOX_DSO_NAME")]: vehicle.tripOwner.name,
-    [t("ES_INBOX_WASTE_COLLECTED")]: vehicle.volumeCarried,
+    [t("ES_INBOX_WASTE_COLLECTED")]: vehicle.tripDetails[0]?.volume,
   }));
 
   // TODO: below line is hard coded, it should come from server
@@ -58,6 +58,7 @@ const MobileInbox = ({ data, vehicleLog, isLoading, onFilterChange, onSearch, on
         <div className="filters-container">
           {!DSO && !isFstpOperator && <ApplicationLinks isMobile={true} />}
           <ApplicationCard
+            t={t}
             data={isFstpOperator ? fstpOperatorData : DSO ? dsoData : localizedData}
             onFilterChange={!isFstpOperator ? onFilterChange : false}
             serviceRequestIdKey={isFstpOperator ? "Vehicle Log" : DSO ? "Application No." : t("ES_INBOX_APPLICATION_NO")}

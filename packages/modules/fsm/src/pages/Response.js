@@ -4,17 +4,35 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 
-const GetActionMessage = (action) => {
+const GetActionMessage = (action, isSuccess) => {
   const { t } = useTranslation();
+  if (isSuccess) {
+    switch (action) {
+      case "REOPEN":
+        return t(`CS_COMMON_COMPLAINT_REOPENED`);
+      case "RATE":
+        return t("CS_COMMON_THANK_YOU");
+      case "PENDING_APPL_FEE_PAYMENT":
+        return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
+      case "SUBMIT_FEEDBACK":
+      case "COMPLETED":
+        return t("CS_APPLICATION_FEEDBACK_SUCCESSFUL");
+      default:
+        return t(`ES_PAYMENT_COLLECTED`);
+    }
+  }
+
   switch (action) {
     case "REOPEN":
-      return t(`CS_COMMON_COMPLAINT_REOPENED`);
+      return t(`CS_COMMON_COMPLAINT_REOPENED_FAILED`);
     case "RATE":
-      return t("CS_COMMON_THANK_YOU");
+      return t("CS_COMMON_ERROR");
     case "PENDING_APPL_FEE_PAYMENT":
-      return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
+      return t("CS_FILE_DESLUDGING_APPLICATION_FAILED");
+    case "SUBMIT_FEEDBACK":
+      return t("CS_APPLICATION_FEEDBACK_FAILED");
     default:
-      return t(`ES_PAYMENT_COLLECTED`);
+      return t(`ES_PAYMENT_COLLECTED_ERROR`);
   }
 };
 
@@ -32,7 +50,7 @@ const BannerPicker = (props) => {
   const { t } = useTranslation();
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm[0].applicationStatus)}
+      message={GetActionMessage(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess)}
       applicationNumber={props.data?.fsm[0].applicationNo}
       info={GetLabel(props.data?.fsm[0].applicationStatus)}
       successful={props.isSuccess}
@@ -60,6 +78,7 @@ const Response = (props) => {
           fsm: state.applicationData,
           workflow: {
             action: state.action,
+            ...state.actionData,
           },
         },
         {
@@ -79,10 +98,16 @@ const Response = (props) => {
   ) : (
     <Card>
       {(!mutation.isIdle || !mutation.isLoading) && (
-        <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+        <BannerPicker
+          t={t}
+          data={mutation.data}
+          action={state.action}
+          isSuccess={mutation.isSuccess}
+          isLoading={mutation.isIdle || mutation.isLoading}
+        />
       )}
       <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
-      <Link to={`/digit-ui/employee`}>
+      <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>

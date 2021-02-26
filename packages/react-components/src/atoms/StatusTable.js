@@ -12,7 +12,16 @@ export const LastRow = (props) => {
 export const Row = (props) => {
   let value = props.text;
   if (Array.isArray(props.text)) {
-    value = props.text.map((val, index) => <p key={index}>{val}</p>);
+    value = props.text.map((val, index) => {
+      if (val?.className) {
+        return (
+          <p className={val?.className} style={val?.style} key={index}>
+            {val?.value}
+          </p>
+        );
+      }
+      return <p key={index}>{val}</p>;
+    });
   }
 
   return (
@@ -20,6 +29,7 @@ export const Row = (props) => {
       <h2>{props.label}</h2>
       <div className="value">{value}</div>
       {props.actionButton ? <div className="action-button">{props.actionButton}</div> : null}
+      <div className="caption">{props.caption}</div>
     </div>
   );
 };

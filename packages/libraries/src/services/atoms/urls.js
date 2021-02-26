@@ -38,6 +38,7 @@ const Urls = {
 
   payment: {
     fetch_bill: "/billing-service/bill/v2/_fetchbill",
+    demandSearch: "/billing-service/demand/_search",
     create_reciept: "/collection-services/payments/_create",
     print_reciept: "/collection-services/payments",
     file_store: "/filestore/v1/files/url",

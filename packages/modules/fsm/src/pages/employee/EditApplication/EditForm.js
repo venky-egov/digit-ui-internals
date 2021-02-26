@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import TripDetails from "../configs/TripDetails";
 import ApplicantDetails from "../configs/ApplicantDetails";
 
-const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
+const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitationMenu }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
@@ -25,7 +25,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
     mobileNumber: applicationData.citizen.mobileNumber,
     noOfTrips: applicationData.noOfTrips,
     amountPerTrip: applicationData.additionalDetails.tripAmount,
-    amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount,
+    amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || "",
     propertyType: applicationData.propertyUsage.split(".")[0],
     subtype: applicationData.propertyUsage,
     address: {
@@ -34,12 +34,12 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
         ...applicationData.address.locality,
         code: `${applicationData.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${applicationData.address.locality.code}`,
       },
-      slum: {},
+      slum: applicationData.address.slumName,
       street: applicationData.address.street,
       doorNo: applicationData.address.doorNo,
       landmark: applicationData.address.landmark,
     },
-    pitType: { code: applicationData.sanitationtype, i18nKey: `PITTYPE_MASTERS_${applicationData.sanitationtype}` },
+    pitType: sanitationMenu.filter((type) => type.code === applicationData.sanitationtype)[0],
     pitDetail: applicationData.pitDetail,
   };
 
@@ -49,12 +49,15 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
     (async () => {
       // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
-      if (formData?.propertyType && formData?.subtype && vehicle?.code && !kill) {
+      if (formData?.propertyType && formData?.subtype && formData?.address && vehicle?.code && !kill) {
         const { capacity } = vehicle;
+        // console.log("find bill slab form data", formData)
+        const { slum: slumDetails } = formData.address;
+        const slum = slumDetails ? "YES" : "NO";
         const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-          propertyType: formData?.subtype.key,
+          propertyType: formData?.subtype,
           capacity,
-          slum: "YES",
+          slum,
         });
 
         const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
@@ -92,6 +95,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
     const pincode = data?.address?.pincode;
     const street = data?.address?.street;
     const doorNo = data?.address?.doorNo;
+    const slum = data?.address?.slum;
     const landmark = data?.address?.landmark;
     const noOfTrips = data.noOfTrips;
     const amount = data.amountPerTrip;
@@ -105,7 +109,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
 
     const formData = {
       ...applicationData,
-      tenantId: cityCode,
       sanitationtype: sanitationtype,
       source: applicationChannel.code,
       additionalDetails: {
@@ -128,9 +131,9 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
         landmark,
         doorNo,
         street,
-        city,
         state,
         pincode,
+        slumName: slum,
         locality: {
           ...applicationData.address.locality,
           code: localityCode.split("_").pop(),
@@ -138,8 +141,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
         },
         geoLocation: {
           ...applicationData.address.geoLocation,
-          latitude: data?.address?.latitude,
-          longitude: data?.address?.longitude,
+          latitude: data?.address?.latitude ? data?.address?.latitude : applicationData.address.geoLocation.latitude,
+          longitude: data?.address?.longitude ? data?.address?.longitude : applicationData.address.geoLocation.longitude,
         },
       },
     };
@@ -162,7 +165,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu }) => {
 
   return (
     <FormComposer
-      heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
+      heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
       config={configs.map((config) => {

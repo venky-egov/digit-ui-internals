@@ -1,9 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const DashboardBox = ({ svgIcon, header, info, subHeader, links }) => {
+const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, links }) => {
+  const mobileView = innerWidth <= 640;
+  const employeeCardStyles = mobileView
+    ? {
+        width: "96vw",
+        margin: "8px auto",
+      }
+    : {
+        width: "328px",
+      };
   return (
-    <div className="employeeCard card-home" style={{ width: "270px" }}>
+    <div className="employeeCard card-home" style={{ padding: 0, ...employeeCardStyles }}>
       <div className="complaint-links-container">
         <div className="header">
           <span className="logo">
@@ -16,25 +25,27 @@ const DashboardBox = ({ svgIcon, header, info, subHeader, links }) => {
             </svg> */}
             {svgIcon}
           </span>
-          <span className="text">{header}</span>
+          <span className="text">{t(header)}</span>
         </div>
-        <div className="body" style={{ marginLeft: 0 }}>
-          <div className="employeeCard-info-box" style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div className="body">
+          <div className="employeeCard-info-box" style={{ display: "flex", justifyContent: "flex-end", marginLeft: "16px" }}>
             {Object.keys(info).map((key, index) => {
               return (
                 <div key={index} style={{ display: "flex", flexDirection: "column" }}>
-                  <span>{info[key]}</span>
-                  <span>{key}</span>
+                  <span>{t(info[key])}</span>
+                  <span style={{ fontWeight: "bold" }}>{t(key)}</span>
                 </div>
               );
             })}
           </div>
-          <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
-          <div className="employeeCard-footer">
-            {links.map((link, index) => (
-              <Link to={link.pathname}>{link.label}</Link>
-            ))}
-          </div>
+        </div>
+        <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
+        <div className="body" style={{ marginLeft: "56px" }}>
+          {links.map((link, index) => (
+            <span key={index} className="link">
+              <Link to={link.pathname}>{t(link.label)}</Link>
+            </span>
+          ))}
         </div>
       </div>
     </div>

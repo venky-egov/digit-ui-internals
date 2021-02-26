@@ -5,10 +5,7 @@ const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
 
-  const [pitType, setPitType] = useState(() => {
-    const { pitType } = formData || {};
-    return pitType !== undefined ? pitType : null;
-  });
+  const [pitType, setPitType] = useState(formData?.pitType);
   const { data: sanitationMenu, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PitType");
 
   const selectPitType = (value) => {
@@ -30,11 +27,11 @@ const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
     return <Loader />;
   }
   if (userType === "employee") {
-    return <Dropdown isMandatory={config.isMandatory} option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} t={t} />;
+    return <Dropdown isMandatory={true} option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} t={t} />;
   }
   return (
     <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!pitType} t={t}>
-      <CardLabel>{`${t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")} *`}</CardLabel>
+      <CardLabel>{t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")}</CardLabel>
       <RadioOrSelect
         isMandatory={config.isMandatory}
         options={sanitationMenu}

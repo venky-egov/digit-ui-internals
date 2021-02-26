@@ -11,7 +11,16 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
       {
         label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
         type: "dropdown",
-        populators: <Dropdown option={vehicleMenu} optionKey="i18nKey" id="vehicle" selected={vehicle} select={setVehicle} t={t} />,
+        populators: (
+          <Dropdown
+            option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: `${t(vehicle.i18nKey)} - ${vehicle.capacity + " Ltrs" || ""}` }))}
+            optionKey="label"
+            id="vehicle"
+            selected={vehicle}
+            select={setVehicle}
+            t={t}
+          />
+        ),
       },
       {
         label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
@@ -23,6 +32,7 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
           // defaultValue: 1
           // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
         },
+        disable: true,
         // disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
       },
       {
@@ -34,6 +44,7 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
           validation: { required: true },
           // defaultValue: vehicle?.amount,
         },
+        disable: true,
         // disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
       },
       {

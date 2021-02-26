@@ -3,19 +3,16 @@ import React, { useState, useEffect } from "react";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
-  const [pincode, setPincode] = useState(() => {
-    const { pincode } = formData?.address || "";
-    return pincode;
-  });
+  const [pincode, setPincode] = useState(() => formData?.address?.pincode || "");
+
   const inputs = [
     {
       label: "CORE_COMMON_PINCODE",
       type: "text",
       name: "pincode",
       validation: {
-        // pattern: /^([1-9])(\d{5})$/,
-        minLength: 6,
-        maxLength: 7,
+        minlength: 6,
+        maxlength: 7,
       },
       error: "CORE_COMMON_PINCODE_INVALID",
     },
@@ -23,7 +20,6 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
   const [pincodeServicability, setPincodeServicability] = useState(null);
 
   useEffect(() => {
-    // console.log("find pincode datahere", formData?.address?.pincode)
     if (formData?.address?.pincode) {
       setPincode(formData.address.pincode);
     }
@@ -33,7 +29,14 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
     setPincode(e.target.value);
     setPincodeServicability(null);
     if (userType === "employee") {
-      onSelect(config.key, { pincode: e.target.value });
+      const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item.toString() === e.target.value));
+      if (foundValue) {
+        const city = tenants.filter((obj) => obj.pincode?.find((item) => item == e.target.value))[0];
+        onSelect(config.key, { city, pincode: e.target.value });
+      } else {
+        onSelect(config.key, { pincode: e.target.value });
+        setPincodeServicability("CS_COMMON_PINCODE_NOT_SERVICABLE");
+      }
     }
   }
 

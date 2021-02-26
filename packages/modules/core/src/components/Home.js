@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import FsmCard from  "@egovernments/digit-ui-module-fsm/src/components/FsmCard"
+import FsmCard from "@egovernments/digit-ui-module-fsm/src/components/FsmCard";
 
 const CitizenHome = ({ modules }) => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
@@ -62,7 +62,7 @@ const EmployeeHome = () => {
             </div>
           </div>
         </div>
-        <FsmCard/>
+        <FsmCard />
       </div>
     </div>
   );

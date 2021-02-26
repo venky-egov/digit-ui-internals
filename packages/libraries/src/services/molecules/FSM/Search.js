@@ -8,9 +8,10 @@ const getPropertyTypeLocale = (value) => {
 
 const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
 
-const getMapUrl = (latitude = 40.714728, longitude = -73.998672) => (
-  `https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C${latitude},${longitude}&zoom=15&size=400x400&key=AIzaSyA3kg7YWugGl1lTXmAmaBGPNhDW9pEh5bo`
-);
+const getMapUrl = (latitude, longitude) => {
+  const key = globalConfigs?.getConfig('GMAPS_API_KEY');
+  return `https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C${latitude},${longitude}&zoom=15&size=400x400&key=${key}`
+};
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)

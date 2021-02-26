@@ -79,7 +79,6 @@ const SearchApplication = () => {
   );
 
   const handleSearch = (params) => {
-    console.log(params, 'params');
     setSearchParams({ ...params });
   };
 

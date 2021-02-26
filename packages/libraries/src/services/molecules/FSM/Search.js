@@ -103,7 +103,7 @@ export const Search = {
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: response?.address?.landmark },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL"), value: response?.address?.slumName },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"),
-            value: (response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude) ? DigitUI.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude) : 'N/A',
+            value: (response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude) ? Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude) : 'N/A',
             map: true
           },
         ],

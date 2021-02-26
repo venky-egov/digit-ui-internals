@@ -197,12 +197,11 @@ const ApplicationDetails = (props) => {
                   {detail?.values?.map((value, index) => {
                     if (value.map === true && value.value !== 'N/A') {
                       return (
-                        <div className="row">
-                          <h2>{value.title}</h2>
-                          <div className="value">
-                            <img src={value.value} alt="" />
-                          </div>
-                        </div>
+                        <Row
+                          key={value.title}
+                          label={value.title}
+                          text={<img src={value.value} alt="" />}
+                        />
                       );
                     }
                     return (

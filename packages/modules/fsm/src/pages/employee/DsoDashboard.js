@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { DashboardBox, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "react-query";
 
 const svgIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -21,6 +20,14 @@ const DsoDashboard = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
 
+  const [info, setInfo] = useState({
+    [t("ES_PENDING")]: "-",
+    [t("ES_NEARING_SLA")]: "-",
+  });
+
+  const fetchMaxSla = (data) => data.BusinessServices[0].businessServiceSla;
+  const { data: maxSla, isFetching: maxSlaFetching } = Digit.Hooks.fsm.useApplicationStatus(fetchMaxSla);
+
   const filters = {
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
     sortBy: "createdTime",
@@ -29,18 +36,11 @@ const DsoDashboard = () => {
     offset: 0,
   };
 
-  const filterFn = (data) => data.totalCount;
+  const { data, isFetching: vendorDetailsFetching } = Digit.Hooks.fsm.useVendorDetail();
 
-  const { isLoading, data, isFetching } = Digit.Hooks.fsm.useVendorDetail();
-
-  const { data: totalCount, isLoading: inboxLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, filters, filterFn, {
-    enabled: !isFetching,
+  const { data: inboxArray, isLoading: inboxLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, filters, null, {
+    enabled: !vendorDetailsFetching && !maxSlaFetching,
   });
-
-  const info = {
-    ES_PENDING: totalCount,
-    ES_NEARING_SLA: 20,
-  };
 
   useEffect(() => {
     if (data?.vendor) {
@@ -48,6 +48,17 @@ const DsoDashboard = () => {
       Digit.UserService.setExtraRoleDetails(vendor[0]);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (maxSla && inboxArray) {
+      let totalCount = inboxArray?.[0]?.totalCount || 0;
+      let nearingSla = inboxArray.filter((e) => e.mathsla / maxSla < 0.33).length;
+      setInfo({
+        [t("ES_PENDING")]: totalCount,
+        [t("ES_NEARING_SLA")]: nearingSla,
+      });
+    }
+  }, [inboxArray, maxSla]);
 
   if (inboxLoading || isIdle) {
     return <Loader />;

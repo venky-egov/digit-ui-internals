@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { Search } from "../../services/molecules/FSM/Search";
 
 const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
@@ -45,7 +45,11 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   let applicationNos = !wfFetching && wfSuccess ? { applicationNos: processInstances.map((e) => e.businessId).join() } : {};
   applicationNos = applicationNos?.applicationNos === "" ? { applicationNos: "null" } : applicationNos;
 
-  if (!filterFsmFn) filterFsmFn = (data) => combineResponses(data.fsm, processInstances);
+  if (!filterFsmFn)
+    filterFsmFn = (data) => {
+      const fsm = data.fsm.map((e) => ({ ...e, totalCount: data.totalCount }));
+      return combineResponses(fsm, processInstances);
+    };
 
   const appList = useQuery(
     ["FSM_SEARCH", { ...fetchFilters(), ...applicationNos }],
@@ -66,15 +70,20 @@ const mapWfBybusinessId = (wfs) => {
 
 const combineResponses = (applicationDetails, workflowInstances) => {
   let wfMap = mapWfBybusinessId(workflowInstances);
-  return applicationDetails.map((application) => ({
+  const response = applicationDetails.map((application) => ({
     applicationNo: application.applicationNo,
     createdTime: new Date(application.auditDetails.createdTime),
     locality: application.address.locality.code,
     status: application.applicationStatus,
     taskOwner: wfMap[application.applicationNo]?.assigner?.name,
-    sla: wfMap[application.applicationNo]?.businesssServiceSla,
+    sla: Math.round(wfMap[application.applicationNo]?.businesssServiceSla / (24 * 60 * 60 * 1000)) || "-",
+    mathsla: wfMap[application.applicationNo]?.businesssServiceSla,
     tenantId: application.tenantId,
+    totalCount: application.totalCount,
   }));
+  // console.log("find combine Response here", applicationDetails, workflowInstances, response)
+
+  return response;
 };
 
 export default useInbox;

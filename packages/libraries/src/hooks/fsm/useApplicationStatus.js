@@ -2,11 +2,15 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 
-const useApplicationStatus = () => {
+const useApplicationStatus = (select) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  return useQuery("APPLICATION_STATUS", async () => {
+  const fetch = async () => {
     let WorkflowService = await Digit.WorkflowService.init(tenantId, "FSM");
+    return WorkflowService;
+  };
+  const defaultSelect = (WorkflowService) => {
+    console.log("defaultSelect executed");
     let applicationStatus = WorkflowService.BusinessServices[0].states
       .filter((state) => state.applicationStatus)
       .map((state) => ({
@@ -14,7 +18,8 @@ const useApplicationStatus = () => {
         code: state.applicationStatus,
       }));
     return applicationStatus;
-  });
+  };
+  return useQuery("APPLICATION_STATUS", () => fetch(), { select: select || defaultSelect });
 };
 
 export default useApplicationStatus;

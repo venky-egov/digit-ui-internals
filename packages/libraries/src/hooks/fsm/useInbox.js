@@ -1,10 +1,11 @@
-import { useQuery } from "react-query";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
 import { Search } from "../../services/molecules/FSM/Search";
 
 const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   let { uuid } = Digit.UserService.getUser().info;
 
-  console.log("inside fetchInbox", filters);
+  debugger;
 
   const fetchFilters = () => {
     let filtersObj = {};
@@ -59,7 +60,19 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
       select: filterFsmFn,
     }
   );
-  return appList;
+
+  const revalidate = () => {
+    workFlowInstances.refetch();
+    appList.refetch();
+  };
+
+  const client = useQueryClient();
+  client.setQueryData("RESET_INBOX", { revalidate });
+
+  return {
+    ...appList,
+    revalidate,
+  };
 };
 
 const mapWfBybusinessId = (wfs) => {

@@ -67,7 +67,7 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   };
 
   const client = useQueryClient();
-  client.setQueryData("RESET_INBOX", { revalidate });
+  client.setQueryData("FUNCTION_RESET_INBOX", { revalidate });
 
   return {
     ...appList,

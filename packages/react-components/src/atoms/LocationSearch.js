@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { SearchIconSvg } from "./svgindex";
 import { Loader } from "@googlemaps/js-api-loader";
 
-//API key
-const key = "AIzaSyDHVGCHFr-kGZA7dKFpGmF1uQafwaEkDus";
 let defaultBounds = {};
 
 const updateDefaultBounds = (center) => {
@@ -38,6 +36,7 @@ const getName = (places) => {
 };
 
 const loadGoogleMaps = (callback) => {
+  const key = globalConfigs?.getConfig("GMAPS_API_KEY");
   const loader = new Loader({
     apiKey: key,
     version: "weekly",
@@ -106,7 +105,12 @@ const LocationSearch = (props) => {
           } // Clear out the old markers.
           let pincode = GetPinCode(place);
           if (pincode) {
-            props.onChange(pincode);
+            const { geometry } = place;
+            const geoLocation = {
+              latitude: geometry.location.lat(),
+              longitude: geometry.location.lng(),
+            };
+            props.onChange(pincode, geoLocation);
           }
           markers.forEach((marker) => {
             marker.setMap(null);
@@ -157,7 +161,7 @@ const LocationSearch = (props) => {
             if (status === "OK") {
               if (results[0]) {
                 let pincode = GetPinCode(results[0]);
-                props.onChange(pincode);
+                props.onChange(pincode, { longitude: location.lng, latitude: location.lat });
                 const infoWindowContent = document.getElementById("pac-input");
                 infoWindowContent.value = getName(results[0]);
               } else {

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { DashboardBox, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 
 const svgIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -20,21 +21,26 @@ const DsoDashboard = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
 
-  const info = {
-    ES_PENDING: 15,
-    ES_NEARING_SLA: 20,
-  };
-
-  const { data: applications, isLoading: inboxLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
+  const filters = {
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
-
     sortBy: "createdTime",
     sortOrder: "DESC",
-    limit: 11,
+    limit: 10,
     offset: 0,
+  };
+
+  const filterFn = (data) => data.totalCount;
+
+  const { isLoading, data, isFetching } = Digit.Hooks.fsm.useVendorDetail();
+
+  const { data: totalCount, isLoading: inboxLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, filters, filterFn, {
+    enabled: !isFetching,
   });
 
-  const { isLoading, data } = Digit.Hooks.fsm.useVendorDetail();
+  const info = {
+    ES_PENDING: totalCount,
+    ES_NEARING_SLA: 20,
+  };
 
   useEffect(() => {
     if (data?.vendor) {
@@ -43,11 +49,7 @@ const DsoDashboard = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log("find here....", applications);
-  }, [applications]);
-
-  if (isLoading) {
+  if (inboxLoading || isIdle) {
     return <Loader />;
   }
   return (

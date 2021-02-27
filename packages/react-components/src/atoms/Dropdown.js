@@ -5,7 +5,7 @@ import { ArrowDown } from "./svgindex";
 const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
   const wrapperRef = useRef(null);
-  Digit.Hooks.useClickOutside(wrapperRef, () => props.setOutsideClicked(true));
+  // Digit.Hooks.useClickOutside(wrapperRef, () => props.setOutsideClicked(true));
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : setValue("");
@@ -51,26 +51,26 @@ const Dropdown = (props) => {
   const [forceSet, setforceSet] = useState(0);
   const optionRef = useRef(null);
   const hasCustomSelector = props.customSelector ? true : false;
-  const [outsideClicked, setOutsideClicked] = useState(false);
+  // const [outsideClicked, setOutsideClicked] = useState(false);
 
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
 
-  useEffect(() => {
-    if (setOutsideClicked) {
-      if (selectedOption?.name && filterVal?.length > 0 && filterVal !== selectedOption?.name) {
-        setDropdownStatus(false);
-        setforceSet(true);
-        setFilter("");
-      }
-    }
-    return () => {
-      setforceSet(false);
-      setFilter("");
-      setOutsideClicked(false);
-    };
-  }, [outsideClicked]);
+  // useEffect(() => {
+  //   if (setOutsideClicked) {
+  //     if (selectedOption?.name && filterVal?.length > 0 && filterVal !== selectedOption?.name) {
+  //       setDropdownStatus(false);
+  //       setforceSet(true);
+  //       setFilter("");
+  //     }
+  //   }
+  //   return () => {
+  //     setforceSet(false);
+  //     setFilter("");
+  //     setOutsideClicked(false);
+  //   };
+  // }, [outsideClicked]);
 
   function dropdownSwitch() {
     if (!props.disable) {
@@ -143,7 +143,7 @@ const Dropdown = (props) => {
             dropdownDisplay={dropdownOn}
             disable={props.disable}
             freeze={props.freeze ? true : false}
-            setOutsideClicked={setOutsideClicked}
+            // setOutsideClicked={setOutsideClicked}
           />
           <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
@@ -168,7 +168,7 @@ const Dropdown = (props) => {
                 })}
           </div>
         ) : (
-          <div className="options-card">
+          <div className="options-card" style={props.optionCardStyles}>
             {props.option
               .filter((option) => option.toUpperCase().includes(filterVal.toUpperCase()))
               .map((option, index) => {

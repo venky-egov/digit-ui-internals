@@ -22,14 +22,13 @@ const Inbox = ({ parentRoute }) => {
   });
 
   let isMobile = window.Digit.Utils.browser.isMobile();
-  let paginationParms = isMobile ? {} : { limit: pageSize + 1, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
-
-  debugger;
+  let paginationParms = isMobile
+    ? { limit: 100, offset: 0, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder }
+    : { limit: pageSize + 1, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
     ...searchParams,
     ...paginationParms,
   });
-
   const fetchNextPage = () => {
     setPageOffset((prevState) => prevState + pageSize);
   };

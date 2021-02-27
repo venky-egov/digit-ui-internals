@@ -25,10 +25,10 @@ const SelectRating = ({ parentRoute }) => {
     }, []);
 
     application.additionalDetails = {
-      CHECKLIST: checklist,
+      CheckList: checklist,
     };
 
-    history.push("/digit-ui/employee/fsm/response", {
+    history.push(`${parentRoute}/response`, {
       applicationData: application,
       key: "update",
       action: "SUBMIT_FEEDBACK",
@@ -57,15 +57,16 @@ const SelectRating = ({ parentRoute }) => {
 
   const config = {
     texts: {
-      header: "CS_FSM_APPLICATION_RATE_HELP_TEXT",
-      submitBarLabel: "CS_COMMON_SUBMIT",
+      header: t("CS_FSM_APPLICATION_RATE_TEXT"),
+      submitBarLabel: t("CS_COMMON_SUBMIT"),
     },
     inputs: [
       {
         type: "rate",
         maxRating: 5,
-        label: t("CS_FSM_APPLICATION_RATE_TEXT"),
+        label: t("CS_FSM_APPLICATION_RATE_HELP_TEXT"),
       },
+      ...inputs,
       {
         type: "textarea",
         label: t("CS_COMMON_COMMENTS"),
@@ -73,6 +74,6 @@ const SelectRating = ({ parentRoute }) => {
       },
     ],
   };
-  return <RatingCard config={{ ...config, inputs: [...inputs, ...config.inputs] }} t={t} onSelect={handleSubmit} />;
+  return <RatingCard config={config} t={t} onSelect={handleSubmit} />;
 };
 export default SelectRating;

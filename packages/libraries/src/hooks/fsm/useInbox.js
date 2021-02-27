@@ -1,9 +1,7 @@
 import { useQuery, useQueryClient } from "react-query";
 import { Search } from "../../services/molecules/FSM/Search";
-import useSearchAll from "./useSearchAll";
 
-const useInbox = (tenantId, filters) => {
-  const client = useQueryClient();
+const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   let { uuid } = Digit.UserService.getUser().info;
 
   console.log("inside fetchInbox", filters);
@@ -38,18 +36,25 @@ const useInbox = (tenantId, filters) => {
   const workflowFilters = fetchFilters().assignee ? { assignee: uuid } : {};
 
   const workFlowInstances = useQuery(
-    ["WORKFLOW", { uuid: fetchFilters().uuid }],
+    ["WORKFLOW", workflowFilters],
     () => Digit.WorkflowService.getAllApplication(tenantId, { ...workflowFilters, businesssService: "FSM" }),
-    { select: (data) => data.ProcessInstances }
+    { ...workFlowConfig, select: (data) => data.ProcessInstances }
   );
 
   const { data: processInstances, isLoading: workflowLoading, isFetching: wfFetching, isSuccess: wfSuccess } = workFlowInstances;
   let applicationNos = !wfFetching && wfSuccess ? { applicationNos: processInstances.map((e) => e.businessId).join() } : {};
+  applicationNos = applicationNos?.applicationNos === "" ? { applicationNos: "null" } : applicationNos;
 
-  const appList = useQuery(["FSM_SEARCH", { ...fetchFilters(), ...applicationNos }], () => Search.all(tenantId, { ...fetchFilters() }), {
-    enabled: !wfFetching && wfSuccess,
-    select: (data) => combineResponses(data, processInstances),
-  });
+  if (!filterFsmFn) filterFsmFn = (data) => combineResponses(data.fsm, processInstances);
+
+  const appList = useQuery(
+    ["FSM_SEARCH", { ...fetchFilters(), ...applicationNos }],
+    () => Search.all(tenantId, { ...fetchFilters(), ...applicationNos }),
+    {
+      enabled: !wfFetching && wfSuccess,
+      select: filterFsmFn,
+    }
+  );
   return appList;
 };
 
@@ -60,7 +65,7 @@ const mapWfBybusinessId = (wfs) => {
 };
 
 const combineResponses = (applicationDetails, workflowInstances) => {
-  let wfMap = mapWfBybusinessId(workflowInstances.ProcessInstances);
+  let wfMap = mapWfBybusinessId(workflowInstances);
   return applicationDetails.map((application) => ({
     applicationNo: application.applicationNo,
     createdTime: new Date(application.auditDetails.createdTime),

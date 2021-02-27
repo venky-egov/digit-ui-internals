@@ -9,7 +9,7 @@ export const SuccessfulPayment = (props) => {
   let { consumerCode, receiptNumber, businessService } = useParams();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
 
-  const getMessage = () => "PAYMENT COLLECTED";
+  const getMessage = () => t("ES_PAYMENT_COLLECTED");
   console.log("--------->", consumerCode);
 
   const printReciept = async () => {

@@ -134,14 +134,18 @@ const FstpOperatorDetails = () => {
           {vehicleData.map((row, index) => (
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
-          <Row key={t("ES_VEHICLE_WASTE_RECIEVED")} label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `} 
+          <Row
+            key={t("ES_VEHICLE_WASTE_RECIEVED")}
+            label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `}
             text={
               <div style={{ width: "25%" }}>
                 <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
               </div>
             }
           />
-          <Row key={t("ES_COMMON_TIME")} label={`${t("ES_COMMON_TIME")} * `}
+          <Row
+            key={t("ES_COMMON_TIME")}
+            label={`${t("ES_COMMON_TIME")} * `}
             text={
               <div>
                 <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" />

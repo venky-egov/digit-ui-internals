@@ -46,7 +46,7 @@ const ApplicationDetails = () => {
     serviceData: application,
   });
   const coreData = Digit.Hooks.useCoreData();
-  const key = globalConfigs.getConfig('GMAPS_API_KEY');
+  const key = globalConfigs.getConfig("GMAPS_API_KEY");
 
   if (isLoading) {
     return <Loader />;
@@ -130,10 +130,11 @@ const ApplicationDetails = () => {
           note={application.address.landmark ? application.address.landmark : "NA"}
         />
         <KeyNote keyValue={t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION")}>
-          {(application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude) ? 
-            <img src={Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude)} /> :
-            'NA'
-          }
+          {application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude ? (
+            <img src={Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude)} />
+          ) : (
+            "NA"
+          )}
         </KeyNote>
         <KeyNote keyValue={t("CS_COMMON_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
         <KeyNote

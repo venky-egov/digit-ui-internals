@@ -125,7 +125,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         if (location.state?.role) {
           const roleInfo = info.roles.find((userRole) => userRole.code === location.state.role);
           if (!roleInfo || !roleInfo.code) {
-            setError("User not permitterd.");
+            setError(t("ES_ERROR_USER_NOT_PERMITTED"));
             setTimeout(() => history.replace("/digit-ui/citizen"), 5000);
             return;
           }

@@ -195,14 +195,8 @@ const ApplicationDetails = (props) => {
                 )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => {
-                    if (value.map === true && value.value !== 'N/A') {
-                      return (
-                        <Row
-                          key={value.title}
-                          label={value.title}
-                          text={<img src={value.value} alt="" />}
-                        />
-                      );
+                    if (value.map === true && value.value !== "N/A") {
+                      return <Row key={value.title} label={value.title} text={<img src={value.value} alt="" />} />;
                     }
                     return (
                       <Row

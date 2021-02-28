@@ -63,7 +63,9 @@ const EmployeeApp = ({ path, url, userType }) => {
       <div className="ground-container">
         <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
           <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
-            {t("ES_COMMON_HOME")}
+            {/* {t("ES_COMMON_HOME")} */}
+            {/* TODO make localization key */}
+            Home
           </Link>{" "}
           / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
         </p>
@@ -79,7 +81,6 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
         <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
         <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />
-        <PrivateRoute path={`${path}/dso-dashboard`} component={() => <DsoDashboard parentRoute={path} />} />
       </div>
     </Switch>
   );
@@ -91,11 +92,16 @@ const CitizenApp = ({ path }) => {
     <React.Fragment>
       {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
       <Switch>
+        <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplicationCitizen parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
-        <PrivateRoute path={`${path}/application-details/:id`} component={ApplicationDetails} />
+        <PrivateRoute
+          path={`${path}/application-details/:id`}
+          component={Digit.UserService.hasAccess("FSM_DSO") ? <EmployeeApplicationDetails parentRoute={path} /> : ApplicationDetails}
+        />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
-        <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
+        <PrivateRoute path={`${path}/response`} component={(props) => <Response parentRoute={path} {...props} />} />
+        <PrivateRoute path={`${path}/dso-dashboard`} component={() => <DsoDashboard parentRoute={path} />} />
       </Switch>
     </React.Fragment>
   );
@@ -133,7 +139,7 @@ export const FSMLinks = ({ matchPath, userType }) => {
   const roleBasedLoginRoutes = [
     {
       role: "FSM_DSO",
-      from: "/digit-ui/employee/fsm/dso-dashboard",
+      from: "/digit-ui/citizen/fsm/dso-dashboard",
       dashoardLink: "CS_LINK_DSO_DASHBOARD",
       loginLink: "CS_LINK_LOGIN_DSO",
     },

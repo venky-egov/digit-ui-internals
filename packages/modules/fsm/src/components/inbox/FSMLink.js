@@ -6,18 +6,20 @@ import { useTranslation } from "react-i18next";
 
 const FSMLink = ({ isMobile, data }) => {
   const { t } = useTranslation();
-  const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const user = Digit.UserService.getUser();
+  const roleCodes = user?.info?.roles?.map((role) => role?.code);
 
   const allLinks = [
     {
       text: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
       link: "/digit-ui/employee/fsm/new-application",
-      // accessTo: ["CSR"]
-      notAccessTo: [COLLECTOR],
+      accessTo: ["FSM_CREATOR_EMP"],
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
-    { text: t("ES_TITLE_DASHBOARD"), link: DSO ? "/digit-ui/employee/fsm/dso-dashboard" : "/employee", hyperlink: !DSO },
+    { text: t("ES_TITILE_SEARCH_APPLICATION"), link: "/digit-ui/employee/fsm/search",
+      accessTo: ["FSM_CREATOR_EMP", "FSM_DSO", "FSM_EDITOR_EMP", "FSM_ADMIN", "FSM_COLLECTOR"]
+    },
+
   ];
 
   const [links, setLinks] = useState([]);
@@ -68,8 +70,12 @@ const FSMLink = ({ isMobile, data }) => {
       <div className="complaint-links-container">
         {GetLogo()}
         <div className="body">
-          {links.map(({ link, text, hyperlink = false, notAccessTo = [] }, index) => {
-            if (!notAccessTo?.includes(COLLECTOR)) {
+          {links.map(({ link, text, hyperlink = false, accessTo = [] }, index) => {
+            let access = false;
+            accessTo.forEach((role) => {
+              if (roleCodes?.includes(role)) access = true;
+            });
+            if (access) {
               return (
                 <span className="link" key={index}>
                   {hyperlink ? <a href={link}>{text}</a> : <Link to={link}>{text}</Link>}

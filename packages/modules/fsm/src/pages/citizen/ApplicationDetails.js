@@ -29,8 +29,8 @@ const displayPitDimension = (pitDeminsion) => {
 };
 
 const getPitDimensionCaption = (diameter, t) => {
-  if (diameter && diameter > 0) return `(${t("CS_COMMON_DEPTH")}X${t("CS_COMMON_DIAMETER")})`;
-  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} X ${t("CS_COMMON_BREADTH")} X ${t("CS_COMMON_DEPTH")})`;
+  if (diameter && diameter > 0) return `(${t("CS_COMMON_DIAMETER")} x ${t("CS_COMMON_DEPTH")})`;
+  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
 };
 
 const ApplicationDetails = () => {
@@ -46,6 +46,7 @@ const ApplicationDetails = () => {
     serviceData: application,
   });
   const coreData = Digit.Hooks.useCoreData();
+  const key = globalConfigs.getConfig('GMAPS_API_KEY');
 
   if (isLoading) {
     return <Loader />;
@@ -128,6 +129,12 @@ const ApplicationDetails = () => {
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL")}
           note={application.address.landmark ? application.address.landmark : "NA"}
         />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION")}>
+          {(application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude) ? 
+            <img src={Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude)} /> :
+            'NA'
+          }
+        </KeyNote>
         <KeyNote keyValue={t("CS_COMMON_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
         <KeyNote
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}

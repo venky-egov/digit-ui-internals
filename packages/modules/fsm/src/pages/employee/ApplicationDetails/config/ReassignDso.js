@@ -11,14 +11,21 @@ export const configReassignDSO = ({ t, dsoData, dso, selectDSO, vehicleMenu, veh
     {
       body: [
         {
-          label: t("ES_FSM_ACTION_DSO_NAME"),
+          label: t("ES_FSM_ACTION_REASSIGN_REASON"),
           type: "dropdown",
-          populators: <Dropdown option={dsoData} autoComplete="off" optionKey="name" id="dso" selected={dso} select={selectDSO} />,
+          populators: <Dropdown option={reassignReasonMenu} id="reassign-reason" selected={reassignReason} select={selectReassignReason} t={t} />,
         },
         {
           label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
           type: "dropdown",
-          populators: <Dropdown option={vehicleMenu} autoComplete="off" optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} />,
+          populators: (
+            <Dropdown option={vehicleMenu} autoComplete="off" optionKey="i18nKey" id="vehicle" selected={vehicle} select={selectVehicle} t={t} />
+          ),
+        },
+        {
+          label: t("ES_FSM_ACTION_DSO_NAME"),
+          type: "dropdown",
+          populators: <Dropdown option={dsoData} autoComplete="off" optionKey="name" id="dso" selected={dso} select={selectDSO} />,
         },
         {
           label: t("ES_FSM_ACTION_VEHICLE_CAPACITY_IN_LTRS"),
@@ -39,12 +46,7 @@ export const configReassignDSO = ({ t, dsoData, dso, selectDSO, vehicleMenu, veh
               required: true,
             },
           },
-        },
-        {
-          label: t("ES_FSM_ACTION_REASSIGN_REASON"),
-          type: "dropdown",
-          populators: <Dropdown option={reassignReasonMenu} id="reassign-reason" selected={reassignReason} select={selectReassignReason} />,
-        },
+        }
       ],
     },
   ],

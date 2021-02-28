@@ -15,7 +15,7 @@ export const Row = (props) => {
     value = props.text.map((val, index) => {
       if (val?.className) {
         return (
-          <p className={val?.className} key={index}>
+          <p className={val?.className} style={val?.style} key={index}>
             {val?.value}
           </p>
         );

@@ -4,8 +4,6 @@ import { Search } from "../../services/molecules/FSM/Search";
 const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   let { uuid } = Digit.UserService.getUser().info;
 
-  console.log("inside fetchInbox", filters);
-
   const fetchFilters = () => {
     let filtersObj = {};
     const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;

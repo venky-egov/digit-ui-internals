@@ -155,7 +155,7 @@ const ApplicationDetails = (props) => {
         setTimeout(closeToast, 5000);
         queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
         const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
-        inbox.revalidate();
+        inbox?.revalidate();
       },
     });
     closeModal();

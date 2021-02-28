@@ -25,8 +25,20 @@ const DsoDashboard = () => {
     [t("ES_NEARING_SLA")]: "-",
   });
 
-  const fetchMaxSla = (data) => data.BusinessServices[0].businessServiceSla;
-  const { data: maxSla, isFetching: maxSlaFetching } = Digit.Hooks.fsm.useApplicationStatus(fetchMaxSla);
+  const [progressStatusCode, setProgressStatusCode] = useState(null);
+  const [pendingApprovalStatusCode, setPendingApprCode] = useState(null);
+
+  // fetch Status codes for DSO_ACTIONS
+
+  const { data: statusCodes, isFetching: statusFetching } = Digit.Hooks.fsm.useApplicationStatus();
+
+  useEffect(() => {
+    if (statusCodes) {
+      const [inProgress, pendingApproval] = statusCodes.filter((e) => e.roles?.includes("FSM_DSO"));
+      setProgressStatusCode(inProgress);
+      setPendingApprCode(pendingApproval);
+    }
+  }, [statusCodes]);
 
   const filters = {
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
@@ -38,10 +50,6 @@ const DsoDashboard = () => {
 
   const { data, isFetching: vendorDetailsFetching } = Digit.Hooks.fsm.useVendorDetail();
 
-  const { data: inboxArray, isLoading: inboxLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, filters, null, {
-    enabled: !vendorDetailsFetching && !maxSlaFetching,
-  });
-
   useEffect(() => {
     if (data?.vendor) {
       const { vendor } = data;
@@ -49,18 +57,35 @@ const DsoDashboard = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (maxSla && inboxArray) {
-      let totalCount = inboxArray?.[0]?.totalCount || 0;
-      let nearingSla = inboxArray.filter((e) => e.mathsla / maxSla < 0.33).length;
-      setInfo({
-        [t("ES_PENDING")]: totalCount,
-        [t("ES_NEARING_SLA")]: nearingSla,
-      });
+  const { data: pendingApprovalArray, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(
+    tenantId,
+    { ...filters, applicationStatus: [pendingApprovalStatusCode] },
+    null,
+    {
+      enabled: typeof pendingApprovalStatusCode === "object" && !vendorDetailsFetching && !statusFetching,
     }
-  }, [inboxArray, maxSla]);
+  );
 
-  if (inboxLoading || isIdle) {
+  const { data: pendingCompletionArray, isFetching: pendingCompletionRefetching } = Digit.Hooks.fsm.useInbox(
+    tenantId,
+    { ...filters, applicationStatus: [progressStatusCode] },
+    null,
+    {
+      enabled: typeof progressStatusCode === "object" && !vendorDetailsFetching && !statusFetching,
+    }
+  );
+
+  useEffect(() => {
+    if (pendingApprovalArray && pendingCompletionArray) {
+      const infoObj = {
+        [t(progressStatusCode.name)]: pendingCompletionArray?.[0]?.totalCount || 0,
+        [t(pendingApprovalStatusCode.name)]: pendingApprovalArray?.[0]?.totalCount || 0,
+      };
+      setInfo(infoObj);
+    }
+  }, [pendingApprovalArray, pendingCompletionArray]);
+
+  if (pendingApprovalRefetching || pendingCompletionRefetching || vendorDetailsFetching) {
     return <Loader />;
   }
   return (

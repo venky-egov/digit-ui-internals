@@ -41,6 +41,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
     defaultOptions: {
       queries: {
         staleTime: Infinity,
+        cacheTime: 30 * 60 * 1000,
       },
     },
   });

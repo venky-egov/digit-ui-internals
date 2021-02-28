@@ -68,10 +68,6 @@ const ApplicationDetails = (props) => {
     }
   }, [showToast]);
 
-  useEffect(() => {
-    console.log("applicationDetails here", applicationDetails);
-  }, [applicationDetails]);
-
   function onActionSelect(action) {
     setSelectedAction(action);
     setDisplayMenu(false);

@@ -1,17 +1,14 @@
-import React from "react";
 import PropTypes from "prop-types";
-// import { Card, CardHeader, CardText, LocationSearch, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
-import { useTranslation } from "react-i18next";
-
+import React from "react";
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
-import CardText from "../atoms/CardText";
 import CardLabel from "../atoms/CardLabel";
+import CardText from "../atoms/CardText";
 import SubmitBar from "../atoms/SubmitBar";
-import LinkButton from "../atoms/LinkButton";
+
 //import box from "../atoms/box";
 
-const PropertyTaxRegistration = (onSave) => {
+const PropertyTaxRegistration = ({ submit }) => {
   return (
     <Card>
       <CardHeader>Property Tax Registration</CardHeader>
@@ -30,7 +27,8 @@ const PropertyTaxRegistration = (onSave) => {
       <SubmitBar
         label="Next"
         onSubmit={() => {
-          onSave;
+          console.log("submiy")
+          submit();
         }}
       />
     </Card>

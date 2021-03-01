@@ -22,7 +22,7 @@
       width: 70%;
       margin-top: 16px;
       margin-left: calc(30% -16px);
-      @apply absolute text-heading-s text-text-secondary
+      @apply absolute text-heading-s text-text-secondary;
     }
   }
 
@@ -54,9 +54,7 @@
 
     .caption {
       width: 70%;
-      margin-top: 16px;
-      margin-left: calc(30% -16px);
-      @apply absolute text-heading-s text-text-secondary
+      @apply text-heading-s text-text-secondary;
     }
   }
 

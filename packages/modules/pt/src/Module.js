@@ -14,6 +14,10 @@ import Proof from "./pageComponents/Proof";
 import SelectOwnerShipDetails from "./pageComponents/SelectOwnerShipDetails";
 import SelectOwnerDetails from "./pageComponents/SelectOwnerDetails";
 import SelectSpecialOwnerCategoryType from "./pageComponents/SelectSpecialOwnerCategoryType";
+import SelectOwnerAddress from "./pageComponents/SelectOwnerAddress";
+import SelectInistitutionOwnerDetails from "./pageComponents/SelectInistitutionOwnerDetails";
+import SelectProofIdentity from "./pageComponents/SelectProofIdentity";
+import SelectSpecialProofIdentity from "./pageComponents/SelectSpecialProofIdentity";
 
 const componentsToRegister = {
   SelectGeolocation,
@@ -25,6 +29,10 @@ const componentsToRegister = {
   SelectOwnerShipDetails,
   SelectOwnerDetails,
   SelectSpecialOwnerCategoryType,
+  SelectOwnerAddress,
+  SelectInistitutionOwnerDetails,
+  SelectProofIdentity,
+  SelectSpecialProofIdentity
 };
 
 const addComponentsToRegistry = () => {

@@ -1,27 +1,32 @@
 import React, { useState } from "react";
-import { FormStep, RadioOrSelect } from "@egovernments/digit-ui-react-components";
+import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
 
 const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formData }) => {
-//   const [slumArea, setSlumArea] = useState(formData?.address?.slumArea);
-  const [typeOfOwner, setTypeOfOwner] = useState( () => {
-      const typeOfOwner = "" //value;
-      return typeOfOwner ? typeOfOwner : {};
-  });
+  let index = 0;
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
+  const [ownerType, setOwnerType] = useState(formData.owners && formData.owners[index] && formData.owners[index].ownerType);
+  const { data: Menu, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType");
 
   const onSkip = () => onSelect();
+
+  function setTypeOfOwner(value) {
+    setOwnerType(value);
+  }
+
   function goNext() {
-    onSelect(config.key, { typeOfOwner });
+    let ownerDetails = formData.owners && formData.owners[index];
+    ownerDetails["ownerType"] = ownerType;
+    onSelect(config.key, ownerDetails);
   }
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
-      <RadioOrSelect
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownerType}>
+      <RadioButtons
+        t={t}
+        optionsKey="i18nKey"
         isMandatory={config.isMandatory}
-        options={[
-          { code: true, i18nKey: "CS_COMMON_YES" },
-          { code: false, i18nKey: "CS_COMMON_NO" },
-        ]}
-        selectedOption={typeOfOwner}
-        optionKey="i18nKey"
+        options={Menu || []}
+        selectedOption={ownerType}
         onSelect={setTypeOfOwner}
       />
     </FormStep>

@@ -36,7 +36,12 @@ const FstpOperatorDetails = () => {
   const [showToast, setShowToast] = useState(null);
   const [wasteCollected, setWasteCollected] = useState(null);
   const [errors, setErrors] = useState({});
-  const [tripTime, setTripTime] = useState(null);
+  const [tripTime, setTripTime] = useState(() => {
+    const today = new Date();
+    const hour = today.getHours();
+    const minutes = today.getMinutes();
+    return `${hour}:${minutes}` || "10:00";
+  });
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
   const { isLoading: isSearchLoading, isIdle, data: tripDetails } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
@@ -138,8 +143,8 @@ const FstpOperatorDetails = () => {
             key={t("ES_VEHICLE_WASTE_RECIEVED")}
             label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `}
             text={
-              <div style={{ width: "25%" }}>
-                <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
+              <div>
+                <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} style={{ width: "auto" }} />
               </div>
             }
           />
@@ -148,7 +153,7 @@ const FstpOperatorDetails = () => {
             label={`${t("ES_COMMON_TIME")} * `}
             text={
               <div>
-                <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" />
+                <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" disableClock={true} />
               </div>
             }
           />
@@ -162,7 +167,15 @@ const FstpOperatorDetails = () => {
           <LabelFieldPair>
             <CardLabel>{t("ES_COMMON_TIME")}</CardLabel>
             <div>
-              <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" />
+              <TimePicker
+                className="time-picker"
+                name="tripTime"
+                onChange={setTripTime}
+                value={tripTime}
+                locale="en-US"
+                format="hh:mm a"
+                clearIcon={null}
+              />
             </div>
           </LabelFieldPair> */}
         </StatusTable>

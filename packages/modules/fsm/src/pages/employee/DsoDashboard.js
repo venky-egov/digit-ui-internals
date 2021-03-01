@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { DashboardBox, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
@@ -9,11 +9,6 @@ const svgIcon = (
   </svg>
 );
 
-const info = {
-  ES_PENDING: 15,
-  ES_NEARING_SLA: 20,
-};
-
 const links = [
   {
     pathname: "/digit-ui/employee/fsm/inbox",
@@ -22,8 +17,30 @@ const links = [
 ];
 
 const DsoDashboard = () => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
-  const { isLoading, data } = Digit.Hooks.fsm.useVendorDetail();
+
+  const [info, setInfo] = useState({
+    [t("ES_PENDING")]: "-",
+    [t("ES_NEARING_SLA")]: "-",
+  });
+
+  const fetchMaxSla = (data) => data.BusinessServices[0].businessServiceSla;
+  const { data: maxSla, isFetching: maxSlaFetching } = Digit.Hooks.fsm.useApplicationStatus(fetchMaxSla);
+
+  const filters = {
+    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+    sortBy: "createdTime",
+    sortOrder: "DESC",
+    limit: 10,
+    offset: 0,
+  };
+
+  const { data, isFetching: vendorDetailsFetching } = Digit.Hooks.fsm.useVendorDetail();
+
+  const { data: inboxArray, isLoading: inboxLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, filters, null, {
+    enabled: !vendorDetailsFetching && !maxSlaFetching,
+  });
 
   useEffect(() => {
     if (data?.vendor) {
@@ -32,7 +49,18 @@ const DsoDashboard = () => {
     }
   }, [data]);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (maxSla && inboxArray) {
+      let totalCount = inboxArray?.[0]?.totalCount || 0;
+      let nearingSla = inboxArray.filter((e) => e.mathsla / maxSla < 0.33).length;
+      setInfo({
+        [t("ES_PENDING")]: totalCount,
+        [t("ES_NEARING_SLA")]: nearingSla,
+      });
+    }
+  }, [inboxArray, maxSla]);
+
+  if (inboxLoading || isIdle) {
     return <Loader />;
   }
   return (

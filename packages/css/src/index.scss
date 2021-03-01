@@ -142,7 +142,11 @@
   outline: transparent solid 2px;
   padding-left: 8px;
   height: 2.5rem;
-  margin-top: 8px;
   background: white;
   pointer-events: none !important;
+  width: 80%;
+}
+
+.h4 {
+  @apply mb-sm;
 }

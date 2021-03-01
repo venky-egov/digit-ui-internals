@@ -129,3 +129,20 @@
   @apply border-grey-dark text-grey-dark !important;
   pointer-events: none !important;
 }
+
+.card-date-input {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  border-top: 2px solid rgb(11, 12, 12);
+  border-right: none;
+  border-bottom: 2px solid rgb(11, 12, 12);
+  border-left: 2px solid rgb(11, 12, 12);
+  border-image: initial;
+  outline: transparent solid 2px;
+  padding-left: 8px;
+  height: 2.5rem;
+  margin-top: 8px;
+  background: white;
+  pointer-events: none !important;
+}

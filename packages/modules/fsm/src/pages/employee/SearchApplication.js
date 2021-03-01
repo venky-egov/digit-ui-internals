@@ -1,5 +1,5 @@
-import { Loader } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useState } from "react";
+import { Loader, Card } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Search from "../../components/inbox/search";
@@ -8,7 +8,35 @@ import ApplicationTable from "../../components/inbox/ApplicationTable";
 const SearchApplication = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, data, error } = Digit.Hooks.fsm.useSearchAll(tenantId, {});
+  const [pageOffset, setPageOffset] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchParams, setSearchParams] = useState({});
+  const [shouldSearch, setShouldSearch] = useState(false);
+  const { isLoading, isIdle, isError, data, error } = Digit.Hooks.fsm.useSearchAll(
+    tenantId,
+    {
+      limit: pageSize + 1,
+      offset: pageOffset,
+      ...searchParams,
+      fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
+      toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
+    },
+    null,
+    { enabled: shouldSearch }
+  );
+
+  const fetchNextPage = () => {
+    setPageOffset((prevState) => prevState + pageSize);
+  };
+
+  const fetchPrevPage = () => {
+    setPageOffset((prevState) => prevState - pageSize);
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+  };
+
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
   const columns = React.useMemo(
     () => [
@@ -56,12 +84,15 @@ const SearchApplication = () => {
     []
   );
 
-  const handleSearch = () => {};
+  const handleSearch = (params) => {
+    setSearchParams({ ...params });
+    setShouldSearch(true);
+  };
 
   const searchFields = [
     {
       label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
-      name: "applicationNo",
+      name: "applicationNos",
     },
     {
       label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
@@ -80,8 +111,19 @@ const SearchApplication = () => {
   ];
 
   let result;
-
-  if (isLoading || isError) {
+  if (!shouldSearch) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t("CS_MYAPPLICATIONS_NO_APPLICATION")
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  } else if (isLoading || isError) {
     result = <Loader />;
   } else {
     result = (
@@ -89,6 +131,12 @@ const SearchApplication = () => {
         t={t}
         data={data}
         columns={columns}
+        onNextPage={fetchNextPage}
+        onPrevPage={fetchPrevPage}
+        currentPage={Math.floor(pageOffset / pageSize)}
+        pageSizeLimit={pageSize}
+        onPageSizeChange={handlePageSizeChange}
+        disableSort={true}
         getCellProps={(cellInfo) => {
           return {
             style: {
@@ -104,7 +152,7 @@ const SearchApplication = () => {
 
   return (
     <div className="inbox-container">
-      <div style={{ flex: 1 }}>
+      <div style={{ width: "94%", overflowX: "auto" }}>
         <Search onSearch={handleSearch} type="desktop" searchFields={searchFields} />
         <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
       </div>

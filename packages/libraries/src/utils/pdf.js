@@ -128,9 +128,9 @@ function createContent(details, phoneNumber) {
       } else {
         value.forEach((value, index) => {
           let margin = [-25, 0, 0, 5];
-          if (index === 1) margin = [15, 0];
-          if (index === 2) margin = [30, 0];
-          if (index === 3) margin = [20, 0];
+          if (index === 1) margin = [15, 0, 0, 5];
+          if (index === 2) margin = [30, 0, 0, 5];
+          if (index === 3) margin = [40, 0, 0, 0];
           column1.push({
             text: value.title,
             fontSize: 11,
@@ -139,7 +139,7 @@ function createContent(details, phoneNumber) {
           });
           if (index === 1) margin = [15, 0, 0, 5];
           if (index === 2) margin = [30, 0, 0, 5];
-          if (index === 3) margin = [20, 0, 0, 5];
+          if (index === 3) margin = [40, 0, 0, 5];
           column2.push({
             text: value.value,
             fontSize: 9,

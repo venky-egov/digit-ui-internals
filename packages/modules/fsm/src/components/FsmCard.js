@@ -1,6 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+const ArrowRight = ({ to }) => (
+  <Link to={to}>
+    <svg style={{ display: "inline", height: "24px" }} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#F47738" />
+      <path d="M16 5.33325L14.12 7.21325L21.56 14.6666H5.33337V17.3333H21.56L14.12 24.7866L16 26.6666L26.6667 15.9999L16 5.33325Z" fill="white" />
+    </svg>
+  </Link>
+);
 
 const FSMCard = () => {
   const { t } = useTranslation();
@@ -9,9 +18,10 @@ const FSMCard = () => {
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
+  const [total, setTotal] = useState("-");
+
   // Septage ready for Disposal ( 10 KL)
   // Septage disposed today ( 50 KL)
-
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
   // TO DO get day time
@@ -37,6 +47,26 @@ const FSMCard = () => {
     filters: { applicationStatus: "WAITING_FOR_DISPOSAL" },
     config,
   });
+
+  const filters = {
+    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+    sortBy: "createdTime",
+    sortOrder: "DESC",
+    limit: 10,
+    offset: 0,
+  };
+
+  const { data: inbox, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters }, null, {
+    enabled: !isFSTPOperator ? true : false,
+  });
+
+  useEffect(() => {
+    if (inbox) {
+      console.log("here", inbox);
+      const total = inbox?.[0]?.totalCount || 0;
+      setTotal(total);
+    }
+  }, [inbox]);
 
   if (isFSTPOperator) {
     return (
@@ -66,6 +96,7 @@ const FSMCard = () => {
             )}
             <span className="link">
               <Link to={`/digit-ui/employee/fsm/fstp-inbox`}>{t("ES_TITLE_INBOX")}</Link>
+              {<ArrowRight to={`/digit-ui/employee/fsm/fstp-inbox`} />}
             </span>
           </div>
         </div>
@@ -87,6 +118,8 @@ const FSMCard = () => {
         <div className="body">
           <span className="link">
             <Link to={`/digit-ui/employee/fsm/inbox`}>{t("ES_TITLE_INBOX")}</Link>
+            <span className="inbox-total">{" " + total || "-"}</span>
+            {<ArrowRight to={`/digit-ui/employee/fsm/inbox`} />}
           </span>
           {!DSO && !COLLECTOR && !FSM_EDITOR && (
             <React.Fragment>

@@ -1,7 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, links }) => {
+const ArrowRight = ({ to }) => (
+  <Link to={to}>
+    <svg style={{ display: "inline", height: "24px" }} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#F47738" />
+      <path d="M16 5.33325L14.12 7.21325L21.56 14.6666H5.33337V17.3333H21.56L14.12 24.7866L16 26.6666L26.6667 15.9999L16 5.33325Z" fill="white" />
+    </svg>
+  </Link>
+);
+
+const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, links, total }) => {
   const mobileView = innerWidth <= 640;
   const employeeCardStyles = mobileView
     ? {
@@ -27,7 +36,7 @@ const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, link
           </span>
           <span className="text">{t(header)}</span>
         </div>
-        <div className="body">
+        <div className="body ">
           <div className="employeeCard-info-box" style={{ display: "flex", justifyContent: "flex-end", marginLeft: "16px" }}>
             {Object.keys(info).map((key, index) => {
               return (
@@ -40,10 +49,12 @@ const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, link
           </div>
         </div>
         <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
-        <div className="body" style={{ marginLeft: "56px" }}>
+        <div className="body" style={{}}>
           {links.map((link, index) => (
             <span key={index} className="link">
               <Link to={link.pathname}>{t(link.label)}</Link>
+              {!isNaN(link.total) && <span className="inbox-total">{link.total}</span>}
+              {<ArrowRight to={link.pathname} />}
             </span>
           ))}
         </div>

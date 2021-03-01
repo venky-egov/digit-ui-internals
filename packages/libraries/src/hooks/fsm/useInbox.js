@@ -6,8 +6,6 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
 
   const client = useQueryClient();
 
-  console.log(filters.applicationStatus);
-
   const fetchFilters = () => {
     let filtersObj = {};
     const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;

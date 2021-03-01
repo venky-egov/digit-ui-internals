@@ -20,10 +20,8 @@ const DsoDashboard = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
 
-  const [info, setInfo] = useState({
-    [t("ES_PENDING")]: "-",
-    [t("ES_NEARING_SLA")]: "-",
-  });
+  const [info, setInfo] = useState({});
+  const [loader, setLoader] = useState(true);
 
   const [progressStatusCode, setProgressStatusCode] = useState(null);
   const [pendingApprovalStatusCode, setPendingApprCode] = useState(null);
@@ -85,7 +83,11 @@ const DsoDashboard = () => {
     }
   }, [pendingApprovalArray, pendingCompletionArray]);
 
-  if (pendingApprovalRefetching || pendingCompletionRefetching || vendorDetailsFetching) {
+  useEffect(() => {
+    if (Object.keys(info).length) setLoader(false);
+  }, [info]);
+
+  if (loader) {
     return <Loader />;
   }
   return (

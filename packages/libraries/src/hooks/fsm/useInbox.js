@@ -11,7 +11,7 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   const fetchFilters = () => {
     let filtersObj = {};
     const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;
-    if (filters.applicationStatus) {
+    if (filters.applicationStatus && filters.applicationStatus?.[0]) {
       filtersObj.applicationStatus = filters.applicationStatus.map((status) => status.code).join(",");
     }
     if (filters.locality) {

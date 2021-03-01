@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -7,8 +7,36 @@ const FsmCard = () => {
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
-
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
+
+  // Septage ready for Disposal ( 10 KL)
+  // Septage disposed today ( 50 KL)
+
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+
+  // TO DO get day time
+
+  const config = {
+    enabled: isFSTPOperator ? true : false,
+    select: (data) => {
+      const info = data.vehicleTrip.reduce(
+        (info, trip) => {
+          const totalVol = trip.tripDetails.reduce((vol, details) => details.volume + vol, 0);
+          info[t("ES_READY_FOR_DISPOSAL")] += totalVol / 1000;
+          return info;
+        },
+        { [t("ES_READY_FOR_DISPOSAL")]: 0 }
+      );
+      info[t("ES_READY_FOR_DISPOSAL")] = info[t("ES_READY_FOR_DISPOSAL")] + " (KL)";
+      return info;
+    },
+  };
+
+  const { isLoading, data: info, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
+    tenantId,
+    filters: { applicationStatus: "WAITING_FOR_DISPOSAL" },
+    config,
+  });
 
   if (isFSTPOperator) {
     return (
@@ -24,6 +52,18 @@ const FsmCard = () => {
             <span className="text">{t("ES_TITLE_VEHICLE_LOG")}</span>
           </div>
           <div className="body">
+            {info && (
+              <div className="employeeCard-info-box" style={{}}>
+                {Object.keys(info).map((key, index) => {
+                  return (
+                    <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                      <span>{t(info[key])}</span>
+                      <span style={{}}>{t(key)}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             <span className="link">
               <Link to={`/digit-ui/employee/fsm/fstp-inbox`}>{t("ES_TITLE_INBOX")}</Link>
             </span>

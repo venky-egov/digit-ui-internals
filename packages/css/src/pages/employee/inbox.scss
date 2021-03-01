@@ -23,6 +23,19 @@
     .link {
       @apply p-sm text-link-normal;
     }
+
+    .employeeCard-info-box {
+      @apply flex;
+      justify-content: "flex-end";
+      background-color: #fafafa;
+
+      div {
+        span:nth-child(2) {
+          color: #4f5a5f;
+          font-style: italic;
+        }
+      }
+    }
   }
 }
 

@@ -17,6 +17,7 @@ export const CollectPayment = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
+  // TODO: enhancement to disablePayerDetails
   const [disablePayerDetails, setDisablePayerDetails] = useState(true);
 
   const { cardConfig } = useCardPaymentDetails(props);

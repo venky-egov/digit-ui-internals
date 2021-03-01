@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const KeyNote = ({ keyValue, note, caption, noteStyle }) => {
+const KeyNote = ({ keyValue, note, caption, noteStyle, children }) => {
   return (
     <div className="key-note-pair">
       <h3>{keyValue}</h3>
       <p style={noteStyle}>{note}</p>
       <p className="caption">{caption}</p>
+      {children}
     </div>
   );
 };

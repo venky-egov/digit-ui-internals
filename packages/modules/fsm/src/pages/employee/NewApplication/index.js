@@ -32,12 +32,15 @@ export const NewApplication = ({ parentUrl, heading }) => {
     (async () => {
       // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
-      if (formData?.propertyType && formData?.subtype && vehicle?.code && !kill) {
+      if (formData?.propertyType && formData?.subtype && formData?.address && vehicle?.code && !kill) {
         const { capacity } = vehicle;
+        // console.log("find bill slab form data", formData)
+        const { slum: slumDetails } = formData.address;
+        const slum = slumDetails ? "YES" : "NO";
         const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-          propertyType: formData?.subtype.key,
+          propertyType: formData?.subtype,
           capacity,
-          slum: "YES",
+          slum,
         });
 
         const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
@@ -75,6 +78,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const pincode = data?.address?.pincode;
     const street = data?.address?.street;
     const doorNo = data?.address?.doorNo;
+    const slum = data?.address?.slum;
     const landmark = data?.address?.landmark;
     const noOfTrips = data.noOfTrips;
     const amount = data.amountPerTrip;
@@ -109,6 +113,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           city,
           state,
           pincode,
+          slumName: slum,
           locality: {
             code: localityCode?.split("_").pop(),
             name: localityName,

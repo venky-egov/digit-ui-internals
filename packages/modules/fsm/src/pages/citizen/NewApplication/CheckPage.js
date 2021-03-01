@@ -33,13 +33,13 @@ const CheckPage = ({ onSubmit, value }) => {
   const { address, propertyType, subtype, pitType, pitDetail } = value;
   // console.log("find values here ", value)
 
-  const pitDetailValues = pitDetail ? Object.values(pitDetail) : null;
+  const pitDetailValues = pitDetail ? Object.values(pitDetail).filter((value) => !!value) : null;
 
   const pitMeasurement = pitDetailValues?.reduce((previous, current, index, array) => {
     if (index === array.length - 1) {
       return previous + current + "m";
     } else {
-      return previous + current + "m X ";
+      return previous + current + "m x ";
     }
   }, "");
 
@@ -91,6 +91,7 @@ const CheckPage = ({ onSubmit, value }) => {
                     ? `${t(`CS_COMMON_LENGTH`)} x ${t(`CS_COMMON_BREADTH`)} x ${t(`CS_COMMON_DEPTH`)}`
                     : `${t(`CS_COMMON_DIAMETER`)} x ${t(`CS_COMMON_DEPTH`)}`,
                 className: "card-text",
+                style: { fontSize: "16px" },
               },
             ]}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}

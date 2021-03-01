@@ -65,7 +65,9 @@ const EmployeeApp = ({ path, url, userType }) => {
       <div className="ground-container">
         <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
           <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
-            {t("ES_COMMON_HOME")}
+            {/* {t("ES_COMMON_HOME")} */}
+            {/* TODO make localization key */}
+            Home
           </Link>{" "}
           / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
         </p>
@@ -100,7 +102,7 @@ const CitizenApp = ({ path }) => {
           component={Digit.UserService.hasAccess("FSM_DSO") ? <EmployeeApplicationDetails parentRoute={path} /> : ApplicationDetails}
         />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
-        <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
+        <PrivateRoute path={`${path}/response`} component={(props) => <Response parentRoute={path} {...props} />} />
         <PrivateRoute path={`${path}/dso-dashboard`} component={() => <DsoDashboard parentRoute={path} />} />
       </Switch>
     </React.Fragment>

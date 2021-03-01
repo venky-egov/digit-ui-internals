@@ -185,7 +185,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "COMPLETED":
         setFormValve(true);
         defaultValues = { capacity: vehicle?.capacity };
-        return setConfig(configCompleteApplication({ t, vehicle }));
+        return setConfig(configCompleteApplication({ t, vehicle, applicationCreatedTime: applicationData?.auditDetails?.createdTime }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);

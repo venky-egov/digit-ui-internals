@@ -26,9 +26,9 @@ const displayPitDimension = (pitDeminsion) => {
     .join(" x ");
 };
 
-const getPitDimensionCaption = (sanitationtype, diameter, t) => {
+const getPitDimensionCaption = (sanitationtype, diameter, length, t) => {
   if (diameter && diameter > 0) return `(${t("CS_COMMON_DIAMETER")} x ${t("CS_COMMON_DEPTH")})`;
-  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
+  if (length && length > 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
 };
 
 const displayServiceDate = (timeStamp) => {
@@ -128,7 +128,7 @@ export const Search = {
               height: response?.pitDetail?.height,
               diameter: response?.pitDetail?.diameter,
             }),
-            caption: getPitDimensionCaption(response?.sanitationtype, response?.pitDetail?.diameter, t),
+            caption: getPitDimensionCaption(response?.sanitationtype, response?.pitDetail?.diameter, response?.pitDetail?.length, t),
           },
           // {
           //   title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
@@ -145,7 +145,7 @@ export const Search = {
       {
         title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: dsoDetails?.name + " - " + (dsoDetails?.username || "") || "N/A" },
+          { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: dsoDetails?.name || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_VEHICLE_MAKE"), value: t(vehicle?.type) || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: vehicle?.registrationNumber || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: vehicle?.capacity || "N/A" },

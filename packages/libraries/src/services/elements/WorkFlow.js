@@ -63,11 +63,11 @@ export const WorkflowService = {
             status: "COMPLAINT_FILED",
           });
         }
-        if (role !== "CITIZEN" && moduleCode === "FSM") {
-          details.timeline.push({
-            status: "APPLICATION_FILED",
-          });
-        }
+        // if (role !== "CITIZEN" && moduleCode === "FSM") {
+        //   details.timeline.push({
+        //     status: "APPLICATION_FILED",
+        //   });
+        // }
         return details;
       }
     } else {

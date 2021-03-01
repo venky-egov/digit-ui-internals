@@ -72,8 +72,6 @@ Digit.ComponentRegistryService.setupRegistry({
   ...pgrComponents,
   PGRLinks,
   PGRModule,
-  FSMModule,
-  FSMLinks,
   PaymentModule,
   PaymentLinks,
   PTModule,

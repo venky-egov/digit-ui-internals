@@ -129,17 +129,17 @@ function createContent(details, phoneNumber) {
         value.forEach((value, index) => {
           let margin = [-25, 0, 0, 5];
           if (index === 1) margin = [15, 0, 0, 5];
-          if (index === 2) margin = [30, 0, 0, 5];
-          if (index === 3) margin = [40, 0, 0, 0];
+          if (index === 2) margin = [26, 0, 0, 5];
+          if (index === 3) margin = [30, 0, 0, 5];
           column1.push({
             text: value.title,
             fontSize: 11,
             bold: true,
             margin,
           });
-          if (index === 1) margin = [15, 0, 0, 5];
-          if (index === 2) margin = [30, 0, 0, 5];
-          if (index === 3) margin = [40, 0, 0, 5];
+          if (index === 1) margin = [15, 0, 0, 10];
+          if (index === 2) margin = [26, 0, 0, 10];
+          if (index === 3) margin = [30, 0, 0, 10];
           column2.push({
             text: value.value,
             fontSize: 9,
@@ -165,7 +165,7 @@ function createContentForDetailsWithLengthOfTwo(values, data, column1, column2, 
         text: value.title,
         fontSize: 12,
         bold: true,
-        margin: [-25, num - 10],
+        margin: [-25, num - 10, -25, 0],
       });
       column2.push({
         text: value.value,
@@ -178,7 +178,7 @@ function createContentForDetailsWithLengthOfTwo(values, data, column1, column2, 
         text: value.title,
         fontSize: 12,
         bold: true,
-        margin: [-115, num - 10],
+        margin: [-115, num - 10, -115, 0],
       });
       column2.push({
         text: value.value,

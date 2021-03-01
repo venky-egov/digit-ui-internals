@@ -133,7 +133,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
     Digit.SessionStorage.set("city_property", null);
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
-    // console.log("find form data here", formData);
     history.push("/digit-ui/employee/fsm/response", formData);
   };
 

@@ -17,9 +17,9 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
 
   useEffect(() => {
     if (isConventionalSpecticTank(tankDimension)) {
-      setSize({ ...formData?.pitDetail, diameter: 0, ...formData?.pitDetail?.length === 0 && { height: 0 }});
+      setSize({ ...formData?.pitDetail, diameter: 0, ...(formData?.pitDetail?.length === 0 && { height: 0 }) });
     } else {
-      setSize({ ...formData?.pitDetail, length: 0, width: 0, ...formData?.pitDetail?.diameter === 0 && { height: 0 }});
+      setSize({ ...formData?.pitDetail, length: 0, width: 0, ...(formData?.pitDetail?.diameter === 0 && { height: 0 }) });
     }
   }, [tankDimension]);
 

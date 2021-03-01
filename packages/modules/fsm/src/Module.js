@@ -33,26 +33,7 @@ import SelectPitType from "./pageComponents/SelectPitType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectSlumName from "./pageComponents/SelectSlumName";
 import CheckSlum from "./pageComponents/CheckSlum";
-
-const componentsToRegister = {
-  SelectPropertySubtype,
-  SelectPropertyType,
-  SelectAddress,
-  SelectStreet,
-  SelectLandmark,
-  SelectPincode,
-  SelectTankSize,
-  SelectPitType,
-  SelectGeolocation,
-  SelectSlumName,
-  CheckSlum,
-};
-
-const addComponentsToRegistry = () => {
-  Object.entries(componentsToRegister).forEach(([key, value]) => {
-    Digit.ComponentRegistryService.setComponent(key, value);
-  });
-};
+import FSMCard from "./components/FsmCard";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -92,7 +73,7 @@ const CitizenApp = ({ path }) => {
     <React.Fragment>
       {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
       <Switch>
-        <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
+        {Digit.UserService.hasAccess("FSM_DSO") && <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />}
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplicationCitizen parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
         <PrivateRoute
@@ -107,9 +88,8 @@ const CitizenApp = ({ path }) => {
   );
 };
 
-export const FSMModule = ({ stateCode, userType }) => {
+const FSMModule = ({ stateCode, userType }) => {
   const moduleCode = "FSM";
-  addComponentsToRegistry();
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;
@@ -128,7 +108,7 @@ export const FSMModule = ({ stateCode, userType }) => {
   }
 };
 
-export const FSMLinks = ({ matchPath, userType }) => {
+const FSMLinks = ({ matchPath, userType }) => {
   const { t } = useTranslation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
 
@@ -207,4 +187,27 @@ export const FSMLinks = ({ matchPath, userType }) => {
       </div>
     );
   }
+};
+
+const componentsToRegister = {
+  SelectPropertySubtype,
+  SelectPropertyType,
+  SelectAddress,
+  SelectStreet,
+  SelectLandmark,
+  SelectPincode,
+  SelectTankSize,
+  SelectPitType,
+  SelectGeolocation,
+  SelectSlumName,
+  CheckSlum,
+  FSMCard,
+  FSMModule,
+  FSMLinks,
+};
+
+export const initFSMComponents = () => {
+  Object.entries(componentsToRegister).forEach(([key, value]) => {
+    Digit.ComponentRegistryService.setComponent(key, value);
+  });
 };

@@ -4,7 +4,7 @@ const DsoDetails = async (tenantId, filters = {}) => {
   const dsoDetails = await FSMService.vendorSearch(tenantId, filters);
 
   //TODO get possible dates to book dso
-  
+
   const data = dsoDetails.vendor.map((dso) => ({
     name: dso.name,
     username: dso.owner?.userName,

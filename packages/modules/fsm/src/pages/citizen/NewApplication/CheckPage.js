@@ -33,7 +33,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const { address, propertyType, subtype, pitType, pitDetail } = value;
   // console.log("find values here ", value)
 
-  const pitDetailValues = pitDetail ? Object.values(pitDetail).filter(value => !!value) : null;
+  const pitDetailValues = pitDetail ? Object.values(pitDetail).filter((value) => !!value) : null;
 
   const pitMeasurement = pitDetailValues?.reduce((previous, current, index, array) => {
     if (index === array.length - 1) {

@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import FsmCard from "@egovernments/digit-ui-module-fsm/src/components/FsmCard";
-
 const CitizenHome = ({ modules }) => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const registry = useContext(ComponentProvider);
@@ -28,8 +26,15 @@ const allLinks = [
   { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
 ];
 
-const EmployeeHome = () => {
-  const { t } = useTranslation();
+const EmployeeHome = ({ modules }) => {
+  const allModules = modules.filter(({ code }) => code === "FSM");
+  const moduleCards = allModules.map((module) => Digit.ComponentRegistryService.getComponent(`${module.code}Card`));
+
+  const addModuleCards = () => {
+    return moduleCards.map((Card) => {
+      return <Card />;
+    });
+  };
 
   return (
     <div className="employee-app-container">
@@ -62,7 +67,7 @@ const EmployeeHome = () => {
             </div>
           </div>
         </div>
-        <FsmCard />
+        {addModuleCards()}
       </div>
     </div>
   );
@@ -72,5 +77,5 @@ export const AppHome = ({ userType, modules }) => {
   if (userType === "citizen") {
     return <CitizenHome modules={modules} />;
   }
-  return <EmployeeHome />;
+  return <EmployeeHome modules={modules} />;
 };

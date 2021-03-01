@@ -5,14 +5,26 @@ import { BackButton, Header, HomeLink, Loader, PrivateRoute } from "@egovernment
 import { useTranslation } from "react-i18next";
 
 import CitizenApp from "./pages/citizen";
+import SelectGeolocation from "./pageComponents/SelectGeolocation";
+import SelectPincode from "./pageComponents/SelectPincode";
+import SelectAddress from "./pageComponents/SelectAddress";
+import SelectLandmark from "./pageComponents/SelectLandmark";
+import SelectStreet from "./pageComponents/SelectStreet";
+import Proof from "./pageComponents/Proof";
 import SelectOwnerShipDetails from "./pageComponents/SelectOwnerShipDetails";
 import SelectOwnerDetails from "./pageComponents/SelectOwnerDetails";
 import SelectSpecialOwnerCategoryType from "./pageComponents/SelectSpecialOwnerCategoryType";
 
 const componentsToRegister = {
+  SelectGeolocation,
+  SelectPincode,
+  SelectAddress,
+  SelectStreet,
+  Proof,
+  SelectLandmark,
   SelectOwnerShipDetails,
   SelectOwnerDetails,
-  SelectSpecialOwnerCategoryType
+  SelectSpecialOwnerCategoryType,
 };
 
 const addComponentsToRegistry = () => {
@@ -20,7 +32,6 @@ const addComponentsToRegistry = () => {
     Digit.ComponentRegistryService.setComponent(key, value);
   });
 };
-
 
 export const PTModule = ({ userType }) => {
   const moduleCode = "PT";

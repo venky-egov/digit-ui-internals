@@ -46,7 +46,8 @@ const CreateProperty = ({ parentRoute }) => {
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "owner-ship-details";
+  //config.indexRoute = "owner-ship-details";
+  config.indexRoute = "map";
   return (
     <Switch>
       {config.map((routeObj, index) => {

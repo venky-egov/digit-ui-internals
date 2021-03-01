@@ -27,9 +27,11 @@ export const Row = (props) => {
   return (
     <div className={props.last ? "row last" : "row"}>
       <h2>{props.label}</h2>
-      <div className="value">{value}</div>
+      <div className="value">
+        {value}
+        {props.caption && <div className="caption">{props.caption}</div>}
+      </div>
       {props.actionButton ? <div className="action-button">{props.actionButton}</div> : null}
-      <div className="caption">{props.caption}</div>
     </div>
   );
 };

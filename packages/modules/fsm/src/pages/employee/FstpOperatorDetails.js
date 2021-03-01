@@ -143,8 +143,8 @@ const FstpOperatorDetails = () => {
             key={t("ES_VEHICLE_WASTE_RECIEVED")}
             label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `}
             text={
-              <div style={{ width: "25%" }}>
-                <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
+              <div>
+                <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} style={{ width: "auto" }} />
               </div>
             }
           />
@@ -153,7 +153,7 @@ const FstpOperatorDetails = () => {
             label={`${t("ES_COMMON_TIME")} * `}
             text={
               <div>
-                <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" />
+                <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" disableClock={true} />
               </div>
             }
           />

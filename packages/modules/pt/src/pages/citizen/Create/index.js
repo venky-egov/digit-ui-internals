@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
-import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { newConfig } from "../../../config/Create/config";
 import { useQueryClient } from "react-query";
 
@@ -17,7 +16,10 @@ const CreateProperty = ({ parentRoute }) => {
   const goNext = (skipStep) => {
     debugger;
     const currentPath = pathname.split("/").pop();
-    const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
+    let { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
+    if (typeof nextStep == "object") {
+      nextStep = nextStep[sessionStorage.getItem("ownershipCategory")];
+    }
     let redirectWithHistory = history.push;
     if (skipStep) {
       redirectWithHistory = history.replace;
@@ -32,8 +34,15 @@ const CreateProperty = ({ parentRoute }) => {
     history.push(`${parentRoute}/new-application/response`);
   };
 
-  function handleSelect(key, data, skipStep) {
-    setParams({ ...params, ...{ [key]: { ...params[key], ...data } }, ...{ source: "ONLINE" } });
+  function handleSelect(key, data, skipStep, index) {
+    if(key === "owners") {
+      let indexs = 0;
+      let owners = params.owners || [];
+      owners[indexs] = data;
+      setParams({ ...params, ...{ [key]: owners } });
+    } else {
+      setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
+    }
     goNext(skipStep);
   }
 
@@ -46,7 +55,6 @@ const CreateProperty = ({ parentRoute }) => {
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  //config.indexRoute = "owner-ship-details";
   config.indexRoute = "map";
   return (
     <Switch>

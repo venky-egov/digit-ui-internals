@@ -1,29 +1,13 @@
-import React, {useState} from "react";
-import { FormStep, TextInput, LabelFieldPair, CardLabel, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
+import { FormStep, TextInput, CardLabel, RadioButtons } from "@egovernments/digit-ui-react-components";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
-
-  const [name, setName] = useState(() => {
-    const { name } = ""; //value
-    return name;
-  });
-  const [gender, setGender] = useState(() => {
-    const { gender } = ""; //value
-    return gender;
-  });
-  const [mobileNo, setMobileNo] = useState(() => {
-    const { mobileNo } = ""; //value
-    return mobileNo;
-  });
-  const [guardians, setGuardianNames] = useState(() => {
-    const { guardian } = ""; //value
-    return guardian;
-  });
-
-  const [guardian, setGuardian] = useState(() => {
-    const { guardian } = ""; //value
-    return guardian;
-  });
+  let index = 0;
+  const [name, setName] = useState(formData.owners && formData.owners[index] && formData.owners[index].name);
+  const [gender, setGender] = useState(formData.owners && formData.owners[index] && formData.owners[index].gender);
+  const [mobileNumber, setMobileNumber] = useState(formData.owners && formData.owners[index] && formData.owners[index].mobileNumber);
+  const [fatherOrHusbandName, setFatherOrHusbandName] = useState(formData.owners && formData.owners[index] && formData.owners[index].fatherOrHusbandName);
+  const [relationship, setRelationship] = useState(formData.owners && formData.owners[index] && formData.owners[index].relationship);
 
   function setOwnerName(e) {
     setName(e.target.value);
@@ -31,31 +15,23 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   function setGenderName(value) {
     setGender(value);
   }
-  function setMobileNumber(e) {
-    setMobileNo(e.target.value);
+  function setMobileNo(e) {
+    setMobileNumber(e.target.value);
   }
   function setGuardiansName(e) {
-    setGuardianNames(e.target.value);
+    setFatherOrHusbandName(e.target.value);
   }
   function setGuardianName(value) {
-    setGuardian(value);
+    setRelationship(value);
   }
 
-  // const goNext = () => {
-  //   onSelect({
-  //       name,
-  //       gender,
-  //       mobileNo, 
-  //       guardian
-  //   });
-  // };
-
-  function goNext() {
-    onSelect();
-  }
+  const goNext = () => {
+    let owner = formData.owners && formData.owners[index];
+    let ownerStep = { ...owner, name, gender, mobileNumber, fatherOrHusbandName, relationship };
+    onSelect(config.key, ownerStep);
+  };
 
   const onSkip = () => onSelect();
-  const onSubmit = () => {};
 
   const options = [
     { value: "Male", code: "PT_FORM3_MALE" },
@@ -68,52 +44,55 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     { name: "Husband", code: "HUSBAND" }
   ];
 
+
   return (
-    <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t}>
-       <CardLabel>{t("PT_OWNER_NAME")}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="name"
-          onChange={setOwnerName}
-          value={name}
-        />
-        <CardLabel>{t("PT_FORM3_GENDER")}</CardLabel>
-        <RadioButtons
-          t={t}
-          onSelect={setGenderName}
-          value={gender}
-          options={options}
-          optionsKey="code"
-          selectedOption={gender}
-        />
-        <CardLabel>{t("PT_FORM3_MOBILE_NO")}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="mobileNo"
-          onChange={setMobileNumber}
-          value={mobileNo}
-        />
-        <CardLabel>{t("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME")}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="guardian"
-          onChange={setGuardiansName}
-          value={guardians}
-        />
-        <RadioButtons
-          t={t}
-          options={GuardianOptions}
-          optionsKey="code"
-          onSelect={setGuardianName}
-          value={guardian}
-          selectedOption={guardian}
-        />
+    <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={(!name || !mobileNumber || !gender || !relationship || !fatherOrHusbandName)}>
+      <CardLabel>{t("PT_OWNER_NAME")}</CardLabel>
+      <TextInput
+        t={t}
+        isMandatory={false}
+        optionKey="i18nKey"
+        name="name"
+        value={name}
+        onChange={setOwnerName}
+      />
+      <CardLabel>{t("PT_FORM3_GENDER")}</CardLabel>
+      <RadioButtons
+        t={t}
+        options={options}
+        optionsKey="code"
+        name="gender"
+        value={gender}
+        selectedOption={gender}
+        onSelect={setGenderName}
+      />
+      <CardLabel>{t("PT_FORM3_MOBILE_NO")}</CardLabel>
+      <TextInput
+        t={t}
+        isMandatory={false}
+        optionKey="i18nKey"
+        name="mobileNumber"
+        value={mobileNumber}
+        onChange={setMobileNo}
+      />
+      <CardLabel>{t("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME")}</CardLabel>
+      <TextInput
+        t={t}
+        isMandatory={false}
+        optionKey="i18nKey"
+        name="fatherOrHusbandName"
+        value={fatherOrHusbandName}
+        onChange={setGuardiansName}
+      />
+      <RadioButtons
+        t={t}
+        optionsKey="code"
+        name="relationship"
+        options={GuardianOptions}
+        value={relationship}
+        selectedOption={relationship}
+        onSelect={setGuardianName}
+      />
     </FormStep>
   );
 };

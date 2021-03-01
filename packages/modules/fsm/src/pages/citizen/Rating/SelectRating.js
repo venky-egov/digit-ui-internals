@@ -52,7 +52,7 @@ const SelectRating = ({ parentRoute }) => {
     onSelect: item.type === "SINGLE_SELECT" ? handleSelect(item.code) : null,
     selectedOption: item.type === "SINGLE_SELECT" ? answers[item.code] : null,
     name: item.code,
-    label: item.code,
+    label: item.code === "SPILLAGE" ? t("CS_FSM_APPLICATION_RATE_HELP_TEXT") : item.code,
   }));
 
   const config = {
@@ -64,7 +64,6 @@ const SelectRating = ({ parentRoute }) => {
       {
         type: "rate",
         maxRating: 5,
-        label: t("CS_FSM_APPLICATION_RATE_HELP_TEXT"),
       },
       ...inputs,
       {

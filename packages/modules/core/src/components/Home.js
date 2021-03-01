@@ -24,8 +24,8 @@ const CitizenHome = ({ modules }) => {
 };
 
 const allLinks = [
-  { text: "Inbox", link: "/digit-ui/employee/pgr/inbox" },
-  { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
+  { text: "ES_TITLE_INBOX", link: "/digit-ui/employee/pgr/inbox" },
+  { text: "ES_TITLE_NEW_DESULDGING_APPLICATION", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
 ];
 
 const EmployeeHome = () => {
@@ -54,7 +54,7 @@ const EmployeeHome = () => {
                 if (!link.accessTo || Digit.UserService.hasAccess(link.accessTo)) {
                   return (
                     <span className="link" key={index}>
-                      <Link to={link.link}>{link.text}</Link>
+                      <Link to={link.link}>{t(link.text)}</Link>
                     </span>
                   );
                 }

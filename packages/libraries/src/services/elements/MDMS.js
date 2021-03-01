@@ -234,6 +234,22 @@ const getSlumLocalityCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getRoleActionMetaCriteria = (tenantId, moduleCode) => ({
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "RoleActionMetadata",
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getBillingServiceForBusinessServiceCriteria = () => ({
   moduleDetails: [
     {
@@ -348,15 +364,6 @@ export const MdmsService = {
       useCache: true,
       params: { tenantId: stateCode },
     }),
-
-  fetchMDMSRoleBasedAction: (tenantId, roleCodes) => {
-    Request({
-      method: "POST",
-      auth: true,
-      data: { roleCodes, tenantId, actionMaster: "actions-test", enabled: true },
-      useCache: true,
-    });
-  },
   call: (tenantId, details) =>
     ServiceRequest({
       serviceName: "mdmsCall",
@@ -406,4 +413,7 @@ export const MdmsService = {
   },
   getSlumLocalityMapping: (tenantId, moduleCode, type) =>
     MdmsService.getDataByCriteria(tenantId, getSlumLocalityCriteria(tenantId, moduleCode, type), moduleCode),
+
+  getRoleActionMetadata: (tenantId, moduleCode) =>
+    MdmsService.getDataByCriteria(tenantId, getRoleActionMetaCriteria(tenantId, moduleCode), moduleCode),
 };

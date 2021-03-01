@@ -59,16 +59,14 @@ const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
   const mobileView = innerWidth <= 640;
   return (
-    <Switch>
-      <div className="ground-container">
-        <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
-          <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
-            {/* {t("ES_COMMON_HOME")} */}
-            {/* TODO make localization key */}
-            Home
-          </Link>{" "}
-          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
-        </p>
+    <div className="ground-container">
+      <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
+        <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
+          {t("ES_COMMON_HOME")}
+        </Link>{" "}
+        / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
+      </p>
+      <Switch>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
         <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
         <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
@@ -80,9 +78,8 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
         <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
-        <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />
-      </div>
-    </Switch>
+      </Switch>
+    </div>
   );
 };
 
@@ -114,11 +111,12 @@ export const FSMModule = ({ stateCode, userType }) => {
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
+  const roleAccess = Digit.Hooks.useAccessControl();
+  console.log("find route acccess here", roleAccess);
 
   if (isLoading) {
     return <Loader />;
   }
-
   console.log("fsm", userType, path, state, store);
 
   if (userType === "citizen") {

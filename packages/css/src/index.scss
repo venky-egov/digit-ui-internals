@@ -129,3 +129,20 @@
   @apply border-grey-dark text-grey-dark !important;
   pointer-events: none !important;
 }
+
+.react-time-picker {
+  width: 194px;
+  height: 2.5rem;
+  &__wrapper {
+    border: 2px solid #0b0c0c;
+    padding-left: 16px;
+  }
+  &__inputGroup__input {
+    @apply px-sm;
+    line-height: 2.5rem;
+    min-width: 16px;
+    &:focus {
+      outline: 2px solid black;
+    }
+  }
+}

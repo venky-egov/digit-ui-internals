@@ -23,7 +23,6 @@ function getFilteredDsoData(dsoData, vehicle) {
 }
 
 export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehicle, selectVehicle }) => {
-  console.log("DSO DATA HERE", dsoData, vehicle);
   return {
     label: {
       heading: "ES_FSM_ACTION_TITLE_ASSIGN_DSO",
@@ -35,6 +34,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
         body: [
           {
             label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
+            isMandatory: true,
             type: "dropdown",
             populators: (
               <Dropdown
@@ -51,6 +51,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
           },
           {
             label: t("ES_FSM_ACTION_DSO_NAME"),
+            isMandatory: true,
             type: "dropdown",
             populators: (
               <Dropdown
@@ -65,6 +66,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
           },
           {
             label: t("ES_FSM_ACTION_VEHICLE_CAPACITY_IN_LTRS"),
+            isMandatory: true,
             type: "text",
             populators: {
               name: "capacity",
@@ -76,6 +78,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
           },
           {
             label: t("ES_FSM_ACTION_SERVICE_DATE"),
+            isMandatory: true,
             type: "date",
             populators: {
               name: "date",

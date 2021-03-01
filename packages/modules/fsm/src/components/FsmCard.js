@@ -2,12 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const FsmCard = () => {
+const FSMCard = () => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
-
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   if (isFSTPOperator) {
@@ -60,4 +59,4 @@ const FsmCard = () => {
     </div>
   );
 };
-export default FsmCard;
+export default FSMCard;

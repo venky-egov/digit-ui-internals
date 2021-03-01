@@ -46,7 +46,7 @@ export const configReassignDSO = ({ t, dsoData, dso, selectDSO, vehicleMenu, veh
               required: true,
             },
           },
-        }
+        },
       ],
     },
   ],

@@ -5,10 +5,6 @@ const TextInput = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
   const [date, setDate] = useState();
 
-  useEffect(() => {
-    setDate(getDDMMYYYY(props?.defaultValue));
-  }, []);
-
   const handleDate = (event) => {
     const { value } = event.target;
     setDate(getDDMMYYYY(value));
@@ -69,16 +65,7 @@ const TextInput = (props) => {
             min={props.min}
           />
         )}
-        {props.type === "date" && (
-          <input
-            type="text"
-            className={`${props.disable && "disabled"} card-date-input`}
-            name={props.name}
-            id={props.id}
-            placeholder={props.placeholder}
-            defaultValue={date}
-          />
-        )}
+        {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} />}
       </div>
     </React.Fragment>
   );
@@ -97,6 +84,23 @@ TextInput.propTypes = {
 TextInput.defaultProps = {
   isMandatory: false,
 };
+
+function DatePicker(props) {
+  useEffect(() => {
+    props.setDate(getDDMMYYYY(props?.defaultValue));
+  }, []);
+
+  return (
+    <input
+      type="text"
+      className={`${props.disable && "disabled"} card-date-input`}
+      name={props.name}
+      id={props.id}
+      placeholder={props.placeholder}
+      defaultValue={props.date}
+    />
+  );
+}
 
 function getDDMMYYYY(mmddyyyy) {
   if (!mmddyyyy) return "";

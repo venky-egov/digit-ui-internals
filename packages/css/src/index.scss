@@ -131,20 +131,13 @@
 }
 
 .card-date-input {
-  position: absolute;
-  top: 0px;
-  left: 0px;
+  @apply absolute top-0 left-0 w-3/4 bg-white pl-sm;
   border-top: 2px solid rgb(11, 12, 12);
-  border-right: none;
   border-bottom: 2px solid rgb(11, 12, 12);
   border-left: 2px solid rgb(11, 12, 12);
   border-image: initial;
   outline: transparent solid 2px;
-  padding-left: 8px;
   height: 2.5rem;
-  background: white;
-  pointer-events: none !important;
-  width: 80%;
 }
 
 .h4 {

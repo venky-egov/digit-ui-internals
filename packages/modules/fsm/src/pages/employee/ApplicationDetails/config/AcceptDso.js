@@ -28,6 +28,7 @@ export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoLis
           },
           {
             label: t("ES_FSM_ACTION_VEHICLE_CAPACITY_IN_LTRS"),
+            isMandatory: true,
             type: "text",
             populators: {
               name: "capacity",

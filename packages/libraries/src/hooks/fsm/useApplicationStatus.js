@@ -10,7 +10,6 @@ const useApplicationStatus = (select) => {
     return WorkflowService;
   };
   const defaultSelect = (WorkflowService) => {
-    console.log("defaultSelect executed");
     let applicationStatus = WorkflowService.BusinessServices[0].states
       .filter((state) => state.applicationStatus)
       .map((state) => {

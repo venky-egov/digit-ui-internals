@@ -68,10 +68,6 @@ const ApplicationDetails = (props) => {
     }
   }, [showToast]);
 
-  useEffect(() => {
-    console.log("applicationDetails here", applicationDetails);
-  }, [applicationDetails]);
-
   function onActionSelect(action) {
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -163,7 +159,7 @@ const ApplicationDetails = (props) => {
 
   const getTimelineCaptions = (checkpoint) => {
     // console.log("tl", checkpoint);
-    if (checkpoint.status === "APPLICATION_FILED") {
+    if (checkpoint.status === "CREATED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData.auditDetails.createdTime),
         name: applicationData.citizen.name,

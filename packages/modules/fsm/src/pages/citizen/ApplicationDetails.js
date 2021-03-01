@@ -39,6 +39,11 @@ const ApplicationDetails = () => {
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: id });
+  const state = tenantId?.split(".")[0] || "pb";
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
+  const pdfVehicleType = `${vehicle?.make} - ${vehicle?.name} - ${vehicle?.capacity} ${t("CS_COMMON_CAPACITY_LTRS")}`;
+
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.tenantId,
     id,
@@ -59,7 +64,7 @@ const ApplicationDetails = () => {
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
   const handleDownloadPdf = async () => {
-    const data = getPDFData(application, tenantInfo, t);
+    const data = getPDFData({ ...application, pdfVehicleType }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 

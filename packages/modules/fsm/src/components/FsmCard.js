@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const FsmCard = () => {
+const FSMCard = () => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
@@ -100,4 +100,4 @@ const FsmCard = () => {
     </div>
   );
 };
-export default FsmCard;
+export default FSMCard;

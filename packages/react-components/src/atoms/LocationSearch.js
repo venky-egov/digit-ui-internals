@@ -36,7 +36,7 @@ const getName = (places) => {
 };
 
 const loadGoogleMaps = (callback) => {
-  const key = globalConfigs?.getConfig('GMAPS_API_KEY');
+  const key = globalConfigs?.getConfig("GMAPS_API_KEY");
   const loader = new Loader({
     apiKey: key,
     version: "weekly",
@@ -109,7 +109,7 @@ const LocationSearch = (props) => {
             const geoLocation = {
               latitude: geometry.location.lat(),
               longitude: geometry.location.lng(),
-            }
+            };
             props.onChange(pincode, geoLocation);
           }
           markers.forEach((marker) => {

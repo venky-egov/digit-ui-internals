@@ -158,7 +158,7 @@ const ApplicationDetails = (props) => {
 
   const getTimelineCaptions = (checkpoint) => {
     // console.log("tl", checkpoint);
-    if (checkpoint.status === "APPLICATION_FILED") {
+    if (checkpoint.status === "CREATED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData.auditDetails.createdTime),
         name: applicationData.citizen.name,
@@ -196,14 +196,8 @@ const ApplicationDetails = (props) => {
                 )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => {
-                    if (value.map === true && value.value !== 'N/A') {
-                      return (
-                        <Row
-                          key={value.title}
-                          label={value.title}
-                          text={<img src={value.value} alt="" />}
-                        />
-                      );
+                    if (value.map === true && value.value !== "N/A") {
+                      return <Row key={value.title} label={value.title} text={<img src={value.value} alt="" />} />;
                     }
                     return (
                       <Row

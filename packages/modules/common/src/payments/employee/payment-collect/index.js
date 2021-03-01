@@ -17,15 +17,14 @@ export const CollectPayment = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
-  const [disablePayerDetails, setDisablePayerDetails] = useState(paymentdetails?.Bill[0]);
+  // TODO: enhancement to disablePayerDetails
+  const [disablePayerDetails, setDisablePayerDetails] = useState(true);
 
   const { cardConfig } = useCardPaymentDetails(props);
   const { chequeConfig, date } = useChequeDetails(props);
   const additionalCharges = getAdditionalCharge() || [];
 
   const [formState, setFormState] = useState({});
-
-  console.log("collect page", currentPath, consumerCode, props, bill);
 
   const defaultPaymentModes = [
     { code: "CASH", label: "Cash" },

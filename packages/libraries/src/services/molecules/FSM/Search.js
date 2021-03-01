@@ -9,8 +9,8 @@ const getPropertyTypeLocale = (value) => {
 const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
 
 const getMapUrl = (latitude, longitude) => {
-  const key = globalConfigs?.getConfig('GMAPS_API_KEY');
-  return `https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C${latitude},${longitude}&zoom=15&size=400x400&key=${key}`
+  const key = globalConfigs?.getConfig("GMAPS_API_KEY");
+  return `https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C${latitude},${longitude}&zoom=15&size=400x400&key=${key}`;
 };
 
 const displayPitDimension = (pitDeminsion) => {
@@ -26,9 +26,9 @@ const displayPitDimension = (pitDeminsion) => {
     .join(" x ");
 };
 
-const getPitDimensionCaption = (sanitationtype, diameter, t) => {
+const getPitDimensionCaption = (sanitationtype, diameter, length, t) => {
   if (diameter && diameter > 0) return `(${t("CS_COMMON_DIAMETER")} x ${t("CS_COMMON_DEPTH")})`;
-  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
+  if (length && length > 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
 };
 
 const displayServiceDate = (timeStamp) => {
@@ -40,7 +40,7 @@ const displayServiceDate = (timeStamp) => {
 export const Search = {
   all: async (tenantId, filters = {}) => {
     const response = await FSMService.search(tenantId, { ...filters });
-    return response.fsm;
+    return response;
   },
 
   application: async (tenantId, filters = {}) => {
@@ -56,6 +56,7 @@ export const Search = {
     if (response?.dsoId) {
       const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
       [dsoDetails] = await DsoDetails(tenantId, dsoFilters);
+
       if (response?.vehicleId) {
         vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
       }
@@ -102,9 +103,13 @@ export const Search = {
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: response?.address?.doorNo },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: response?.address?.landmark },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL"), value: response?.address?.slumName },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"),
-            value: (response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude) ? Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude) : 'N/A',
-            map: true
+          {
+            title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"),
+            value:
+              response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
+                ? Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude)
+                : "N/A",
+            map: true,
           },
         ],
       },
@@ -123,7 +128,7 @@ export const Search = {
               height: response?.pitDetail?.height,
               diameter: response?.pitDetail?.diameter,
             }),
-            caption: getPitDimensionCaption(response?.sanitationtype, response?.pitDetail?.diameter, t),
+            caption: getPitDimensionCaption(response?.sanitationtype, response?.pitDetail?.diameter, response?.pitDetail?.length, t),
           },
           // {
           //   title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
@@ -141,6 +146,7 @@ export const Search = {
         title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
         values: [
           { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: dsoDetails?.name || "N/A" },
+          { title: t("ES_APPLICATION_DETAILS_VEHICLE_MAKE"), value: t(vehicle?.type) || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: vehicle?.registrationNumber || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: vehicle?.capacity || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: displayServiceDate(response?.possibleServiceDate) || "N/A" },

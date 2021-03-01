@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import { Card, Banner, CardText, SubmitBar, Loader } from "@egovernments/digit-ui-react-components";
+import { Card, Banner, CardText, SubmitBar, Loader, LinkButton } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
+import getPDFData from "../getPDFData";
 
 const GetActionMessage = (action, isSuccess) => {
   const { t } = useTranslation();
@@ -65,6 +66,16 @@ const Response = (props) => {
   const { state } = props.location;
 
   const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
+  const coreData = Digit.Hooks.useCoreData();
+
+  const handleDownloadPdf = () => {
+    const { fsm } = mutation.data;
+    const [applicationDetails, ...rest] = fsm;
+    const tenantInfo = coreData.tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
+
+    const data = getPDFData(applicationDetails, tenantInfo, t);
+    Digit.Utils.pdf.generate(data);
+  };
 
   useEffect(() => {
     const onSuccess = () => {
@@ -107,6 +118,21 @@ const Response = (props) => {
         />
       )}
       <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
+      {mutation.isSuccess && (
+        <LinkButton
+          label={
+            <div className="response-download-button">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+              </span>
+              <span className="download-button">{t("CS_COMMON_DOWNLOAD")}</span>
+            </div>
+          }
+          onClick={handleDownloadPdf}
+        />
+      )}
       <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

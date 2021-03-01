@@ -39,6 +39,11 @@ const ApplicationDetails = () => {
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: id });
+  const state = tenantId?.split(".")[0] || "pb";
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
+  const pdfVehicleType = `${vehicle?.make} - ${vehicle?.name} - ${vehicle?.capacity} ${t("CS_COMMON_CAPACITY_LTRS")}`;
+
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.tenantId,
     id,
@@ -46,7 +51,7 @@ const ApplicationDetails = () => {
     serviceData: application,
   });
   const coreData = Digit.Hooks.useCoreData();
-  const key = globalConfigs.getConfig('GMAPS_API_KEY');
+  const key = globalConfigs.getConfig("GMAPS_API_KEY");
 
   if (isLoading) {
     return <Loader />;
@@ -59,7 +64,7 @@ const ApplicationDetails = () => {
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
   const handleDownloadPdf = async () => {
-    const data = getPDFData(application, tenantInfo, t);
+    const data = getPDFData({ ...application, pdfVehicleType }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 
@@ -130,10 +135,11 @@ const ApplicationDetails = () => {
           note={application.address.landmark ? application.address.landmark : "NA"}
         />
         <KeyNote keyValue={t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION")}>
-          {(application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude) ? 
-            <img src={Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude)} /> :
-            'NA'
-          }
+          {application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude ? (
+            <img src={Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude)} />
+          ) : (
+            "NA"
+          )}
         </KeyNote>
         <KeyNote keyValue={t("CS_COMMON_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
         <KeyNote

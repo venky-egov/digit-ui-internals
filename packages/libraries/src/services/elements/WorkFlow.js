@@ -63,11 +63,11 @@ export const WorkflowService = {
             status: "COMPLAINT_FILED",
           });
         }
-        if (role !== "CITIZEN" && moduleCode === "FSM") {
-          details.timeline.push({
-            status: "APPLICATION_FILED",
-          });
-        }
+        // if (role !== "CITIZEN" && moduleCode === "FSM") {
+        //   details.timeline.push({
+        //     status: "APPLICATION_FILED",
+        //   });
+        // }
         return details;
       }
     } else {
@@ -75,5 +75,15 @@ export const WorkflowService = {
       throw new Error("error fetching workflow services");
     }
     return {};
+  },
+
+  getAllApplication: (tenantId, filters) => {
+    return Request({
+      url: Urls.WorkFlowProcessSearch,
+      useCache: false,
+      method: "POST",
+      params: { tenantId, ...filters },
+      auth: true,
+    });
   },
 };

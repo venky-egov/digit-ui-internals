@@ -16,8 +16,11 @@ const FSMLink = ({ isMobile, data }) => {
       accessTo: ["FSM_CREATOR_EMP"],
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
-    { text: t("ES_TITLE_DASHBOARD"), link: DSO ? "/digit-ui/citizen/fsm/dso-dashboard" : "/employee", hyperlink: !DSO },
-    { text: t("ES_TITLE_SEARCH_APPLICATION"), link: "/digit-ui/employee/fsm/search" },
+    {
+      text: t("ES_TITLE_SEARCH_APPLICATION"),
+      link: "/digit-ui/employee/fsm/search",
+      accessTo: ["FSM_CREATOR_EMP", "FSM_DSO", "FSM_EDITOR_EMP", "FSM_ADMIN", "FSM_COLLECTOR"],
+    },
   ];
 
   const [links, setLinks] = useState([]);

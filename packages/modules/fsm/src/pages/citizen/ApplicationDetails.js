@@ -28,9 +28,9 @@ const displayPitDimension = (pitDeminsion) => {
     .join(" x ");
 };
 
-const getPitDimensionCaption = (diameter, t) => {
+const getPitDimensionCaption = (diameter, length, t) => {
   if (diameter && diameter > 0) return `(${t("CS_COMMON_DIAMETER")} x ${t("CS_COMMON_DEPTH")})`;
-  if (diameter === 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
+  if (length && length > 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
 };
 
 const ApplicationDetails = () => {
@@ -43,7 +43,10 @@ const ApplicationDetails = () => {
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
   const pdfVehicleType = `${vehicle?.make} - ${vehicle?.name} - ${vehicle?.capacity} ${t("CS_COMMON_CAPACITY_LTRS")}`;
-
+  const { data: dsoData, isLoading: isDsoLoading } = Digit.Hooks.fsm.useDsoSearch(tenantId, { ids: application?.dsoId }, {
+    enabled: !!application?.dsoId,
+    select: ([data]) => data
+  });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.tenantId,
     id,
@@ -149,9 +152,13 @@ const ApplicationDetails = () => {
             width: application.pitDetail.width,
             height: application.pitDetail.height,
             diameter: application.pitDetail.diameter,
-          })}
-          caption={getPitDimensionCaption(application?.pitDetail?.diameter, t)}
+          }) || 'NA'}
+          caption={getPitDimensionCaption(application?.pitDetail?.diameter, application?.pitDetail?.length, t)}
         />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_ASSIGNED_DSO")} note={dsoData?.name || 'NA'} />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_NO")} note={dsoData?.vehicles.find(vehicle => vehicle.id === application?.vehicleId)?.registrationNumber || 'NA'} />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY")} note={dsoData?.vehicles.find(vehicle => vehicle.id === application?.vehicleId)?.capacity || 'NA'} />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE")} note={application?.possibleServiceDate ? Digit.DateUtils.ConvertTimestampToDate(application?.possibleServiceDate) : 'NA'} />
         {!workflowDetails?.isLoading && (
           <Fragment>
             {workflowDetails?.data?.timeline?.length > 0 && (

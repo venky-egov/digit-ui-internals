@@ -17,6 +17,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
+import CustomTimePicker from "../../components/CustomTimePicker";
 
 const config = {
   select: (data) => {
@@ -36,10 +37,11 @@ const FstpOperatorDetails = () => {
   const [showToast, setShowToast] = useState(null);
   const [wasteCollected, setWasteCollected] = useState(null);
   const [errors, setErrors] = useState({});
+  // const [tripTime, setTripTime] = useState(null);
   const [tripTime, setTripTime] = useState(() => {
     const today = new Date();
-    const hour = today.getHours();
-    const minutes = today.getMinutes();
+    const hour = today.getHours() < 10 ? '0' : '' + today.getHours();
+    const minutes = today.getMinutes() < 10 ? '0' : '' + today.getMinutes();
     return `${hour}:${minutes}` || "10:00";
   });
 
@@ -52,6 +54,7 @@ const FstpOperatorDetails = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      setWasteCollected(vehicle.vehicle.tankCapacity);
       const applicationNos = vehicle.tripDetails.map((tripData) => tripData.referenceNo).join(",");
       setSearchParams({ applicationNos });
       setIsVehicleSearchCompleted(true);
@@ -59,12 +62,14 @@ const FstpOperatorDetails = () => {
   }, [isSuccess]);
 
   const handleSubmit = () => {
-    if (!tripTime || !wasteCollected) {
+    const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
+    if (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
+      setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
       return;
     }
-    const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
-    if (wasteCollected < 1 || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
-      setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
+
+    if (tripTime === null) {
+      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
       return;
     }
 
@@ -139,6 +144,7 @@ const FstpOperatorDetails = () => {
           {vehicleData.map((row, index) => (
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
+          <CardLabelError>{ t(errors.wasteRecieved) }</CardLabelError>
           <Row
             key={t("ES_VEHICLE_WASTE_RECIEVED")}
             label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `}
@@ -148,12 +154,13 @@ const FstpOperatorDetails = () => {
               </div>
             }
           />
+          <CardLabelError>{ t(errors.tripTime) }</CardLabelError>
           <Row
             key={t("ES_COMMON_TIME")}
             label={`${t("ES_COMMON_TIME")} * `}
             text={
               <div>
-                <TimePicker name="tripTime" onChange={setTripTime} value={tripTime} locale="en-US" disableClock={true} />
+                <CustomTimePicker name="tripTime" onChange={setTripTime} value={tripTime} />
               </div>
             }
           />

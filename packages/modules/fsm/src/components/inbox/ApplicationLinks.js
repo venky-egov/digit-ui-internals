@@ -10,10 +10,10 @@ const ApplicationLinks = ({ isMobile, data }) => {
     {
       text: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
       link: "/digit-ui/employee/fsm/new-application",
-      // accessTo: ["CSR"]
+      accessTo: ["FSM_EMPLOYEE_CREATOR"],
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
-    { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },
+    // { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },
   ];
 
   const [links, setLinks] = useState([]);

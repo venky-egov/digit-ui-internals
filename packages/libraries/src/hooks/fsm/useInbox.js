@@ -3,7 +3,7 @@ import { Search } from "../../services/molecules/FSM/Search";
 
 const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   let { uuid } = Digit.UserService.getUser().info;
-
+  console.log("find inbox search filter here", filters);
   const client = useQueryClient();
 
   const fetchFilters = () => {
@@ -34,7 +34,6 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   };
 
   const workflowFilters = fetchFilters().assignee ? { assignee: uuid } : {};
-
   const workFlowInstances = useQuery(
     ["WORKFLOW", workflowFilters],
     () => Digit.WorkflowService.getAllApplication(tenantId, { ...workflowFilters, businesssService: "FSM" }),
@@ -52,8 +51,15 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
     };
 
   const appList = useQuery(
-    ["FSM_SEARCH", { ...fetchFilters(), ...applicationNos }],
-    () => Search.all(tenantId, { ...fetchFilters(), ...applicationNos }),
+    [
+      "FSM_SEARCH",
+      { ...fetchFilters(), applicationNos: fetchFilters().applicationNos ? fetchFilters().applicationNos : applicationNos.applicationNos },
+    ],
+    () =>
+      Search.all(tenantId, {
+        ...fetchFilters(),
+        applicationNos: fetchFilters().applicationNos ? fetchFilters().applicationNos : applicationNos.applicationNos,
+      }),
     {
       enabled: !wfFetching && wfSuccess,
       select: filterFsmFn,

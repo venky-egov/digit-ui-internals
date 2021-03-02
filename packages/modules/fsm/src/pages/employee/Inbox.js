@@ -53,6 +53,7 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const onSearch = (params = {}) => {
+    // console.log("find onSearch", { ...searchParams, ...params })
     setSearchParams({ ...searchParams, ...params });
   };
 

@@ -87,7 +87,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
         </div>
         {type === "mobile" && (
           <ActionBar>
-            <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
+            <SubmitBar label={t("ES_COMMON_SEARCH")} submit={true} />
           </ActionBar>
         )}
       </React.Fragment>

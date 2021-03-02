@@ -74,6 +74,7 @@ const DsoDashboard = () => {
         [t(progressStatusCode?.name)]: pendingCompletionArray?.[0]?.totalCount || 0,
         [t(pendingApprovalStatusCode?.name)]: pendingApprovalArray?.[0]?.totalCount || 0,
       };
+
       setInfo(infoObj);
     }
   }, [pendingApprovalArray, pendingCompletionArray, progressStatusCode, pendingApprovalStatusCode]);
@@ -100,6 +101,8 @@ const DsoDashboard = () => {
       if (Object.keys(info).length) setLoader(false);
     }
   }, [info, inbox]);
+
+  console.log(info);
 
   if (loader) {
     return <Loader />;

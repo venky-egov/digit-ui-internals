@@ -2,7 +2,7 @@ import React from "react";
 import { CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const Status = ({ applications, onAssignmentChange, fsmfilters }) => {
+const Status = ({ onAssignmentChange, fsmfilters }) => {
   const { t } = useTranslation();
   const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus();
   if (isLoading) {

@@ -11,6 +11,7 @@ const ArrowRight = ({ to }) => (
 );
 
 const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, links, total }) => {
+  debugger;
   const mobileView = innerWidth <= 640;
   const employeeCardStyles = mobileView
     ? {
@@ -39,6 +40,7 @@ const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, link
         <div className="body ">
           <div className="employeeCard-info-box" style={{ display: "flex", justifyContent: "flex-end", marginLeft: "16px" }}>
             {Object.keys(info).map((key, index) => {
+              console.log("key", key);
               return (
                 <div key={index} style={{ display: "flex", flexDirection: "column" }}>
                   <span>{t(info[key])}</span>
@@ -52,7 +54,9 @@ const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, link
         <div className="body" style={{}}>
           {links.map((link, index) => (
             <span key={index} className="link">
-              <Link to={link.pathname}>{t(link.label)}</Link>
+              <Link to={link.pathname}>
+                <span style={{ color: "#F47738" }}>{t(link.label)}</span>
+              </Link>
               {!isNaN(link.total) && <span className="inbox-total">{link.total}</span>}
               {<ArrowRight to={link.pathname} />}
             </span>

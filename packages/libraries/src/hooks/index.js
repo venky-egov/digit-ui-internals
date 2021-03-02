@@ -39,6 +39,7 @@ import useApplicationAudit from "./fsm/useApplicationAudit";
 import useSearchForAuditData from "./fsm/useSearchForAudit";
 import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
+import useSlum from "./fsm/useSlum";
 
 const pgr = {
   useComplaintDetails,
@@ -74,6 +75,7 @@ const fsm = {
   useVehicleUpdate,
   useVendorDetail,
   useConfig,
+  useSlum,
 };
 
 const pt = {

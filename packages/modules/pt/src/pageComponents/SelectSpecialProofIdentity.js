@@ -3,8 +3,8 @@ import { FormStep, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-reac
 
 const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData }) => {
   let index = 0;
-  const [uploadedFile, setUploadedFile] = useState(formData?.institutionalProofOfIdentity?.specialProofIdentity?.fileStoreId || null);
-  const [file, setFile] = useState(formData?.institutionalProofOfIdentity?.specialProofIdentity);
+  const [uploadedFile, setUploadedFile] = useState(formData?.SelectSpecialProofIdentity?.specialProofIdentity?.fileStoreId || null);
+  const [file, setFile] = useState(formData?.SelectSpecialProofIdentity?.specialProofIdentity);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const handleSubmit = () => {

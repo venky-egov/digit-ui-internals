@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FormStep, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
 
 const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
-  const [uploadedFile, setUploadedFile] = useState(formData?.institutionalProofOfIdentity?.proofIdentity.fileStoreId || null);
-  const [file, setFile] = useState(formData?.institutionalProofOfIdentity?.proofIdentity);
+  const [uploadedFile, setUploadedFile] = useState(formData?.proofOfIdentity?.proofIdentity?.fileStoreId || null);
+  const [file, setFile] = useState(formData?.proofOfIdentity?.proofIdentity);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const onSkip = () => onSelect();

@@ -17,7 +17,7 @@ const CreateProperty = ({ parentRoute }) => {
     debugger;
     const currentPath = pathname.split("/").pop();
     let { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
-    if (typeof nextStep == "object") {
+    if (typeof nextStep == "object" && nextStep != null) {
       nextStep = nextStep[sessionStorage.getItem("ownershipCategory")];
     }
     let redirectWithHistory = history.push;

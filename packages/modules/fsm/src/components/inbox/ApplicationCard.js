@@ -50,19 +50,6 @@ export const ApplicationCard = ({
     setParams(searchParams);
   };
 
-  const handlePopupAction = () => {
-    if (type === "SEARCH") {
-      setSelectedComponent();
-    } else if (type === "FILTER") {
-      setSelectedComponent(
-        <Filter onFilterChange={selectParams} onClose={handlePopupClose} onSearch={onSearchPara} type="mobile" searchParams={params} />
-      );
-    } else if (type === "SORT") {
-      setSelectedComponent(<SortBy type="mobile" onClose={handlePopupClose} type="mobile" onSort={onSort} />);
-    }
-    setPopup(true);
-  };
-
   if (isLoading) {
     return <Loader />;
   }

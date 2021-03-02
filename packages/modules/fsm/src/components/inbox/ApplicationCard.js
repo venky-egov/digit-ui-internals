@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Card, DetailsCard, Loader, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
 import { FilterAction } from "@egovernments/digit-ui-react-components";
@@ -19,10 +19,27 @@ export const ApplicationCard = ({
   searchFields,
   linkPrefix,
 }) => {
+  debugger;
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
+  const [params, setParams] = useState(searchParams);
+
+  const selectParams = (param) => {
+    setParams((o) => ({ ...o, ...param }));
+  };
+
+  const onSearchPara = (param) => {
+    console.log(param);
+    onFilterChange(params);
+    handlePopupClose();
+  };
 
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+
+  const handlePopupClose = () => {
+    setPopup(false);
+    setSelectedComponent(null);
+  };
 
   const handlePopupAction = (type) => {
     console.log("option");
@@ -38,16 +55,13 @@ export const ApplicationCard = ({
         />
       );
     } else if (type === "FILTER") {
-      setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" searchParams={searchParams} />);
+      setSelectedComponent(
+        <Filter onFilterChange={selectParams} onClose={handlePopupClose} onSearch={onSearchPara} type="mobile" searchParams={params} />
+      );
     } else if (type === "SORT") {
       setSelectedComponent(<SortBy type="mobile" onClose={handlePopupClose} type="mobile" onSort={onSort} />);
     }
     setPopup(true);
-  };
-
-  const handlePopupClose = () => {
-    setPopup(false);
-    setSelectedComponent(null);
   };
 
   if (isLoading) {

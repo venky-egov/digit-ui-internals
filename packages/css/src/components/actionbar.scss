@@ -2,7 +2,8 @@
   box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
   max-width: 480px;
   z-index: 100;
-  @apply sticky bottom-0 w-full bg-white py-sm px-sm text-right;
+
+  @apply bottom-0 w-full bg-white py-sm px-sm fixed text-right;
 
   div {
     @apply w-full;
@@ -23,9 +24,7 @@
       }
     }
   }
-
 }
-
 
 @screen dt {
   .action-bar-wrap {

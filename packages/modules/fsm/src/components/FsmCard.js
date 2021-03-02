@@ -14,6 +14,7 @@ const FSMCard = () => {
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
+  const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const [total, setTotal] = useState("-");
@@ -54,7 +55,7 @@ const FSMCard = () => {
     offset: 0,
   };
 
-  const { data: inbox, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters }, null, {
+  const { data: inbox, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters, ...filters }, null, {
     enabled: !isFSTPOperator ? true : false,
   });
 
@@ -92,7 +93,9 @@ const FSMCard = () => {
               </div>
             )}
             <span className="link">
-              <Link to={`/digit-ui/employee/fsm/fstp-inbox`}>{t("ES_TITLE_INBOX")}</Link>
+              <Link to={`/digit-ui/employee/fsm/fstp-inbox`}>
+                <span style={{ color: "#F47738" }}>{t("ES_TITLE_INBOX")}</span>
+              </Link>
               {<ArrowRight to={`/digit-ui/employee/fsm/fstp-inbox`} />}
             </span>
           </div>

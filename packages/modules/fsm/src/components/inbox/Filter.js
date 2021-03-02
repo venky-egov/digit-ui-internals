@@ -15,8 +15,6 @@ import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
 const Filter = (props) => {
-  let { uuid } = Digit.UserService.getUser().info;
-
   const { t } = useTranslation();
   const [selectedLocality, setSelectedLocality] = useState(null);
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
@@ -161,7 +159,13 @@ const Filter = (props) => {
       </div>
       <ActionBar>
         {props.type === "mobile" && (
-          <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={props.onClose} />
+          <ApplyFilterBar
+            submit={false}
+            labelLink={t("CS_COMMON_CLEAR_ALL")}
+            buttonLink={t("CS_COMMON_FILTER")}
+            onClear={clearAll}
+            onSubmit={() => props.onSearch(wfFilters)}
+          />
         )}
       </ActionBar>
       {/* <ActionBar>

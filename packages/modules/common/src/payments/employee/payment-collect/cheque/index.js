@@ -90,7 +90,7 @@ export const ChequeDetailsComponent = (props) => {
           <div className="label-field-pair">
             <h2 className="card-label">IFSC Code</h2>
             <div className="field">
-              <div className="field-container">
+              <div>
                 <div style={{ border: "2px solid #0b0c0c", borderRadius: "2px", display: "flex", alignItems: "center", marginBottom: "24px" }}>
                   <input
                     style={{

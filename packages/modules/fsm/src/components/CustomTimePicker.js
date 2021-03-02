@@ -6,7 +6,7 @@ const CustomTimePicker = ({ name, value, onChange }) => {
   const timeFormat = (new Date()).toLocaleTimeString();
   if (timeFormat.includes('AM') || timeFormat.includes('PM')) {
     return (
-      <TextInput name={name} type="time" value={value} onChange={onChange} style={{ width: "25%" }} />
+      <TextInput name={name} type="time" value={value} onChange={event => onChange(event.target.value)} style={{ width: "194px" }} />
     )
   }
 

@@ -6,7 +6,7 @@ const useSlum = (slumCode, localityCode) => {
   if (!slumData || !slumCode || !localityCode) return;
 
   if (slumData[localityCode]) {
-    setSlum(slumData[localityCode].find((slum) => slum?.code === slumCode));
+    return slumData[localityCode].find((slum) => slum?.code === slumCode);
   } else {
     const slumDataArray = Object.values(slumData);
     for (let i = 0; i < slumDataArray.length; i++) {

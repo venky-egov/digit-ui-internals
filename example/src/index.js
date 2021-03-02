@@ -41,8 +41,6 @@ import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
 
-initLibraries();
-
 const userInfo = {
   CITIZEN,
   EMPLOYEE,
@@ -68,76 +66,57 @@ const userInfo = {
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
 
-Digit.ComponentRegistryService.setupRegistry({
-  ...pgrComponents,
-  PGRLinks,
-  PGRModule,
-  PaymentModule,
-  PaymentLinks,
-  PTModule,
-  PTLinks,
-});
+const initTokens = (stateCode) => {
+  const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-initFSMComponents();
+  const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
-const moduleReducers = (initData) => ({
-  pgr: PGRReducers(initData),
-});
+  // console.log(token);
 
-window.Digit.Customizations = { PGR: pgrCustomizations };
+  const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 
-const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
+  const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
 
-// console.log(stateCode);
+  const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
+  const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
 
-const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
+  const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
+  window.Digit.SessionStorage.set("user_type", userTypeInfo);
+  window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-const token = process.env[`REACT_APP_${userType}_TOKEN`];
+  if (userType !== "CITIZEN") {
+    window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
+  } else {
+    if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+  }
 
-// console.log(token);
-
-const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
-
-const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
-
-const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
-const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
-
-const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
-window.Digit.SessionStorage.set("user_type", userTypeInfo);
-window.Digit.SessionStorage.set("userType", userTypeInfo);
-
-if (userType !== "CITIZEN") {
-  window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
-} else {
-  if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
-}
-
-window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
-window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
-
-window.mdmsInitPre = ({ params, data }) => {
-  // console.log("mdms init pre", params, data);
-  return { params, data };
+  window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
+  window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
 };
 
-window.mdmsInitPost = (data) => {
-  // console.log("mdms init post", data);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(data);
-    }, 2000);
+const initDigitUI = () => {
+  Digit.ComponentRegistryService.setupRegistry({
+    ...pgrComponents,
+    PGRLinks,
+    PGRModule,
+    PaymentModule,
+    PaymentLinks,
+    PTModule,
+    PTLinks,
   });
+
+  initFSMComponents();
+
+  const moduleReducers = (initData) => ({
+    pgr: PGRReducers(initData),
+  });
+
+  window.Digit.Customizations = { PGR: pgrCustomizations };
+
+  const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
+  initTokens(stateCode);
+
+  ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 };
 
-subFormRegistry.changeConfig("testForm", async (config) => {
-  config.state = { ...config.state, firstDDoptions: ["j", "k", "l"] };
-  config.fields[0] = {
-    ...config.fields[0],
-    defaultValue: "j",
-  };
-  // console.log(config);
-  return config;
-});
-
-ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
+initLibraries(initDigitUI);

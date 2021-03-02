@@ -10,6 +10,11 @@ import SelectName from "./SelectName";
 const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
+const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
+
+const getFromLocation = (state, searchParams) => {
+  return state?.from || searchParams?.from || DEFAULT_REDIRECT_URL;
+};
 
 const Login = ({ stateCode, isUserRegistered = true }) => {
   const { t } = useTranslation();
@@ -21,6 +26,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   const [tokens, setTokens] = useState(null);
   const [params, setParmas] = useState({});
   const [errorTO, setErrorTO] = useState(null);
+  const searchParams = Digit.Hooks.useQueryParams();
 
   useEffect(() => {
     let errorTimeout;
@@ -45,7 +51,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       return;
     }
     Digit.UserService.setUser(user);
-    const redirectPath = location.state?.from || "/digit-ui";
+    const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
     history.replace(redirectPath);
   }, [user]);
 
@@ -83,10 +89,10 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     if (isUserRegistered) {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
       if (!err) {
-        history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui", role: location.state?.role });
+        history.push(`${path}/otp`, { from: getFromLocation(location.state, searchParams), role: location.state?.role });
         return;
       } else {
-        history.push(`/digit-ui/citizen/register/name`, { from: location.state?.from || "/digit-ui" });
+        history.push(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams) });
       }
       if (location.state?.role) {
         setError("User not registered.");
@@ -94,7 +100,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     } else {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
       if (!err) {
-        history.push(`${path}/otp`, { from: location.state?.from || "/digit-ui" });
+        history.push(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
         return;
       }
     }
@@ -107,7 +113,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       userType: getUserType(),
     };
     setParmas({ ...params, ...name });
-    history.push(`${path}`, { from: location.state?.from || "/digit-ui" });
+    history.push(`${path}`, { from: getFromLocation(location.state, searchParams) });
   };
 
   const selectOtp = async () => {
@@ -126,7 +132,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
           const roleInfo = info.roles.find((userRole) => userRole.code === location.state.role);
           if (!roleInfo || !roleInfo.code) {
             setError(t("ES_ERROR_USER_NOT_PERMITTED"));
-            setTimeout(() => history.replace("/digit-ui/citizen"), 5000);
+            setTimeout(() => history.replace(DEFAULT_REDIRECT_URL), 5000);
             return;
           }
         }

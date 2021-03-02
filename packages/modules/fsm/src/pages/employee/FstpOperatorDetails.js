@@ -40,8 +40,8 @@ const FstpOperatorDetails = () => {
   // const [tripTime, setTripTime] = useState(null);
   const [tripTime, setTripTime] = useState(() => {
     const today = new Date();
-    const hour = today.getHours() < 10 ? '0' : '' + today.getHours();
-    const minutes = today.getMinutes() < 10 ? '0' : '' + today.getMinutes();
+    const hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
+    const minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
     return `${hour}:${minutes}` || "10:00";
   });
 

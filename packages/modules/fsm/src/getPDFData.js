@@ -46,7 +46,10 @@ const getPDFData = (application, tenantInfo, t) => {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
             value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_ADMIN_${application?.address?.locality?.code}`) || "NA",
           },
-          { title: t("CS_NEW_APPLICATION_SLUM_NAME"), value: application?.address?.slumName || "NA" },
+          {
+            title: t("CS_NEW_APPLICATION_SLUM_NAME"),
+            value: application?.address?.slumName ? t(`${application?.address?.locality?.code}_${application?.address?.slumName}`) : "NA",
+          },
           { title: t("CS_APPLICATION_DETAILS_STREET"), value: application?.address?.street || "NA" },
           { title: t("CS_APPLICATION_DETAILS_DOOR_NO"), value: application?.address?.doorNo || "NA" },
           { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application?.address?.landmark || "NA" },
@@ -75,11 +78,16 @@ const getPDFData = (application, tenantInfo, t) => {
           { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "NA" },
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),
-            value: application?.amountPerTrip ? application?.amountPerTrip !== 0 && `₹ ${application?.amountPerTrip}` : "NA",
+            value: application?.additionalDetails?.tripAmount
+              ? application?.additionalDetails?.tripAmount !== 0 && `₹ ${application?.additionalDetails?.tripAmount}`
+              : "NA",
           },
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_DUE"),
-            value: application?.amountDue && application?.amountDue !== 0 ? `₹ ${application?.amountDue}` : "NA",
+            value:
+              application?.additionalDetails?.tripAmount && application?.additionalDetails?.tripAmount !== 0
+                ? `₹ ${application?.additionalDetails?.tripAmount * application?.noOfTrips}`
+                : "NA",
           },
         ],
       },

@@ -267,7 +267,7 @@ const ApplicationDetails = (props) => {
             <ActionBar>
               {displayMenu && workflowDetails?.data?.nextActions ? (
                 <Menu
-                  localeKeyPrefix={"CS_COMMON_FSM"}
+                  localeKeyPrefix={"ES_FSM"}
                   options={workflowDetails?.data?.nextActions.map((action) => action.action)}
                   t={t}
                   onSelect={onActionSelect}

@@ -42,7 +42,16 @@ const ApplicationDetails = () => {
   const state = tenantId?.split(".")[0] || "pb";
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
-  const pdfVehicleType = `${t(vehicle?.make)} - ${vehicle?.name} - ${vehicle?.capacity} ${t("CS_COMMON_CAPACITY_LTRS")}`;
+  const pdfVehicleType =
+    (vehicle?.make &&
+      vehicle?.name &&
+      vehicle?.capacity &&
+      `${t(vehicle?.make)} - ${vehicle?.name} - ${vehicle?.capacity} ${t("CS_COMMON_CAPACITY_LTRS")}`) ||
+    null;
+  const localityCode = application?.address?.locality?.code;
+  const slumCode = application?.address?.slumName;
+  const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
+
   const { data: dsoData, isLoading: isDsoLoading } = Digit.Hooks.fsm.useDsoSearch(
     tenantId,
     { ids: application?.dsoId },
@@ -71,7 +80,7 @@ const ApplicationDetails = () => {
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
 
   const handleDownloadPdf = async () => {
-    const data = getPDFData({ ...application, pdfVehicleType }, tenantInfo, t);
+    const data = getPDFData({ ...application, pdfVehicleType, slum }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 

@@ -104,6 +104,15 @@ const Response = (props) => {
     }
   }, []);
 
+  const displayText = (action) => {
+    switch (action) {
+      case "SUBMIT_FEEDBACK":
+        return t("CS_SUBMIT_FEEDBACK_RESPONSE");
+      default:
+        return t("CS_FILE_PROPERTY_RESPONSE");
+    }
+  }
+
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />
   ) : (
@@ -117,7 +126,7 @@ const Response = (props) => {
           isLoading={mutation.isIdle || mutation.isLoading}
         />
       )}
-      <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
+      <CardText>{displayText(state.action)}</CardText>
       {mutation.isSuccess && (
         <LinkButton
           label={

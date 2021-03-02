@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-const CitizenHome = ({ modules }) => {
+
+const CitizenHome = ({ modules, t }) => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const registry = useContext(ComponentProvider);
 
@@ -26,7 +27,7 @@ const allLinks = [
   { text: "ES_TITLE_NEW_DESULDGING_APPLICATION", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
 ];
 
-const EmployeeHome = ({ modules }) => {
+const EmployeeHome = ({ modules, t }) => {
   const allModules = modules.filter(({ code }) => code === "FSM");
   const moduleCards = allModules.map((module) => Digit.ComponentRegistryService.getComponent(`${module.code}Card`));
 
@@ -74,8 +75,9 @@ const EmployeeHome = ({ modules }) => {
 };
 
 export const AppHome = ({ userType, modules }) => {
+  const { t } = useTranslation();
   if (userType === "citizen") {
-    return <CitizenHome modules={modules} />;
+    return <CitizenHome modules={modules} t={t} />;
   }
-  return <EmployeeHome modules={modules} />;
+  return <EmployeeHome modules={modules} t={t} />;
 };

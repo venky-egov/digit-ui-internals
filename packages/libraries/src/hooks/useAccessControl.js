@@ -15,7 +15,7 @@ const useAccessControl = () => {
       "DIGIT-UI": { RoleActionMetadata: metadata },
     } = await MdmsService.getRoleActionMetadata(stateCode, "DIGIT-UI");
 
-    console.log("find data here", roleAccess, metadata);
+    // console.log("find data here", roleAccess, metadata);
 
     return metadata.filter((meta) => roleAccess.filter((role) => meta.actionId === role.id)[0]);
   });

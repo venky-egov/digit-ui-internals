@@ -34,23 +34,6 @@ const MobileInbox = ({ data, vehicleLog, isLoading, onSearch, onFilterChange, on
     [t("ES_INBOX_WASTE_COLLECTED")]: vehicle.tripDetails[0]?.volume,
   }));
 
-  // TODO: below line is hard coded, it should come from server
-
-  // const dsoData = [
-  //   {
-  //     "Application No.": "FSM-789-78-21222",
-  //     Locality: "Ajit Nagar",
-  //     Status: "DSO Assigned",
-  //     "SLA Remaining": 12,
-  //   },
-  //   {
-  //     "Application No.": "FSM-789-78-34563",
-  //     Locality: "Ajit Nagar",
-  //     Status: "Completed",
-  //     "SLA Remaining": 12,
-  //   },
-  // ];
-
   return (
     <div style={{ padding: 0 }}>
       <div className="inbox-container">

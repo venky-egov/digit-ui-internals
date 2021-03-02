@@ -40,7 +40,7 @@ export const PaymentService = {
       method: "POST",
       auth: true,
       userService: true,
-      params: { tenantId, key: "consolidatedreceipt" },
+      params: { tenantId, key: "fsm-receipt" },
       data: data,
     }),
 

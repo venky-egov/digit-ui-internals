@@ -5,11 +5,16 @@ import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 
 const SortBy = (props) => {
   const { t } = useTranslation();
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(() =>
+    props.sortParams?.sortOrder === "DESC"
+      ? { code: "DESC", name: t("ES_INBOX_DATE_LATEST_FIRST") }
+      : { code: "ASC", name: t("ES_INBOX_DATE_LATEST_LAST") }
+  );
 
   function clearAll() {}
 
   function onSort(option) {
+    console.log(option);
     setSelectedOption(option);
     props.onSort([{ id: "createdTime", desc: option.code === "DESC" ? true : false }]);
   }

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "@egovernments/digit-ui-react-components";
 
@@ -38,11 +38,14 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const handleFilterChange = (filterParam) => {
-    console.log("handleFilterChange", " in inbox", { ...searchParams, ...filterParam });
-    setSearchParams({ ...searchParams, ...filterParam });
+    let keys_to_delete = filterParam.delete;
+    let _new = { ...searchParams };
+    if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
+    setSearchParams({ ..._new, ...filterParam });
   };
 
   const handleSort = useCallback((args) => {
+    console.log(args);
     if (args.length === 0) return;
     const [sortBy] = args;
     setSortParams({ key: sortBy.id, sortOrder: sortBy.desc ? "DESC" : "ASC" });
@@ -53,9 +56,19 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const onSearch = (params = {}) => {
-    // console.log("find onSearch", { ...searchParams, ...params })
+    console.log("----", { ...searchParams, ...params });
     setSearchParams({ ...searchParams, ...params });
   };
+
+  const removeParam = (params = {}) => {
+    const _search = { ...searchParams };
+    Object.keys(params).forEach((key) => delete _search[key]);
+    setSearchParams(_search);
+  };
+
+  useEffect(() => {
+    console.log("=========>>>>>>", sortParams);
+  }, [sortParams]);
 
   const getSearchFields = (userRoles) => {
     if (userRoles.find((role) => role.code === "FSM_EMP_FSTPO")) {
@@ -94,6 +107,8 @@ const Inbox = ({ parentRoute }) => {
           onSearch={onSearch}
           onSort={handleSort}
           searchParams={searchParams}
+          sortParams={sortParams}
+          removeParam={removeParam}
           linkPrefix={"/digit-ui/employee/fsm/application-details/"}
         />
       );
@@ -115,6 +130,7 @@ const Inbox = ({ parentRoute }) => {
             disableSort={false}
             onPageSizeChange={handlePageSizeChange}
             parentRoute={parentRoute}
+            searchParams={searchParams}
           />
         </div>
       );

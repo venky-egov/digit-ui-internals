@@ -14,7 +14,7 @@ import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
-const Filter = ({ searchParams, onFilterChange, onSearch, ...props }) => {
+const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
   console.log("in filter", searchParams);
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
@@ -103,7 +103,8 @@ const Filter = ({ searchParams, onFilterChange, onSearch, ...props }) => {
             buttonLink={t("CS_COMMON_FILTER")}
             onClear={clearAll}
             onSubmit={() => {
-              onSearch();
+              if (props.type === "mobile") onSearch({ delete: ["applicationNos"] });
+              else onSearch();
             }}
           />
         )}

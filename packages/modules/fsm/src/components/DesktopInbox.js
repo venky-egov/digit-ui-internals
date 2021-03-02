@@ -151,7 +151,10 @@ const DesktopInbox = (props) => {
         onNextPage={props.onNextPage}
         onPrevPage={props.onPrevPage}
         pageSizeLimit={props.pageSizeLimit}
-        onSort={props.onSort}
+        onSort={(d) => {
+          console.log("-------", d);
+          props.onSort(d);
+        }}
         disableSort={props.disableSort}
         onPageSizeChange={props.onPageSizeChange}
       />
@@ -164,7 +167,7 @@ const DesktopInbox = (props) => {
         <div className="filters-container">
           <FSMLink />
           <div>
-            <Filter applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+            <Filter searchParams={props.searchParams} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>
         </div>
       )}

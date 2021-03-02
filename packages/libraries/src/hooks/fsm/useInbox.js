@@ -3,7 +3,7 @@ import { Search } from "../../services/molecules/FSM/Search";
 
 const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   let { uuid } = Digit.UserService.getUser().info;
-  // console.log("find inbox search filter here", filters);
+
   const client = useQueryClient();
 
   const fetchFilters = () => {

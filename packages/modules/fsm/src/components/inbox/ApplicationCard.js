@@ -17,7 +17,9 @@ export const ApplicationCard = ({
   isLoading,
   searchParams,
   searchFields,
+  sortParams,
   linkPrefix,
+  removeParam,
 }) => {
   const [popup, setPopup] = useState(false);
 
@@ -28,8 +30,12 @@ export const ApplicationCard = ({
     setParams((o) => ({ ...o, ...param }));
   };
 
+  const clearParam = () => {
+    setParams({});
+  };
+
   const onSearchPara = (param) => {
-    onFilterChange(params);
+    onFilterChange({ ...params, ...param });
     setType("");
     setPopup(false);
   };
@@ -39,6 +45,7 @@ export const ApplicationCard = ({
   }, [params]);
 
   useEffect(() => {
+    console.log(type);
     if (type) setPopup(true);
   }, [type]);
 
@@ -48,6 +55,10 @@ export const ApplicationCard = ({
     setPopup(false);
     setType("");
     setParams(searchParams);
+  };
+
+  const _onSearch = (d) => {
+    console.log(d);
   };
 
   if (isLoading) {
@@ -111,15 +122,24 @@ export const ApplicationCard = ({
         <PopUp>
           {type === "FILTER" && (
             <div className="popup-module">
-              {<Filter onFilterChange={selectParams} onClose={handlePopupClose} onSearch={onSearchPara} type="mobile" searchParams={params} />}
+              {
+                <Filter
+                  onFilterChange={selectParams}
+                  onClose={handlePopupClose}
+                  onSearch={onSearchPara}
+                  type="mobile"
+                  searchParams={params}
+                  removeParam={removeParam}
+                />
+              }
             </div>
           )}
           {type === "SORT" && (
             <div className="popup-module">
-              {<SortBy type="mobile" searchParams={searchParams} onClose={handlePopupClose} type="mobile" onSort={selectParams} />}
+              {<SortBy type="mobile" sortParams={sortParams} searchParams={searchParams} onClose={handlePopupClose} type="mobile" onSort={onSort} />}
             </div>
           )}
-          {type === "Search" && (
+          {type === "SEARCH" && (
             <SearchApplication
               type="mobile"
               onClose={handlePopupClose}

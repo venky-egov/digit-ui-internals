@@ -25,58 +25,21 @@
     }
 
     .employeeCard-info-box {
-      @apply flex;
-      justify-content: "flex-end";
+      @apply flex justify-end;
       background-color: #fafafa;
-
       div {
         span:nth-child(2) {
+          @apply font-bold;
           color: #4f5a5f;
         }
       }
     }
 
     .inbox-total {
+      @apply text-center inline-block text-white;
       background-color: #000;
       border-radius: 50%;
-      color: white;
       width: 24px;
-      text-align: center;
-      display: inline-block;
-      margin-left: 5px;
-      padding-top: 0.5px;
-    }
-  }
-
-  .body.without-margin {
-    padding: 10px;
-    @apply flex items-start flex-col;
-    margin-left: unset;
-
-    .link {
-      @apply p-sm text-link-normal;
-    }
-
-    .employeeCard-info-box {
-      @apply flex;
-      justify-content: "flex-end";
-      background-color: #fafafa;
-
-      div {
-        span:nth-child(2) {
-          color: #4f5a5f;
-          font-weight: bold;
-        }
-      }
-    }
-
-    .inbox-total {
-      background-color: #000;
-      border-radius: 50%;
-      color: white;
-      width: 24px;
-      text-align: center;
-      display: inline-block;
       margin-left: 5px;
       padding-top: 0.5px;
     }

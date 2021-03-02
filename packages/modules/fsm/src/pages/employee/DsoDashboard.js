@@ -33,7 +33,6 @@ const DsoDashboard = () => {
   const { data: statusCodes, isFetching: statusFetching } = Digit.Hooks.fsm.useApplicationStatus();
   useEffect(() => {
     if (statusCodes) {
-      console.log(statusCodes);
       const [inProgress, pendingApproval] = statusCodes.filter((e) => e.roles?.includes("FSM_DSO"));
       console.log("here", inProgress, pendingApproval);
       setProgressStatusCode(inProgress);
@@ -102,7 +101,6 @@ const DsoDashboard = () => {
   );
 
   useEffect(() => {
-    console.log(Object.keys(info));
     if (inbox) {
       const total = inbox?.[0]?.totalCount || 0;
       setTotal(total);

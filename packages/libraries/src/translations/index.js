@@ -50,6 +50,6 @@ const templatePostprocessor = {
   },
 };
 
-export const initI18n = () => {
-  return i18next.use(new ReactPostprocessor()).use(templatePostprocessor).use(initReactI18next).init(i18nextConfig);
+export const initI18n = (callback) => {
+  return i18next.use(new ReactPostprocessor()).use(templatePostprocessor).use(initReactI18next).init(i18nextConfig, callback);
 };

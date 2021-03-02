@@ -90,6 +90,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="institutionName"
           onChange={setInistitution}
           value={inistitutionName}
+          pattern="^[a-zA-Z_ ]*$"
         />
         <CardLabel>{t("PT_TYPE_OF_INSTITUTION")}</CardLabel>
         <Dropdown
@@ -109,6 +110,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="name"
           onChange={setInistituteName}
           value={name}
+          pattern="^[a-zA-Z_ ]*$"
         />
         <CardLabel>{t("PT_COMMON_AUTHORISED_PERSON_DESIGNATION")}</CardLabel>
         <TextInput
@@ -118,6 +120,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="designation"
           onChange={setDesignationName}
           value={designation}
+          pattern="^[a-zA-Z_ ]*$"
         />
         <CardLabel>{t("PT_FORM3_MOBILE_NO")}</CardLabel>
         <TextInput
@@ -127,6 +130,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="setMobileNo"
           onChange={setMobileNo}
           value={mobileNumber}
+          pattern="^([0]|((\+\d{1,2}[-]{0,1})))?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
         />
         <CardLabel>{t("PT_OWNERSHIP_INFO_TEL_NO")}</CardLabel>
         <TextInput
@@ -136,6 +140,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="altContactNumber"
           onChange={setAltContactNo}
           value={altContactNumber}
+          pattern="^[0-9]{10,11}$"
         />
         <CardLabel>{t("PT_FORM3_EMAIL_ID")}</CardLabel>
         <TextInput

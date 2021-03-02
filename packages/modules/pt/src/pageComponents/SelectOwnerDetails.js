@@ -55,6 +55,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         name="name"
         value={name}
         onChange={setOwnerName}
+        pattern= "^[a-zA-Z_ ]*$"
       />
       <CardLabel>{t("PT_FORM3_GENDER")}</CardLabel>
       <RadioButtons
@@ -74,6 +75,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         name="mobileNumber"
         value={mobileNumber}
         onChange={setMobileNo}
+        pattern="^([0]|((\+\d{1,2}[-]{0,1})))?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
       />
       <CardLabel>{t("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME")}</CardLabel>
       <TextInput
@@ -83,6 +85,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         name="fatherOrHusbandName"
         value={fatherOrHusbandName}
         onChange={setGuardiansName}
+        pattern="^[a-zA-Z_ ]*$"
       />
       <RadioButtons
         t={t}

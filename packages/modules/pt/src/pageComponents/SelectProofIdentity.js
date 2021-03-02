@@ -1,44 +1,23 @@
 import React, { useState, useEffect } from "react";
-import {
-  FormStep,
-  ImageUploadHandler,
-  Loader,
-  UploadFile,
-  CardLabel,
-  CardLabelDesc
-} from "@egovernments/digit-ui-react-components";
+import { FormStep, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
 
 const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
-  const [uploadedImages, setUploadedImagesIds] = useState(() => {
-    const { uploadedImages } = ""; //value;
-    return uploadedImages ? uploadedImages : null;
-  });
-
-  const handleUpload = (ids) => {
-    setUploadedImagesIds(ids);
-  };
-
-  const onSkip = () => onSelect();
-  const handleSubmit = () => {
-    if (!uploadedImages || uploadedImages.length === 0) return onSkip();
-    onSelect({ proofOfIdentity: uploadedImages });
-  };
-  const [file, setFile] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(formData?.institutionalProofOfIdentity?.proofIdentity.fileStoreId || null);
+  const [file, setFile] = useState(formData?.institutionalProofOfIdentity?.proofIdentity);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
-
+  const onSkip = () => onSelect();
 
   function selectfile(e) {
     setFile(e.target.files[0]);
-    console.log(e.target.files[0]);
   }
+
   useEffect(() => {
     (async () => {
       setError(null);
       if (file) {
         if (file.size >= 5242880) {
-          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+          setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
             // TODO: change module in file storage
@@ -46,11 +25,11 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
-              setError(t("CS_FILE_UPLOAD_ERROR"));
+              setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
             console.error("Modal -> err ", err);
-            setError(t("CS_FILE_UPLOAD_ERROR"));
+            setError(t("PT_FILE_UPLOAD_ERROR"));
           }
         }
       }
@@ -58,11 +37,14 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
   }, [file]);
 
   function goNext() {
-    onSelect();
+    let fileStoreId = uploadedFile;
+    let fileDetails = file;
+    if(fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
+    onSelect(config.key, { proofIdentity: fileDetails });
   }
 
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} >
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!uploadedFile}>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <UploadFile
@@ -71,8 +53,9 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
         onDelete={() => {
           setUploadedFile(null);
         }}
-        message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+        message={uploadedFile ? `1 ${t(`PT_ACTION_FILEUPLOADED`)}` : t(`PT_ACTION_NO_FILEUPLOADED`)}
       />
+      <CardLabelDesc>{" "}</CardLabelDesc>
     </FormStep>
   );
 };

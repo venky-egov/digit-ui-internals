@@ -42,7 +42,7 @@ const Urls = {
     create_reciept: "/collection-services/payments/_create",
     print_reciept: "/collection-services/payments",
     file_store: "/filestore/v1/files/url",
-    generate_pdf: "/pdf-service/v1/_create",
+    generate_pdf: "/pdf-service/v1/_createnosave",
     create_citizen_reciept: "/pg-service/transaction/v1/_create",
     update_citizen_reciept: "/pg-service/transaction/v1/_update",
   },

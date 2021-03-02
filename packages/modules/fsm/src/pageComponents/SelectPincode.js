@@ -57,7 +57,9 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <TextInput style={{ width: "50%" }} key={input.name} value={pincode} onChange={onChange} {...input.validation} />
+          <div className="field">
+            <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} />
+          </div>
         </LabelFieldPair>
       );
     });

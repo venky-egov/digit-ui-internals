@@ -10,13 +10,6 @@ const svgIcon = (
   </svg>
 );
 
-const links = [
-  {
-    pathname: "/digit-ui/employee/fsm/inbox",
-    label: "ES_TITLE_INBOX",
-  },
-];
-
 const DsoDashboard = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();

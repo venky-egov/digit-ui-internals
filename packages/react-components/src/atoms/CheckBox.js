@@ -2,7 +2,7 @@ import React from "react";
 import { CheckSvg } from "./svgindex";
 import PropTypes from "prop-types";
 
-const CheckBox = ({ onChange, label, disable, ref, checked, inputRef, ...props }) => {
+const CheckBox = ({ onChange, label, value, disable, ref, checked, inputRef, ...props }) => {
   const userType = Digit.SessionStorage.get("userType");
   // console.log("%c 🏎️: checkbox ", "font-size:16px;background-color:#c239cc;color:white;", props);
   return (
@@ -13,7 +13,7 @@ const CheckBox = ({ onChange, label, disable, ref, checked, inputRef, ...props }
           className={userType === "employee" ? "input-emp" : ""}
           onChange={onChange}
           style={{ cursor: "pointer" }}
-          value={label}
+          value={value || label}
           {...props}
           ref={inputRef}
           disabled={disable}

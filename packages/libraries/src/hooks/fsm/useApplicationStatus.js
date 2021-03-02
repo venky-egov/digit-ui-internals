@@ -12,10 +12,16 @@ const useApplicationStatus = (select) => {
   const defaultSelect = (WorkflowService) => {
     let applicationStatus = WorkflowService.BusinessServices[0].states
       .filter((state) => state.applicationStatus)
-      .map((state) => ({
-        name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
-        code: state.applicationStatus,
-      }));
+      .map((state) => {
+        const roles = state.actions?.map((e) => e.roles)?.flat();
+        return {
+          name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
+          code: state.applicationStatus,
+          roles,
+        };
+      });
+
+    console.log(applicationStatus);
     return applicationStatus;
   };
   return useQuery("APPLICATION_STATUS", () => fetch(), { select: select || defaultSelect });

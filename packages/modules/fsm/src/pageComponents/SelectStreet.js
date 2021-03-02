@@ -29,9 +29,9 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
     },
   ];
   if (userType === "employee") {
-    return inputs?.map((input) => {
+    return inputs?.map((input, index) => {
       return (
-        <LabelFieldPair>
+        <LabelFieldPair key={index}>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
             {t(input.label)}
             {config.isMandatory ? " * " : null}

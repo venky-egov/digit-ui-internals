@@ -46,7 +46,7 @@ const getPDFData = (application, tenantInfo, t) => {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
             value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_ADMIN_${application?.address?.locality?.code}`) || "NA",
           },
-          { title: t("CS_APPLICATION_SLUM_NAME"), value: application?.address?.slumName || "NA" },
+          { title: t("CS_NEW_APPLICATION_SLUM_NAME"), value: application?.address?.slumName || "NA" },
           { title: t("CS_APPLICATION_DETAILS_STREET"), value: application?.address?.street || "NA" },
           { title: t("CS_APPLICATION_DETAILS_DOOR_NO"), value: application?.address?.doorNo || "NA" },
           { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application?.address?.landmark || "NA" },
@@ -69,7 +69,7 @@ const getPDFData = (application, tenantInfo, t) => {
                 : "NA",
           },
           {
-            title: t("CS_APPLICATION_DETAILS_VEHICLE_TYPE"),
+            title: t("ES_FSM_ACTION_VEHICLE_TYPE"),
             value: application?.pdfVehicleLabel ? application?.pdfVehicleType : "NA",
           },
           { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "NA" },

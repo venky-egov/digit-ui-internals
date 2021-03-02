@@ -86,6 +86,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
                 required: true,
               },
               min: todayDate(),
+              defaultValue: todayDate(),
             },
           },
         ],

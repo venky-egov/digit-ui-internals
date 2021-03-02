@@ -87,7 +87,7 @@ const initTokens = (stateCode) => {
   if (userType !== "CITIZEN") {
     window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
   } else {
-    if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+    // if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
   }
 
   window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);

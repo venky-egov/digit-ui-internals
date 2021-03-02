@@ -37,7 +37,7 @@ const setupLibraries = (Library, props) => {
   window.Digit[Library] = { ...window.Digit[Library], ...props };
 };
 
-const initLibraries = () => {
+const initLibraries = (callback) => {
   setupLibraries("SessionStorage", Storage);
   setupLibraries("UserService", UserService);
   setupLibraries("ULBService", ULBService);
@@ -67,7 +67,7 @@ const initLibraries = () => {
   setupLibraries("Customizations", {});
   setupLibraries("Utils", Utils);
 
-  initI18n();
+  initI18n(callback);
   window.i18next = i18next;
 };
 

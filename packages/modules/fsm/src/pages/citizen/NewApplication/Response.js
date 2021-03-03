@@ -24,9 +24,12 @@ const BannerPicker = (props) => {
 const Response = ({ data, onSuccess }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  console.log("data---------->", data);
   const mutation = Digit.Hooks.fsm.useDesludging(data.city ? data.city.code : tenantId);
   const coreData = Digit.Hooks.useCoreData();
+  const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
+  const slumCode = mutation?.data?.fsm[0].address?.slumName;
+  const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
+
   // console.log("%c ⚖️: Response -> mutation ", "font-size:16px;background-color:#a9ecf3;color:black;", mutation);
   useEffect(() => {
     try {
@@ -75,7 +78,7 @@ const Response = ({ data, onSuccess }) => {
     const [applicationDetails, ...rest] = fsm;
     const tenantInfo = coreData.tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
 
-    const data = getPDFData(applicationDetails, tenantInfo, t);
+    const data = getPDFData({ ...applicationDetails, slum }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 

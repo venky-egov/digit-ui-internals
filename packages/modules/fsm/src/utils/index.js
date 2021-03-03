@@ -4,6 +4,10 @@ export const getPropertyTypeLocale = (value) => {
 
 export const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
 
+export const getVehicleType = (vehicle, t) => {
+  return (vehicle?.i18nKey && vehicle?.capacity && `${t(vehicle.i18nKey)} - ${vehicle.capacity} ${t("CS_COMMON_CAPACITY_LTRS")}`) || null;
+};
+
 export const updateConfiguration = ({ config, defaultConfig, detailsConfig, customConfiguration, isDefaultConfig }) => {
   const fieldSectionNamesInsideConfig = [];
   const detailsConfigCopy = { ...detailsConfig };

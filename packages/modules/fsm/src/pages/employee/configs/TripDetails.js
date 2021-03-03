@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import { getVehicleType } from "../../../utils";
 
 const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
   const { t } = useTranslation();
@@ -13,7 +14,7 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
         type: "dropdown",
         populators: (
           <Dropdown
-            option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: `${t(vehicle.i18nKey)} - ${vehicle.capacity + " Ltrs" || ""}` }))}
+            option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))}
             optionKey="label"
             id="vehicle"
             selected={vehicle}

@@ -13,7 +13,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
-import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../utils";
+import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "../../utils";
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
@@ -42,12 +42,7 @@ const ApplicationDetails = () => {
   const state = tenantId?.split(".")[0] || "pb";
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
-  const pdfVehicleType =
-    (vehicle?.make &&
-      vehicle?.name &&
-      vehicle?.capacity &&
-      `${t(vehicle?.make)} - ${vehicle?.name} - ${vehicle?.capacity} ${t("CS_COMMON_CAPACITY_LTRS")}`) ||
-    null;
+  const pdfVehicleType = getVehicleType(vehicle, t);
   const localityCode = application?.address?.locality?.code;
   const slumCode = application?.address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);

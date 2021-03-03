@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
+import { getVehicleType } from "../utils";
 
 const GetActionMessage = (action, isSuccess) => {
   const { t } = useTranslation();
@@ -76,12 +77,7 @@ const Response = (props) => {
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => mutation?.data?.fsm[0]?.vehicleType === vehicle?.code);
-  const pdfVehicleType =
-    (vehicle?.make &&
-      vehicle?.name &&
-      vehicle?.capacity &&
-      `${t(vehicle?.make)} - ${vehicle?.name} - ${vehicle?.capacity} ${t("CS_COMMON_CAPACITY_LTRS")}`) ||
-    null;
+  const pdfVehicleType = getVehicleType(vehicle, t);
 
   const handleDownloadPdf = () => {
     const { fsm } = mutation.data;

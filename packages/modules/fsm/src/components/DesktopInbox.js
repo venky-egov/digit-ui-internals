@@ -151,9 +151,7 @@ const DesktopInbox = (props) => {
         onNextPage={props.onNextPage}
         onPrevPage={props.onPrevPage}
         pageSizeLimit={props.pageSizeLimit}
-        onSort={(d) => {
-          props.onSort(d);
-        }}
+        onSort={props.onSort}
         disableSort={props.disableSort}
         onPageSizeChange={props.onPageSizeChange}
       />

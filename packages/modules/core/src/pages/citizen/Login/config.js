@@ -15,7 +15,7 @@ export const loginSteps = [
         validation: {
           required: true,
           minLength: 10,
-          maxLength: 10
+          maxLength: 10,
         },
       },
     ],

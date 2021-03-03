@@ -21,10 +21,10 @@ const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t, error }) =
     <FormStep onSelect={onSelect} config={config} t={t} isDisabled={otp?.length !== 6}>
       <OTPInput length={6} onChange={onOtpChange} value={otp} />
       {timeLeft > 0 ? (
-        <CardText>{`${t('CS_RESEND_ANOTHER_OTP')} ${timeLeft}`}</CardText>
+        <CardText>{`${t("CS_RESEND_ANOTHER_OTP")} ${timeLeft}`}</CardText>
       ) : (
         <p className="card-text-button" onClick={handleResendOtp}>
-          {t('CS_RESEND_OTP')}
+          {t("CS_RESEND_OTP")}
         </p>
       )}
       {!error && <CardLabelError>{t("CS_INVALID OTP")}</CardLabelError>}

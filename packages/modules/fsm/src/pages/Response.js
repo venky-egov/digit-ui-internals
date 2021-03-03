@@ -62,6 +62,10 @@ const BannerPicker = (props) => {
 const Response = (props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+
+  const paymentAccess = Digit.UserService.hasAccess("FSM_COLLECTOR");
+  // console.log("find payment Roles here", paymentAccess)
+
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { state } = props.location;
 
@@ -104,6 +108,15 @@ const Response = (props) => {
     }
   }, []);
 
+  const displayText = (action) => {
+    switch (action) {
+      case "SUBMIT_FEEDBACK":
+        return t("CS_SUBMIT_FEEDBACK_RESPONSE");
+      default:
+        return t("CS_FILE_PROPERTY_RESPONSE");
+    }
+  };
+
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />
   ) : (
@@ -117,7 +130,7 @@ const Response = (props) => {
           isLoading={mutation.isIdle || mutation.isLoading}
         />
       )}
-      <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
+      <CardText>{displayText(state.action)}</CardText>
       {mutation.isSuccess && (
         <LinkButton
           label={
@@ -136,6 +149,13 @@ const Response = (props) => {
       <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
+      {props.parentRoute.includes("employee") && state?.applicationData?.applicationNo && paymentAccess && mutation.isSuccess && (
+        <div className="secondary-action">
+          <Link to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo}`}>
+            <SubmitBar label={t("ES_COMMON_PAY")} />
+          </Link>
+        </div>
+      )}
     </Card>
   );
 };

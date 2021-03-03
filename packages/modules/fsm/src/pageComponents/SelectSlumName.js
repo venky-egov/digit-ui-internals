@@ -49,6 +49,12 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
           ];
       // console.log("find slum dta here", optionalSlumData)
       setSlumMenu(optionalSlumData);
+      setSlum({
+        code: null,
+        active: true,
+        name: "Not residing in slum area",
+        i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
+      });
     }
     if (userType !== "employee" && !slumDataLoading && slumData) {
       // console.log("find citizen slum menu here", slumData, slumData[locality], formData)

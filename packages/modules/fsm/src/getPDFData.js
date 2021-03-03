@@ -20,7 +20,10 @@ const getPDFData = (application, tenantInfo, t) => {
             title: t("CS_APPLICATION_DETAILS_APPLICATION_DATE"),
             value: Digit.DateUtils.ConvertTimestampToDate(application?.auditDetails?.createdTime, "dd/MM/yyyy"),
           },
-          { title: t("CS_APPLICATION_DETAILS_APPLICATION_CHANNEL"), value: application?.source || "NA" },
+          {
+            title: t("CS_APPLICATION_DETAILS_APPLICATION_CHANNEL"),
+            value: t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${application?.source}`) || "NA",
+          },
         ],
       },
       {
@@ -46,7 +49,10 @@ const getPDFData = (application, tenantInfo, t) => {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
             value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_ADMIN_${application?.address?.locality?.code}`) || "NA",
           },
-          { title: t("CS_NEW_APPLICATION_SLUM_NAME"), value: application?.address?.slumName || "NA" },
+          {
+            title: t("CS_APPLICATION_DETAILS_SLUM_NAME"),
+            value: application?.slum?.i18nKey ? t(`${application?.slum?.i18nKey}`) : "NA",
+          },
           { title: t("CS_APPLICATION_DETAILS_STREET"), value: application?.address?.street || "NA" },
           { title: t("CS_APPLICATION_DETAILS_DOOR_NO"), value: application?.address?.doorNo || "NA" },
           { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application?.address?.landmark || "NA" },
@@ -61,25 +67,35 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_APPLICATION_DETAILS_DIMENSION"),
+            // NOTE: value have too much whitespace bcz we want the text after whitespace should go to next line, so pls don't remove whitespace
             value:
               application?.pitDetail?.height && application?.pitDetail?.height !== null
                 ? application?.pitDetail?.length
-                  ? `${application?.pitDetail?.length}m * ${application?.pitDetail?.width}m * ${application?.pitDetail?.height}m`
-                  : `${application?.pitDetail?.diameter}m * ${application?.pitDetail?.height}m`
+                  ? `${application?.pitDetail?.length}m * ${application?.pitDetail?.width}m * ${
+                      application?.pitDetail?.height
+                    }m                                  (${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`
+                  : `${application?.pitDetail?.diameter}m * ${application?.pitDetail?.height}m                                  (${t(
+                      "CS_COMMON_DIAMETER"
+                    )} x ${t("CS_COMMON_DEPTH")})`
                 : "NA",
           },
           {
             title: t("ES_FSM_ACTION_VEHICLE_TYPE"),
-            value: application?.pdfVehicleLabel ? application?.pdfVehicleType : "NA",
+            value: application?.pdfVehicleType ? application?.pdfVehicleType : "NA",
           },
           { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "NA" },
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),
-            value: application?.amountPerTrip ? application?.amountPerTrip !== 0 && `₹ ${application?.amountPerTrip}` : "NA",
+            value: application?.additionalDetails?.tripAmount
+              ? application?.additionalDetails?.tripAmount !== 0 && `₹ ${application?.additionalDetails?.tripAmount}`
+              : "NA",
           },
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_DUE"),
-            value: application?.amountDue && application?.amountDue !== 0 ? `₹ ${application?.amountDue}` : "NA",
+            value:
+              application?.additionalDetails?.tripAmount && application?.additionalDetails?.tripAmount !== 0
+                ? `₹ ${application?.additionalDetails?.tripAmount * application?.noOfTrips}`
+                : "NA",
           },
         ],
       },

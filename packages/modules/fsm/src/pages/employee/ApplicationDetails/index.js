@@ -150,6 +150,8 @@ const ApplicationDetails = (props) => {
         setShowToast({ key: "success", action: selectedAction });
         setTimeout(closeToast, 5000);
         queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+        const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
+        inbox?.revalidate();
       },
     });
     closeModal();
@@ -267,7 +269,7 @@ const ApplicationDetails = (props) => {
             <ActionBar>
               {displayMenu && workflowDetails?.data?.nextActions ? (
                 <Menu
-                  localeKeyPrefix={"CS_COMMON_FSM"}
+                  localeKeyPrefix={"ES_FSM"}
                   options={workflowDetails?.data?.nextActions.map((action) => action.action)}
                   t={t}
                   onSelect={onActionSelect}

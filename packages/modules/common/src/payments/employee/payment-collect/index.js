@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
+import { useQueryClient } from "react-query";
 import { useCardPaymentDetails } from "./card";
 import { useChequeDetails, ChequeDetailsComponent } from "./cheque";
 import isEqual from "lodash/isEqual";
@@ -11,6 +12,7 @@ export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
   const { t } = useTranslation();
   const history = useHistory();
+  const queryClient = useQueryClient();
 
   const { path: currentPath } = useRouteMatch();
   const { consumerCode, businessService } = useParams();
@@ -74,7 +76,7 @@ export const CollectPayment = (props) => {
       recieptRequest.Payment.transactionNumber = "12345678";
     }
     const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
-    console.log(resposne);
+    queryClient.invalidateQueries();
     history.push(`${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}`);
   };
 

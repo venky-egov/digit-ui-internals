@@ -8,7 +8,8 @@ const TextField = (props) => {
   // Digit.Hooks.useClickOutside(wrapperRef, () => props.setOutsideClicked(true));
 
   useEffect(() => {
-    props.selectedVal ? setValue(props.selectedVal) : setValue("");
+    if (!props.keepNull) props.selectedVal ? setValue(props.selectedVal) : setValue("");
+    else setValue("");
   }, [props.selectedVal, props.forceSet]);
 
   function inputChange(e) {
@@ -129,6 +130,7 @@ const Dropdown = (props) => {
             autoComplete={props.autoComplete}
             setFilter={setFilter}
             forceSet={forceSet}
+            keepNull={props.keepNull}
             selectedVal={
               selectedOption
                 ? props.t

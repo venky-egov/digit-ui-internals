@@ -1,13 +1,15 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { Search } from "../../services/molecules/FSM/Search";
 
 const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   let { uuid } = Digit.UserService.getUser().info;
 
+  const client = useQueryClient();
+
   const fetchFilters = () => {
     let filtersObj = {};
     const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;
-    if (filters.applicationStatus) {
+    if (filters.applicationStatus && filters.applicationStatus?.[0]) {
       filtersObj.applicationStatus = filters.applicationStatus.map((status) => status.code).join(",");
     }
     if (filters.locality) {
@@ -32,7 +34,6 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
   };
 
   const workflowFilters = fetchFilters().assignee ? { assignee: uuid } : {};
-
   const workFlowInstances = useQuery(
     ["WORKFLOW", workflowFilters],
     () => Digit.WorkflowService.getAllApplication(tenantId, { ...workflowFilters, businesssService: "FSM" }),
@@ -50,14 +51,32 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
     };
 
   const appList = useQuery(
-    ["FSM_SEARCH", { ...fetchFilters(), ...applicationNos }],
-    () => Search.all(tenantId, { ...fetchFilters(), ...applicationNos }),
+    [
+      "FSM_SEARCH",
+      { ...fetchFilters(), applicationNos: fetchFilters().applicationNos ? fetchFilters().applicationNos : applicationNos.applicationNos },
+    ],
+    () =>
+      Search.all(tenantId, {
+        ...fetchFilters(),
+        applicationNos: fetchFilters().applicationNos ? fetchFilters().applicationNos : applicationNos.applicationNos,
+      }),
     {
       enabled: !wfFetching && wfSuccess,
       select: filterFsmFn,
     }
   );
-  return appList;
+
+  const revalidate = () => {
+    client.refetchQueries(["WORKFLOW"]);
+    client.refetchQueries(["FSM_SEARCH"]);
+  };
+
+  client.setQueryData("FUNCTION_RESET_INBOX", { revalidate });
+
+  return {
+    ...appList,
+    revalidate,
+  };
 };
 
 const mapWfBybusinessId = (wfs) => {

@@ -1,5 +1,6 @@
 import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
+import { useQueryClient } from "react-query";
 
 import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication } from "../config";
 
@@ -43,6 +44,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     }
   );
   // console.log("find application details here", applicationData)
+  const client = useQueryClient();
   const stateCode = tenantId.split(".")[0];
   const { data: vehicleList, isLoading: isVehicleData, isSuccess: isVehicleDataLoaded } = Digit.Hooks.fsm.useMDMS(
     stateCode,

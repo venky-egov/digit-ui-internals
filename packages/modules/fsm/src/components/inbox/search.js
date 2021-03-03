@@ -14,14 +14,16 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
     if (!data.mobileNumber) {
       delete data.mobileNumber;
     }
+
     onSearch(data);
     if (type === "mobile") {
       onClose();
     }
   };
+
   function clearSearch() {
     reset();
-    onSearch({});
+    onSearch([]);
   }
 
   const clearAll = () => {
@@ -87,7 +89,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
         </div>
         {type === "mobile" && (
           <ActionBar>
-            <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
+            <SubmitBar label={t("ES_COMMON_SEARCH")} submit={true} />
           </ActionBar>
         )}
       </React.Fragment>

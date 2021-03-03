@@ -1,13 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ArrowRightInbox } from "@egovernments/digit-ui-react-components";
+
+const ArrowRight = ({ to }) => (
+  <Link to={to}>
+    <ArrowRightInbox />
+  </Link>
+);
 
 const FSMCard = () => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
+  const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
+
+  const [total, setTotal] = useState("-");
+
+  // Septage ready for Disposal ( 10 KL)
+  // Septage disposed today ( 50 KL)
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+
+  // TO DO get day time
+
+  const config = {
+    enabled: isFSTPOperator ? true : false,
+    select: (data) => {
+      const info = data.vehicleTrip.reduce(
+        (info, trip) => {
+          const totalVol = trip.tripDetails.reduce((vol, details) => details.volume + vol, 0);
+          info[t("ES_READY_FOR_DISPOSAL")] += totalVol / 1000;
+          return info;
+        },
+        { [t("ES_READY_FOR_DISPOSAL")]: 0 }
+      );
+      info[t("ES_READY_FOR_DISPOSAL")] = info[t("ES_READY_FOR_DISPOSAL")] + " (KL)";
+      return info;
+    },
+  };
+
+  const { isLoading, data: info, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
+    tenantId,
+    filters: { applicationStatus: "WAITING_FOR_DISPOSAL" },
+    config,
+  });
+
+  const filters = {
+    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+    sortBy: "createdTime",
+    sortOrder: "DESC",
+    limit: 10,
+    offset: 0,
+  };
+
+  const { data: inbox, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters, ...filters }, null, {
+    enabled: !isFSTPOperator ? true : false,
+  });
+
+  useEffect(() => {
+    if (inbox) {
+      const total = inbox?.[0]?.totalCount || 0;
+      setTotal(total);
+    }
+  }, [inbox]);
 
   if (isFSTPOperator) {
     return (
@@ -23,8 +80,23 @@ const FSMCard = () => {
             <span className="text">{t("ES_TITLE_VEHICLE_LOG")}</span>
           </div>
           <div className="body">
+            {info && (
+              <div className="employeeCard-info-box" style={{}}>
+                {Object.keys(info).map((key, index) => {
+                  return (
+                    <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                      <span>{t(info[key])}</span>
+                      <span style={{}}>{t(key)}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             <span className="link">
-              <Link to={`/digit-ui/employee/fsm/fstp-inbox`}>{t("ES_TITLE_INBOX")}</Link>
+              <Link to={`/digit-ui/employee/fsm/fstp-inbox`}>
+                <span style={{ color: "#F47738" }}>{t("ES_TITLE_INBOX")}</span>
+              </Link>
+              {<ArrowRight to={`/digit-ui/employee/fsm/fstp-inbox`} />}
             </span>
           </div>
         </div>
@@ -46,6 +118,8 @@ const FSMCard = () => {
         <div className="body">
           <span className="link">
             <Link to={`/digit-ui/employee/fsm/inbox`}>{t("ES_TITLE_INBOX")}</Link>
+            <span className="inbox-total">{" " + total || "-"}</span>
+            {<ArrowRight to={`/digit-ui/employee/fsm/inbox`} />}
           </span>
           {!DSO && !COLLECTOR && !FSM_EDITOR && (
             <React.Fragment>

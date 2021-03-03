@@ -2,7 +2,7 @@ import React from "react";
 import { CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const Status = ({ applications, onAssignmentChange, fsmfilters }) => {
+const Status = ({ onAssignmentChange, fsmfilters }) => {
   const { t } = useTranslation();
   const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus();
   if (isLoading) {
@@ -16,7 +16,7 @@ const Status = ({ applications, onAssignmentChange, fsmfilters }) => {
         <CheckBox
           key={index}
           onChange={(e) => onAssignmentChange(e, option)}
-          checked={fsmfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
+          checked={fsmfilters?.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
           label={t(option.name)}
         />
       ))}

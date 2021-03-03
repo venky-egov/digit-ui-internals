@@ -40,13 +40,13 @@ export const PaymentService = {
       method: "POST",
       auth: true,
       userService: true,
-      params: { tenantId, key: "consolidatedreceipt" },
+      params: { tenantId, key: "fsm-receipt" },
       data: data,
     }),
 
   printReciept: (tenantId, filters = {}) =>
     Request({
-      url: Urls.payment.file_store,
+      url: Urls.FileStore,
       useCache: false,
       method: "GET",
       auth: true,

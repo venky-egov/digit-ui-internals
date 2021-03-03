@@ -23,6 +23,27 @@
     .link {
       @apply p-sm text-link-normal;
     }
+
+    .employeeCard-info-box {
+      @apply flex justify-end;
+      background-color: #fafafa;
+      div {
+        margin-right: 32px;
+        span:nth-child(2) {
+          @apply font-bold;
+          color: #4f5a5f;
+        }
+      }
+    }
+
+    .inbox-total {
+      @apply text-center inline-block text-white;
+      background-color: #000;
+      border-radius: 50%;
+      width: 24px;
+      margin-left: 5px;
+      padding-top: 0.5px;
+    }
   }
 }
 

@@ -185,6 +185,34 @@ export const LogoutIcon = ({ className, styles }) => (
   </svg>
 );
 
+const SortDown = (style) => (
+  <svg
+    style={{ display: "inline-block", height: "16px", ...style }}
+    xmlns="http://www.w3.org/2000/svg"
+    enable-background="new 0 0 24 24"
+    height="24"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <rect fill="none" height="24" width="24" />
+    <path d="M19,15l-1.41-1.41L13,18.17V2H11v16.17l-4.59-4.59L5,15l7,7L19,15z" />
+  </svg>
+);
+
+const SortUp = (style) => (
+  <svg
+    style={{ display: "inline-block", height: "16px", ...style }}
+    xmlns="http://www.w3.org/2000/svg"
+    enable-background="new 0 0 24 24"
+    height="24"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <rect fill="none" height="24" width="24" />
+    <path d="M5,9l1.41,1.41L11,5.83V22H13V5.83l4.59,4.59L19,9l-7-7L5,9z" />
+  </svg>
+);
+
 const ArrowRightInbox = ({ style }) => (
   <svg
     style={{ display: "inline", height: "24px", ...style }}
@@ -198,6 +226,17 @@ const ArrowRightInbox = ({ style }) => (
     <path d="M16 5.33325L14.12 7.21325L21.56 14.6666H5.33337V17.3333H21.56L14.12 24.7866L16 26.6666L26.6667 15.9999L16 5.33325Z" fill="white" />
   </svg>
 );
+
+const ShippingTruck = (style) => (
+  <svg style={{ display: "inline-block", fontSize: "16px", ...style }} xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+    <path d="M0 0h24v24H0z" fill="none" />
+    <path
+      fill={"white"}
+      d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
+    />
+  </svg>
+);
+
 export {
   ArrowLeft,
   ArrowDown,
@@ -220,4 +259,7 @@ export {
   ArrowBack,
   ArrowForward,
   ArrowRightInbox,
+  SortDown,
+  SortUp,
+  ShippingTruck,
 };

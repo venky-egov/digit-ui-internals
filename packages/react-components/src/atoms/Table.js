@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useTable, useRowSelect, usePagination, useSortBy } from "react-table";
-import { ArrowBack, ArrowForward } from "./svgindex";
+import { ArrowBack, ArrowForward, SortUp, SortDown } from "./svgindex";
 
 // const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
 //   const defaultRef = React.useRef();
@@ -99,7 +99,17 @@ const Table = ({
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
-                  <span>{column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}</span>
+                  <span>
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <SortDown style={{ display: "inline-block", height: "16px" }} />
+                      ) : (
+                        <SortUp style={{ display: "inline-block", height: "16px" }} />
+                      )
+                    ) : (
+                      ""
+                    )}
+                  </span>
                 </th>
               ))}
             </tr>

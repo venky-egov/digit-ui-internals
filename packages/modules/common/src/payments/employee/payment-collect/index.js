@@ -10,6 +10,7 @@ import {} from "../../../hoc/testForm-config";
 
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
+  props.setLink("Collect Payment");
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();

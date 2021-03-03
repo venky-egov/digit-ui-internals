@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import BreakLine from "../atoms/BreakLine";
 import Card from "../atoms/Card";
 import CardLabel from "../atoms/CardLabel";
+// import CardLabelError from "../atoms/CardLabelError";
 import CardSubHeader from "../atoms/CardSubHeader";
 import CardSectionHeader from "../atoms/CardSectionHeader";
 import CardLabelDesc from "../atoms/CardLabelDesc";
@@ -15,7 +16,7 @@ import LabelFieldPair from "../atoms/LabelFieldPair";
 import { useTranslation } from "react-i18next";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, getValues, watch, control, formState } = useForm({ defaultValues: props.defaultValues });
+  const { register, handleSubmit, setValue, getValues, watch, control, formState, errors } = useForm({ defaultValues: props.defaultValues });
   const { t } = useTranslation();
   const formData = watch();
 
@@ -88,7 +89,19 @@ export const FormComposer = (props) => {
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Controller
-            as={<Component userType={"employee"} t={t} setValue={setValue} onSelect={setValue} config={config} data={formData} formData={formData} />}
+            as={
+              <Component
+                userType={"employee"}
+                t={t}
+                setValue={setValue}
+                onSelect={setValue}
+                config={config}
+                data={formData}
+                formData={formData}
+                register={register}
+                errors={errors}
+              />
+            }
             name={config.key}
             control={control}
           />

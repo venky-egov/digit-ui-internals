@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DashboardBox, Loader } from "@egovernments/digit-ui-react-components";
+import { DashboardBox, Loader, ShippingTruck } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 
@@ -108,7 +108,7 @@ const DsoDashboard = () => {
   }
   return (
     <div>
-      <DashboardBox t={t} svgIcon={svgIcon} header={t("ES_TITLE_FAECAL_SLUDGE_MGMT")} info={info} links={links} />
+      <DashboardBox t={t} svgIcon={<ShippingTruck />} header={t("ES_TITLE_FAECAL_SLUDGE_MGMT")} info={info} links={links} />
     </div>
   );
 };

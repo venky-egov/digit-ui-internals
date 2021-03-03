@@ -40,7 +40,6 @@ export const ChequeDetailsComponent = (props) => {
   const setBankDetailsFromIFSC = async () => {
     try {
       const res = await window.fetch(`https://ifsc.razorpay.com/${ifscCode}`);
-      console.log(res.ok);
       if (res.ok) {
         const { BANK, BRANCH } = await res.json();
         setBankName(BANK);

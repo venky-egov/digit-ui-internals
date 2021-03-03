@@ -4,6 +4,7 @@ import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export const SuccessfulPayment = (props) => {
+  props.setLink("Response");
   const { addParams, clearParams } = props;
   const { t } = useTranslation();
   let { consumerCode, receiptNumber, businessService } = useParams();
@@ -44,6 +45,7 @@ export const SuccessfulPayment = (props) => {
 };
 
 export const FailedPayment = (props) => {
+  props.setLink("Response");
   const { addParams, clearParams } = props;
   const { t } = useTranslation();
   const { consumerCode } = useParams();

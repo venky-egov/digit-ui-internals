@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 const ApplicantDetails = (channelMenu, channel, setChannel) => {
   const { t } = useTranslation();
   return {
-    head: t("ES_TITLE_APPLICATION_DETAILS"),
+    head: t("ES_TITLE_APPLICANT_DETAILS"),
     body: [
       {
         label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),

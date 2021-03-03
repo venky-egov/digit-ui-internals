@@ -167,7 +167,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     <FormComposer
       heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
-      label={t("ES_COMMON_APPLICATION_SUBMIT")}
+      label={t("ES_COMMON_UPDATE_DEMAND")}
       config={configs.map((config) => {
         return {
           ...config,

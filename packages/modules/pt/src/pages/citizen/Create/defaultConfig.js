@@ -1,19 +1,18 @@
+import CheckPage from "./Steps/CheckPage";
+import Proof from "./Steps/Proof";
+import { PropertyTax } from "./Steps/PropertyTax";
+import SelectAddress from "./Steps/SelectAddress";
+import SelectGeolocation from "./Steps/SelectGeolocation";
+import SelectInistitutionOwnerDetails from "./Steps/SelectInistitutionOwnerDetails";
+import SelectLandmark from "./Steps/SelectLandmark";
 import SelectOwnerAddress from "./Steps/SelectOwnerAddress";
 import SelectOwnerDetails from "./Steps/SelectOwnerDetails";
-import SelectSpecialProofIdentityImages from "./Steps/SelectSpecialProofIdentityImages";
+import SelectOwnerShipDetails from "./Steps/SelectOwnerShipDetails";
+import SelectPincode from "./Steps/SelectPincode";
 import SelectProofIdentityImages from "./Steps/SelectProofIdentityImages";
 import SelectSpecialOwnerCategoryType from "./Steps/SelectSpecialOwnerCategoryType";
-import SelectOwnerShipDetails from "./Steps/SelectOwnerShipDetails";
-import SelectInistitutionOwnerDetails from "./Steps/SelectInistitutionOwnerDetails";
-import SelectGeolocation from "./Steps/SelectGeolocation";
-import SelectPincode from "./Steps/SelectPincode";
-import SelectAddress from "./Steps/SelectAddress";
+import SelectSpecialProofIdentityImages from "./Steps/SelectSpecialProofIdentityImages";
 import SelectStreet from "./Steps/SelectStreet";
-import SelectLandmark from "./Steps/SelectLandmark";
-import Proof from "./Steps/Proof";
-import CheckPage from "./Steps/CheckPage";
-import Response from "./Steps/Response";
-import { PropertyTax } from "./Steps/PropertyTax";
 
 export const config = {
   routes: {
@@ -222,5 +221,5 @@ export const config = {
       nextStep: null,
     }, */
   },
-  indexRoute: "map",
+  indexRoute: "info",
 };

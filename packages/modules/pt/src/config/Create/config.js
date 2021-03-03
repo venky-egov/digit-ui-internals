@@ -82,7 +82,7 @@ export const newConfig = [
           submitBarLabel: "PT_COMMONS_NEXT",
         },
         key: "address",
-        nextStep: "owner-ship-details",
+        nextStep: "owner-ship-details@0",
       },
     ],
   },
@@ -91,7 +91,7 @@ export const newConfig = [
     body: [
       {
         type: "component",
-        route: "owner-ship-details",
+        route: "owner-ship-details@0",
         isMandatory: true,
         component: "SelectOwnerShipDetails",
         texts: {
@@ -168,7 +168,7 @@ export const newConfig = [
           cardText: "",
           submitBarLabel: "PT_COMMON_NEXT",
         },
-        key: "SelectSpecialProofIdentity",
+        key: "owners",
         withoutLabel: true,
         nextStep: "proof-of-identity",
         hideInEmployee: true,
@@ -183,8 +183,9 @@ export const newConfig = [
           header: "PT_PROOF_IDENTITY_HEADER",
           cardText: "",
           submitBarLabel: "PT_COMMON_NEXT",
+          addMultipleText: "PT_COMMON_ADD_APPLICANT_LABEL"
         },
-        key: "proofOfIdentity",
+        key: "owners",
         withoutLabel: true,
         nextStep: null,
         hideInEmployee: true,
@@ -232,7 +233,7 @@ export const newConfig = [
           cardText: "",
           submitBarLabel: "PT_COMMON_NEXT",
         },
-        key: "SelectSpecialProofIdentity",
+        key: "owners",
         withoutLabel: true,
         nextStep: "",
         hideInEmployee: true,

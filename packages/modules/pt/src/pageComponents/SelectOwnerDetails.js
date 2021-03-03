@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons } from "@egovernments/digit-ui-react-components";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
-  let index = 0;
+  let index = window.location.href.charAt(window.location.href.length-1);
   const [name, setName] = useState(formData.owners && formData.owners[index] && formData.owners[index].name);
   const [gender, setGender] = useState(formData.owners && formData.owners[index] && formData.owners[index].gender);
   const [mobileNumber, setMobileNumber] = useState(formData.owners && formData.owners[index] && formData.owners[index].mobileNumber);
@@ -28,20 +28,20 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   const goNext = () => {
     let owner = formData.owners && formData.owners[index];
     let ownerStep = { ...owner, name, gender, mobileNumber, fatherOrHusbandName, relationship };
-    onSelect(config.key, ownerStep);
+    onSelect(config.key, ownerStep, false, index);
   };
 
   const onSkip = () => onSelect();
 
   const options = [
-    { value: "Male", code: "PT_FORM3_MALE" },
-    { value: "Female", code: "PT_FORM3_FEMALE" },
-    { value: "OTHERS", code: "PT_FORM3_TRANSGENDER" },
+    { value: "Female", code: "PT_FORM3_FEMALE", value: "FEMALE" },
+    { value: "Male", code: "PT_FORM3_MALE", value: "MALE" },
+    { value: "OTHERS", code: "PROPERTYTAX_BILLING_SLAB_OTHERS", value: "OTHERS" },
   ];
 
   const GuardianOptions = [
-    { name: "Father", code: "FATHER" },
-    { name: "Husband", code: "HUSBAND" }
+    { name: "Father", code: "FATHER", "i18nKey": "PT_RELATION_FATHER" },
+    { name: "Husband", code: "HUSBAND", "i18nKey": "PT_RELATION_HUSBAND" }
   ];
 
 
@@ -67,7 +67,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         selectedOption={gender}
         onSelect={setGenderName}
       />
-      <CardLabel>{t("PT_FORM3_MOBILE_NO")}</CardLabel>
+      <CardLabel>{t("PT_FORM3_MOBILE_NUMBER")}</CardLabel>
       <TextInput
         t={t}
         isMandatory={false}
@@ -77,7 +77,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         onChange={setMobileNo}
         pattern="^([0]|((\+\d{1,2}[-]{0,1})))?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
       />
-      <CardLabel>{t("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME")}</CardLabel>
+      <CardLabel>{t("PT_FORM3_GUARDIAN_NAME")}</CardLabel>
       <TextInput
         t={t}
         isMandatory={false}
@@ -89,7 +89,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
       />
       <RadioButtons
         t={t}
-        optionsKey="code"
+        optionsKey="i18nKey"
         name="relationship"
         options={GuardianOptions}
         value={relationship}

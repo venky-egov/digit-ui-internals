@@ -7,7 +7,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 
 const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
-  let index = 0;
+  let index = window.location.href.charAt(window.location.href.length-1);
   const [permanentAddress, setPermanentAddress] = useState(formData.owners && formData.owners[index] && formData.owners[index].permanentAddress);
   const [isCorrespondenceAddress, setIsCorrespondenceAddress] = useState(formData.owners && formData.owners[index] && formData.owners[index].isCorrespondenceAddress);
 
@@ -41,7 +41,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
     let ownerDetails = formData.owners && formData.owners[index];
     ownerDetails["permanentAddress"] = permanentAddress;
     ownerDetails["isCorrespondenceAddress"] = isCorrespondenceAddress
-    onSelect(config.key, ownerDetails);
+    onSelect(config.key, ownerDetails, "", index);
   };
 
   return (

@@ -2,21 +2,29 @@ import React, { useState, useEffect } from "react";
 import { FormStep, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
 
 const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData }) => {
-  let index = 0;
-  const [uploadedFile, setUploadedFile] = useState(formData?.SelectSpecialProofIdentity?.specialProofIdentity?.fileStoreId || null);
-  const [file, setFile] = useState(formData?.SelectSpecialProofIdentity?.specialProofIdentity);
+  let index = window.location.href.charAt(window.location.href.length-1);
+  const [uploadedFile, setUploadedFile] = useState(formData?.owners[index]?.documents?.specialProofIdentity?.fileStoreId || null);
+  const [file, setFile] = useState(formData?.owners[index]?.documents?.specialProofIdentity);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const handleSubmit = () => {
     let fileStoreId = uploadedFile;
     let fileDetails = file;
     if(fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
-    onSelect(config.key, { specialProofIdentity: fileDetails });
+    let ownerDetails = formData.owners && formData.owners[index];
+    if(ownerDetails && ownerDetails.documents) {
+      ownerDetails.documents["specialProofIdentity"] = fileDetails;
+    } else {
+      ownerDetails["documents"] = [];
+      ownerDetails.documents["specialProofIdentity"] = fileDetails;
+    }
+    onSelect(config.key, ownerDetails, "", index);
+    // onSelect(config.key, { specialProofIdentity: fileDetails }, "", index);
   };
   const onSkip = () => onSelect();
 
   useEffect(() => {
-    if (formData.owners && formData.owners[index] && formData.owners[index].ownerType.code === "NONE") onSelect(config.key, {}, true);
+    if (formData.owners && formData.owners[index] && formData.owners[index].ownerType.code === "NONE") onSelect(config.key, {}, true, index);
   }, [formData.owners && formData.owners[index] && formData.owners[index].ownerType.code]);
 
 
@@ -48,7 +56,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData })
   }, [file]);
 
   return (
-    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t}>
+    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile}>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <UploadFile

@@ -42,7 +42,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData }) => 
   function getDropdwonForProperty(ownerShipdropDown) {
     return ownerShipdropDown && ownerShipdropDown.length && ownerShipdropDown.splice(0, 4).map((ownerShipDetails) => ({
       ...ownerShipDetails,
-      i18nKey: `PROPERTYTAX_BILLING_SLAB_${ownerShipDetails.value.split('.')[1] ? ownerShipDetails.value.split('.')[1] : ownerShipDetails.value.split('.')[0]}`,
+      i18nKey: `PT_OWNERSHIP_${ownerShipDetails.value.split('.')[1] ? ownerShipDetails.value.split('.')[1] : ownerShipDetails.value.split('.')[0]}`,
     }));;
   }
 
@@ -69,8 +69,9 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData }) => 
 
   const onSkip = () => onSelect();
   function goNext() {
+    let index = window.location.href.charAt(window.location.href.length-1);
     sessionStorage.setItem("ownershipCategory", ownershipCategory.value);
-    onSelect(config.key, ownershipCategory);
+    onSelect(config.key, ownershipCategory, "", index);
   }
 
   return (

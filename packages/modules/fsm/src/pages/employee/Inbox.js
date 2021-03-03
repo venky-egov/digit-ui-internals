@@ -66,10 +66,6 @@ const Inbox = ({ parentRoute }) => {
     setSearchParams(_search);
   };
 
-  useEffect(() => {
-    console.log("=========>>>>>>", sortParams);
-  }, [sortParams]);
-
   const getSearchFields = (userRoles) => {
     if (userRoles.find((role) => role.code === "FSM_EMP_FSTPO")) {
       return [

@@ -5,18 +5,19 @@ import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 
 const SortBy = (props) => {
   const { t } = useTranslation();
-  const [selectedOption, setSelectedOption] = useState(() =>
-    props.sortParams?.sortOrder === "DESC"
+  const [selectedOption, setSelectedOption] = useState(() => {
+    console.log(props.sortParams);
+    return props.sortParams?.sortOrder === "DESC"
       ? { code: "DESC", name: t("ES_INBOX_DATE_LATEST_FIRST") }
-      : { code: "ASC", name: t("ES_INBOX_DATE_LATEST_LAST") }
-  );
+      : { code: "ASC", name: t("ES_INBOX_DATE_LATEST_LAST") };
+  });
 
   function clearAll() {}
 
   function onSort(option) {
     console.log(option);
-    setSelectedOption(option);
     props.onSort([{ id: "createdTime", desc: option.code === "DESC" ? true : false }]);
+    props.onClose();
   }
 
   return (
@@ -48,11 +49,16 @@ const SortBy = (props) => {
           </div>
         </div>
       </div>
-      <ActionBar>
+      {/* <ActionBar>
         {props.type === "mobile" && (
-          <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={props.onClose} />
+          <ApplyFilterBar
+            labelLink={t("CS_COMMON_CLEAR_ALL")}
+            buttonLink={t("CS_COMMON_FILTER")}
+            onClear={clearAll}
+            onSubmit={props.onSort([selectedOption])}
+          />
         )}
-      </ActionBar>
+      </ActionBar> */}
     </React.Fragment>
   );
 };

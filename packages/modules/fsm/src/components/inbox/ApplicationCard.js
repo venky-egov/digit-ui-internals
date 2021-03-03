@@ -24,6 +24,7 @@ export const ApplicationCard = ({
   const [popup, setPopup] = useState(false);
 
   const [params, setParams] = useState(searchParams);
+  const [_sortparams, setSortParams] = useState(sortParams);
   const [type, setType] = useState("");
 
   const selectParams = (param) => {
@@ -55,10 +56,14 @@ export const ApplicationCard = ({
     setPopup(false);
     setType("");
     setParams(searchParams);
+    setSortParams(sortParams);
   };
 
-  const _onSearch = (d) => {
-    console.log(d);
+  const onSearchSortParams = (d) => {
+    setSortParams(d);
+    setPopup(false);
+    setType("");
+    onSort(d);
   };
 
   if (isLoading) {
@@ -136,7 +141,7 @@ export const ApplicationCard = ({
           )}
           {type === "SORT" && (
             <div className="popup-module">
-              {<SortBy type="mobile" sortParams={sortParams} searchParams={searchParams} onClose={handlePopupClose} type="mobile" onSort={onSort} />}
+              {<SortBy type="mobile" sortParams={sortParams} onClose={handlePopupClose} type="mobile" onSort={onSort} />}
             </div>
           )}
           {type === "SEARCH" && (

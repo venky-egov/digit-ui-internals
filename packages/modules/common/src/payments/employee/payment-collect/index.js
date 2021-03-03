@@ -90,8 +90,9 @@ export const CollectPayment = (props) => {
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();
       history.push(`${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}`);
-    } catch (er) {
-      alert("Something went wrong !!");
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong,DD/Cheque Date cant be from future");
     }
   };
 

@@ -8,7 +8,7 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
 
   const fetchFilters = () => {
     let filtersObj = {};
-    const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;
+    const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder, total } = filters;
     if (filters.applicationStatus && filters.applicationStatus?.[0]) {
       filtersObj.applicationStatus = filters.applicationStatus.map((status) => status.code).join(",");
     }
@@ -30,7 +30,8 @@ const useInbox = (tenantId, filters, filterFsmFn, workFlowConfig = {}) => {
     if (sortOrder) {
       filtersObj.sortOrder = sortOrder;
     }
-    return { limit, offset, sortBy, sortOrder, ...filtersObj };
+    if (!total) return { limit, offset, sortBy, sortOrder, ...filtersObj };
+    else return { limit: 100000, offset: 0, sortBy, sortOrder, ...filtersObj };
   };
 
   const workflowFilters = fetchFilters().assignee ? { assignee: uuid } : {};

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DashboardBox, Loader } from "@egovernments/digit-ui-react-components";
+import { DashboardBox, Loader, ShippingTruck } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 
@@ -37,8 +37,7 @@ const DsoDashboard = () => {
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
     sortBy: "createdTime",
     sortOrder: "DESC",
-    limit: 10,
-    offset: 0,
+    total: true,
   };
 
   const { data, isFetching: vendorDetailsFetching } = Digit.Hooks.fsm.useVendorDetail();
@@ -71,8 +70,8 @@ const DsoDashboard = () => {
   useEffect(() => {
     if (pendingApprovalArray && pendingCompletionArray) {
       const infoObj = {
-        [t(progressStatusCode?.name)]: pendingCompletionArray?.[0]?.totalCount || 0,
-        [t(pendingApprovalStatusCode?.name)]: pendingApprovalArray?.[0]?.totalCount || 0,
+        [t("ES_COMPLETION_PENDING")]: pendingCompletionArray?.[0]?.totalCount || 0,
+        [t("ES_VEHICLE_ASSIGNMENT_PENDING")]: pendingApprovalArray?.[0]?.totalCount || 0,
       };
 
       setInfo(infoObj);
@@ -109,7 +108,7 @@ const DsoDashboard = () => {
   }
   return (
     <div>
-      <DashboardBox t={t} svgIcon={svgIcon} header={t("ES_TITLE_FAECAL_SLUDGE_MGMT")} info={info} links={links} />
+      <DashboardBox t={t} svgIcon={<ShippingTruck />} header={t("ES_TITLE_FAECAL_SLUDGE_MGMT")} info={info} links={links} />
     </div>
   );
 };

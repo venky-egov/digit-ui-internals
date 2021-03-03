@@ -102,7 +102,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         </LabelFieldPair>
         <LabelFieldPair>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
-            {t("CS_CREATECOMPLAINT_MOHALLA")}
+            {t("PT_LOCALITY_LABEL")}
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <Dropdown

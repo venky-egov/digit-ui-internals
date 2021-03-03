@@ -58,7 +58,7 @@ const Proof = ({ t, config, onSelect, onSkip, value }) => {
         onDelete={() => {
           setUploadedFile(null);
         }}
-        message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+        message={uploadedFile ? `1 ${t(`PT_ACTION_FILEUPLOADED`)}` : t(`PT_ACTION_NO_FILEUPLOADED`)}
       />
       <CardLabelDesc> </CardLabelDesc>
     </FormStep>

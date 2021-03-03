@@ -30,7 +30,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { city_complaint, locality_complaint, street, doorNo, landmark, ownerType } = value;
+  const { address, city_complaint, locality_complaint, street, doorNo, landmark, ownerType } = value;
   return (
     <Card>
       <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
@@ -39,7 +39,9 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       <StatusTable>
         <Row
           label={t("CS_CHECK_ADDRESS")}
-          text={`${doorNo ? `${doorNo} ` : ""} ${street ? `${street}, ` : ""}${t(locality_complaint.code)}, ${t(city_complaint.code)}`}
+          text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
+            address?.city.code
+          )}`}
           /* text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
             address?.city.code
           )}`} */

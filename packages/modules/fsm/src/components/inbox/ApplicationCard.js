@@ -35,10 +35,6 @@ export const ApplicationCard = ({
   };
 
   useEffect(() => {
-    console.log("params in application card", params);
-  }, [params]);
-
-  useEffect(() => {
     if (type) setPopup(true);
   }, [type]);
 
@@ -71,7 +67,7 @@ export const ApplicationCard = ({
     result = (
       <DetailsCard
         data={data}
-        serviceRequestIdKey={"Application No"}
+        serviceRequestIdKey={serviceRequestIdKey}
         linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
       />
     );

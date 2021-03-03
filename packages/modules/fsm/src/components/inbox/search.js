@@ -14,14 +14,16 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
     if (!data.mobileNumber) {
       delete data.mobileNumber;
     }
+
     onSearch(data);
     if (type === "mobile") {
       onClose();
     }
   };
+
   function clearSearch() {
     reset();
-    onSearch({});
+    onSearch([]);
   }
 
   const clearAll = () => {

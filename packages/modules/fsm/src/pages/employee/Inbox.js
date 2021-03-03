@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "@egovernments/digit-ui-react-components";
 
@@ -38,8 +38,10 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const handleFilterChange = (filterParam) => {
-    console.log("handleFilterChange", " in inbox", { ...searchParams, ...filterParam });
-    setSearchParams({ ...searchParams, ...filterParam });
+    let keys_to_delete = filterParam.delete;
+    let _new = { ...searchParams };
+    if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
+    setSearchParams({ ..._new, ...filterParam });
   };
 
   const handleSort = useCallback((args) => {
@@ -53,8 +55,13 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const onSearch = (params = {}) => {
-    // console.log("find onSearch", { ...searchParams, ...params })
     setSearchParams({ ...searchParams, ...params });
+  };
+
+  const removeParam = (params = {}) => {
+    const _search = { ...searchParams };
+    Object.keys(params).forEach((key) => delete _search[key]);
+    setSearchParams(_search);
   };
 
   const getSearchFields = (userRoles) => {
@@ -94,6 +101,8 @@ const Inbox = ({ parentRoute }) => {
           onSearch={onSearch}
           onSort={handleSort}
           searchParams={searchParams}
+          sortParams={sortParams}
+          removeParam={removeParam}
           linkPrefix={"/digit-ui/employee/fsm/application-details/"}
         />
       );
@@ -116,6 +125,7 @@ const Inbox = ({ parentRoute }) => {
             searchParams={searchParams}
             onPageSizeChange={handlePageSizeChange}
             parentRoute={parentRoute}
+            searchParams={searchParams}
           />
         </div>
       );

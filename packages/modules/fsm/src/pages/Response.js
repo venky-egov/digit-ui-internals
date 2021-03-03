@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
+import { getVehicleType } from "../utils";
 
 const GetActionMessage = (action, isSuccess) => {
   const { t } = useTranslation();
@@ -71,13 +72,19 @@ const Response = (props) => {
 
   const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
   const coreData = Digit.Hooks.useCoreData();
+  const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
+  const slumCode = mutation?.data?.fsm[0].address?.slumName;
+  const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  const vehicle = vehicleMenu?.find((vehicle) => mutation?.data?.fsm[0]?.vehicleType === vehicle?.code);
+  const pdfVehicleType = getVehicleType(vehicle, t);
 
   const handleDownloadPdf = () => {
     const { fsm } = mutation.data;
     const [applicationDetails, ...rest] = fsm;
     const tenantInfo = coreData.tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
 
-    const data = getPDFData(applicationDetails, tenantInfo, t);
+    const data = getPDFData({ ...applicationDetails, slum, pdfVehicleType }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 

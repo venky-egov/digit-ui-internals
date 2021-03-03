@@ -19,7 +19,6 @@ const FSMLink = ({ isMobile, data }) => {
     {
       text: t("ES_TITILE_SEARCH_APPLICATION"),
       link: "/digit-ui/employee/fsm/search",
-      accessTo: ["FSM_CREATOR_EMP", "FSM_DSO", "FSM_EDITOR_EMP", "FSM_ADMIN", "FSM_COLLECTOR"],
     },
   ];
 

@@ -25,6 +25,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
   const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO");
 
   const handleLogout = () => {
     toggleSidebar(false);
@@ -58,7 +59,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main" style={{ ...sideBarOpenStyles }}>
+        <div className={`main ${DSO ? "m-auto" : ""}`} style={{ ...sideBarOpenStyles }}>
           <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
         </div>
       </Route>

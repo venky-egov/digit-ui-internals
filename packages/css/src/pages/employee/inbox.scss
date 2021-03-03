@@ -164,10 +164,10 @@
 
     .search-container {
       width: 874px;
-      @apply ml-lg;
 
       .search-complaint-container {
-        @apply flex items-center bg-white p-md;
+        margin: auto;
+        @apply flex flex-col items-start  mb-md bg-white p-md;
 
         .complaint-header {
           display: flex;
@@ -176,6 +176,9 @@
 
         .complaint-input-container {
           display: flex !important;
+          * {
+            @apply flex-1;
+          }
 
           .complaint-input {
             @apply flex flex-col;
@@ -205,17 +208,17 @@
 }
 
 .sla-cell-error {
-  color: "#D4351C";
-  background-color: "rgba(212, 53, 28, 0.12)";
-  padding: "0 24px";
-  border-radius: "11px";
+  color: #d4351c;
+  background-color: rgba(212, 53, 28, 0.12);
+  padding: 0 24px;
+  border-radius: 11px;
 }
 
 .sla-cell-success {
-  color: "#00703C";
-  background-color: "rgba(0, 112, 60, 0.12)";
-  padding: "0 24px";
-  border-radius: "11px";
+  color: #00703c;
+  background-color: rgba(0, 112, 60, 0.12);
+  padding: 0 24px;
+  border-radius: 11px;
 }
 
 .complain-no-cell-text {

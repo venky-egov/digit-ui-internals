@@ -48,7 +48,7 @@
 }
 
 .employeeCard {
-  @apply bg-white shadow-card p-md mt-md mr-md mb-md;
+  @apply bg-white shadow-card p-md mt-md mb-xl;
   border-radius: 4px;
 
   .field-container {
@@ -190,6 +190,8 @@
   }
 
   .employeeCard {
+    @apply mb-md;
+
     &.filter {
       margin-left: auto;
       margin-right: auto;

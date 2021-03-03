@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
+const { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg } = require("@egovernments/digit-ui-react-components");
 import { useTranslation } from "react-i18next";
 
 const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFields, isInboxPage }) => {
@@ -60,7 +60,9 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
                 }}
               >
                 <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
-                <span onClick={onClose}>x</span>
+                <span onClick={onClose}>
+                  <CloseSvg />
+                </span>
               </div>
             )}
             <div className="complaint-input-container" style={{ width: "100%" }}>

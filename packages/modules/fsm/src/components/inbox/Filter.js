@@ -8,6 +8,7 @@ import {
   SubmitBar,
   ActionBar,
   RemoveableTag,
+  CloseSvg,
 } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
@@ -50,7 +51,11 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
                 {t("ES_COMMON_CLEAR_ALL")}
               </span>
             )}
-            {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
+            {props.type === "mobile" && (
+              <span onClick={props.onClose}>
+                <CloseSvg />
+              </span>
+            )}
           </div>
           <div>
             {!DSO && !isFstpOperator && (

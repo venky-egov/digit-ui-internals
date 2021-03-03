@@ -77,6 +77,7 @@ import FilterAction from "./molecules/FilterAction";
 import PitDimension from "./molecules/PitDimension";
 import RadioOrSelect from "./molecules/RadioOrSelect";
 import DashboardBox from "./molecules/DashboardBox";
+import PropertyTaxRegistration from "./molecules/PropertyTaxRegistration";
 
 import { FormComposer } from "./hoc/FormComposer";
 import ResponseComposer from "./hoc/ResponseComposer";
@@ -174,6 +175,7 @@ export {
   ApplyFilterBar,
   RemoveableTag,
   RadioOrSelect,
+  PropertyTaxRegistration,
   // hoc
   FormComposer,
   ResponseComposer,

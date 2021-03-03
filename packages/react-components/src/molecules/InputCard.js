@@ -9,9 +9,9 @@ import LinkButton from "../atoms/LinkButton";
 import CardCaption from "../atoms/CardCaption";
 import TextInput from "../atoms/TextInput";
 
-const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], inputRef, onNext, onSkip, isDisable }) => {
+const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], inputRef, onNext, onSkip, isDisable, onAdd, isMultipleAllow = false }) => {
   // TODO: inputs handle
-  console.log("FIND ME", isDisable);
+  console.log("FIND ME", isDisable, isMultipleAllow);
   return (
     <Card>
       {texts.headerCaption && <CardCaption>{t(texts.headerCaption)}</CardCaption>}
@@ -20,6 +20,7 @@ const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], input
       {children}
       <SubmitBar disabled={isDisable} submit={submit} label={t(texts.submitBarLabel)} onSubmit={onNext} />
       {texts.skipText ? <LinkButton label={t(texts.skipText)} onClick={onSkip} /> : null}
+      {isMultipleAllow && texts.addMultipleText ? <LinkButton label={t(texts.addMultipleText)} onClick={onAdd} /> : null}
     </Card>
   );
 };
@@ -29,6 +30,7 @@ InputCard.propTypes = {
   submit: PropTypes.bool,
   onNext: PropTypes.func,
   onSkip: PropTypes.func,
+  onAdd: PropTypes.func,
   t: PropTypes.func,
 };
 
@@ -37,6 +39,7 @@ InputCard.defaultProps = {
   submit: false,
   onNext: undefined,
   onSkip: undefined,
+  onAdd: undefined,
   t: (value) => value,
 };
 

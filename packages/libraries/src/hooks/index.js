@@ -41,6 +41,8 @@ import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
 
+import usePropertyMDMS from "./pt/usePropertyMDMS";
+
 const pgr = {
   useComplaintDetails,
   useComplaintsList,
@@ -54,6 +56,7 @@ const pgr = {
   useServiceDefs,
   useTenants,
   useComplaintSubType,
+  usePropertyMDMS
 };
 
 const fsm = {
@@ -81,6 +84,7 @@ const fsm = {
 const pt = {
   usePropertySearch,
   usePropertyPayment,
+  usePropertyMDMS
 };
 
 const Hooks = {

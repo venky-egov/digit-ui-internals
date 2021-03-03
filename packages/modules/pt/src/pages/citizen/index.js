@@ -8,6 +8,7 @@ import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-r
 import SearchPropertyComponent from "./SearchProperty";
 import SearchResultsComponent from "./SearchResults";
 import ApplicationDetails from "./MyApplications/application-details";
+import CreateProperty from "./Create";
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
@@ -15,6 +16,7 @@ const App = () => {
     <Switch>
       <AppContainer>
         <BackButton>Back</BackButton>
+        <PrivateRoute path={`${path}/property/new-application`} component={CreateProperty} />
         <PrivateRoute path={`${path}/property/search`} component={SearchPropertyComponent} />
         <PrivateRoute path={`${path}/property/search-results`} component={SearchResultsComponent} />
         {/* <PrivateRoute path={`${path}/property/my-bills`} component={MyBills}></PrivateRoute> */}

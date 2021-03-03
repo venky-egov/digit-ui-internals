@@ -6,7 +6,6 @@ import { useQueryClient } from "react-query";
 import { useCardPaymentDetails } from "./card";
 import { useChequeDetails, ChequeDetailsComponent } from "./cheque";
 import isEqual from "lodash/isEqual";
-import {} from "../../../hoc/testForm-config";
 
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
@@ -72,6 +71,15 @@ export const CollectPayment = (props) => {
     if (data.chequeDetails) {
       recieptRequest.Payment = { ...recieptRequest.Payment, ...data.chequeDetails };
       delete recieptRequest.Payment.chequeDetails;
+      if (data.chequeDetails.errorObj) {
+        const errors = data.chequeDetails.errorObj;
+        const messages = Object.keys(errors)
+          .map((e) => t(errors[e]))
+          .join();
+        alert(`${messages} are required`);
+        return;
+      }
+
       recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime();
       recieptRequest.Payment.transactionNumber = "12345678";
     }

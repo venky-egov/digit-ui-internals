@@ -15,7 +15,9 @@ import LabelFieldPair from "../atoms/LabelFieldPair";
 import { useTranslation } from "react-i18next";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, getValues, watch, control, formState } = useForm({ defaultValues: props.defaultValues });
+  const { register, handleSubmit, setValue, getValues, watch, control, formState } = useForm({
+    defaultValues: props.defaultValues,
+  });
   const { t } = useTranslation();
   const formData = watch();
 

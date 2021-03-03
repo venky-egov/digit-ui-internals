@@ -91,6 +91,8 @@ const Response = (props) => {
   useEffect(() => {
     const onSuccess = () => {
       queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+      const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
+      inbox?.revalidate();
     };
     console.log("state -------->", state);
     if (state.key === "update") {

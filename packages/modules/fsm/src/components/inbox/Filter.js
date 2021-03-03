@@ -94,8 +94,8 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
           </div>
         </div>
       </div>
-      <ActionBar>
-        {props.type === "mobile" && (
+      {props.type === "mobile" && (
+        <ActionBar>
           <ApplyFilterBar
             submit={false}
             labelLink={t("CS_COMMON_CLEAR_ALL")}
@@ -105,9 +105,10 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
               if (props.type === "mobile") onSearch({ delete: ["applicationNos"] });
               else onSearch();
             }}
+            style={{ flex: 1 }}
           />
-        )}
-      </ActionBar>
+        </ActionBar>
+      )}
     </React.Fragment>
   );
 };

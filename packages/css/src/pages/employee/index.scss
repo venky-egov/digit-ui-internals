@@ -141,8 +141,8 @@
     }
     .main {
       padding-top: 80px;
-      margin-left: 88px;
-      width: calc(100%-88px);
+      margin-left: 72px;
+      width: calc(100%-83px);
     }
   }
 
@@ -178,4 +178,8 @@
     row-gap: 2px;
     margin-left: -12px;
   }
+}
+
+.m-auto {
+  margin: auto !important;
 }

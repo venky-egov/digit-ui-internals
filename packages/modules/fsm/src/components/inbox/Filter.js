@@ -34,7 +34,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
 
   const clearAll = () => {
     onFilterChange({ applicationStatus: [], locality: [], uuid: { code: "ASSIGNED_TO_ME", name: "Assigned to Me" } });
-    props.onClose();
+    props?.onClose?.();
   };
 
   return (

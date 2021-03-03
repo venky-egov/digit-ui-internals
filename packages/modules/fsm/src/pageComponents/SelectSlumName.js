@@ -25,7 +25,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
     const locality = formData?.address?.locality?.code.split("_")[3];
     // console.log("find locality code here", locality)
     if (userType === "employee" && !slumDataLoading && slumData) {
-      // console.log("find slum data here", slumData[locality])
+      // console.log("find slum data here", slumData[locality], formData)
       const optionalSlumData = slumData[locality]
         ? [
             {
@@ -49,12 +49,19 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
           ];
       // console.log("find slum dta here", optionalSlumData)
       setSlumMenu(optionalSlumData);
+      // console.log("ok setting slum name to none",{
+      //   code: null,
+      //   active: true,
+      //   name: "Not residing in slum area",
+      //   i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
+      // })
       setSlum({
         code: null,
         active: true,
         name: "Not residing in slum area",
         i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
       });
+      onSelect(config.key, { ...formData[config.key], slum: null });
     }
     if (userType !== "employee" && !slumDataLoading && slumData) {
       // console.log("find citizen slum menu here", slumData, slumData[locality], formData)

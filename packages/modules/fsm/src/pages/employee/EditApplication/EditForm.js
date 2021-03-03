@@ -72,7 +72,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
 
     console.log("find form data here", formData);
-    if (formData?.propertyType && formData?.subtype && formData?.address?.locality?.code) {
+    if (formData?.propertyType && formData?.subtype && formData?.address?.locality?.code && vehicle && formData?.pitType && formData?.pitDetail) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -161,7 +161,13 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     });
   };
 
-  const configs = [ApplicantDetails(channelMenu, channel, setChannel), ...newConfig, TripDetails(vehicleMenu, vehicle, selectVehicle)];
+  const disable = {
+    channel: true,
+    name: true,
+    number: true,
+  };
+
+  const configs = [ApplicantDetails(channelMenu, channel, setChannel, disable), ...newConfig, TripDetails(vehicleMenu, vehicle, selectVehicle)];
 
   return (
     <FormComposer

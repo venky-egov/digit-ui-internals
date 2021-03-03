@@ -151,9 +151,7 @@ const DesktopInbox = (props) => {
         onNextPage={props.onNextPage}
         onPrevPage={props.onPrevPage}
         pageSizeLimit={props.pageSizeLimit}
-        onSort={(d) => {
-          props.onSort(d);
-        }}
+        onSort={props.onSort}
         disableSort={props.disableSort}
         onPageSizeChange={props.onPageSizeChange}
       />
@@ -171,7 +169,7 @@ const DesktopInbox = (props) => {
         </div>
       )}
       <div style={{ flex: 1 }}>
-        <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} />
+        <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={true} />
         <div style={{ marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
       </div>
     </div>

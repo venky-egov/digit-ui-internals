@@ -33,6 +33,21 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
       {
         body: [
           {
+            label: t("ES_FSM_ACTION_DSO_NAME"),
+            isMandatory: true,
+            type: "dropdown",
+            populators: (
+              <Dropdown
+                option={getFilteredDsoData(dsoData, vehicle)}
+                autoComplete="off"
+                optionKey="name"
+                id="dso"
+                selected={dso}
+                select={selectDSO}
+              />
+            ),
+          },
+          {
             label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
             isMandatory: true,
             type: "dropdown",
@@ -46,21 +61,6 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
                 select={selectVehicle}
                 disable={vehicle ? true : false}
                 t={t}
-              />
-            ),
-          },
-          {
-            label: t("ES_FSM_ACTION_DSO_NAME"),
-            isMandatory: true,
-            type: "dropdown",
-            populators: (
-              <Dropdown
-                option={getFilteredDsoData(dsoData, vehicle)}
-                autoComplete="off"
-                optionKey="name"
-                id="dso"
-                selected={dso}
-                select={selectDSO}
               />
             ),
           },

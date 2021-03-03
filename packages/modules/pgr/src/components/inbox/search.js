@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { TextInput, Label, SubmitBar, LinkLabel, ActionBar } from "@egovernments/digit-ui-react-components";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg } from "@egovernments/digit-ui-react-components";
 
 const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
   const [complaintNo, setComplaintNo] = useState(searchParams?.search?.serviceRequestId || "");
@@ -56,7 +56,9 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
             {type === "mobile" && (
               <div className="complaint-header">
                 <h2> {t("CS_COMMON_SEARCH_BY")}:</h2>
-                <span onClick={onClose}>x</span>
+                <span onClick={onClose}>
+                  <CloseSvg />
+                </span>
               </div>
             )}
             <div className="complaint-input-container" style={{ width: "100%" }}>

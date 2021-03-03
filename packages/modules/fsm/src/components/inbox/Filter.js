@@ -14,15 +14,14 @@ import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
-const Filter = ({ searchParams, onFilterChange, onSearch, ...props }) => {
-  console.log("in filter", searchParams);
+const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
   const { t } = useTranslation();
+
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const localities = useSelector((state) => state.common.localities[tenantId]);
-  console.log(localities);
   const selectLocality = (d) => {
     onFilterChange({ locality: [...searchParams?.locality, d] });
   };
@@ -34,7 +33,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, ...props }) => {
 
   const clearAll = () => {
     onFilterChange({ applicationStatus: [], locality: [], uuid: { code: "ASSIGNED_TO_ME", name: "Assigned to Me" } });
-    props.onClose();
+    props?.onClose?.();
   };
 
   return (
@@ -75,7 +74,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, ...props }) => {
 
           <div>
             <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-            <Dropdown option={localities} selected={null} select={selectLocality} optionKey={"name"} />
+            <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} />
             <div className="tag-container">
               {searchParams?.locality.map((locality, index) => {
                 return (
@@ -103,7 +102,8 @@ const Filter = ({ searchParams, onFilterChange, onSearch, ...props }) => {
             buttonLink={t("CS_COMMON_FILTER")}
             onClear={clearAll}
             onSubmit={() => {
-              onSearch();
+              if (props.type === "mobile") onSearch({ delete: ["applicationNos"] });
+              else onSearch();
             }}
           />
         )}

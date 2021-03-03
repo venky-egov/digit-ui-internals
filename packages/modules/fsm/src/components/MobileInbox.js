@@ -13,8 +13,19 @@ const GetSlaCell = (value) => {
 
 const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
 
-const MobileInbox = ({ data, vehicleLog, isLoading, onSearch, onFilterChange, onSort, searchParams, searchFields, linkPrefix }) => {
-  // console.log("find vehicle log here",vehicleLog)
+const MobileInbox = ({
+  data,
+  vehicleLog,
+  isLoading,
+  onSearch,
+  onFilterChange,
+  onSort,
+  searchParams,
+  searchFields,
+  linkPrefix,
+  removeParam,
+  sortParams,
+}) => {
   const { t } = useTranslation();
   const localizedData = data?.map(({ locality, applicationNo, createdTime, tenantId, status, sla }) => ({
     [t("ES_INBOX_APPLICATION_NO")]: applicationNo,
@@ -52,6 +63,8 @@ const MobileInbox = ({ data, vehicleLog, isLoading, onSearch, onFilterChange, on
             searchParams={searchParams}
             searchFields={searchFields}
             linkPrefix={linkPrefix}
+            removeParam={removeParam}
+            sortParams={sortParams}
           />
         </div>
       </div>

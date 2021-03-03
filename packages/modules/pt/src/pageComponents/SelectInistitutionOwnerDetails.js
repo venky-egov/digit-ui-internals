@@ -73,16 +73,17 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
       ownerDetails["mobileNumber"] = mobileNumber;
       ownerDetails["altContactNumber"] = altContactNumber;
       ownerDetails["emailId"] = emailId;
-      onSelect(config.key, ownerDetails);
+      onSelect(config.key, ownerDetails, false, index);
     } else {
-      onSelect(config.key, { inistitutionName, inistitutetype, name, designation, mobileNumber, altContactNumber, emailId });
+      let ownerStep = { ...ownerDetails, inistitutionName, inistitutetype, name, designation, mobileNumber, altContactNumber, emailId };
+      onSelect(config.key, ownerStep, false, index);
     }
   };
 
   return (
-    <FormStep config={config} t={t} onSelect={goNext}>
+    <FormStep config={config} t={t} onSelect={goNext} isDisabled={(!inistitutionName || !inistitutetype || !name || !designation || !mobileNumber || !altContactNumber)}>
       <div>
-        <CardLabel>{t("PT_INSTITUTION_NAME")}</CardLabel>
+        <CardLabel>{t("PT_COMMON_INSTITUTION_NAME")}</CardLabel>
         <TextInput
           isMandatory={false}
           optionKey="i18nKey"
@@ -90,6 +91,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="institutionName"
           onChange={setInistitution}
           value={inistitutionName}
+          pattern="^[a-zA-Z_ ]*$"
         />
         <CardLabel>{t("PT_TYPE_OF_INSTITUTION")}</CardLabel>
         <Dropdown
@@ -109,6 +111,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="name"
           onChange={setInistituteName}
           value={name}
+          pattern="^[a-zA-Z_ ]*$"
         />
         <CardLabel>{t("PT_COMMON_AUTHORISED_PERSON_DESIGNATION")}</CardLabel>
         <TextInput
@@ -118,8 +121,9 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="designation"
           onChange={setDesignationName}
           value={designation}
+          pattern="^[a-zA-Z_ ]*$"
         />
-        <CardLabel>{t("PT_FORM3_MOBILE_NO")}</CardLabel>
+        <CardLabel>{t("PT_FORM3_MOBILE_NUMBER")}</CardLabel>
         <TextInput
           isMandatory={false}
           optionKey="i18nKey"
@@ -127,8 +131,9 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="setMobileNo"
           onChange={setMobileNo}
           value={mobileNumber}
+          pattern="^([0]|((\+\d{1,2}[-]{0,1})))?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
         />
-        <CardLabel>{t("PT_OWNERSHIP_INFO_TEL_NO")}</CardLabel>
+        <CardLabel>{t("PT_OWNERSHIP_INFO_TEL_PHONE_NO")}</CardLabel>
         <TextInput
           isMandatory={false}
           optionKey="i18nKey"
@@ -136,6 +141,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="altContactNumber"
           onChange={setAltContactNo}
           value={altContactNumber}
+          pattern="^[0-9]{10,11}$"
         />
         <CardLabel>{t("PT_FORM3_EMAIL_ID")}</CardLabel>
         <TextInput

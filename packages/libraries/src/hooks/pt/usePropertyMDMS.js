@@ -18,7 +18,6 @@ const usePropertyMDMS = (tenantId, moduleCode, type, config = {}) => {
         case "OwnerType":
             return usePropertyOwnerType();
         case "SubOwnerShipCategory":
-            debugger;
             return useSubOwnerShipCategory();
     }
 };

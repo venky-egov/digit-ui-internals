@@ -51,5 +51,12 @@ const templatePostprocessor = {
 };
 
 export const initI18n = (callback) => {
-  return i18next.use(new ReactPostprocessor()).use(templatePostprocessor).use(initReactI18next).init(i18nextConfig, callback);
+  return i18next
+    .use(new ReactPostprocessor())
+    .use(templatePostprocessor)
+    .use(initReactI18next)
+    .init(i18nextConfig, () => {
+      window.i18next = i18next;
+      callback();
+    });
 };

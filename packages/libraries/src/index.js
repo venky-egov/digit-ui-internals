@@ -37,7 +37,7 @@ const setupLibraries = (Library, props) => {
   window.Digit[Library] = { ...window.Digit[Library], ...props };
 };
 
-const initLibraries = (callback) => {
+const initLibraries = () => {
   setupLibraries("SessionStorage", Storage);
   setupLibraries("UserService", UserService);
   setupLibraries("ULBService", ULBService);
@@ -67,8 +67,9 @@ const initLibraries = (callback) => {
   setupLibraries("Customizations", {});
   setupLibraries("Utils", Utils);
 
-  initI18n(callback);
-  window.i18next = i18next;
+  return new Promise((resolve) => {
+    initI18n(resolve);
+  });
 };
 
 export { initLibraries, Enums, Hooks, subFormRegistry };

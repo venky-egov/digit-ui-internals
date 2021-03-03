@@ -14,7 +14,9 @@ const CreateProperty = ({ parentRoute }) => {
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
 
   const goNext = (skipStep, index, isAddMultiple, key) => {
-    let currentPath = pathname.split("/").pop(), isMultiple = false, nextPage;
+    let currentPath = pathname.split("/").pop(),
+      isMultiple = false,
+      nextPage;
     if (Number(parseInt(currentPath)) || currentPath == "0") {
       currentPath = pathname.slice(0, -2);
       currentPath = currentPath.split("/").pop();
@@ -31,7 +33,7 @@ const CreateProperty = ({ parentRoute }) => {
       redirectWithHistory = history.replace;
     }
     if (isAddMultiple) {
-      nextStep = key
+      nextStep = key;
     }
     if (nextStep === null) {
       return redirectWithHistory(`${parentRoute}/new-application/check`);
@@ -43,7 +45,7 @@ const CreateProperty = ({ parentRoute }) => {
   const submitComplaint = async () => {
     history.push(`${parentRoute}/new-application/response`);
   };
-  
+
   function handleSelect(key, data, skipStep, index, isAddMultiple = false) {
     if (key === "owners") {
       let owners = params.owners || [];
@@ -55,8 +57,8 @@ const CreateProperty = ({ parentRoute }) => {
     goNext(skipStep, index, isAddMultiple, key);
   }
 
-  const handleSkip = () => { };
-  const handleMultiple = () => { };
+  const handleSkip = () => {};
+  const handleMultiple = () => {};
 
   const handleSUccess = () => {
     clearParams();
@@ -65,7 +67,8 @@ const CreateProperty = ({ parentRoute }) => {
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "map";
+  //config.indexRoute = "map";
+  config.indexRoute = "info";
   return (
     <Switch>
       {config.map((routeObj, index) => {

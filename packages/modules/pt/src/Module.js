@@ -18,8 +18,10 @@ import SelectOwnerAddress from "./pageComponents/SelectOwnerAddress";
 import SelectInistitutionOwnerDetails from "./pageComponents/SelectInistitutionOwnerDetails";
 import SelectProofIdentity from "./pageComponents/SelectProofIdentity";
 import SelectSpecialProofIdentity from "./pageComponents/SelectSpecialProofIdentity";
+import PropertyTax from "./pageComponents/PropertyTax";
 
 const componentsToRegister = {
+  PropertyTax,
   SelectGeolocation,
   SelectPincode,
   SelectAddress,
@@ -32,7 +34,7 @@ const componentsToRegister = {
   SelectOwnerAddress,
   SelectInistitutionOwnerDetails,
   SelectProofIdentity,
-  SelectSpecialProofIdentity
+  SelectSpecialProofIdentity,
 };
 
 const addComponentsToRegistry = () => {

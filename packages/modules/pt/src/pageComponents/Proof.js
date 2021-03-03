@@ -1,31 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { FormStep, ImageUploadHandler, Loader, UploadFile } from "@egovernments/digit-ui-react-components";
+import { FormStep, ImageUploadHandler, Loader, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
 
 const Proof = ({ t, config, onSelect, onSkip, value }) => {
-  // const __initImages = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
   const [uploadedImages, setUploadedImagesIds] = useState(() => {
-    // __initImages ? __initImages : null
-    console.log("%c 🏎️: props in selectImages ", "font-size:16px;background-color:#c239cc;color:white;", value);
     const { uploadedImages } = ""; //value;
     return uploadedImages ? uploadedImages : null;
   });
 
   const handleUpload = (ids) => {
     setUploadedImagesIds(ids);
-    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
   };
 
-  // const onSkip = () => onSelect();
   const handleSubmit = () => {
-    // if (!uploadedImages || uploadedImages.length === 0) return onSkip();
-    // const _uploadImages = uploadedImages.map((url) => ({
-    //   documentType: "PHOTO",
-    //   fileStore: url,
-    //   documentUid: "",
-    //   additionalDetails: {},
-    // }));
-    onSelect({ uploadedImages });
+    if (!uploadedImages || uploadedImages.length === 0) return onSkip();
+    onSelect({ specialProofIdentity: uploadedImages });
   };
+
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
@@ -60,7 +50,8 @@ const Proof = ({ t, config, onSelect, onSkip, value }) => {
 
   return (
     <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t}>
-      {/* <ImageUploadHandler tenantId="pb.amritsar" uploadedImages={uploadedImages} onPhotoChange={handleUpload} /> */}
+      <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
+      <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <UploadFile
         accept=".jpg"
         onUpload={selectfile}

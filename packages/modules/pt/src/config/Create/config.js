@@ -3,6 +3,13 @@ export const newConfig = [
     head: "ES_NEW_APPLICATION_LOCATION_DETAILS",
     body: [
       {
+        route: "info",
+        component: "PropertyTax",
+        nextStep: "map",
+        hideInEmployee: true,
+        key: "Documents",
+      },
+      {
         route: "map",
         component: "SelectGeolocation",
         nextStep: "pincode",
@@ -77,7 +84,7 @@ export const newConfig = [
         texts: {
           headerCaption: "Property's Location",
           header: "Proof Of address",
-          cardText: "Adhaar Card, Voter ID, Driving Licence File Type: jpg, PNG OR PDF (less than 2MB)",
+          cardText: "",
           nextText: "PT_COMMONS_NEXT",
           submitBarLabel: "PT_COMMONS_NEXT",
         },
@@ -103,15 +110,15 @@ export const newConfig = [
         key: "ownershipCategory",
         withoutLabel: true,
         nextStep: {
-          "INSTITUTIONALPRIVATE" : "inistitution-details",
-          "INSTITUTIONALGOVERNMENT": "inistitution-details",
+          INSTITUTIONALPRIVATE: "inistitution-details",
+          INSTITUTIONALGOVERNMENT: "inistitution-details",
           "INDIVIDUAL.SINGLEOWNER": "owner-details",
-          "INDIVIDUAL.MULTIPLEOWNERS": "owner-details"
+          "INDIVIDUAL.MULTIPLEOWNERS": "owner-details",
         },
         hideInEmployee: true,
       },
       {
-        label: "ES_NEW_APPLICATION_PROPERTY_TYPE", 
+        label: "ES_NEW_APPLICATION_PROPERTY_TYPE",
         isMandatory: true,
         type: "component",
         route: "owner-details",
@@ -183,7 +190,7 @@ export const newConfig = [
           header: "PT_PROOF_IDENTITY_HEADER",
           cardText: "",
           submitBarLabel: "PT_COMMON_NEXT",
-          addMultipleText: "PT_COMMON_ADD_APPLICANT_LABEL"
+          addMultipleText: "PT_COMMON_ADD_APPLICANT_LABEL",
         },
         key: "owners",
         withoutLabel: true,

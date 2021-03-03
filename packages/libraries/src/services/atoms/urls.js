@@ -41,7 +41,7 @@ const Urls = {
     demandSearch: "/billing-service/demand/_search",
     create_reciept: "/collection-services/payments/_create",
     print_reciept: "/collection-services/payments",
-    generate_pdf: "/pdf-service/v1/_createnosave",
+    generate_pdf: "/pdf-service/v1/_create",
     create_citizen_reciept: "/pg-service/transaction/v1/_create",
     update_citizen_reciept: "/pg-service/transaction/v1/_update",
   },

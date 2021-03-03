@@ -19,7 +19,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
       error: "CORE_COMMON_STREET_INVALID",
     },
     {
-      label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL",
+      label: "PT_DOOR_NUM_LABEL",
       type: "text",
       name: "doorNo",
       validation: {

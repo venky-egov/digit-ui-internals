@@ -123,7 +123,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
       <RadioOrSelect options={cities} selectedOption={selectedCity} optionKey="code" onSelect={selectCity} t={t} />
-      {selectedCity && localities && <CardLabel>{`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}</CardLabel>}
+      {selectedCity && localities && <CardLabel>{`${t("PT_LOCALITY_LABEL")} *`}</CardLabel>}
       {selectedCity && localities && (
         <RadioOrSelect
           isMandatory={config.isMandatory}

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { newConfig } from "../../../config/Create/config";
 import { useQueryClient } from "react-query";
+import CheckPage from "./CheckPage";
 
 const CreateProperty = ({ parentRoute }) => {
   const queryClient = useQueryClient();
@@ -80,6 +81,9 @@ const CreateProperty = ({ parentRoute }) => {
           </Route>
         );
       })}
+      <Route path={`${match.path}/check`}>
+        <CheckPage onSubmit={submitComplaint} value={params} />
+      </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>

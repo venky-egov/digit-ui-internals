@@ -240,9 +240,7 @@ const getPropertyOwnerTypeCriteria = (tenantId, moduleCode, type) => ({
     moduleDetails: [
       {
         moduleName: moduleCode,
-        masterDetails: [
-          { name: "OwnerType" },
-        ],
+        masterDetails: [{ name: "OwnerType" }],
       },
     ],
   },
@@ -255,9 +253,7 @@ const getSubPropertyOwnerShipCategoryCriteria = (tenantId, moduleCode, type) => 
     moduleDetails: [
       {
         moduleName: moduleCode,
-        masterDetails: [
-          { name: "SubOwnerShipCategory" }
-        ],
+        masterDetails: [{ name: "SubOwnerShipCategory" }],
       },
     ],
   },
@@ -269,8 +265,22 @@ const getPropertyOwnerShipCategoryCriteria = (tenantId, moduleCode, type) => ({
     moduleDetails: [
       {
         moduleName: moduleCode,
+        masterDetails: [{ name: "OwnerShipCategory" }],
+      },
+    ],
+  },
+});
+
+const getDyarnocumentRequiredScreenCategory = (tenantId, moduleCode) => ({
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
         masterDetails: [
-          { name: "OwnerShipCategory" },
+          {
+            name: "Documents",
+          },
         ],
       },
     ],
@@ -366,19 +376,30 @@ const GetPropertyOwnerShipCategory = (MdmsRes) =>
 const GetPropertyOwnerType = (MdmsRes) =>
   MdmsRes["PropertyTax"].OwnerType.filter((owner) => owner.active).map((ownerDetails) => {
     return {
-      ...ownerDetails, i18nKey: `PROPERTYTAX_OWNERTYPE_${ownerDetails.code}`,
+      ...ownerDetails,
+      i18nKey: `PROPERTYTAX_OWNERTYPE_${ownerDetails.code}`,
     };
   });
 
 const getSubPropertyOwnerShipCategory = (MdmsRes) => {
   MdmsRes["PropertyTax"].SubOwnerShipCategory.filter((category) => category.active).map((subOwnerShipDetails) => {
     return {
-      ...subOwnerShipDetails, i18nKey: `PROPERTYTAX_BILLING_SLAB_${subOwnerShipDetails.code}`,
+      ...subOwnerShipDetails,
+      i18nKey: `PROPERTYTAX_BILLING_SLAB_${subOwnerShipDetails.code}`,
     };
   });
   sessionStorage.setItem("getSubPropertyOwnerShipCategory", JSON.stringify(MdmsRes));
-}
-  
+};
+
+const getDocumentRequiredScreen = (MdmsRes) => {
+  MdmsRes["PropertyTax"].Documents.filter((Documents) => Documents.active).map((dropdownData) => {
+    return {
+      ...Documents,
+      i18nKey: `${dropdownData.code}`,
+    };
+  });
+};
+
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
     case "citymodule":
@@ -401,12 +422,14 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetVehicleType(MdmsRes);
     case "Slum":
       return GetSlumLocalityMapping(MdmsRes);
-    case "OwnerShipCategory": 
-      return GetPropertyOwnerShipCategory(MdmsRes); 
-    case "OwnerType": 
-      return GetPropertyOwnerType(MdmsRes); 
-    case "SubOwnerShipCategory": 
+    case "OwnerShipCategory":
+      return GetPropertyOwnerShipCategory(MdmsRes);
+    case "OwnerType":
+      return GetPropertyOwnerType(MdmsRes);
+    case "SubOwnerShipCategory":
       return getSubPropertyOwnerShipCategory(MdmsRes);
+    case "Documents":
+      return getDocumentRequiredScreen(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -478,5 +501,8 @@ export const MdmsService = {
   },
   getPropertySubOwnerShipCategory: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getSubPropertyOwnerShipCategoryCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getDocumentRequiredScreen: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getDocumentRequiredScreenCategory(tenantId, moduleCode), moduleCode);
   },
 };

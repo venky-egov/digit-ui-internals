@@ -60,6 +60,7 @@ const Proof = ({ t, config, onSelect, onSkip, value }) => {
         }}
         message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
       />
+      <CardLabelDesc> </CardLabelDesc>
     </FormStep>
   );
 };

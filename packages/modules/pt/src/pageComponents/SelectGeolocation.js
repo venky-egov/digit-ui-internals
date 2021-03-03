@@ -23,9 +23,9 @@ const SelectGeolocation = ({ onSelect, t, config }) => {
 
   return (
     <LocationSearchCard
-      header={t("CS_ADDCOMPLAINT_SELECT_GEOLOCATION_HEADER")}
-      cardText={t("CS_ADDCOMPLAINT_SELECT_GEOLOCATION_TEXT")}
-      nextText={t("CS_COMMON_NEXT")}
+      header={t("PT_GEOLOCATON_HEADER")}
+      cardText={t("PT_GEOLOCATION_TEXT")}
+      nextText={t("PT_COMMON_NEXT")}
       skipAndContinueText={t("CORE_COMMON_SKIP_CONTINUE")}
       skip={onSkip}
       t={t}

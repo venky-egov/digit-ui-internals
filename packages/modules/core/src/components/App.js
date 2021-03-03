@@ -9,7 +9,7 @@ import { AppModules } from "./AppModules";
 import { CitizenSidebar } from "./Sidebar";
 
 const TextToImg = (props) => (
-  <span className="user-img-txt" onClick={props.toggleMenu}>
+  <span className="user-img-txt" onClick={props.toggleMenu} title={props.name}>
     {props.name[0].toUpperCase()}
   </span>
 );

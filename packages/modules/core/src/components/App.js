@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { Link, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { TopBar as TopBarComponent, Dropdown, LogoutIcon, HomeIcon, Hamburger } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "./ChangeLanguage";
 import { useSelector } from "react-redux";
@@ -18,6 +18,7 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
+  const history = useHistory();
   const [isSidebarOpen, toggleSidebar] = useState(false);
   const [displayMenu, toggleMenu] = useState(false);
   const innerWidth = window.innerWidth;
@@ -25,6 +26,10 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
   const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
+
+  history.listen(() => {
+    window?.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  });
 
   const handleLogout = () => {
     toggleSidebar(false);

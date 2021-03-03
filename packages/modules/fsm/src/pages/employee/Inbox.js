@@ -11,6 +11,12 @@ const Inbox = ({ parentRoute }) => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo.info.roles;
 
+  const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
+  const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
+  const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
+
   const { t } = useTranslation();
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -18,7 +24,10 @@ const Inbox = ({ parentRoute }) => {
   const [searchParams, setSearchParams] = useState({
     applicationStatus: [],
     locality: [],
-    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+    uuid:
+      DSO || isFSTPOperator
+        ? { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") }
+        : { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
   });
 
   let isMobile = window.Digit.Utils.browser.isMobile();

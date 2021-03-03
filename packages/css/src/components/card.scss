@@ -236,6 +236,9 @@
       .field {
         width: 50%;
         margin-right: 20%;
+        .field {
+          margin-right: unset;
+        }
       }
     }
 

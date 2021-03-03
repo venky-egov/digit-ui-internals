@@ -15,16 +15,16 @@ import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
 const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
-  console.log("in filter", searchParams);
   const { t } = useTranslation();
+  const [localityToShow, setLocalityToShow] = useState(null);
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const localities = useSelector((state) => state.common.localities[tenantId]);
-  console.log(localities);
   const selectLocality = (d) => {
-    onFilterChange({ locality: [...searchParams.locality, d] });
+    setLocalityToShow(null);
+    setTimeout(() => onFilterChange({ locality: [...searchParams.locality, d] }));
   };
 
   const onStatusChange = (e, type) => {
@@ -75,7 +75,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
 
           <div>
             <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-            <Dropdown option={localities} selected={null} select={selectLocality} optionKey={"name"} />
+            <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} />
             <div className="tag-container">
               {searchParams.locality.map((locality, index) => {
                 return (

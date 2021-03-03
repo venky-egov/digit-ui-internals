@@ -4,6 +4,7 @@ import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export const SuccessfulPayment = (props) => {
+  props.setLink("Response");
   const { addParams, clearParams } = props;
   const { t } = useTranslation();
   let { consumerCode, receiptNumber, businessService } = useParams();
@@ -15,14 +16,14 @@ export const SuccessfulPayment = (props) => {
   const printReciept = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const payments = await Digit.PaymentService.getReciept(tenantId, businessService, { receiptNumbers: receiptNumber });
-    // let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
+    let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 
     if (!payments.Payments[0]?.fileStoreId) {
       response = await Digit.PaymentService.generatePdf(tenantId, { Payments: payments.Payments });
       // console.log({ response });
-      window.open(response, "_blank");
     }
-    // const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response.filestoreIds[0]], "_blank");
   };
 
   return (
@@ -44,6 +45,7 @@ export const SuccessfulPayment = (props) => {
 };
 
 export const FailedPayment = (props) => {
+  props.setLink("Response");
   const { addParams, clearParams } = props;
   const { t } = useTranslation();
   const { consumerCode } = useParams();

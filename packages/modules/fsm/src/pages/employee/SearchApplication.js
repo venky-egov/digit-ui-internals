@@ -152,9 +152,9 @@ const SearchApplication = () => {
 
   return (
     <div className="inbox-container">
-      <div style={{ width: "94%", overflowX: "auto" }}>
+      <div style={{ width: "100%", overflowX: "auto" }}>
         <Search onSearch={handleSearch} type="desktop" searchFields={searchFields} />
-        <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
+        <div style={{ flex: 1 }}>{result}</div>
       </div>
     </div>
   );

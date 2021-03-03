@@ -4,11 +4,8 @@ import { ApplicationCard } from "./inbox/ApplicationCard";
 import ApplicationLinks from "./inbox/ApplicationLinks";
 
 const GetSlaCell = (value) => {
-  return value < 0 ? (
-    <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
-  ) : (
-    <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
-  );
+  if (isNaN(value)) value = "-";
+  return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
 };
 
 const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
@@ -50,7 +47,7 @@ const MobileInbox = ({
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {!DSO && !isFstpOperator && <ApplicationLinks isMobile={true} />}
+          {!isFstpOperator && <ApplicationLinks isMobile={true} />}
           <ApplicationCard
             t={t}
             data={isFstpOperator ? fstpOperatorData : localizedData}

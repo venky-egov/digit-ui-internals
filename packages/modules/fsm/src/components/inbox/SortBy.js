@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ActionBar, RadioButtons } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
+import { ApplyFilterBar, CloseSvg } from "@egovernments/digit-ui-react-components";
 
 const SortBy = (props) => {
   const { t } = useTranslation();
@@ -32,7 +32,11 @@ const SortBy = (props) => {
                 {t("ES_COMMON_CLEAR_ALL")}
               </span>
             )}
-            {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
+            {props.type === "mobile" && (
+              <span onClick={props.onClose}>
+                <CloseSvg />
+              </span>
+            )}
           </div>
           <div>
             <RadioButtons

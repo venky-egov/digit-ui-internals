@@ -36,7 +36,7 @@ const Profile = ({ info, stateName }) => (
       <div className="label-text"> {info.name} </div>
     </div>
     <div id="profile-location" className="label-container loc-Profile">
-      <div className="label-text"> {stateName} </div>
+      <div className="label-text"> {info?.mobileNumber} </div>
     </div>
     {info.emailId && (
       <div id="profile-emailid" className="label-container loc-Profile">

@@ -23,6 +23,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   const history = useHistory();
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [isOtpValid, setIsOtpValid] = useState(true);
   const [tokens, setTokens] = useState(null);
   const [params, setParmas] = useState({});
   const [errorTO, setErrorTO] = useState(null);
@@ -89,10 +90,10 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     if (isUserRegistered) {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
       if (!err) {
-        history.push(`${path}/otp`, { from: getFromLocation(location.state, searchParams), role: location.state?.role });
+        history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams), role: location.state?.role });
         return;
       } else {
-        history.push(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams) });
+        history.replace(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams) });
       }
       if (location.state?.role) {
         setError("User not registered.");
@@ -100,7 +101,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     } else {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
       if (!err) {
-        history.push(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
+        history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
         return;
       }
     }
@@ -113,11 +114,12 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       userType: getUserType(),
     };
     setParmas({ ...params, ...name });
-    history.push(`${path}`, { from: getFromLocation(location.state, searchParams) });
+    history.replace(`${path}`, { from: getFromLocation(location.state, searchParams) });
   };
 
   const selectOtp = async () => {
     try {
+      setIsOtpValid(true);
       const { mobileNumber, otp, name } = params;
       if (isUserRegistered) {
         const requestData = {
@@ -149,6 +151,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         setUser({ info, ...tokens });
       }
     } catch (err) {
+      setIsOtpValid(false);
       console.log(err);
     }
   };
@@ -197,6 +200,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
             onResend={resendOtp}
             onSelect={selectOtp}
             otp={params.otp}
+            error={isOtpValid}
             t={t}
           />
         </Route>

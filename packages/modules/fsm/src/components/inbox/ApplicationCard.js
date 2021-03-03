@@ -140,14 +140,16 @@ export const ApplicationCard = ({
             </div>
           )}
           {type === "SEARCH" && (
-            <SearchApplication
-              type="mobile"
-              onClose={handlePopupClose}
-              onSearch={onSearch}
-              isFstpOperator={isFstpOperator}
-              searchParams={searchParams}
-              searchFields={searchFields}
-            />
+            <div className="popup-module">
+              <SearchApplication
+                type="mobile"
+                onClose={handlePopupClose}
+                onSearch={onSearch}
+                isFstpOperator={isFstpOperator}
+                searchParams={searchParams}
+                searchFields={searchFields}
+              />
+            </div>
           )}
         </PopUp>
       )}

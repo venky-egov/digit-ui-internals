@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { Link, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { TopBar as TopBarComponent, Dropdown, LogoutIcon, HomeIcon, Hamburger } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "./ChangeLanguage";
 import { useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import { AppModules } from "./AppModules";
 import { CitizenSidebar } from "./Sidebar";
 
 const TextToImg = (props) => (
-  <span className="user-img-txt" onClick={props.toggleMenu}>
+  <span className="user-img-txt" onClick={props.toggleMenu} title={props.name}>
     {props.name[0].toUpperCase()}
   </span>
 );
@@ -18,6 +18,7 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
+  const history = useHistory();
   const [isSidebarOpen, toggleSidebar] = useState(false);
   const [displayMenu, toggleMenu] = useState(false);
   const innerWidth = window.innerWidth;
@@ -25,6 +26,11 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
   const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO");
+
+  history.listen(() => {
+    window?.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  });
 
   const handleLogout = () => {
     toggleSidebar(false);
@@ -58,7 +64,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main" style={{ ...sideBarOpenStyles }}>
+        <div className={`main ${DSO ? "m-auto" : ""}`} style={{ ...sideBarOpenStyles }}>
           <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
         </div>
       </Route>

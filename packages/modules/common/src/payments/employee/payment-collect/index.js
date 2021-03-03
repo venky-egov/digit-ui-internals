@@ -9,6 +9,7 @@ import isEqual from "lodash/isEqual";
 
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
+  props.setLink("Collect Payment");
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();
@@ -76,16 +77,22 @@ export const CollectPayment = (props) => {
         const messages = Object.keys(errors)
           .map((e) => t(errors[e]))
           .join();
-        alert(`${messages} are required`);
-        return;
+        if (messages) {
+          alert(`${messages} are required`);
+          return;
+        }
       }
 
       recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime();
       recieptRequest.Payment.transactionNumber = "12345678";
     }
-    const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
-    queryClient.invalidateQueries();
-    history.push(`${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}`);
+    try {
+      const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
+      queryClient.invalidateQueries();
+      history.push(`${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}`);
+    } catch (er) {
+      alert("Something went wrong !!");
+    }
   };
 
   function getAdditionalCharge() {

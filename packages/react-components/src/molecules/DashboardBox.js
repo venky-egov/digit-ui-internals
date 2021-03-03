@@ -11,7 +11,6 @@ const ArrowRight = ({ to }) => (
 );
 
 const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, links, total }) => {
-  debugger;
   const mobileView = innerWidth <= 640;
   const employeeCardStyles = mobileView
     ? {

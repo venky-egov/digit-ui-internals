@@ -51,11 +51,10 @@ const FSMCard = () => {
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
     sortBy: "createdTime",
     sortOrder: "DESC",
-    limit: 10,
-    offset: 0,
+    total: true,
   };
 
-  const { data: inbox, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters, ...filters }, null, {
+  const { data: inbox, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters }, null, {
     enabled: !isFSTPOperator ? true : false,
   });
 

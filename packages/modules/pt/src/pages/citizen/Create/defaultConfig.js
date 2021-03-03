@@ -18,6 +18,86 @@ export const config = {
   routes: {
     info: {
       component: PropertyTax,
+      nextStep: "is-this-a-residential-property",
+    },
+    "is-this-a-residential-property": {
+      component: IsResidentialType,
+      texts: {
+        headerCaption: "",
+        header: "Is this a Residential Property ?",
+        cardText: "Used as Residence by a Person or persons/Family. There are no commercial/industrial/institutional activities in this property",
+        submitBarLabel: "PT_COMMONS_NEXT",
+      },
+      nextStep: "provide-usage-type",
+    },
+    "provide-usage-type": {
+      component: PropertyUsagePurpose,
+      texts: {
+        headerCaption: "Property Usage Type",
+        header: "Provide Usage Type",
+        cardText: "choose the type of usage of the property from the options given below",
+        submitBarLabel: "PT_COMMONS_NEXT",
+      },
+      nextStep: "type-of-property",
+    },
+    "type-of-property": {
+      component: PropertyType,
+      texts: {
+        headerCaption: "",
+        header: "Type of Property",
+        cardText: "",
+        submitBarLabel: "PT_COMMONS_NEXT",
+      },
+      nextStep: "number-of-floors",
+    },
+    "number-of-floors": {
+      component: PropertyFloorsDetails,
+      texts: {
+        headerCaption: "",
+        header: "Number of Floors",
+        cardText: "choose no. of floors on the property excluding basement",
+        submitBarLabel: "PT_COMMONS_NEXT",
+      },
+      nextStep: "number-of-basements",
+    },
+    "number-of-basements": {
+      component: PropertyBasementsDetails,
+      texts: {
+        headerCaption: "",
+        header: "Number of Basements",
+        cardText: "",
+        submitBarLabel: "PT_COMMONS_NEXT",
+      },
+      nextStep: "groundfloordetails",
+    },
+    groundfloordetails: {
+      component: GroundFloorSize,
+      texts: {
+        headerCaption: "",
+        header: "Ground Floor Details",
+        cardText: "Enter Plot size and built up area on the ground floor.",
+        submitBarLabel: "Next",
+      },
+      inputs: [
+        {
+          label: "Plot Size(sq.yd)",
+          type: "text",
+          name: "PlotSize",
+          validation: {
+            pattern: /^[\w\s]{1,256}$/,
+          },
+          error: "CORE_COMMON_PLOTSIZE_INVALID",
+        },
+        {
+          label: "Door Number",
+          type: "text",
+          name: "BuiltUpArea",
+          validation: {
+            pattern: /^[\w]([\w\/,\s])*$/,
+          },
+          error: "CORE_COMMON_AREA_INVALID",
+        },
+      ],
       nextStep: "map",
     },
     map: {

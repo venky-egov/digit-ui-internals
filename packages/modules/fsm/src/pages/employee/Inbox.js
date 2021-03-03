@@ -45,7 +45,6 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const handleSort = useCallback((args) => {
-    console.log(args);
     if (args.length === 0) return;
     const [sortBy] = args;
     setSortParams({ key: sortBy.id, sortOrder: sortBy.desc ? "DESC" : "ASC" });
@@ -56,7 +55,6 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const onSearch = (params = {}) => {
-    console.log("----", { ...searchParams, ...params });
     setSearchParams({ ...searchParams, ...params });
   };
 

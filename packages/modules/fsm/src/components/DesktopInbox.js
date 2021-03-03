@@ -152,7 +152,6 @@ const DesktopInbox = (props) => {
         onPrevPage={props.onPrevPage}
         pageSizeLimit={props.pageSizeLimit}
         onSort={(d) => {
-          console.log("-------", d);
           props.onSort(d);
         }}
         disableSort={props.disableSort}

@@ -16,7 +16,7 @@ const Status = ({ onAssignmentChange, fsmfilters }) => {
         <CheckBox
           key={index}
           onChange={(e) => onAssignmentChange(e, option)}
-          checked={fsmfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
+          checked={fsmfilters?.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
           label={t(option.name)}
         />
       ))}

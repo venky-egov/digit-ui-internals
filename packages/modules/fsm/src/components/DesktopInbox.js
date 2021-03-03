@@ -164,7 +164,7 @@ const DesktopInbox = (props) => {
         <div className="filters-container">
           <FSMLink />
           <div>
-            <Filter applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+            <Filter applications={props.data} onFilterChange={props.onFilterChange} type="desktop" searchParams={props.searchParams} />
           </div>
         </div>
       )}

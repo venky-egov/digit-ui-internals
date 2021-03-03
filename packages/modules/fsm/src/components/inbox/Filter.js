@@ -16,20 +16,19 @@ import Status from "./Status";
 
 const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
   const { t } = useTranslation();
-  const [localityToShow, setLocalityToShow] = useState(null);
+
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const localities = useSelector((state) => state.common.localities[tenantId]);
   const selectLocality = (d) => {
-    setLocalityToShow(null);
-    setTimeout(() => onFilterChange({ locality: [...searchParams.locality, d] }));
+    onFilterChange({ locality: [...searchParams?.locality, d] });
   };
 
   const onStatusChange = (e, type) => {
-    if (e.target.checked) onFilterChange({ applicationStatus: [...searchParams.applicationStatus, type] });
-    else onFilterChange({ applicationStatus: searchParams.applicationStatus.filter((option) => type.name !== option.name) });
+    if (e.target.checked) onFilterChange({ applicationStatus: [...searchParams?.applicationStatus, type] });
+    else onFilterChange({ applicationStatus: searchParams?.applicationStatus.filter((option) => type.name !== option.name) });
   };
 
   const clearAll = () => {
@@ -58,7 +57,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
               <React.Fragment>
                 <RadioButtons
                   onSelect={(d) => onFilterChange({ uuid: d })}
-                  selectedOption={searchParams.uuid}
+                  selectedOption={searchParams?.uuid}
                   optionsKey="name"
                   options={[
                     { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
@@ -77,13 +76,13 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
             <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
             <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} />
             <div className="tag-container">
-              {searchParams.locality.map((locality, index) => {
+              {searchParams?.locality.map((locality, index) => {
                 return (
                   <RemoveableTag
                     key={index}
                     text={locality.name}
                     onClick={() => {
-                      onFilterChange({ locality: searchParams.locality.filter((loc) => loc.code !== locality.code) });
+                      onFilterChange({ locality: searchParams?.locality.filter((loc) => loc.code !== locality.code) });
                     }}
                   />
                 );

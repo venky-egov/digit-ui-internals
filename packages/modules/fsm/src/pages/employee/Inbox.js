@@ -124,6 +124,7 @@ const Inbox = ({ parentRoute }) => {
             currentPage={Math.floor(pageOffset / pageSize)}
             pageSizeLimit={pageSize}
             disableSort={false}
+            searchParams={searchParams}
             onPageSizeChange={handlePageSizeChange}
             parentRoute={parentRoute}
             searchParams={searchParams}

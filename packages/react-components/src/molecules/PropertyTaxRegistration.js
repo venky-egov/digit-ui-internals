@@ -11,7 +11,7 @@ import SubmitBar from "../atoms/SubmitBar";
 import LinkButton from "../atoms/LinkButton";
 //import box from "../atoms/box";
 
-const PropertyTaxRegistration = (onSave) => {
+const PropertyTaxRegistration = ({ goNext, onSelect}) => {
   return (
     <Card>
       <CardHeader>Property Tax Registration</CardHeader>
@@ -29,9 +29,7 @@ const PropertyTaxRegistration = (onSave) => {
       <CardText>Rent agreement, Electricity bill</CardText>
       <SubmitBar
         label="Next"
-        onSubmit={() => {
-          onSave;
-        }}
+        onSubmit={onSelect}
       />
     </Card>
   );

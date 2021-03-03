@@ -12,7 +12,7 @@ const Proof = ({ t, config, onSelect, onSkip, value }) => {
   };
 
   const handleSubmit = () => {
-    if (!uploadedImages || uploadedImages.length === 0) return onSkip();
+    // if (!uploadedImages || uploadedImages.length === 0) return onSkip();
     onSelect({ specialProofIdentity: uploadedImages });
   };
 

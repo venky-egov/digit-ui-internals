@@ -166,7 +166,7 @@ const ApplicationDetails = () => {
           }
           caption={getPitDimensionCaption(application?.pitDetail?.diameter, application?.pitDetail?.length, t)}
         />
-        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_ASSIGNED_DSO")} note={dsoData?.name || "NA"} />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_ASSIGNED_DSO")} note={dsoData?.displayName || "NA"} />
         <KeyNote keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_MAKE")} note={application?.vehicleType || "NA"} />
         <KeyNote
           keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_NO")}

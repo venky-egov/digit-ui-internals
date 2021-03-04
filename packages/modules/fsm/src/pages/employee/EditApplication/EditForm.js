@@ -145,6 +145,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         },
       },
     };
+
     delete formData["responseInfo"];
 
     window.Digit.SessionStorage.set("propertyType", null);

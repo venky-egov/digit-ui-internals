@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 
 const FSMLink = ({ isMobile, data }) => {
   const { t } = useTranslation();
-  const user = Digit.UserService.getUser();
 
   const allLinks = [
     {

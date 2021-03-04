@@ -6,55 +6,57 @@ import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
 import { getVehicleType } from "../utils";
 
-const GetActionMessage = (action, isSuccess) => {
+const GetMessage = (type, action, isSuccess, isEmployee) => {
   const { t } = useTranslation();
-  if (isSuccess) {
-    switch (action) {
-      case "REOPEN":
-        return t(`CS_COMMON_COMPLAINT_REOPENED`);
-      case "RATE":
-        return t("CS_COMMON_THANK_YOU");
-      case "PENDING_APPL_FEE_PAYMENT":
-        return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
-      case "SUBMIT_FEEDBACK":
-      case "COMPLETED":
-        return t("CS_APPLICATION_FEEDBACK_SUCCESSFUL");
-      default:
-        return t(`CS_COMMON_THANK_YOU`);
-    }
-  }
+  //   if (isSuccess) {
+  //     switch (action) {
+  //       case "REOPEN":
+  //         return t(`CS_COMMON_COMPLAINT_REOPENED`);
+  //       case "RATE":
+  //         return t("CS_COMMON_THANK_YOU");
+  //       case "PENDING_APPL_FEE_PAYMENT":
+  //         return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
+  //       case "SUBMIT_FEEDBACK":
+  //       case "COMPLETED":
+  //         return t("CS_APPLICATION_FEEDBACK_SUCCESSFUL");
+  //       default:
+  //         return t(`CS_COMMON_THANK_YOU`);
+  //     }
+  //   }
 
-  switch (action) {
-    case "REOPEN":
-      return t(`CS_COMMON_COMPLAINT_REOPENED_FAILED`);
-    case "RATE":
-      return t("CS_COMMON_ERROR");
-    case "PENDING_APPL_FEE_PAYMENT":
-      return t("CS_FILE_DESLUDGING_APPLICATION_FAILED");
-    case "SUBMIT_FEEDBACK":
-      return t("CS_APPLICATION_FEEDBACK_FAILED");
-    default:
-      return t(`CS_COMMON_SOMETHING_WENT_WRONG`);
-  }
+  //   switch (action) {
+  //     case "REOPEN":
+  //       return t(`CS_COMMON_COMPLAINT_REOPENED_FAILED`);
+  //     case "RATE":
+  //       return t("CS_COMMON_ERROR");
+  //     case "PENDING_APPL_FEE_PAYMENT":
+  //       return t("CS_FILE_DESLUDGING_APPLICATION_FAILED");
+  //     case "SUBMIT_FEEDBACK":
+  //       return t("CS_APPLICATION_FEEDBACK_FAILED");
+  //     default:
+  //       return t(`CS_COMMON_SOMETHING_WENT_WRONG`);
+  //   }
+  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action}_${type}${isSuccess ? "" : "_ERROR"}`);
 };
 
-const GetLabel = (action) => {
-  const { t } = useTranslation();
-  switch (action) {
-    case "PENDING_APPL_FEE_PAYMENT":
-      return t("CS_FILE_DESLUDGING_APPLICATION_NO");
-    default:
-      return t("ES_RECEIPT_NO");
-  }
+const GetActionMessage = (action, isSuccess, isEmployee) => {
+  return GetMessage("ACTION", action, isSuccess, isEmployee);
+};
+
+const GetLabel = (action, isSuccess, isEmployee) => {
+  return GetMessage("LABEL", action, isSuccess, isEmployee);
+};
+
+const DisplayText = (action, isSuccess, isEmployee) => {
+  return GetMessage("DISPLAY", action, isSuccess, isEmployee);
 };
 
 const BannerPicker = (props) => {
-  const { t } = useTranslation();
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess)}
+      message={GetActionMessage(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee)}
       applicationNumber={props.data?.fsm[0].applicationNo}
-      info={GetLabel(props.data?.fsm[0].applicationStatus)}
+      info={GetLabel(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee)}
       successful={props.isSuccess}
     />
   );
@@ -91,9 +93,7 @@ const Response = (props) => {
 
   useEffect(() => {
     const onSuccess = () => {
-      queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
-      const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
-      inbox?.revalidate();
+      queryClient.invalidateQueries();
     };
     console.log("state -------->", state);
     if (state.key === "update") {
@@ -139,21 +139,21 @@ const Response = (props) => {
       }
     }
   };
+  if (mutation.isLoading || mutation.isIdle) {
+    return <Loader />;
+  }
 
-  return mutation.isLoading || mutation.isIdle ? (
-    <Loader />
-  ) : (
+  return (
     <Card>
-      {(!mutation.isIdle || !mutation.isLoading) && (
-        <BannerPicker
-          t={t}
-          data={mutation.data}
-          action={state.action}
-          isSuccess={mutation.isSuccess}
-          isLoading={mutation.isIdle || mutation.isLoading}
-        />
-      )}
-      <CardText>{displayText(state.action)}</CardText>
+      <BannerPicker
+        t={t}
+        data={mutation.data}
+        action={state.action}
+        isSuccess={mutation.isSuccess}
+        isLoading={mutation.isIdle || mutation.isLoading}
+        isEmployee={props.parentRoute.includes("employee")}
+      />
+      <CardText>{DisplayText(state.action, mutation.isSuccess, props.parentRoute.includes("employee"))}</CardText>
       {mutation.isSuccess && (
         <LinkButton
           label={

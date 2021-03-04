@@ -55,13 +55,11 @@ export const Request = async ({ method = "POST", url, data = {}, headers = {}, u
   }
 
   const res = await Axios({ method, url, data, params, headers });
-
-  if (res && res.status >= 200 && res.status < 300) {
-    if (useCache) {
-      window.Digit.RequestCache[key] = res.data;
-    }
-    return res.data;
+  const returnData = res?.data || res?.response?.data || {};
+  if (useCache && res?.data && Object.keys(returnData).length !== 0) {
+    window.Digit.RequestCache[key] = returnData;
   }
+  return returnData;
 };
 
 /**

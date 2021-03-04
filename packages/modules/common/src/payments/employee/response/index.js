@@ -2,6 +2,7 @@ import React from "react";
 import { Banner, Card, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 
 export const SuccessfulPayment = (props) => {
   props.setLink("Response");
@@ -23,6 +24,10 @@ export const SuccessfulPayment = (props) => {
       // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    const queryClient = useQueryClient();
+    const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
+    inbox?.revalidate?.();
+    queryClient.refetchQueries("FSM_CITIZEN_SEARCH");
     window.open(fileStore[response.filestoreIds[0]], "_blank");
   };
 

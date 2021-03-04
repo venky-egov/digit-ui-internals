@@ -114,7 +114,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       userType: getUserType(),
     };
     setParmas({ ...params, ...name });
-    history.replace(`${path}`, { from: getFromLocation(location.state, searchParams) });
+    history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
   };
 
   const selectOtp = async () => {

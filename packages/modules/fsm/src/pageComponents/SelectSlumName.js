@@ -85,7 +85,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   }
 
   function goNext() {
-    onSelect(config.key, { ...formData[config.key], slum: slum.code });
+    onSelect(config.key, { ...formData[config.key], slum: slum.code, slumData: slum });
   }
 
   if (slumDataLoading) return <Loader />;

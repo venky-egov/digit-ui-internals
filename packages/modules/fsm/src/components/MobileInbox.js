@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "./inbox/ApplicationCard";
 import ApplicationLinks from "./inbox/ApplicationLinks";
@@ -18,11 +18,14 @@ const MobileInbox = ({
   onFilterChange,
   onSort,
   searchParams,
-  searchFields,
+  searchFields: initialSearchFields,
   linkPrefix,
   removeParam,
   sortParams,
 }) => {
+  const [popup, setPopup] = useState(false);
+  const [type, setType] = useState("");
+  const [searchFields, setSearchFields] = useState(initialSearchFields);
   const { t } = useTranslation();
   const localizedData = data?.map(({ locality, applicationNo, createdTime, tenantId, status, sla }) => ({
     [t("ES_INBOX_APPLICATION_NO")]: applicationNo,
@@ -43,11 +46,15 @@ const MobileInbox = ({
     [t("ES_INBOX_WASTE_COLLECTED")]: vehicle?.tripDetails[0]?.volume,
   }));
 
+  useEffect(() => {
+    if (!popup) setSearchFields(initialSearchFields);
+  }, [popup]);
+
   return (
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {!isFstpOperator && <ApplicationLinks isMobile={true} />}
+          {!isFstpOperator && <ApplicationLinks isMobile={true} setPopup={setPopup} setType={setType} setSearchFields={setSearchFields} />}
           <ApplicationCard
             t={t}
             data={isFstpOperator ? fstpOperatorData : localizedData}
@@ -55,13 +62,17 @@ const MobileInbox = ({
             serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}
             isFstpOperator={isFstpOperator}
             isLoading={isLoading}
-            onSearch={!DSO ? onSearch : false}
+            onSearch={onSearch}
             onSort={onSort}
             searchParams={searchParams}
             searchFields={searchFields}
             linkPrefix={linkPrefix}
             removeParam={removeParam}
             sortParams={sortParams}
+            popup={popup}
+            setPopup={setPopup}
+            type={type}
+            setType={setType}
           />
         </div>
       </div>

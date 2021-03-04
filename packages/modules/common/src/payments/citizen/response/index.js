@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { Banner, Card, CardText, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 
 export const SuccessfulPayment = (props) => {
   const { t } = useTranslation();
-  const { eg_pg_txnid: egId } = Digit.Hooks.useQueryParams();
-  const { isLoading, data: payments, isError } = Digit.Hooks.usePaymentUpdate({ egId });
+  const { eg_pg_txnid: egId, pc_Amount: amount } = Digit.Hooks.useQueryParams();
   const [printing, setPrinting] = useState(false);
+  const { businessService: business_service } = useParams();
+  const { isLoading, data, isError } = Digit.Hooks.usePaymentUpdate({ egId }, business_service);
+
+  const payments = data?.payments;
+  const applicationNo = data?.applicationNo;
 
   if (isLoading) {
     return <Loader />;
@@ -17,6 +22,7 @@ export const SuccessfulPayment = (props) => {
     return (
       <Card>
         <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
+
         <Link to="/digit-ui/citizen">
           <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
         </Link>
@@ -42,6 +48,13 @@ export const SuccessfulPayment = (props) => {
 
   const bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
 
+  const queryClient = useQueryClient();
+  const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
+  inbox?.revalidate?.();
+  queryClient.refetchQueries("FSM_CITIZEN_SEARCH");
+
+  // https://dev.digit.org/collection-services/payments/FSM.TRIP_CHARGES/_search?tenantId=pb.amritsar&consumerCodes=107-FSM-2021-02-18-063433
+
   return (
     <Card>
       <Banner
@@ -59,6 +72,11 @@ export const SuccessfulPayment = (props) => {
           {t("COMMON_PRINT_RECEIPT")}
         </div>
       </React.Fragment>
+      <StatusTable>
+        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_APPLICATION_NO")} text={applicationNo} />
+        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
+        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PAID")} text={amount} />
+      </StatusTable>
       <Link to="/digit-ui/citizen">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

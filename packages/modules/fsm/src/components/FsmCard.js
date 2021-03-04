@@ -48,13 +48,17 @@ const FSMCard = () => {
   });
 
   const filters = {
-    uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
     sortBy: "createdTime",
     sortOrder: "DESC",
     total: true,
   };
 
-  const { data: inbox, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters }, null, {
+  const getUUIDFilter = () => {
+    if (FSM_EDITOR || FSM_CREATOR || COLLECTOR) return { uuid: { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") } };
+    else return { uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") } };
+  };
+
+  const { data: inbox, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters, ...getUUIDFilter() }, null, {
     enabled: !isFSTPOperator ? true : false,
   });
 

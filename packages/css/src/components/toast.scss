@@ -6,7 +6,8 @@
   margin: 0 10px;
   gap: 16px;
   border-radius: 4px;
-  @apply fixed flex bg-success h-12 z-20 items-center pl-md pr-sm;
+  min-height: 48px;
+  @apply fixed flex bg-success leading-7 z-20 items-center pl-md pr-sm;
 
   svg {
     height: 20px;
@@ -24,6 +25,6 @@
 
 @screen dt {
   .toast-success {
-    left: 30%
+    left: 30%;
   }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader } from "@egovernments/digit-ui-react-components";
+import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { useQueryClient } from "react-query";
@@ -27,6 +27,7 @@ export const CollectPayment = (props) => {
   const additionalCharges = getAdditionalCharge() || [];
 
   const [formState, setFormState] = useState({});
+  const [toast, setToast] = useState(null);
 
   const defaultPaymentModes = [
     { code: "CASH", label: "Cash" },
@@ -49,7 +50,7 @@ export const CollectPayment = (props) => {
 
   const onSubmit = async (data) => {
     bill.totalAmount = Math.round(bill.totalAmount);
-    console.log(data, bill.totalAmount);
+    // console.log(data, bill.totalAmount);
     const recieptRequest = {
       Payment: {
         ...data,
@@ -78,7 +79,8 @@ export const CollectPayment = (props) => {
           .map((e) => t(errors[e]))
           .join();
         if (messages) {
-          alert(`${messages} are required`);
+          setToast({ key: "error", action: `${messages} ES_ERROR_REQUIRED` });
+          setTimeout(() => setToast(null), 5000);
           return;
         }
       }
@@ -91,8 +93,9 @@ export const CollectPayment = (props) => {
       queryClient.invalidateQueries();
       history.push(`${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}`);
     } catch (error) {
-      console.log(error);
-      alert("Something went wrong,DD/Cheque Date cant be from future");
+      setToast({ key: "error", action: error?.response?.data?.Errors?.map((e) => e.message) })?.join(" , ");
+      setTimeout(() => setToast(null), 5000);
+      return;
     }
   };
 
@@ -249,6 +252,13 @@ export const CollectPayment = (props) => {
         }}
       ></FormComposer>
       {/* <ChequeDetailsComponent chequeDetails={{}} /> */}
+      {toast && (
+        <Toast
+          error={toast.key === "error" ? true : false}
+          label={t(toast.key === "success" ? `ES_FSM_${toast.action}_UPDATE_SUCCESS` : toast.action)}
+          onClose={() => setToast(null)}
+        />
+      )}
     </React.Fragment>
   );
 };

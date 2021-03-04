@@ -35,6 +35,7 @@ import SelectSlumName from "./pageComponents/SelectSlumName";
 import CheckSlum from "./pageComponents/CheckSlum";
 import SelectChannel from "./pageComponents/SelectChannel";
 import SelectName from "./pageComponents/SelectName";
+import SelectTripData from "./pageComponents/SelectTripData";
 import FSMCard from "./components/FsmCard";
 
 const EmployeeApp = ({ path, url, userType }) => {
@@ -206,6 +207,7 @@ const componentsToRegister = {
   FSMLinks,
   SelectChannel,
   SelectName,
+  SelectTripData,
 };
 
 export const initFSMComponents = () => {

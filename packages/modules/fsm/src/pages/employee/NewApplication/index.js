@@ -3,59 +3,44 @@ import { useTranslation } from "react-i18next";
 import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import { newConfig } from "../../../config/NewApplication/config";
-import TripDetails from "../configs/TripDetails";
+import TripDetails from "../../../config/Employee/TripDetailsConfig";
 import ApplicantDetails from "../../../config/Employee/ApplicantConfig";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId?.split(".")[0] || "pb";
+  // const state = tenantId?.split(".")[0] || "pb";
 
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
-  const { data: channelMenu } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
+  // const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  // const { data: channelMenu } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
 
   const { t } = useTranslation();
   const history = useHistory();
 
-  const [vehicle, setVehicle] = useState();
   const [canSubmit, setSubmitValve] = useState(false);
-  const [channel, setChannel] = useState(null);
+  // const [channel, setChannel] = useState(null);
 
   const defaultValues = {
-    noOfTrips: 1,
+    tripData: {
+      noOfTrips: 1,
+      amountPerTrip: null,
+      amount: null,
+    },
   };
-  const [kill, setKill] = useState(false);
 
   const onFormValueChange = (setValue, formData) => {
     // setNoOfTrips(formData?.noOfTrips || 1);
-    (async () => {
-      // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
-
-      if (formData?.propertyType && formData?.subtype && formData?.address && vehicle?.code && !kill) {
-        const { capacity } = vehicle;
-        // console.log("find bill slab form data", formData)
-        const { slum: slumDetails } = formData.address;
-        const slum = slumDetails ? "YES" : "NO";
-        const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-          propertyType: formData?.subtype,
-          capacity,
-          slum,
-        });
-
-        const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
-        if (billSlab?.price) {
-          setKill(true);
-          console.log("find bill slab here", billSlab.price);
-          setValue("amountPerTrip", billSlab.price);
-          setValue("amount", billSlab.price * formData.noOfTrips);
-        }
-      }
-    })();
     // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
-
     // console.log("find form data here helllo", formData);
-    if (formData?.propertyType && formData?.subtype && formData?.address?.locality?.code && vehicle && formData?.pitType && formData?.pitDetail) {
+    if (
+      formData?.propertyType &&
+      formData?.subtype &&
+      formData?.address?.locality?.code &&
+      formData?.tripData?.vehicleType &&
+      formData?.pitType &&
+      formData?.pitDetail
+    ) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -70,11 +55,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   const onSubmit = (data) => {
     console.log("find submit data", data);
-    const applicationChannel = channel;
+    const applicationChannel = data.channel;
     const sanitationtype = data.pitType.code;
     const pitDimension = data?.pitDetail;
-    const applicantName = data.applicantName;
-    const mobileNumber = data.mobileNumber;
+    const applicantName = data.applicationData.applicantName;
+    const mobileNumber = data.applicationData.mobileNumber;
     const pincode = data?.address?.pincode;
     const street = data?.address?.street;
     const doorNo = data?.address?.doorNo;
@@ -100,7 +85,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           tripAmount: amount,
         },
         propertyUsage: data?.subtype,
-        vehicleType: vehicle?.code,
+        vehicleType: formData?.tripData?.vehicleType?.code,
         pitDetail: {
           ...pitDimension,
           distanceFromRoad: data?.distanceFromRoad,
@@ -136,7 +121,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     history.push("/digit-ui/employee/fsm/response", formData);
   };
 
-  const configs = [ApplicantDetails, ...newConfig, TripDetails(vehicleMenu, vehicle, setVehicle)];
+  const configs = [...ApplicantDetails, ...newConfig, ...TripDetails];
 
   return (
     <FormComposer

@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import TripDetails from "../configs/TripDetails";
-import ApplicantDetails from "../configs/ApplicantDetails";
+import ApplicantDetails from "../../../config/Employee/ApplicantConfig";
 
 const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitationMenu }) => {
   const { t } = useTranslation();
@@ -21,8 +21,11 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   }
 
   const defaultValues = {
-    applicantName: applicationData.citizen.name,
-    mobileNumber: applicationData.citizen.mobileNumber,
+    channel: channelMenu.filter((channel) => channel.code === applicationData.source)[0],
+    applicationData: {
+      applicantName: applicationData.citizen.name,
+      mobileNumber: applicationData.citizen.mobileNumber,
+    },
     noOfTrips: applicationData.noOfTrips,
     amountPerTrip: applicationData.additionalDetails.tripAmount,
     amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || "",
@@ -90,8 +93,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     const applicationChannel = channel;
     const sanitationtype = data.pitType.code;
     const pitDimension = data?.pitDetail;
-    const applicantName = data.applicantName;
-    const mobileNumber = data.mobileNumber;
+    const applicantName = data.applicationData.applicantName;
+    const mobileNumber = data.applicationData.mobileNumber;
     const pincode = data?.address?.pincode;
     const street = data?.address?.street;
     const doorNo = data?.address?.doorNo;
@@ -160,13 +163,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     });
   };
 
-  const disable = {
-    channel: true,
-    name: true,
-    number: true,
-  };
-
-  const configs = [ApplicantDetails(channelMenu, channel, setChannel, disable), ...newConfig, TripDetails(vehicleMenu, vehicle, selectVehicle)];
+  const configs = [...ApplicantDetails, ...newConfig, TripDetails(vehicleMenu, vehicle, selectVehicle)];
 
   return (
     <FormComposer

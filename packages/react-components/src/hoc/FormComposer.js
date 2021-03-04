@@ -34,6 +34,7 @@ export const FormComposer = (props) => {
 
   useEffect(() => {
     props.onFormValueChange && props.onFormValueChange(setValue, formData, formState);
+    console.log("find formData", formData);
   }, [formData]);
 
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {

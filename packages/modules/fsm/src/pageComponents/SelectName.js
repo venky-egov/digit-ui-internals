@@ -1,7 +1,10 @@
 import React from "react";
 import { LabelFieldPair, CardLabel, TextInput } from "@egovernments/digit-ui-react-components";
+import { useLocation } from "react-router-dom";
 
 const SelectName = ({ t, config, onSelect, formData = {}, userType }) => {
+  const { pathname: url } = useLocation();
+  const editScreen = url.includes("/modify-application/");
   const inputs = [
     {
       label: "ES_NEW_APPLICATION_APPLICANT_NAME",
@@ -9,7 +12,6 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType }) => {
       name: "applicantName",
       validation: {
         required: true,
-        pattern: /[A-Za-z]/,
       },
       error: "CORE_COMMON_APPLICANT_NAME_INVALID",
     },
@@ -19,11 +21,16 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType }) => {
       name: "mobileNumber",
       validation: {
         required: true,
-        pattern: /^[6-9]\d{9}$/,
       },
       error: "CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID",
     },
   ];
+
+  function setValue(value, input) {
+    onSelect(config.key, { ...formData[config.key], [input]: value });
+    console.log("find value here", value, input, formData);
+  }
+
   return (
     <div>
       {inputs?.map((input) => (
@@ -33,7 +40,13 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType }) => {
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <div className="field">
-            <TextInput key={input.name} onChange={() => {}} {...input.validation} />
+            <TextInput
+              key={input.name}
+              value={formData && formData[config.key] ? formData[config.key][input.name] : null}
+              onChange={(e) => setValue(e.target.value, input.name)}
+              {...input.validation}
+              disable={editScreen}
+            />
           </div>
         </LabelFieldPair>
       ))}

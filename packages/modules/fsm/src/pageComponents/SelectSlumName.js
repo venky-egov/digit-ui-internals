@@ -55,13 +55,15 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
       //   name: "Not residing in slum area",
       //   i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
       // })
-      setSlum({
-        code: null,
-        active: true,
-        name: "Not residing in slum area",
-        i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
-      });
-      onSelect(config.key, { ...formData[config.key], slum: null });
+      if (!formData?.address?.slum) {
+        setSlum({
+          code: null,
+          active: true,
+          name: "Not residing in slum area",
+          i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
+        });
+        onSelect(config.key, { ...formData[config.key], slum: null });
+      }
     }
     if (userType !== "employee" && !slumDataLoading && slumData) {
       // console.log("find citizen slum menu here", slumData, slumData[locality], formData)

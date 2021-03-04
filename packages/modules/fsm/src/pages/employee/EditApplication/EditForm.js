@@ -101,7 +101,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     const amount = data.amountPerTrip;
     const cityCode = data?.address?.city?.code;
     const city = data?.address?.city?.name;
-    const state = data?.address?.city?.state;
+    // const state = data?.address?.city?.state;
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const propertyUsage = data?.subtype;
@@ -131,7 +131,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         landmark,
         doorNo,
         street,
-        state,
         pincode,
         slumName: slum,
         locality: {

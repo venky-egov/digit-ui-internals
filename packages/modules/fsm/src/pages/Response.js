@@ -20,7 +20,7 @@ const GetActionMessage = (action, isSuccess) => {
       case "COMPLETED":
         return t("CS_APPLICATION_FEEDBACK_SUCCESSFUL");
       default:
-        return t(`ES_PAYMENT_COLLECTED`);
+        return t(`CS_COMMON_THANK_YOU`);
     }
   }
 
@@ -34,7 +34,7 @@ const GetActionMessage = (action, isSuccess) => {
     case "SUBMIT_FEEDBACK":
       return t("CS_APPLICATION_FEEDBACK_FAILED");
     default:
-      return t(`ES_PAYMENT_COLLECTED_ERROR`);
+      return t(`CS_COMMON_SOMETHING_WENT_WRONG`);
   }
 };
 
@@ -68,6 +68,7 @@ const Response = (props) => {
   // console.log("find payment Roles here", paymentAccess)
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
   const { state } = props.location;
 
   const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
@@ -75,7 +76,7 @@ const Response = (props) => {
   const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   const slumCode = mutation?.data?.fsm[0].address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(stateId, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => mutation?.data?.fsm[0]?.vehicleType === vehicle?.code);
   const pdfVehicleType = getVehicleType(vehicle, t);
 
@@ -118,11 +119,24 @@ const Response = (props) => {
   }, []);
 
   const displayText = (action) => {
-    switch (action) {
-      case "SUBMIT_FEEDBACK":
-        return t("CS_SUBMIT_FEEDBACK_RESPONSE");
-      default:
-        return t("CS_FILE_PROPERTY_RESPONSE");
+    // console.log("find new application action here", action)
+    // console.log("find mutation error here", mutation)
+    if (mutation.isSuccess) {
+      switch (action) {
+        case "SUBMIT_FEEDBACK":
+          return t("CS_SUBMIT_FEEDBACK_RESPONSE");
+        case "SUBMIT":
+          return t("CS_SUBMIT_APPLICATION_RESPONSE");
+        case undefined:
+          return t("CS_FILE_PROPERTY_RESPONSE");
+        default:
+          return t("CS_COMMON_THANK_YOU");
+      }
+    } else if (mutation.isError) {
+      switch (action) {
+        default:
+          return mutation?.error?.message;
+      }
     }
   };
 
@@ -158,13 +172,13 @@ const Response = (props) => {
       <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
-      {props.parentRoute.includes("employee") && state?.applicationData?.applicationNo && paymentAccess && mutation.isSuccess && (
+      {props.parentRoute.includes("employee") && state?.applicationData?.applicationNo && paymentAccess && mutation.isSuccess ? (
         <div className="secondary-action">
           <Link to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo}`}>
             <SubmitBar label={t("ES_COMMON_PAY")} />
           </Link>
         </div>
-      )}
+      ) : null}
     </Card>
   );
 };

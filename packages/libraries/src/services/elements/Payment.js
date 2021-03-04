@@ -46,9 +46,9 @@ export const PaymentService = {
 
   printReciept: (tenantId, filters = {}) =>
     Request({
-      url: Urls.FileStore,
+      url: Urls.FileFetch,
       useCache: false,
-      method: "POST",
+      method: "GET",
       auth: true,
       userService: true,
       params: { tenantId, ...filters },

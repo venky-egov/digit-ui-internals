@@ -112,7 +112,7 @@ const TENANTS = [
 
 const useTenants = () => {
   const tenantInfo = TENANTS;
-  console.log("tenantInfo", tenantInfo);
+  // console.log("tenantInfo", tenantInfo);
   const [tenants, setTenants] = useState(tenantInfo ? tenantInfo : null);
   return tenants;
 };

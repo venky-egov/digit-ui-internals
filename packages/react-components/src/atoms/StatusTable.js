@@ -25,7 +25,7 @@ export const Row = (props) => {
   }
 
   return (
-    <div style={props.rowContainerStyle} className={props.last ? "row last" : "row"}>
+    <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
       <h2>{props.label}</h2>
       <div className="value">
         {value}

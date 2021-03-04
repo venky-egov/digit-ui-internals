@@ -10,7 +10,7 @@ const ApplicationLinks = ({ isMobile, data, setPopup, setType, setSearchFields }
     {
       text: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
       link: "/digit-ui/employee/fsm/new-application",
-      accessTo: ["FSM_EMPLOYEE_CREATOR"],
+      accessTo: ["FSM_CREATOR_EMP"],
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
     // { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },

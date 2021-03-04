@@ -35,7 +35,7 @@ const Inbox = ({ parentRoute }) => {
     ? { limit: 100, offset: 0, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
 
-  // TODO: fromDate and toDate is only for mobile and it is not working for search application for mobile screen
+  // TODO: Here fromDate and toDate is only for mobile and it is not working for search application for mobile screen
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
     ...searchParams,
     ...paginationParms,

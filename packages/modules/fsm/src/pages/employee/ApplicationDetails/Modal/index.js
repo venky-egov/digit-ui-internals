@@ -195,25 +195,18 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "DECLINE":
       case "SENDBACK":
       case "DSO_REJECT":
-        setFormValve(rejectionReason ? true : false);
-        return setConfig(
-          configRejectApplication({
-            t,
-            rejectMenu,
-            selectReason,
-            rejectionReason,
-          })
-        );
       case "REJECT":
         setFormValve(rejectionReason ? true : false);
         return setConfig(
           configRejectApplication({
             t,
             rejectMenu,
-            rejectionReason,
             selectReason,
+            rejectionReason,
+            action,
           })
         );
+
       case "PAY":
       case "ADDITIONAL_PAY_REQUEST":
       case "FSM_PAY":

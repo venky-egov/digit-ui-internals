@@ -4,7 +4,7 @@ import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import { newConfig } from "../../../config/NewApplication/config";
 import TripDetails from "../configs/TripDetails";
-import ApplicantDetails from "../configs/ApplicantDetails";
+import ApplicantDetails from "../../../config/Employee/ApplicantConfig";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
@@ -136,7 +136,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     history.push("/digit-ui/employee/fsm/response", formData);
   };
 
-  const configs = [ApplicantDetails(channelMenu, channel, setChannel), ...newConfig, TripDetails(vehicleMenu, vehicle, setVehicle)];
+  const configs = [ApplicantDetails, ...newConfig, TripDetails(vehicleMenu, vehicle, setVehicle)];
 
   return (
     <FormComposer

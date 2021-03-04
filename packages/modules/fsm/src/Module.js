@@ -33,6 +33,8 @@ import SelectPitType from "./pageComponents/SelectPitType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectSlumName from "./pageComponents/SelectSlumName";
 import CheckSlum from "./pageComponents/CheckSlum";
+import SelectChannel from "./pageComponents/SelectChannel";
+import SelectName from "./pageComponents/SelectName";
 import FSMCard from "./components/FsmCard";
 
 const EmployeeApp = ({ path, url, userType }) => {
@@ -202,6 +204,8 @@ const componentsToRegister = {
   FSMCard,
   FSMModule,
   FSMLinks,
+  SelectChannel,
+  SelectName,
 };
 
 export const initFSMComponents = () => {

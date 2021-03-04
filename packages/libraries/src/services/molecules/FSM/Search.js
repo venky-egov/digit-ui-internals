@@ -90,7 +90,7 @@ export const Search = {
         ],
       },
       {
-        title: t("ES_TITLE_APPLICATION_DETAILS"),
+        title: t("ES_TITLE_APPLICANT_DETAILS"),
         values: [
           { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: response?.citizen?.name },
           { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: response?.citizen?.mobileNumber },

@@ -92,7 +92,7 @@ const Response = (props) => {
 
   useEffect(() => {
     const onSuccess = () => {
-      queryClient.invalidateQueries();
+      // queryClient.invalidateQueries();
     };
     console.log("state -------->", state);
     if (state.key === "update") {

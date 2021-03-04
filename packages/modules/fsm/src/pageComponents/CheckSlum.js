@@ -23,7 +23,7 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   // }, [locality, slumDataLoading]);
 
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!slumArea}>
       <RadioOrSelect
         isMandatory={config.isMandatory}
         options={[

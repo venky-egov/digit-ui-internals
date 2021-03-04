@@ -1,9 +1,9 @@
 import { Card } from "@egovernments/digit-ui-react-components";
-import { forEach } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
-const ApplicationLinks = ({ isMobile, data }) => {
+const ApplicationLinks = ({ isMobile, data, setPopup, setType, setSearchFields }) => {
   const { t } = useTranslation();
 
   const allLinks = [
@@ -63,14 +63,45 @@ const ApplicationLinks = ({ isMobile, data }) => {
     </div>
   );
 
+  const searchApplicationSearchFields = [
+    {
+      label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
+      name: "applicationNos",
+    },
+    {
+      label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
+      name: "mobileNumber",
+    },
+    {
+      label: t("ES_SEARCH_FROM_DATE"),
+      name: "fromDate",
+      type: "date",
+    },
+    {
+      label: t("ES_SEARCH_TO_DATE"),
+      name: "toDate",
+      type: "date",
+    },
+  ];
+
   return (
     <Card className="employeeCard filter">
       <div className="complaint-links-container">
         {GetLogo()}
         <div className="body">
           {links.map(({ link, text }, index) => (
-            <span className="link" key={index}>
-              <a href={link}>{text}</a>
+            <span
+              className="link"
+              key={index}
+              onClick={() => {
+                if (isMobile) {
+                  setPopup(true);
+                  setSearchFields(searchApplicationSearchFields);
+                  setType("SEARCH");
+                }
+              }}
+            >
+              {isMobile && text?.toLowerCase()?.includes("search") ? text : <Link to={link}>{text}</Link>}
             </span>
           ))}
         </div>

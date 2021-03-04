@@ -5,9 +5,10 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 
 export const SuccessfulPayment = (props) => {
-  props.setLink("Response");
   const { addParams, clearParams } = props;
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  props.setLink("Response");
   let { consumerCode, receiptNumber, businessService } = useParams();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
 
@@ -24,9 +25,7 @@ export const SuccessfulPayment = (props) => {
       // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
-    const queryClient = useQueryClient();
-    const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
-    inbox?.revalidate?.();
+    queryClient.clear();
     queryClient.refetchQueries("FSM_CITIZEN_SEARCH");
     window.open(fileStore[response.filestoreIds[0]], "_blank");
   };

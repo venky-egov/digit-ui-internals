@@ -11,7 +11,6 @@ import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 
 import { NewApplication } from "./pages/employee/NewApplication";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
-import CollectPayment from "./pages/employee/CollectPayment";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
@@ -56,7 +55,6 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
         <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
-        <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
         <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
         <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />

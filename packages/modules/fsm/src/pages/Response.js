@@ -92,9 +92,8 @@ const Response = (props) => {
 
   useEffect(() => {
     const onSuccess = () => {
-      // queryClient.invalidateQueries();
+      queryClient.clear();
     };
-    console.log("state -------->", state);
     if (state.key === "update") {
       // console.log("find state here", state.applicationData, state.action)
       mutation.mutate(

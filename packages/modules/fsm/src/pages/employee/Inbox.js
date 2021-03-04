@@ -34,10 +34,15 @@ const Inbox = ({ parentRoute }) => {
   let paginationParms = isMobile
     ? { limit: 100, offset: 0, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
+
+  // TODO: Here fromDate and toDate is only for mobile and it is not working for search application for mobile screen
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
     ...searchParams,
     ...paginationParms,
+    fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
+    toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
   });
+
   const fetchNextPage = () => {
     setPageOffset((prevState) => prevState + pageSize);
   };

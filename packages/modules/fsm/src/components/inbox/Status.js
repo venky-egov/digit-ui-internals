@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 
 const Status = ({ onAssignmentChange, fsmfilters }) => {
   const { t } = useTranslation();
-  const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus();
+  const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus(true);
+  // console.log("find application stats", applicationsWithCount)
   if (isLoading) {
     return <Loader />;
   }

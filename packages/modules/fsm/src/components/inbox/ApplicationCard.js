@@ -20,12 +20,13 @@ export const ApplicationCard = ({
   sortParams,
   linkPrefix,
   removeParam,
+  popup,
+  setPopup,
+  type,
+  setType,
 }) => {
-  const [popup, setPopup] = useState(false);
-
   const [params, setParams] = useState(searchParams);
   const [_sortparams, setSortParams] = useState(sortParams);
-  const [type, setType] = useState("");
 
   const selectParams = (param) => {
     setParams((o) => ({ ...o, ...param }));
@@ -140,14 +141,16 @@ export const ApplicationCard = ({
             </div>
           )}
           {type === "SEARCH" && (
-            <SearchApplication
-              type="mobile"
-              onClose={handlePopupClose}
-              onSearch={onSearch}
-              isFstpOperator={isFstpOperator}
-              searchParams={searchParams}
-              searchFields={searchFields}
-            />
+            <div className="popup-module">
+              <SearchApplication
+                type="mobile"
+                onClose={handlePopupClose}
+                onSearch={onSearch}
+                isFstpOperator={isFstpOperator}
+                searchParams={searchParams}
+                searchFields={searchFields}
+              />
+            </div>
           )}
         </PopUp>
       )}

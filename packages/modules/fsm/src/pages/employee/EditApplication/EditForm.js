@@ -72,7 +72,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
 
     console.log("find form data here", formData);
-    if (formData?.propertyType && formData?.subtype && formData?.address?.locality?.code) {
+    if (formData?.propertyType && formData?.subtype && formData?.address?.locality?.code && vehicle && formData?.pitType && formData?.pitDetail) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -101,7 +101,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     const amount = data.amountPerTrip;
     const cityCode = data?.address?.city?.code;
     const city = data?.address?.city?.name;
-    const state = data?.address?.city?.state;
+    // const state = data?.address?.city?.state;
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const propertyUsage = data?.subtype;
@@ -131,7 +131,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         landmark,
         doorNo,
         street,
-        state,
         pincode,
         slumName: slum,
         locality: {
@@ -161,13 +160,19 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     });
   };
 
-  const configs = [ApplicantDetails(channelMenu, channel, setChannel), ...newConfig, TripDetails(vehicleMenu, vehicle, selectVehicle)];
+  const disable = {
+    channel: true,
+    name: true,
+    number: true,
+  };
+
+  const configs = [ApplicantDetails(channelMenu, channel, setChannel, disable), ...newConfig, TripDetails(vehicleMenu, vehicle, selectVehicle)];
 
   return (
     <FormComposer
       heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
-      label={t("ES_COMMON_APPLICATION_SUBMIT")}
+      label={t("ES_COMMON_UPDATE_DEMAND")}
       config={configs.map((config) => {
         return {
           ...config,

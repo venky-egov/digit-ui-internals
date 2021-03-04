@@ -2,7 +2,7 @@ import React from "react";
 
 export const LastRow = (props) => {
   return (
-    <div className="row-last">
+    <div styles={props.rowContainerStyle} className="row-last">
       <h2>{props.label}</h2>
       <p>{props.text}</p>
     </div>
@@ -25,7 +25,7 @@ export const Row = (props) => {
   }
 
   return (
-    <div className={props.last ? "row last" : "row"}>
+    <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
       <h2>{props.label}</h2>
       <div className="value">
         {value}

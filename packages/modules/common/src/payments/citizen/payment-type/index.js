@@ -40,16 +40,21 @@ export const SelectPaymentType = (props) => {
           mobileNumber: billDetails.mobileNumber,
           tenantId: tenantId,
         },
-        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success`,
+        // success
+        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}`,
         additionalDetails: {
           isWhatsapp: false,
         },
       },
     };
 
-    const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
-    const redirectUrl = data?.Transaction?.redirectUrl;
-    window.location = redirectUrl;
+    try {
+      const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
+      const redirectUrl = data?.Transaction?.redirectUrl;
+      window.location = redirectUrl;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

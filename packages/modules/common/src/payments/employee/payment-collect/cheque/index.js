@@ -34,7 +34,13 @@ export const ChequeDetailsComponent = (props) => {
   const [bankBranch, setBankBranch] = useState(props.chequeDetails.bankBranch);
 
   useEffect(() => {
-    if (props.onChange) props.onChange({ instrumentDate, instrumentNumber, ifscCode, bankName, bankBranch });
+    if (props.onChange) {
+      let errorObj = {};
+      if (!instrumentDate) errorObj.instrumentDate = "ES_COMMON_INSTRUMENT_DATE";
+      if (!instrumentNumber) errorObj.instrumentNumber = "ES_COMMON_INSTR_NUMBER";
+      if (!ifscCode) errorObj.ifscCode = "ES_COMMON_IFSC";
+      props.onChange({ instrumentDate, instrumentNumber, ifscCode, bankName, bankBranch, errorObj });
+    }
   }, [bankName, bankBranch, instrumentDate, instrumentNumber]);
 
   const setBankDetailsFromIFSC = async () => {
@@ -46,15 +52,16 @@ export const ChequeDetailsComponent = (props) => {
         setBankBranch(BRANCH);
       } else alert("Please enter correct IFSC Code!");
     } catch (er) {
-      console.log(er);
       alert("Please enter correct IFSC Code!");
     }
   };
 
+  const getDatePrint = () => instrumentDate && new Date(instrumentDate).toLocaleString("en-In").split(",")[0];
+
   return (
     <React.Fragment>
       <div className="label-field-pair">
-        <h2 className="card-label">Cheque Number</h2>
+        <h2 className="card-label">Cheque Number *</h2>
         <div className="field">
           <div className="field-container">
             <input
@@ -70,13 +77,21 @@ export const ChequeDetailsComponent = (props) => {
         </div>
       </div>
       <div className="label-field-pair">
-        <h2 className="card-label">Cheque Date</h2>
+        <h2 className="card-label">Cheque Date *</h2>
         <div className="field">
           <div className="field-container">
+            <input
+              type="text"
+              value={getDatePrint()}
+              readOnly
+              className="employee-card-input"
+              style={{ width: "calc(100%-62px)", borderRight: "0" }}
+            />
             <input
               className="employee-card-input"
               value={instrumentDate}
               type="date"
+              style={{ width: "62px", borderLeft: "0px" }}
               name="instrumentDate"
               onChange={(e) => setChequeDate(e.target.value)}
             />
@@ -87,7 +102,7 @@ export const ChequeDetailsComponent = (props) => {
         // chequeDate && chequeNo &&
         <React.Fragment>
           <div className="label-field-pair">
-            <h2 className="card-label">IFSC Code</h2>
+            <h2 className="card-label">IFSC Code *</h2>
             <div className="field">
               <div>
                 <div style={{ border: "2px solid #0b0c0c", borderRadius: "2px", display: "flex", alignItems: "center", marginBottom: "24px" }}>
@@ -128,6 +143,7 @@ export const ChequeDetailsComponent = (props) => {
                   type="text"
                   className="employee-card-input"
                   readOnly
+                  disabled
                 />
               </div>
             </div>
@@ -136,7 +152,7 @@ export const ChequeDetailsComponent = (props) => {
             <h2 className="card-label">Bank Branch</h2>
             <div className="field">
               <div className="field-container">
-                <input className="employee-card-input" value={bankBranch} type="text" className="employee-card-input" readOnly />
+                <input className="employee-card-input" value={bankBranch} type="text" className="employee-card-input" readOnly disabled />
               </div>
             </div>
           </div>

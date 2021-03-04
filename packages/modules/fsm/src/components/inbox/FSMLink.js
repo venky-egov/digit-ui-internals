@@ -6,8 +6,6 @@ import { useTranslation } from "react-i18next";
 
 const FSMLink = ({ isMobile, data }) => {
   const { t } = useTranslation();
-  const user = Digit.UserService.getUser();
-  const roleCodes = user?.info?.roles?.map((role) => role?.code);
 
   const allLinks = [
     {
@@ -19,28 +17,27 @@ const FSMLink = ({ isMobile, data }) => {
     {
       text: t("ES_TITILE_SEARCH_APPLICATION"),
       link: "/digit-ui/employee/fsm/search",
-      accessTo: ["FSM_CREATOR_EMP", "FSM_DSO", "FSM_EDITOR_EMP", "FSM_ADMIN", "FSM_COLLECTOR"],
     },
   ];
 
   const [links, setLinks] = useState([]);
 
-  // const { roles } = Digit.UserService.getUser().info;
+  const { roles } = Digit.UserService.getUser().info;
 
   const hasAccess = (accessTo) => {
-    // return roles.filter((role) => accessTo.includes(role.code)).length;
+    return roles.filter((role) => accessTo.includes(role.code)).length;
   };
 
   useEffect(() => {
     let linksToShow = [];
     allLinks.forEach((link) => {
-      // if (link.accessTo) {
-      //   if (hasAccess(link.accessTo)) {
-      //     linksToShow.push(link);
-      //   }
-      // } else {
-      linksToShow.push(link);
-      // }
+      if (link.accessTo) {
+        if (hasAccess(link.accessTo)) {
+          linksToShow.push(link);
+        }
+      } else {
+        linksToShow.push(link);
+      }
     });
     setLinks(linksToShow);
   }, []);
@@ -72,17 +69,11 @@ const FSMLink = ({ isMobile, data }) => {
         {GetLogo()}
         <div className="body">
           {links.map(({ link, text, hyperlink = false, accessTo = [] }, index) => {
-            let access = false;
-            accessTo.forEach((role) => {
-              if (roleCodes?.includes(role)) access = true;
-            });
-            if (access) {
-              return (
-                <span className="link" key={index}>
-                  {hyperlink ? <a href={link}>{text}</a> : <Link to={link}>{text}</Link>}
-                </span>
-              );
-            }
+            return (
+              <span className="link" key={index}>
+                {hyperlink ? <a href={link}>{text}</a> : <Link to={link}>{text}</Link>}
+              </span>
+            );
           })}
         </div>
       </div>

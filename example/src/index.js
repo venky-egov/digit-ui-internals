@@ -119,4 +119,6 @@ const initDigitUI = () => {
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 };
 
-initLibraries(initDigitUI);
+initLibraries().then(() => {
+  initDigitUI();
+});

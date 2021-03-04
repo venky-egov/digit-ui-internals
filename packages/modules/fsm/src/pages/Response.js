@@ -6,55 +6,57 @@ import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
 import { getVehicleType } from "../utils";
 
-const GetActionMessage = (action, isSuccess) => {
+const GetMessage = (type, action, isSuccess, isEmployee) => {
   const { t } = useTranslation();
-  if (isSuccess) {
-    switch (action) {
-      case "REOPEN":
-        return t(`CS_COMMON_COMPLAINT_REOPENED`);
-      case "RATE":
-        return t("CS_COMMON_THANK_YOU");
-      case "PENDING_APPL_FEE_PAYMENT":
-        return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
-      case "SUBMIT_FEEDBACK":
-      case "COMPLETED":
-        return t("CS_APPLICATION_FEEDBACK_SUCCESSFUL");
-      default:
-        return t(`ES_PAYMENT_COLLECTED`);
-    }
-  }
+  //   if (isSuccess) {
+  //     switch (action) {
+  //       case "REOPEN":
+  //         return t(`CS_COMMON_COMPLAINT_REOPENED`);
+  //       case "RATE":
+  //         return t("CS_COMMON_THANK_YOU");
+  //       case "PENDING_APPL_FEE_PAYMENT":
+  //         return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
+  //       case "SUBMIT_FEEDBACK":
+  //       case "COMPLETED":
+  //         return t("CS_APPLICATION_FEEDBACK_SUCCESSFUL");
+  //       default:
+  //         return t(`CS_COMMON_THANK_YOU`);
+  //     }
+  //   }
 
-  switch (action) {
-    case "REOPEN":
-      return t(`CS_COMMON_COMPLAINT_REOPENED_FAILED`);
-    case "RATE":
-      return t("CS_COMMON_ERROR");
-    case "PENDING_APPL_FEE_PAYMENT":
-      return t("CS_FILE_DESLUDGING_APPLICATION_FAILED");
-    case "SUBMIT_FEEDBACK":
-      return t("CS_APPLICATION_FEEDBACK_FAILED");
-    default:
-      return t(`ES_PAYMENT_COLLECTED_ERROR`);
-  }
+  //   switch (action) {
+  //     case "REOPEN":
+  //       return t(`CS_COMMON_COMPLAINT_REOPENED_FAILED`);
+  //     case "RATE":
+  //       return t("CS_COMMON_ERROR");
+  //     case "PENDING_APPL_FEE_PAYMENT":
+  //       return t("CS_FILE_DESLUDGING_APPLICATION_FAILED");
+  //     case "SUBMIT_FEEDBACK":
+  //       return t("CS_APPLICATION_FEEDBACK_FAILED");
+  //     default:
+  //       return t(`CS_COMMON_SOMETHING_WENT_WRONG`);
+  //   }
+  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action}_${type}${isSuccess ? "" : "_ERROR"}`);
 };
 
-const GetLabel = (action) => {
-  const { t } = useTranslation();
-  switch (action) {
-    case "PENDING_APPL_FEE_PAYMENT":
-      return t("CS_FILE_DESLUDGING_APPLICATION_NO");
-    default:
-      return t("ES_RECEIPT_NO");
-  }
+const GetActionMessage = (action, isSuccess, isEmployee) => {
+  return GetMessage("ACTION", action, isSuccess, isEmployee);
+};
+
+const GetLabel = (action, isSuccess, isEmployee) => {
+  return GetMessage("LABEL", action, isSuccess, isEmployee);
+};
+
+const DisplayText = (action, isSuccess, isEmployee) => {
+  return GetMessage("DISPLAY", action, isSuccess, isEmployee);
 };
 
 const BannerPicker = (props) => {
-  const { t } = useTranslation();
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess)}
+      message={GetActionMessage(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee)}
       applicationNumber={props.data?.fsm[0].applicationNo}
-      info={GetLabel(props.data?.fsm[0].applicationStatus)}
+      info={GetLabel(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee)}
       successful={props.isSuccess}
     />
   );
@@ -68,6 +70,7 @@ const Response = (props) => {
   // console.log("find payment Roles here", paymentAccess)
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
   const { state } = props.location;
 
   const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
@@ -75,7 +78,7 @@ const Response = (props) => {
   const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   const slumCode = mutation?.data?.fsm[0].address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(stateId, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => mutation?.data?.fsm[0]?.vehicleType === vehicle?.code);
   const pdfVehicleType = getVehicleType(vehicle, t);
 
@@ -90,7 +93,7 @@ const Response = (props) => {
 
   useEffect(() => {
     const onSuccess = () => {
-      queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+      queryClient.invalidateQueries();
     };
     console.log("state -------->", state);
     if (state.key === "update") {
@@ -116,28 +119,41 @@ const Response = (props) => {
   }, []);
 
   const displayText = (action) => {
-    switch (action) {
-      case "SUBMIT_FEEDBACK":
-        return t("CS_SUBMIT_FEEDBACK_RESPONSE");
-      default:
-        return t("CS_FILE_PROPERTY_RESPONSE");
+    // console.log("find new application action here", action)
+    // console.log("find mutation error here", mutation)
+    if (mutation.isSuccess) {
+      switch (action) {
+        case "SUBMIT_FEEDBACK":
+          return t("CS_SUBMIT_FEEDBACK_RESPONSE");
+        case "SUBMIT":
+          return t("CS_SUBMIT_APPLICATION_RESPONSE");
+        case undefined:
+          return t("CS_FILE_PROPERTY_RESPONSE");
+        default:
+          return t("CS_COMMON_THANK_YOU");
+      }
+    } else if (mutation.isError) {
+      switch (action) {
+        default:
+          return mutation?.error?.message;
+      }
     }
   };
+  if (mutation.isLoading || mutation.isIdle) {
+    return <Loader />;
+  }
 
-  return mutation.isLoading || mutation.isIdle ? (
-    <Loader />
-  ) : (
+  return (
     <Card>
-      {(!mutation.isIdle || !mutation.isLoading) && (
-        <BannerPicker
-          t={t}
-          data={mutation.data}
-          action={state.action}
-          isSuccess={mutation.isSuccess}
-          isLoading={mutation.isIdle || mutation.isLoading}
-        />
-      )}
-      <CardText>{displayText(state.action)}</CardText>
+      <BannerPicker
+        t={t}
+        data={mutation.data}
+        action={state.action}
+        isSuccess={mutation.isSuccess}
+        isLoading={mutation.isIdle || mutation.isLoading}
+        isEmployee={props.parentRoute.includes("employee")}
+      />
+      <CardText>{DisplayText(state.action, mutation.isSuccess, props.parentRoute.includes("employee"))}</CardText>
       {mutation.isSuccess && (
         <LinkButton
           label={
@@ -156,13 +172,13 @@ const Response = (props) => {
       <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
-      {props.parentRoute.includes("employee") && state?.applicationData?.applicationNo && paymentAccess && mutation.isSuccess && (
+      {props.parentRoute.includes("employee") && state?.applicationData?.applicationNo && paymentAccess && mutation.isSuccess ? (
         <div className="secondary-action">
           <Link to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo}`}>
             <SubmitBar label={t("ES_COMMON_PAY")} />
           </Link>
         </div>
-      )}
+      ) : null}
     </Card>
   );
 };

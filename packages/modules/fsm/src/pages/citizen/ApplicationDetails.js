@@ -145,6 +145,7 @@ const ApplicationDetails = () => {
           keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL")}
           note={application.address.landmark ? application.address.landmark : "NA"}
         />
+        <KeyNote keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL")} note={slum?.i18nKey ? t(slum?.i18nKey) : "NA"} />
         <KeyNote keyValue={t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION")}>
           {application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude ? (
             <img src={Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude)} />
@@ -166,6 +167,7 @@ const ApplicationDetails = () => {
           caption={getPitDimensionCaption(application?.pitDetail?.diameter, application?.pitDetail?.length, t)}
         />
         <KeyNote keyValue={t("ES_APPLICATION_DETAILS_ASSIGNED_DSO")} note={dsoData?.name || "NA"} />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_MAKE")} note={application?.vehicleType || "NA"} />
         <KeyNote
           keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_NO")}
           note={dsoData?.vehicles.find((vehicle) => vehicle.id === application?.vehicleId)?.registrationNumber || "NA"}

@@ -141,8 +141,8 @@
     }
     .main {
       padding-top: 80px;
-      margin-left: 88px;
-      width: calc(100%-88px);
+      margin-left: 72px;
+      width: calc(100%-83px);
     }
   }
 
@@ -151,7 +151,12 @@
       gap: 0.3rem;
       width: 100%;
       padding-top: 80px;
-      padding-left: 160px;
+      padding-left: 16px;
+    }
+
+    .center-container {
+      width: 70%;
+      margin: 0 auto;
     }
   }
 }
@@ -178,4 +183,8 @@
     row-gap: 2px;
     margin-left: -12px;
   }
+}
+
+.m-auto {
+  margin: auto !important;
 }

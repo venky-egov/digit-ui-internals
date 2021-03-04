@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown, RadioButtons, ActionBar, RemoveableTag, RoundedLabel } from "@egovernments/digit-ui-react-components";
-import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
+import { ApplyFilterBar, CloseSvg } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
@@ -171,7 +171,11 @@ const Filter = (props) => {
                 {t("CS_COMMON_CLEAR_ALL")}
               </span>
             )}
-            {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
+            {props.type === "mobile" && (
+              <span onClick={props.onClose}>
+                <CloseSvg />
+              </span>
+            )}
           </div>
           <div>
             <RadioButtons

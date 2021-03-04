@@ -58,8 +58,8 @@ export const Search = {
       }
     }
 
-    const stateId = tenantId?.split(".")[0]
-    let slumLabel = '';
+    const stateId = tenantId?.split(".")[0];
+    let slumLabel = "";
     if (response?.address?.slumName && response?.address?.locality?.code) {
       const slumData = await MdmsService.getSlumLocalityMapping(stateId, "FSM", "Slum");
       if (slumData[response?.address?.locality?.code]) {
@@ -115,7 +115,7 @@ export const Search = {
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"), value: response?.address?.street },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: response?.address?.doorNo },
           { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: response?.address?.landmark },
-          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL"), value: slumLabel ? t(slumLabel.i18nKey) : 'N/A' },
+          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL"), value: slumLabel ? t(slumLabel.i18nKey) : "N/A" },
           {
             title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"),
             value:

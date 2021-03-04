@@ -38,7 +38,7 @@ const ApplicationDetails = () => {
   const { id } = useParams();
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: id });
+  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useCitizenApplicationDetails(tenantId, { applicationNos: id });
   const state = tenantId?.split(".")[0] || "pb";
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
@@ -47,14 +47,15 @@ const ApplicationDetails = () => {
   const slumCode = application?.address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
 
-  const { data: dsoData, isLoading: isDsoLoading } = Digit.Hooks.fsm.useDsoSearch(
-    tenantId,
-    { ids: application?.dsoId },
-    {
-      enabled: !!application?.dsoId,
-      select: ([data]) => data,
-    }
-  );
+  // const { data: dsoData, isLoading: isDsoLoading } = Digit.Hooks.fsm.useDsoSearch(
+  //   tenantId,
+  //   { ids: application?.dsoId },
+  //   {
+  //     enabled: !!application?.dsoId,
+  //     select: ([data]) => data,
+  //   }
+  // );
+
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.tenantId,
     id,
@@ -118,7 +119,16 @@ const ApplicationDetails = () => {
           style={{ position: "absolute", top: 0, right: 20 }}
           onClick={handleDownloadPdf}
         />
-        <KeyNote keyValue={t("CS_FSM_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
+
+        {application.map(({ title, value, child, caption }, index) => {
+          return (
+            <KeyNote key={index} keyValue={title} note={value} {...{ caption }}>
+              {child && typeof child === "object" ? React.createElement(child.element, { ...child }) : child}
+            </KeyNote>
+          );
+        })}
+
+        {/* <KeyNote keyValue={t("CS_FSM_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
         <KeyNote keyValue={t("CS_FSM_APPLICATION_SERVICE_CATEGORY")} note={application.serviceCategory || t("CS_TITLE_FSM")} />
         <KeyNote keyValue={t("CS_FSM_APPLICATION_TYPE")} note={application.applicationType || t("CS_FSM_APPLICATION_TYPE_DESLUDGING")} />
         <KeyNote keyValue={t("CS_FSM_APPLICATION_DETAIL_STATUS")} note={t("CS_COMMON_" + application.applicationStatus)} />
@@ -166,7 +176,7 @@ const ApplicationDetails = () => {
           }
           caption={getPitDimensionCaption(application?.pitDetail?.diameter, application?.pitDetail?.length, t)}
         />
-        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_ASSIGNED_DSO")} note={dsoData?.displayName || "NA"} />
+        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_ASSIGNED_DSO")} note={dsoData?.name || "NA"} />
         <KeyNote keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_MAKE")} note={application?.vehicleType || "NA"} />
         <KeyNote
           keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_NO")}
@@ -179,7 +189,7 @@ const ApplicationDetails = () => {
         <KeyNote
           keyValue={t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE")}
           note={application?.possibleServiceDate ? Digit.DateUtils.ConvertTimestampToDate(application?.possibleServiceDate) : "NA"}
-        />
+        /> */}
         {!workflowDetails?.isLoading && (
           <Fragment>
             {workflowDetails?.data?.timeline?.length > 0 && (

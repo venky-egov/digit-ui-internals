@@ -40,6 +40,7 @@ import useSearchForAuditData from "./fsm/useSearchForAudit";
 import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
+import useCitizenApplicationDetails from "./fsm/useCitizenApplicationDetail";
 
 const pgr = {
   useComplaintDetails,
@@ -76,6 +77,7 @@ const fsm = {
   useVendorDetail,
   useConfig,
   useSlum,
+  useCitizenApplicationDetails,
 };
 
 const pt = {

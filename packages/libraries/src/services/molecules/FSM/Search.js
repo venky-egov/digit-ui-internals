@@ -2,12 +2,7 @@ import { PaymentService } from "../../elements/Payment";
 import { FSMService } from "../../elements/FSM";
 import { MdmsService } from "../../../services/elements/MDMS";
 import DsoDetails from "./DsoDetails";
-
-const getPropertyTypeLocale = (value) => {
-  return `PROPERTYTYPE_MASTERS_${value?.split(".")[0]}`;
-};
-
-const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
+import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "../../../utils/fsm";
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
@@ -164,6 +159,85 @@ export const Search = {
           { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: vehicle?.capacity || "N/A" },
           { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
         ],
+      },
+    ];
+  },
+
+  citizenApplicationDetails: async (t, tenantId, applicationNos) => {
+    const filter = { applicationNos };
+    let dsoDetails = {},
+      vehicle = {};
+    const application = await Search.application(tenantId, filter);
+    if (application?.dsoId) {
+      const dsoFilters = { ids: application.dsoId, vehicleIds: application?.vehicleId };
+      [dsoDetails] = await DsoDetails(tenantId, dsoFilters);
+
+      if (application?.vehicleId) {
+        vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === application.vehicleId);
+      }
+    }
+
+    return [
+      { tite: t("CS_FSM_APPLICATION_APPLICATION_NO"), value: application.applicationNo },
+      { tite: t("CS_FSM_APPLICATION_SERVICE_CATEGORY"), value: application.serviceCategory || t("CS_TITLE_FSM") },
+      { tite: t("CS_FSM_APPLICATION_TYPE"), value: application.applicationType || t("CS_FSM_APPLICATION_TYPE_DESLUDGING") },
+      { tite: t("CS_FSM_APPLICATION_DETAIL_STATUS"), value: t("CS_COMMON_" + application.applicationStatus) },
+      { tite: t("CS_FSM_APPLICATION_DATE"), value: Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime) },
+      {
+        tite: t("CS_FSM_APPLICATION_PROPERTY_TYPE"),
+        value: t(getPropertyTypeLocale(application.propertyUsage)) + " / " + t(getPropertySubtypeLocale(application.propertyUsage)),
+      },
+      { tite: t("CS_COMMON_MYCITY_CODE_LABEL"), value: application.address.city },
+      {
+        tite: t("CS_FSM_APPLICATION_MOHALLA"),
+        value: t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`),
+      },
+      { tite: t("CS_FSM_APPLICATION_PINCODE"), value: application.address.pincode ? application.address.pincode : "NA" },
+      {
+        tite: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"),
+        value: application.address.street ? application.address.street : "NA",
+      },
+      { tite: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: application.address.doorNo ? application.address.doorNo : "NA" },
+      {
+        tite: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"),
+        value: application.address.landmark ? application.address.landmark : "NA",
+      },
+      { tite: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL"), value: slum?.i18nKey ? t(slum?.i18nKey) : "NA" },
+      {
+        tite: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"),
+        child:
+          application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude
+            ? {
+                element: "img",
+                src: Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude),
+              }
+            : "NA",
+      },
+      { tite: t("CS_COMMON_PIT_TYPE"), value: !!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA" },
+      {
+        tite: t("CS_APPLICATION_DETAILS_PIT_SIZE"),
+        value:
+          displayPitDimension({
+            length: application.pitDetail.length,
+            width: application.pitDetail.width,
+            height: application.pitDetail.height,
+            diameter: application.pitDetail.diameter,
+          }) || "NA",
+        caption: getPitDimensionCaption(application?.pitDetail?.diameter, application?.pitDetail?.length, t),
+      },
+      { tite: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: dsoData?.name || "NA" },
+      { tite: t("ES_APPLICATION_DETAILS_VEHICLE_MAKE"), value: application?.vehicleType || "NA" },
+      {
+        title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"),
+        value: dsoData?.vehicles.find((vehicle) => vehicle.id === application?.vehicleId)?.registrationNumber || "NA",
+      },
+      {
+        title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"),
+        value: dsoData?.vehicles.find((vehicle) => vehicle.id === application?.vehicleId)?.capacity || "NA",
+      },
+      {
+        title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"),
+        value: application?.possibleServiceDate ? Digit.DateUtils.ConvertTimestampToDate(application?.possibleServiceDate) : "NA",
       },
     ];
   },

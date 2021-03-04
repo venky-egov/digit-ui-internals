@@ -39,11 +39,12 @@ const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const mobileView = innerWidth <= 640;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO");
   return (
     <Switch>
       <div className="ground-container">
         <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
-          <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
+          <Link to={DSO ? "/digit-ui/citizen/fsm/dso-dashboard" : "/digit-ui/employee"} style={{ cursor: "pointer", color: "#666" }}>
             {t("ES_COMMON_HOME")}
           </Link>{" "}
           / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>

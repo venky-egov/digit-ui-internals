@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 
-const useApplicationStatus = (select) => {
+const useApplicationStatus = (select, isEnabled = true) => {
   const { t } = useTranslation();
 
   const userInfo = Digit.UserService.getUser();
@@ -52,7 +52,7 @@ const useApplicationStatus = (select) => {
     // console.log("find filter status",DSO ? allowedStatusForDSO.map(item => applicationStatus.filter(status => status.code === item)[0] ) : applicationStatus);
     return DSO ? allowedStatusForDSO.map((item) => applicationStatus.filter((status) => status.code === item)[0]) : applicationStatus;
   };
-  return useQuery("APPLICATION_STATUS", () => fetch(), select ? { select: roleWiseSelect } : { select: defaultSelect });
+  return useQuery(["APPLICATION_STATUS", isEnabled], () => fetch(), select ? { select: roleWiseSelect, enabled: isEnabled } : { select: defaultSelect, enabled: isEnabled });
 };
 
 export default useApplicationStatus;

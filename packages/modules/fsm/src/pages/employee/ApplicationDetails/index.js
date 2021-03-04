@@ -207,6 +207,7 @@ const ApplicationDetails = (props) => {
                         text={value.value || "N/A"}
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}
+                        className="border-none"
                       />
                     );
                   })}

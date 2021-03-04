@@ -44,9 +44,7 @@ const EmployeeApp = ({ path, url, userType }) => {
       <div className="ground-container">
         <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
           <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
-            {/* {t("ES_COMMON_HOME")} */}
-            {/* TODO make localization key */}
-            Home
+            {t("ES_COMMON_HOME")}
           </Link>{" "}
           / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
         </p>

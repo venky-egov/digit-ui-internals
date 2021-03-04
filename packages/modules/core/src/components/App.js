@@ -83,7 +83,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <div className="main" style={{ ...sideBarOpenStyles }}>
+        <div className="main center-container" style={{ ...sideBarOpenStyles }}>
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
       </Route>

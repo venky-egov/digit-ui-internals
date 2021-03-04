@@ -48,7 +48,7 @@ export const PaymentService = {
     Request({
       url: Urls.FileStore,
       useCache: false,
-      method: "GET",
+      method: "POST",
       auth: true,
       userService: true,
       params: { tenantId, ...filters },

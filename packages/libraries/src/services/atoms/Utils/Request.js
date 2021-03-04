@@ -13,6 +13,7 @@ Axios.interceptors.response.use(
         }
       }
     }
+    throw err;
   }
 );
 
@@ -54,10 +55,11 @@ export const Request = async ({ method = "POST", url, data = {}, headers = {}, u
   }
 
   const res = await Axios({ method, url, data, params, headers });
-  if (useCache) {
-    window.Digit.RequestCache[key] = res.data;
+  const returnData = res?.data || res?.response?.data || {};
+  if (useCache && res?.data && Object.keys(returnData).length !== 0) {
+    window.Digit.RequestCache[key] = returnData;
   }
-  return res.data;
+  return returnData;
 };
 
 /**

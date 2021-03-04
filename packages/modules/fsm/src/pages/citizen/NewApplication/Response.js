@@ -30,7 +30,6 @@ const Response = ({ data, onSuccess }) => {
   const slumCode = mutation?.data?.fsm[0].address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
 
-  // console.log("%c ⚖️: Response -> mutation ", "font-size:16px;background-color:#a9ecf3;color:black;", mutation);
   useEffect(() => {
     try {
       const { subtype, pitDetail, address, pitType, source } = data;

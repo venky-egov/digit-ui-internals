@@ -30,15 +30,15 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { address, city_complaint, locality_complaint, street, doorNo, landmark, ownerType } = value;
+  const { address, city_complaint, locality_complaint, street, doorNo, landmark, ownerType, ownershipCategory, owners } = value;
   return (
     <Card>
       <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
       <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
-      <CardSubHeader>{t("Property Address")}</CardSubHeader>
+      <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
       <StatusTable>
         <Row
-          label={t("CS_CHECK_ADDRESS")}
+          label={t("PT_PROPERTY_ADDRESS_SUB_HEADER")}
           text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
             address?.city.code
           )}`}
@@ -49,24 +49,42 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/pincode" />}
         />
         <Row
-          label={t("Proof of Address")}
-          text="Adhaar.jpg"
+          label={t("PT_PROOF_OF_ADDRESS_SUB_HEADER")}
+          //text="Adhaar.jpg"
+          text={`${t(owners[0]?.documents[0]?.specialProofIdentity)}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/proof" />}
         />
         {/* {landmark && (
           <Row label={t("landmark")} text={landmark} actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/test/landmark" />} />
         )} */}
       </StatusTable>
-      <CardSubHeader>{t("Ownership Details")}</CardSubHeader>
+      <CardSubHeader>{t("PT_OWNERSHIP_DETAILS_SUB_HEADER")}</CardSubHeader>
       <StatusTable>
         <Row
-          label={t("type of ownership")}
-          //text = {`${ownerType ? `${t(ownerType.code)}` : ""}`}
-          text="Single Owner"
+          label={t("PT_FORM3_OWNERSHIP_TYPE")}
+          //text = {`${ownershipCategory ? `${ownershipCategory}` : ""}`}
+          text={t(ownershipCategory.i18nKey)}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
         />
       </StatusTable>
-      <CardSubHeader>{t("Property Details")}</CardSubHeader>
+      <CardSubHeader>{t("PT_OWNER_SUB_HEADER")}</CardSubHeader>
+      <StatusTable>
+        <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(owners[0]?.name)}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
+        <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(owners[0]?.gender.code)}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
+        <Row
+          label={t("PT_GUARDIAN_SUB_HEADER")}
+          text={`${t(owners[0]?.fatherOrHusbandName)}`}
+          actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+        />
+        <Row
+          label={t("Owner address")}
+          text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
+            address?.city.code
+          )}`}
+          actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+        />
+      </StatusTable>
+      <CardSubHeader>{t("PT_ASSESMENT_INFO_SUB_HEADER")}</CardSubHeader>
       <StatusTable>
         <Row label={t("Residental Property")} text="yes" actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
         <Row label={t("Type of property")} text="Independent Building" actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />

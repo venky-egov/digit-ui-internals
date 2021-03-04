@@ -271,7 +271,7 @@ const getPropertyOwnerShipCategoryCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
-const getDyarnocumentRequiredScreenCategory = (tenantId, moduleCode) => ({
+const getDocumentRequiredScreenCategory = (tenantId, moduleCode) => ({
   details: {
     tenantId: tenantId,
     moduleDetails: [

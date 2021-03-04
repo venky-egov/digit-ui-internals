@@ -37,7 +37,10 @@ const CreateProperty = ({ parentRoute }) => {
       nextStep = key;
     }
     if (nextStep === null) {
-      return redirectWithHistory(`${parentRoute}/new-application/check`);
+      console.log(match.path);
+      debugger;
+
+      return redirectWithHistory(`${match.path}/check`);
     }
     nextPage = isMultiple ? `${match.path}/${nextStep}/${index}` : `${match.path}/${nextStep}`;
     redirectWithHistory(nextPage);

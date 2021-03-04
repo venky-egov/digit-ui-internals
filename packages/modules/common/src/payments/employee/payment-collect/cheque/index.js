@@ -143,6 +143,7 @@ export const ChequeDetailsComponent = (props) => {
                   type="text"
                   className="employee-card-input"
                   readOnly
+                  disabled
                 />
               </div>
             </div>
@@ -151,7 +152,7 @@ export const ChequeDetailsComponent = (props) => {
             <h2 className="card-label">Bank Branch</h2>
             <div className="field">
               <div className="field-container">
-                <input className="employee-card-input" value={bankBranch} type="text" className="employee-card-input" readOnly />
+                <input className="employee-card-input" value={bankBranch} type="text" className="employee-card-input" readOnly disabled />
               </div>
             </div>
           </div>

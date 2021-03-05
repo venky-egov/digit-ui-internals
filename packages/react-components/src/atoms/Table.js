@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useTable, useRowSelect, usePagination, useSortBy } from "react-table";
+import { useTable, useRowSelect, usePagination, useSortBy, useControlledState } from "react-table";
 import { ArrowBack, ArrowForward, SortUp, SortDown } from "./svgindex";
 
 // const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
@@ -32,6 +32,7 @@ const Table = ({
   onPrevPage,
   onSort = noop,
   onPageSizeChange,
+  sortParams = {},
 }) => {
   const {
     getTableProps,
@@ -53,13 +54,21 @@ const Table = ({
     {
       columns,
       data,
-      initialState: { pageIndex: currentPage, pageSize: pageSizeLimit },
+      initialState: { pageIndex: currentPage, pageSize: pageSizeLimit, sortBy: sortParams },
       pageCount: totalRecords > 0 ? Math.ceil(totalRecords / pageSizeLimit) : -1,
       manualPagination: true,
       disableMultiSort: false,
       disableSortBy: disableSort,
       manualSortBy: true,
       autoResetPage: false,
+      autoResetSortBy: false,
+      useControlledState: state => {
+        return React.useMemo(
+          () => ({
+            ...state,
+            pageIndex: currentPage,
+          }))
+      },
     },
     useSortBy,
     usePagination,

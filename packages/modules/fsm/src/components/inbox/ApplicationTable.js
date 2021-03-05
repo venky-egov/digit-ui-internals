@@ -13,6 +13,7 @@ const ApplicationTable = ({
   onPrevPage,
   onPageSizeChange,
   pageSizeLimit,
+  sortParams,
   totalRecords,
 }) => {
   return (
@@ -28,6 +29,7 @@ const ApplicationTable = ({
       disableSort={disableSort}
       onPageSizeChange={onPageSizeChange}
       onSort={onSort}
+      sortParams={sortParams}
       totalRecords={totalRecords}
     />
   );

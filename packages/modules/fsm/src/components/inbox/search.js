@@ -24,7 +24,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
 
   function clearSearch() {
     reset();
-    onSearch([]);
+    onSearch({});
   }
 
   const clearAll = (mobileView) => {

@@ -48,7 +48,7 @@ const DesktopInbox = (props) => {
           },
           {
             Header: t("ES_INBOX_DSO_NAME"),
-            accessor: (row) => row.tripOwner.name,
+            accessor: (row) => row.tripOwner.displayName,
           },
           {
             Header: t("ES_INBOX_WASTE_COLLECTED"),

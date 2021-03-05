@@ -11,6 +11,7 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
       body: [
         {
           label: t("ES_FSM_ACTION_DESLUGED_DATE_LABEL"),
+          isMandatory: true,
           type: "date",
           populators: {
             name: "desluged",

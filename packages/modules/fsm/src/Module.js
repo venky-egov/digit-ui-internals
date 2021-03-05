@@ -11,7 +11,6 @@ import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 
 import { NewApplication } from "./pages/employee/NewApplication";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
-import CollectPayment from "./pages/employee/CollectPayment";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
@@ -42,14 +41,15 @@ const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const mobileView = innerWidth <= 640;
+  const DSO = Digit.UserService.hasAccess("FSM_DSO");
   return (
     <Switch>
       <div className="ground-container">
         <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
-          <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
+          <Link to={DSO ? "/digit-ui/citizen/fsm/dso-dashboard" : "/digit-ui/employee"} style={{ cursor: "pointer", color: "#666" }}>
             {t("ES_COMMON_HOME")}
           </Link>{" "}
-          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
+          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? t("ES_TITLE_INBOX") : "FSM"}</span>
         </p>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
         <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
@@ -59,7 +59,6 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
         <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
-        <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
         <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
         <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />

@@ -14,7 +14,7 @@ const KeyNote = ({ keyValue, note, caption, noteStyle, children }) => {
 
 KeyNote.propTypes = {
   keyValue: PropTypes.string,
-  note: PropTypes.string || PropTypes.number,
+  note: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   noteStyle: PropTypes.any,
 };
 

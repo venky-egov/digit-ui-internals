@@ -6,8 +6,7 @@ import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
 import { getVehicleType } from "../utils";
 
-const GetMessage = (type, action, isSuccess, isEmployee) => {
-  const { t } = useTranslation();
+const GetMessage = (type, action, isSuccess, isEmployee, t) => {
   //   if (isSuccess) {
   //     switch (action) {
   //       case "REOPEN":
@@ -36,27 +35,27 @@ const GetMessage = (type, action, isSuccess, isEmployee) => {
   //     default:
   //       return t(`CS_COMMON_SOMETHING_WENT_WRONG`);
   //   }
-  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action}_${type}${isSuccess ? "" : "_ERROR"}`);
+  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}`);
 };
 
-const GetActionMessage = (action, isSuccess, isEmployee) => {
-  return GetMessage("ACTION", action, isSuccess, isEmployee);
+const GetActionMessage = (action, isSuccess, isEmployee, t) => {
+  return GetMessage("ACTION", action, isSuccess, isEmployee, t);
 };
 
-const GetLabel = (action, isSuccess, isEmployee) => {
-  return GetMessage("LABEL", action, isSuccess, isEmployee);
+const GetLabel = (action, isSuccess, isEmployee, t) => {
+  return GetMessage("LABEL", action, isSuccess, isEmployee, t);
 };
 
-const DisplayText = (action, isSuccess, isEmployee) => {
-  return GetMessage("DISPLAY", action, isSuccess, isEmployee);
+const DisplayText = (action, isSuccess, isEmployee, t) => {
+  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t);
 };
 
 const BannerPicker = (props) => {
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee)}
+      message={GetActionMessage(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
       applicationNumber={props.data?.fsm[0].applicationNo}
-      info={GetLabel(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee)}
+      info={GetLabel(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
       successful={props.isSuccess}
     />
   );
@@ -93,9 +92,8 @@ const Response = (props) => {
 
   useEffect(() => {
     const onSuccess = () => {
-      queryClient.invalidateQueries();
+      queryClient.clear();
     };
-    console.log("state -------->", state);
     if (state.key === "update") {
       // console.log("find state here", state.applicationData, state.action)
       mutation.mutate(
@@ -153,7 +151,7 @@ const Response = (props) => {
         isLoading={mutation.isIdle || mutation.isLoading}
         isEmployee={props.parentRoute.includes("employee")}
       />
-      <CardText>{DisplayText(state.action, mutation.isSuccess, props.parentRoute.includes("employee"))}</CardText>
+      <CardText>{DisplayText(state.action, mutation.isSuccess, props.parentRoute.includes("employee"), t)}</CardText>
       {mutation.isSuccess && (
         <LinkButton
           label={

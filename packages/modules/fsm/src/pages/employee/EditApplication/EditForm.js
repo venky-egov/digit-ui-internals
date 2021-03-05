@@ -149,6 +149,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         },
       },
     };
+
     delete formData["responseInfo"];
 
     window.Digit.SessionStorage.set("propertyType", null);
@@ -157,7 +158,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
     // console.log("find form data here", formData);
-    history.push("/digit-ui/employee/fsm/response", {
+    history.replace("/digit-ui/employee/fsm/response", {
       applicationData: formData,
       key: "update",
       action: "SUBMIT",

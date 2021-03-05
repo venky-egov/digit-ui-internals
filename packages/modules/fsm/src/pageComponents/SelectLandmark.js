@@ -30,7 +30,7 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
       if (userType === "employee") {
         const value = e?.target?.value;
         const key = e?.target?.id;
-        onSelect(key, value);
+        onSelect(config.key, { ...formData[config.key], landmark: e.target.value });
       }
     }
   }
@@ -55,7 +55,7 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
       config={{ ...config, inputs }}
       value={landmark}
       onChange={onChange}
-      onSelect={(data) => onSelect(config.key, { ...data })}
+      onSelect={(data) => onSelect(config.key, { ...formData[config.key], ...data })}
       onSkip={onSkip}
       t={t}
       forcedError={t(error)}

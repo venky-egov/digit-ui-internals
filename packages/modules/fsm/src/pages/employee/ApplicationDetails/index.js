@@ -57,7 +57,7 @@ const ApplicationDetails = (props) => {
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => applicationData?.vehicleType === vehicle?.code);
 
-  const getVehicleValue = (vehicle, text) => {
+  const getVehicleValue = (vehicle, text, t) => {
     if (text?.includes("Vehicle Make")) return t(vehicle?.i18nKey);
     else if (text?.includes("Vehicle Capacity")) return vehicle?.capacity;
     return "N/A";
@@ -71,7 +71,7 @@ const ApplicationDetails = (props) => {
             value?.title?.includes("Vehicle")
               ? {
                   ...value,
-                  value: value?.value !== "N/A" ? t(value?.value) : getVehicleValue(vehicle, value?.title),
+                  value: value?.value !== "N/A" ? t(value?.value) : getVehicleValue(vehicle, value?.title, t),
                 }
               : value
           ),

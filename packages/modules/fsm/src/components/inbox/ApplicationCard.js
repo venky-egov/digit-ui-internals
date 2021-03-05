@@ -15,6 +15,7 @@ export const ApplicationCard = ({
   serviceRequestIdKey,
   isFstpOperator,
   isLoading,
+  isSearch,
   searchParams,
   searchFields,
   sortParams,
@@ -101,7 +102,7 @@ export const ApplicationCard = ({
             }}
           />
         )}
-        {onFilterChange && (
+        {(!isSearch && onFilterChange) && (
           <FilterAction
             text="FILTER"
             handleActionClick={() => {

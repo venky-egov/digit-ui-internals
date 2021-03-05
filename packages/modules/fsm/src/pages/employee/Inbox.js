@@ -5,7 +5,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 
-const Inbox = ({ parentRoute }) => {
+const Inbox = ({ parentRoute, isSearch = false, isInbox = false, }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   console.log("current TenantId in ", tenantId);
   const userInfo = Digit.UserService.getUser();
@@ -18,16 +18,19 @@ const Inbox = ({ parentRoute }) => {
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const { t } = useTranslation();
+  const [shouldSearch, setShouldSearch] = useState(false);
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sortParams, setSortParams] = useState({ key: "createdTime", sortOrder: "DESC" });
-  const [searchParams, setSearchParams] = useState({
-    applicationStatus: [],
-    locality: [],
-    uuid:
-      DSO || isFSTPOperator
-        ? { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") }
-        : { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
+  const [searchParams, setSearchParams] = useState(() => {
+    return isInbox ? {
+      applicationStatus: [],
+      locality: [],
+      uuid:
+        DSO || isFSTPOperator
+          ? { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") }
+          : { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
+    } : {}
   });
 
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -41,7 +44,22 @@ const Inbox = ({ parentRoute }) => {
     ...paginationParms,
     fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
     toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
+  }, null, {
+    enabled: isInbox
   });
+
+  const { isLoading: isSearchLoading, isIdle: isSearchIdle, isError: isSearchError, data, error } = Digit.Hooks.fsm.useSearchAll(
+    tenantId,
+    {
+      limit: pageSize + 1,
+      offset: pageOffset,
+      ...searchParams,
+      fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
+      toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
+    },
+    null,
+    { enabled: shouldSearch && isSearch }
+  );
 
   const fetchNextPage = () => {
     setPageOffset((prevState) => prevState + pageSize);
@@ -70,6 +88,9 @@ const Inbox = ({ parentRoute }) => {
 
   const onSearch = (params = {}) => {
     setSearchParams({ ...searchParams, ...params });
+    if (isSearch) {
+      setShouldSearch(true);
+    }
   };
 
   const removeParam = (params = {}) => {
@@ -79,6 +100,28 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const getSearchFields = (userRoles) => {
+    if (isSearch) {
+      return [
+        {
+          label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
+          name: "applicationNos",
+        },
+        {
+          label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
+          name: "mobileNumber",
+        },
+        {
+          label: t("ES_SEARCH_FROM_DATE"),
+          name: "fromDate",
+          type: "date",
+        },
+        {
+          label: t("ES_SEARCH_TO_DATE"),
+          name: "toDate",
+          type: "date",
+        },
+      ];
+    }
     if (userRoles.find((role) => role.code === "FSM_EMP_FSTPO")) {
       return [
         {
@@ -108,8 +151,9 @@ const Inbox = ({ parentRoute }) => {
     if (isMobile) {
       return (
         <MobileInbox
-          data={applications}
-          isLoading={isLoading || isIdle}
+          data={isInbox ? applications : data}
+          isLoading={isInbox ? (isLoading || isIdle) : (isSearchLoading)}
+          isSearch={isSearch}
           searchFields={getSearchFields(userRoles)}
           onFilterChange={handleFilterChange}
           onSearch={onSearch}
@@ -123,10 +167,12 @@ const Inbox = ({ parentRoute }) => {
     } else {
       return (
         <div>
-          <Header>{t("ES_COMMON_INBOX")}</Header>
+          {!isSearch && <Header>{t("ES_COMMON_INBOX")}</Header>}
           <DesktopInbox
-            data={applications}
-            isLoading={isLoading || isIdle}
+            data={isInbox ? applications : data}
+            isLoading={isInbox ? (isLoading || isIdle) : (isSearchLoading)}
+            isSearch={isSearch}
+            shouldSearch={shouldSearch}
             onFilterChange={handleFilterChange}
             searchFields={getSearchFields(userRoles)}
             onSearch={onSearch}

@@ -101,7 +101,7 @@ const ApplicationLinks = ({ isMobile, data, setPopup, setType, setSearchFields }
                 }
               }}
             >
-              {isMobile && text?.toLowerCase()?.includes("search") ? text : <Link to={link}>{text}</Link>}
+              <Link to={link}>{text}</Link>
             </span>
           ))}
         </div>

@@ -1,9 +1,9 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { CardSectionHeader, Header, Card, KeyNote, LinkButton, Loader, CheckPoint } from "@egovernments/digit-ui-react-components";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Header, Card, KeyNote, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
+import { useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
-import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "../../utils";
+import { getVehicleType } from "../../utils";
 import { ApplicationTimeline } from "../../components/ApplicationTimeline";
 
 // const displayPitDimension = (pitDeminsion) => {
@@ -44,13 +44,6 @@ const ApplicationDetails = () => {
   const slumCode = application?.address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
 
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({
-    tenantId: application?.tenantId,
-    id,
-    moduleCode: "FSM",
-    serviceData: application,
-    config: { enabled: application?.tenantId ? true : false },
-  });
   const coreData = Digit.Hooks.useCoreData();
 
   useEffect(() => {
@@ -70,27 +63,6 @@ const ApplicationDetails = () => {
   const handleDownloadPdf = async () => {
     const data = getPDFData({ ...application?.pdfData, pdfVehicleType, slum }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
-  };
-
-  const showNextActions = (nextAction) => {
-    switch (nextAction?.action) {
-      case "PAY":
-        return (
-          <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${id}`}>
-              <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
-            </Link>
-          </div>
-        );
-      case "SUBMIT_FEEDBACK":
-        return (
-          <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/fsm/rate/${id}`}>
-              <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
-            </Link>
-          </div>
-        );
-    }
   };
 
   return (
@@ -119,42 +91,6 @@ const ApplicationDetails = () => {
             </KeyNote>
           );
         })}
-
-        {!workflowDetails?.isLoading && workflowDetails.data && (
-          <Fragment>
-            {workflowDetails?.data?.timeline?.length > 0 && (
-              <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
-                {t("CS_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
-              </CardSectionHeader>
-            )}
-            {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
-              <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
-            ) : (
-              <ConnectingCheckPoints>
-                {workflowDetails?.data?.timeline &&
-                  workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <CheckPoint keyValue={index} isCompleted={index === 0} label={t("CS_COMMON_" + checkpoint.status)} />
-                      </React.Fragment>
-                    );
-                  })}
-              </ConnectingCheckPoints>
-            )}
-          </Fragment>
-        )}
-        {/* <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} /> */}
-        {/* <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} /> */}
-        {/* {application.applicationStatus === "PENDING_APPL_FEE_PAYMENT" && (
-          <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
-            <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
-          </Link>
-        )}
-        {["COMPLETED", "CANCELED"].includes(application.applicationStatus) && (
-          <Link to={`/digit-ui/citizen/fsm/rate/${application.applicationNo}`}>
-            <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
-          </Link>
-        )} */}
         <ApplicationTimeline application={application} id={id} />
       </Card>
     </React.Fragment>

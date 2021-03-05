@@ -16,6 +16,7 @@ export const ApplicationCard = ({
   isFstpOperator,
   isLoading,
   isSearch,
+  shouldSearch,
   searchParams,
   searchFields,
   sortParams,
@@ -66,7 +67,7 @@ export const ApplicationCard = ({
   }
 
   let result;
-  if (data && data?.length === 0) {
+  if ((isSearch && !shouldSearch) || (data && data?.length === 0)) {
     result = (
       <Card style={{ marginTop: 20 }}>
         {t("CS_MYAPPLICATIONS_NO_APPLICATION")

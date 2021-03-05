@@ -1,9 +1,9 @@
-import { Card } from "@egovernments/digit-ui-react-components";
+import { Card, ShippingTruck } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const ApplicationLinks = ({ isMobile, data, setPopup, setType, setSearchFields }) => {
+const ApplicationLinks = () => {
   const { t } = useTranslation();
 
   const allLinks = [
@@ -54,35 +54,11 @@ const ApplicationLinks = ({ isMobile, data, setPopup, setType, setSearchFields }
   const GetLogo = () => (
     <div className="header">
       <span className="logo">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-          <path d="M0 0h24v24H0z" fill="none" />
-          <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z" fill="white" />
-        </svg>
+        <ShippingTruck />
       </span>{" "}
-      <span className="text">Applications</span>
+      <span className="text">{t("ES_TITLE_FAECAL_SLUDGE_MGMT")}</span>
     </div>
   );
-
-  const searchApplicationSearchFields = [
-    {
-      label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
-      name: "applicationNos",
-    },
-    {
-      label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
-      name: "mobileNumber",
-    },
-    {
-      label: t("ES_SEARCH_FROM_DATE"),
-      name: "fromDate",
-      type: "date",
-    },
-    {
-      label: t("ES_SEARCH_TO_DATE"),
-      name: "toDate",
-      type: "date",
-    },
-  ];
 
   return (
     <Card className="employeeCard filter">
@@ -90,18 +66,8 @@ const ApplicationLinks = ({ isMobile, data, setPopup, setType, setSearchFields }
         {GetLogo()}
         <div className="body">
           {links.map(({ link, text }, index) => (
-            <span
-              className="link"
-              key={index}
-              onClick={() => {
-                if (isMobile) {
-                  setPopup(true);
-                  setSearchFields(searchApplicationSearchFields);
-                  setType("SEARCH");
-                }
-              }}
-            >
-              {isMobile && text?.toLowerCase()?.includes("search") ? text : <Link to={link}>{text}</Link>}
+            <span className="link" key={index}>
+              <Link to={link}>{text}</Link>
             </span>
           ))}
         </div>

@@ -21,4 +21,14 @@ export const PTService = {
       userService: true,
       params: { tenantId, consumerCode: consumerCodes, businessService: "PT" },
     }),
+  create: (details, tenantId) =>
+    Request({
+      url: Urls.pt.create,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
 };

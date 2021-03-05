@@ -51,7 +51,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row
           label={t("PT_PROOF_OF_ADDRESS_SUB_HEADER")}
           //text="Adhaar.jpg"
-          text={`${t(owners[0]?.documents[0]?.specialProofIdentity)}`}
+          text={`${t(owners[0]?.documents.specialProofIdentity)}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/proof" />}
         />
         {/* {landmark && (

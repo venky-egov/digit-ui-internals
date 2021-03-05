@@ -47,7 +47,8 @@ const CreateProperty = ({ parentRoute }) => {
   };
 
   const submitComplaint = async () => {
-    history.push(`${parentRoute}/new-application/response`);
+    debugger;
+    history.push(`${match.path}/response`);
   };
 
   function handleSelect(key, data, skipStep, index, isAddMultiple = false) {
@@ -86,6 +87,9 @@ const CreateProperty = ({ parentRoute }) => {
       })}
       <Route path={`${match.path}/check`}>
         <CheckPage onSubmit={submitComplaint} value={params} />
+      </Route>
+      <Route path={`${match.path}/response`}>
+        <Response data={params} onSuccess={handleSUccess} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />

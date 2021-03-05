@@ -1,19 +1,10 @@
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Header,
-  Card,
-  CardSectionHeader,
-  ConnectingCheckPoints,
-  CheckPoint,
-  KeyNote,
-  SubmitBar,
-  LinkButton,
-  Loader,
-} from "@egovernments/digit-ui-react-components";
+import { Header, Card, KeyNote, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
 import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
 import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "../../utils";
+import { ApplicationTimeline } from "../../components/ApplicationTimeline";
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
@@ -55,14 +46,7 @@ const ApplicationDetails = () => {
       select: ([data]) => data,
     }
   );
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({
-    tenantId: application?.tenantId,
-    id,
-    moduleCode: "FSM",
-    serviceData: application,
-  });
   const coreData = Digit.Hooks.useCoreData();
-  const key = globalConfigs.getConfig("GMAPS_API_KEY");
 
   if (isLoading) {
     return <Loader />;
@@ -77,27 +61,6 @@ const ApplicationDetails = () => {
   const handleDownloadPdf = async () => {
     const data = getPDFData({ ...application, pdfVehicleType, slum }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
-  };
-
-  const showNextActions = (nextAction) => {
-    switch (nextAction?.action) {
-      case "PAY":
-        return (
-          <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
-              <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
-            </Link>
-          </div>
-        );
-      case "SUBMIT_FEEDBACK":
-        return (
-          <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/fsm/rate/${application.applicationNo}`}>
-              <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
-            </Link>
-          </div>
-        );
-    }
   };
 
   return (
@@ -180,29 +143,7 @@ const ApplicationDetails = () => {
           keyValue={t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE")}
           note={application?.possibleServiceDate ? Digit.DateUtils.ConvertTimestampToDate(application?.possibleServiceDate) : "NA"}
         />
-        {!workflowDetails?.isLoading && (
-          <Fragment>
-            {workflowDetails?.data?.timeline?.length > 0 && (
-              <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
-                {t("CS_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
-              </CardSectionHeader>
-            )}
-            {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
-              <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
-            ) : (
-              <ConnectingCheckPoints>
-                {workflowDetails?.data?.timeline &&
-                  workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <CheckPoint keyValue={index} isCompleted={index === 0} label={t("CS_COMMON_" + checkpoint.status)} />
-                      </React.Fragment>
-                    );
-                  })}
-              </ConnectingCheckPoints>
-            )}
-          </Fragment>
-        )}
+
         {/* <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} /> */}
         {/* <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} /> */}
         {/* {application.applicationStatus === "PENDING_APPL_FEE_PAYMENT" && (
@@ -215,7 +156,7 @@ const ApplicationDetails = () => {
             <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
           </Link>
         )} */}
-        {workflowDetails.data && showNextActions(workflowDetails.data?.nextActions[0])}
+        <ApplicationTimeline application={application} id={id} />
       </Card>
     </React.Fragment>
   );

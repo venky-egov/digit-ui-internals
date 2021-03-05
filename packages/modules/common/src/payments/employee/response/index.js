@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Banner, Card, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";

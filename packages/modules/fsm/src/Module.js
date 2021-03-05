@@ -18,7 +18,6 @@ import Inbox from "./pages/employee/Inbox";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import DsoDashboard from "./pages/employee/DsoDashboard";
 
-import SearchApplication from "./pages/employee/SearchApplication";
 import FstpInbox from "./pages/employee/FstpInbox";
 
 import SelectPropertySubtype from "./pageComponents/SelectPropertySubtype";
@@ -49,7 +48,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? t("ES_TITLE_INBOX") : "FSM"}</span>
         </p>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
-        <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
+        <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
         <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
@@ -57,7 +56,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
-        <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
+        <PrivateRoute path={`${path}/search`} component={() => <Inbox parentRoute={path} isSearch={true} />} />
         <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />
       </div>
     </Switch>

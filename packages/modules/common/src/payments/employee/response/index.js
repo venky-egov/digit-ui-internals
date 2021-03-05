@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Banner, Card, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,12 @@ export const SuccessfulPayment = (props) => {
   props.setLink("Response");
   let { consumerCode, receiptNumber, businessService } = useParams();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
+
+  useEffect(() => {
+    return () => {
+      queryClient.clear();
+    };
+  }, []);
 
   const getMessage = () => t("ES_PAYMENT_COLLECTED");
   // console.log("--------->", consumerCode);
@@ -25,7 +31,6 @@ export const SuccessfulPayment = (props) => {
       // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
-    queryClient.clear();
     queryClient.refetchQueries("FSM_CITIZEN_SEARCH");
     window.open(fileStore[response.filestoreIds[0]], "_blank");
   };

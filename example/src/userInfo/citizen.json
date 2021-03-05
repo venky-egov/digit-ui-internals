@@ -1,13 +1,19 @@
 {
-  "id": 29752,
-  "uuid": "1bc2f02b-eb30-4777-a8b1-6e831e867c4f",
+  "id": 12153,
+  "uuid": "5e5070d3-96ff-4009-b018-305a682dec53",
   "userName": "9999999999",
-  "name": "Aniket",
+  "name": "Test",
   "mobileNumber": "9999999999",
-  "emailId": null,
+  "emailId": "",
   "locale": null,
   "type": "CITIZEN",
-  "roles": [{ "name": "Citizen", "code": "CITIZEN", "tenantId": "pb" }],
+  "roles": [
+    {
+      "name": "Citizen",
+      "code": "CITIZEN",
+      "tenantId": "pb"
+    }
+  ],
   "active": true,
   "tenantId": "pb"
 }

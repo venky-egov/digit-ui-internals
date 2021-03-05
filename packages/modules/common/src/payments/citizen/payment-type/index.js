@@ -54,6 +54,7 @@ export const SelectPaymentType = (props) => {
       window.location = redirectUrl;
     } catch (error) {
       console.log(error);
+      // TODO: add error toast for error.response.data.Errors[0].message
     }
   };
 

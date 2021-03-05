@@ -1,19 +1,10 @@
 import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Header,
-  Card,
-  CardSectionHeader,
-  ConnectingCheckPoints,
-  CheckPoint,
-  KeyNote,
-  SubmitBar,
-  LinkButton,
-  Loader,
-} from "@egovernments/digit-ui-react-components";
+import { Header, Card, KeyNote, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
 import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
 import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "../../utils";
+import { ApplicationTimeline } from "../../components/ApplicationTimeline";
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
@@ -61,7 +52,6 @@ const ApplicationDetails = () => {
     config: { enabled: application?.tenantId ? true : false },
   });
   const coreData = Digit.Hooks.useCoreData();
-  const key = globalConfigs.getConfig("GMAPS_API_KEY");
 
   useEffect(() => {
     console.log(application?.pdfData, errorApplication);
@@ -165,7 +155,7 @@ const ApplicationDetails = () => {
             <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
           </Link>
         )} */}
-        {workflowDetails.data && showNextActions(workflowDetails.data?.nextActions[0])}
+        <ApplicationTimeline application={application} id={id} />
       </Card>
     </React.Fragment>
   );

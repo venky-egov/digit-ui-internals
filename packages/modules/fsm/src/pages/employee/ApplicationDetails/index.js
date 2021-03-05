@@ -71,7 +71,7 @@ const ApplicationDetails = (props) => {
             value?.title?.includes("Vehicle")
               ? {
                   ...value,
-                  value: value?.value !== "N/A" ? value?.value : getVehicleValue(vehicle, value?.title),
+                  value: value?.value !== "N/A" ? t(value?.value) : getVehicleValue(vehicle, value?.title),
                 }
               : value
           ),

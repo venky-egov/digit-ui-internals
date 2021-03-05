@@ -42,6 +42,7 @@ import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
 
 import usePropertyMDMS from "./pt/usePropertyMDMS";
+import usePropertyAPI from "./pt/usePropertyAPI";
 
 const pgr = {
   useComplaintDetails,
@@ -84,7 +85,8 @@ const fsm = {
 const pt = {
   usePropertySearch,
   usePropertyPayment,
-  usePropertyMDMS
+  usePropertyMDMS,
+  usePropertyAPI
 };
 
 const Hooks = {

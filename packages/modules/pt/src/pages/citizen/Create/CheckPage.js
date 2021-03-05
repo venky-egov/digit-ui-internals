@@ -51,7 +51,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row
           label={t("PT_PROOF_OF_ADDRESS_SUB_HEADER")}
           //text="Adhaar.jpg"
-          text={`${t(owners[0]?.documents.specialProofIdentity)}`}
+          text={`${t(owners&&Array.isArray(owners)&&owners.length>0?owners[0]?.documents.specialProofIdentity:'NA')}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/proof" />}
         />
         {/* {landmark && (
@@ -63,14 +63,14 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row
           label={t("PT_FORM3_OWNERSHIP_TYPE")}
           //text = {`${ownershipCategory ? `${ownershipCategory}` : ""}`}
-          text={t(ownershipCategory.i18nKey)}
+          text={t(ownershipCategory?.i18nKey)}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
         />
       </StatusTable>
       <CardSubHeader>{t("PT_OWNER_SUB_HEADER")}</CardSubHeader>
       <StatusTable>
-        <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(owners[0]?.name)}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
-        <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(owners[0]?.gender.code)}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
+        <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(owners&&Array.isArray(owners)&&owners.length>0?owners[0]?.name:'NA')}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
+        <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(owners[0]?.gender?.code)}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
         <Row
           label={t("PT_GUARDIAN_SUB_HEADER")}
           text={`${t(owners[0]?.fatherOrHusbandName)}`}

@@ -24,7 +24,7 @@ const BannerPicker = (props) => {
 const Response = ({ data, onSuccess }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  //const mutation = Digit.Hooks.pt.usePropertyAPI(data,tenantId);
+  let mutation ={};
   //const coreData = Digit.Hooks.useCoreData();
   //const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   //const slumCode = mutation?.data?.fsm[0].address?.slumName;
@@ -35,16 +35,16 @@ const Response = ({ data, onSuccess }) => {
       const { subtype, pitDetail, address, pitType, source, ownershipCategory, owners } = data;
       //const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
       const formdata = {
-        property: {
-          tenantId: tenantId,
+        Property: {
+          tenantId: 'pb.amritsar',
           address: {
             city: address?.city.code,
             doorNo: address?.doorNo,
-            buildingName,
-            locality: {
-              code: address?.locality.code.split("_").pop(),
-              area: address?.locality.name,
-            },
+            buildingName:address?.buildingName,
+            "locality": {
+              "code": "SUN23",
+              "area": "Area1"
+          }
           },
           usageCategoryMinor: null,
           units: [
@@ -62,7 +62,7 @@ const Response = ({ data, onSuccess }) => {
           landArea: null,
           propertyType: "BUILTUP.SHAREDPROPERTY",
           noOfFloors: 2,
-          ownershipCategory: t(ownershipCategory.i18nKey),
+          ownershipCategory:"INDIVIDUAL.SINGLEOWNER",
           owners: [
             {
               name: t(owners[0]?.name),
@@ -112,10 +112,91 @@ const Response = ({ data, onSuccess }) => {
           creationReason: "CREATE",
         },
       };
+
+      /* temp line to override proeprty value should be removed  */
+
       console.log(formdata);
-      /*  mutation.mutate(formdata, {
-        onSuccess,
-      }); */
+      formdata.Property=     {
+        "tenantId": "pb.amritsar",
+        "address": {
+            "city": "Amritsar",
+            "locality": {
+                "code": "SUN23",
+                "area": "Area1"
+            }
+        },
+        "usageCategoryMinor": null,
+        "units": [
+            {
+                "floorNo": "0",
+                "occupancyType": "SELFOCCUPIED",
+                "constructionDetail": {
+                    "builtUpArea": 111.11
+                },
+                "tenantId": "pb.amritsar",
+                "usageCategory": "RESIDENTIAL"
+            }
+        ],
+        "usageCategoryMajor": "RESIDENTIAL",
+        "landArea": "2000",
+        "propertyType": "BUILTUP.INDEPENDENTPROPERTY",
+        "noOfFloors": 1,
+        "ownershipCategory": "INDIVIDUAL.SINGLEOWNER",
+        "owners": [
+            {
+                "name": "Jagankumar",
+                "mobileNumber": "9965664222",
+                "fatherOrHusbandName": "E",
+                "emailId": null,
+                "permanentAddress": "No 1, New cross street",
+                "relationship": "FATHER",
+                "ownerType": "NONE",
+                "gender": "Male",
+                "isCorrespondenceAddress": null
+            }
+        ],
+        "additionalDetails": {
+            "inflammable": false,
+            "heightAbove36Feet": false
+        },
+        "source": "MUNICIPAL_RECORDS",
+        "channel": "CFC_COUNTER",
+        "documents": [
+            {
+                "documentType": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+                "fileStoreId": "619e20b3-f486-4197-9e77-4258a5885d89",
+                "documentUid": "619e20b3-f486-4197-9e77-4258a5885d89"
+            },
+            {
+                "documentType": "OWNER.IDENTITYPROOF.AADHAAR",
+                "fileStoreId": "45d1fe0e-a6b8-4d83-a3f2-8e6e78c17c0f",
+                "documentUid": "45d1fe0e-a6b8-4d83-a3f2-8e6e78c17c0f"
+            },
+            {
+                "documentType": "OWNER.REGISTRATIONPROOF.SALEDEED",
+                "fileStoreId": "54185790-8c0f-4979-94f6-31868f1ebe60",
+                "documentUid": "54185790-8c0f-4979-94f6-31868f1ebe60"
+            },
+            {
+                "documentType": "OWNER.USAGEPROOF.ELECTRICITYBILL",
+                "fileStoreId": "ba6d138c-ead5-4605-b577-a9024dd9694b",
+                "documentUid": "ba6d138c-ead5-4605-b577-a9024dd9694b"
+            },
+            {
+                "documentType": "OWNER.CONSTRUCTIONPROOF.BPACERTIFICATE",
+                "fileStoreId": "b03a71ba-0f10-4d09-ac3b-e6b6be2ea691",
+                "documentUid": "b03a71ba-0f10-4d09-ac3b-e6b6be2ea691"
+            }
+        ],
+        "creationReason": "CREATE",
+        "superBuiltUpArea": null,
+        "usageCategory": "RESIDENTIAL"
+    }
+
+      /* TODO */
+   
+       mutation = Digit.Hooks.pt.usePropertyAPI(formdata,tenantId);
+       console.log(mutation)
     } catch (err) {
       console.log(err);
     }
@@ -147,7 +228,7 @@ const Response = ({ data, onSuccess }) => {
               <span className="download-button">{t("CS_COMMON_DOWNLOAD")}</span>
             </div>
           }
-          onClick={/* handleDownloadPdf */}
+          onClick={ handleDownloadPdf }
         />
       )}
       <Link to={`/digit-ui/citizen`}>

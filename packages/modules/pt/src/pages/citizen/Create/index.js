@@ -4,7 +4,7 @@ import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteM
 import { newConfig } from "../../../config/Create/config";
 import { useQueryClient } from "react-query";
 import CheckPage from "./CheckPage";
-
+import Response from "./Response";
 const CreateProperty = ({ parentRoute }) => {
   const queryClient = useQueryClient();
   const match = useRouteMatch();

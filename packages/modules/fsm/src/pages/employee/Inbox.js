@@ -5,7 +5,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 
-const Inbox = ({ parentRoute, isSearch = false, isInbox = false, }) => {
+const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   console.log("current TenantId in ", tenantId);
   const userInfo = Digit.UserService.getUser();
@@ -23,14 +23,16 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false, }) => {
   const [pageSize, setPageSize] = useState(10);
   const [sortParams, setSortParams] = useState({ key: "createdTime", sortOrder: "DESC" });
   const [searchParams, setSearchParams] = useState(() => {
-    return isInbox ? {
-      applicationStatus: [],
-      locality: [],
-      uuid:
-        DSO || isFSTPOperator
-          ? { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") }
-          : { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
-    } : {}
+    return isInbox
+      ? {
+          applicationStatus: [],
+          locality: [],
+          uuid:
+            DSO || isFSTPOperator
+              ? { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") }
+              : { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
+        }
+      : {};
   });
 
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -39,14 +41,19 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false, }) => {
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
 
   // TODO: Here fromDate and toDate is only for mobile and it is not working for search application for mobile screen
-  const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
-    ...searchParams,
-    ...paginationParms,
-    fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
-    toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
-  }, null, {
-    enabled: isInbox
-  });
+  const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(
+    tenantId,
+    {
+      ...searchParams,
+      ...paginationParms,
+      fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
+      toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
+    },
+    null,
+    {
+      enabled: isInbox,
+    }
+  );
 
   const { isLoading: isSearchLoading, isIdle: isSearchIdle, isError: isSearchError, data, error } = Digit.Hooks.fsm.useSearchAll(
     tenantId,
@@ -152,7 +159,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false, }) => {
       return (
         <MobileInbox
           data={isInbox ? applications : data}
-          isLoading={isInbox ? (isLoading || isIdle) : (isSearchLoading)}
+          isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
           isSearch={isSearch}
           searchFields={getSearchFields(userRoles)}
           onFilterChange={handleFilterChange}
@@ -170,7 +177,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false, }) => {
           {!isSearch && <Header>{t("ES_COMMON_INBOX")}</Header>}
           <DesktopInbox
             data={isInbox ? applications : data}
-            isLoading={isInbox ? (isLoading || isIdle) : (isSearchLoading)}
+            isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
             isSearch={isSearch}
             shouldSearch={shouldSearch}
             onFilterChange={handleFilterChange}

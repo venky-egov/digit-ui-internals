@@ -1,12 +1,11 @@
 import { Card, CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
 import FSMLink from "./inbox/FSMLink";
 import ApplicationTable from "./inbox/ApplicationTable";
 import Filter from "./inbox/Filter";
 import SearchApplication from "./inbox/search";
-import { useHistory } from "react-router-dom";
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
@@ -163,7 +162,7 @@ const DesktopInbox = (props) => {
   let result;
   if (props.isLoading) {
     result = <Loader />;
-  } else if ((props.isSearch && !props.shouldSearch) ||props?.data?.length === 0) {
+  } else if ((props.isSearch && !props.shouldSearch) || props?.data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
         {/* TODO Change localization key */}
@@ -209,9 +208,11 @@ const DesktopInbox = (props) => {
     );
   }
 
+  const isInboxPage = history?.location?.pathname?.includes("inbox") || false;
+
   return (
     <div className="inbox-container">
-      {(props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch) && (
+      {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
           <FSMLink />
           <div>
@@ -220,8 +221,8 @@ const DesktopInbox = (props) => {
         </div>
       )}
       <div style={{ flex: 1 }}>
-        <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={true} />
-        <div style={{ marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
+        <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={isInboxPage} />
+        <div style={{ marginTop: "24px", marginLeft: isInboxPage ? "24px" : "", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

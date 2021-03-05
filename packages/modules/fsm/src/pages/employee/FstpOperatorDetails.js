@@ -40,8 +40,8 @@ const FstpOperatorDetails = () => {
   // const [tripTime, setTripTime] = useState(null);
   const [tripTime, setTripTime] = useState(() => {
     const today = new Date();
-    const hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
-    const minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
+    const hour = (today.getHours() < 10 ? "0" : "") + today.getHours();
+    const minutes = (today.getMinutes() < 10 ? "0" : "") + today.getMinutes();
     return `${hour}:${minutes}` || "10:00";
   });
 
@@ -144,7 +144,7 @@ const FstpOperatorDetails = () => {
           {vehicleData.map((row, index) => (
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
-          <CardLabelError>{ t(errors.wasteRecieved) }</CardLabelError>
+          <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
           <Row
             key={t("ES_VEHICLE_WASTE_RECIEVED")}
             label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `}
@@ -154,7 +154,7 @@ const FstpOperatorDetails = () => {
               </div>
             }
           />
-          <CardLabelError>{ t(errors.tripTime) }</CardLabelError>
+          <CardLabelError>{t(errors.tripTime)}</CardLabelError>
           <Row
             key={t("ES_COMMON_TIME")}
             label={`${t("ES_COMMON_TIME")} * `}
@@ -200,7 +200,7 @@ const FstpOperatorDetails = () => {
                   <Row
                     key={index}
                     label={t("ES_INBOX_LOCALITY")}
-                    text={t(`${trip?.tenantId?.toUpperCase()?.split(".")?.join("_")}_ADMIN_${trip?.address?.locality?.code}`)}
+                    text={t(`${trip?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${trip?.address?.locality?.code}`)}
                   />
                   <Row key={index} label={t("ES_USAGE")} text={t(`PROPERTYTYPE_MASTERS_${trip.propertyUsage}`)} />
                   <Row key={index} label={t("ES_WASTE_RECIEVED")} text={vehicle.tripDetails[index].volume} />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Header, Card, RadioButtons, CardSubHeader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Header, Card, RadioButtons, CardSubHeader, SubmitBar, BackButton } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useRouteMatch, useHistory, useLocation } from "react-router-dom";
@@ -60,6 +60,7 @@ export const SelectPaymentType = (props) => {
 
   return (
     <React.Fragment>
+      <BackButton>Back</BackButton>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>Payment</Header>
         <Card>

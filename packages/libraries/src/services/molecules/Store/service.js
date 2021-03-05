@@ -46,10 +46,18 @@ export const StoreService = {
     });
     return await Promise.all(allBoundries);
   },
+  getRevenueBoundries: async (tenants) => {
+    let allBoundries = [];
+    allBoundries = tenants.map((tenant) => {
+      return Digit.LocationService.getRevenueLocalities({ tenantId: tenant.code });
+    });
+    return await Promise.all(allBoundries);
+  },
   digitInitData: async (stateCode, enabledModules) => {
     const { MdmsRes } = await MdmsService.init(stateCode);
     const stateInfo = MdmsRes["common-masters"].StateInfo[0];
     const localities = {};
+    const revenue_localities = {};
     const initData = {
       languages: stateInfo.hasLocalisation ? stateInfo.languages : [{ label: "ENGLISH", value: "en_IN" }],
       stateInfo: {
@@ -90,6 +98,11 @@ export const StoreService = {
     });
     Storage.set("initData", initData);
     let tenantBoundriesList = await StoreService.getBoundries(initData.tenants);
+    let revenueBoundaryList = await StoreService.getRevenueBoundries(initData.tenants);
+    revenueBoundaryList.forEach((boundry) => {
+      revenue_localities[boundry.TenantBoundary[0].tenantId] = Digit.LocalityService.get(boundry.TenantBoundary[0]);
+    });
+    initData.revenue_localities = revenue_localities;
     tenantBoundriesList.forEach((boundry) => {
       localities[boundry.TenantBoundary[0].tenantId] = Digit.LocalityService.get(boundry.TenantBoundary[0]);
     });

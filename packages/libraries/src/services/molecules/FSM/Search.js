@@ -2,12 +2,7 @@ import { PaymentService } from "../../elements/Payment";
 import { FSMService } from "../../elements/FSM";
 import { MdmsService } from "../../../services/elements/MDMS";
 import DsoDetails from "./DsoDetails";
-
-const getPropertyTypeLocale = (value) => {
-  return `PROPERTYTYPE_MASTERS_${value?.split(".")[0]}`;
-};
-
-const getPropertySubtypeLocale = (value) => `PROPERTYTYPE_MASTERS_${value}`;
+import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "../../../utils/fsm";
 
 const displayPitDimension = (pitDeminsion) => {
   return Object.values(pitDeminsion)
@@ -44,10 +39,10 @@ export const Search = {
     return response.fsm[0];
   },
 
-  applicationDetails: async (t, tenantId, applicationNos) => {
+  applicationDetails: async (t, tenantId, applicationNos, userType) => {
     const filter = { applicationNos };
-    let dsoDetails = {},
-      vehicle = {};
+    let dsoDetails = {};
+    let vehicle = {};
     const response = await Search.application(tenantId, filter);
     if (response?.dsoId) {
       const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
@@ -56,6 +51,7 @@ export const Search = {
       if (response?.vehicleId) {
         vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
       }
+      console.log("----------->>>>>>", vehicle);
     }
 
     const stateId = tenantId?.split(".")[0];
@@ -75,66 +71,80 @@ export const Search = {
       }
     }
 
+    const state = tenantId.split(".")[0];
+    const vehicleMenu = await MdmsService.getVehicleType(state, "Vehicle", "VehicleType");
+    const _vehicle = vehicleMenu?.find((vehicle) => response?.vehicleType === vehicle?.code);
+
+    const vehicleMake = _vehicle?.i18nKey;
+    const vehicleCapacity = _vehicle?.capacity;
+
     const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
     // console.log("find demand detail here", demandDetails)
     const amountPerTrip = response?.additionalDetails && response?.additionalDetails.tripAmount ? response.additionalDetails.tripAmount : "N/A";
     // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
     const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
 
-    return [
+    const employeeResponse = [
       {
-        title: t("ES_TITLE_APPLICATION_DETAILS"),
+        title: "ES_TITLE_APPLICATION_DETAILS",
         values: [
-          { title: t("CS_FILE_DESLUDGING_APPLICATION_NO"), value: response?.applicationNo },
-          { title: t("ES_APPLICATION_CHANNEL"), value: t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${response?.source}`) },
+          { title: "CS_FILE_DESLUDGING_APPLICATION_NO", value: response?.applicationNo },
+          { title: "ES_APPLICATION_CHANNEL", value: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${response?.source}` },
         ],
       },
       {
-        title: t("ES_TITLE_APPLICATION_DETAILS"),
+        title: t("ES_TITLE_APPLICANT_DETAILS"),
         values: [
-          { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: response?.citizen?.name },
-          { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: response?.citizen?.mobileNumber },
+          { title: "ES_APPLICATION_DETAILS_APPLICANT_NAME", value: response?.citizen?.name },
+          { title: "ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO", value: response?.citizen?.mobileNumber },
         ],
       },
       {
-        title: t("ES_APPLICATION_DETAILS_PROPERTY_DETAILS"),
+        title: "ES_APPLICATION_DETAILS_PROPERTY_DETAILS",
         values: [
-          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(response?.propertyUsage)) },
-          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: t(getPropertySubtypeLocale(response?.propertyUsage)) },
+          { title: "ES_APPLICATION_DETAILS_PROPERTY_TYPE", value: getPropertyTypeLocale(response?.propertyUsage) },
+          { title: "ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE", value: getPropertySubtypeLocale(response?.propertyUsage) },
         ],
       },
       {
-        title: t("ES_APPLICATION_DETAILS_LOCATION_DETAILS"),
+        title: "ES_APPLICATION_DETAILS_LOCATION_DETAILS",
         values: [
           {
-            title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"),
-            value: t(`${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_ADMIN_${response?.address?.locality?.code}`),
+            title: "ES_APPLICATION_DETAILS_LOCATION_LOCALITY",
+            value: `${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`,
           },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: response?.address?.city },
-          { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: response?.address?.pincode },
-          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL"), value: response?.address?.street },
-          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL"), value: response?.address?.doorNo },
-          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL"), value: response?.address?.landmark },
-          { title: t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL"), value: slumLabel ? t(slumLabel.i18nKey) : "N/A" },
+          { title: "ES_APPLICATION_DETAILS_LOCATION_CITY", value: response?.address?.city },
+          { title: "ES_APPLICATION_DETAILS_LOCATION_PINCODE", value: response?.address?.pincode },
+          { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL", value: response?.address?.street },
+          { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL", value: response?.address?.doorNo },
+          { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL", value: response?.address?.landmark },
+          { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL", value: slumLabel ? slumLabel.i18nKey : "N/A" },
           {
-            title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"),
+            title: "ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION",
             value:
               response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
                 ? Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude)
                 : "N/A",
             map: true,
+            child:
+              response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
+                ? {
+                    element: "img",
+                    src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
+                  }
+                : null,
           },
         ],
       },
       {
-        title: t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS"),
+        title: "CS_CHECK_PIT_SEPTIC_TANK_DETAILS",
         values: [
           {
-            title: t("ES_APPLICATION_DETAILS_PIT_TYPE"),
-            value: !!response?.sanitationtype ? t(`PITTYPE_MASTERS_${response?.sanitationtype}`) : "",
+            title: "ES_APPLICATION_DETAILS_PIT_TYPE",
+            value: !!response?.sanitationtype ? `PITTYPE_MASTERS_${response?.sanitationtype}` : "",
           },
           {
-            title: t("ES_APPLICATION_DETAILS_PIT_DIMENSION"),
+            title: "ES_APPLICATION_DETAILS_PIT_DIMENSION",
             value: displayPitDimension({
               length: response?.pitDetail?.length,
               width: response?.pitDetail?.width,
@@ -147,26 +157,42 @@ export const Search = {
           //   title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
           //   value: response?.pitDetail?.distanceFromRoad,
           // },
-          { title: t("ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS"), value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
+          { title: "ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS", value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
-            title: t("ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),
+            title: "ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP",
             value: amountPerTrip,
           },
-          { title: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"), value: totalAmount },
+          { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: totalAmount },
         ],
       },
       {
-        title: t("ES_APPLICATION_DETAILS_DSO_DETAILS"),
+        title: "ES_APPLICATION_DETAILS_DSO_DETAILS",
         values: [
-          { title: t("ES_APPLICATION_DETAILS_ASSIGNED_DSO"), value: dsoDetails?.name || "N/A" },
-          { title: t("ES_APPLICATION_DETAILS_VEHICLE_MAKE"), value: t(vehicle?.type) || "N/A" },
-          { title: t("ES_APPLICATION_DETAILS_VEHICLE_NO"), value: vehicle?.registrationNumber || "N/A" },
-          { title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"), value: vehicle?.capacity || "N/A" },
-          { title: t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE"), value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_ASSIGNED_DSO", value: dsoDetails?.name || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_VEHICLE_MAKE", value: vehicleMake || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_VEHICLE_NO", value: vehicle?.registrationNumber || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: vehicleCapacity || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE", value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
         ],
       },
     ];
+
+    if (userType !== "CITIZEN") return employeeResponse;
+
+    const citizenResp = employeeResponse.reduce((arr, curr) => {
+      return arr.concat(curr.values);
+    }, []);
+
+    const citizenResponse = citizenResp.map((detail) => {
+      // detail.title = detail.title?.replace("ES_", "CS_");
+      if (!detail.map) return detail;
+      delete detail.value;
+      return detail;
+    });
+
+    return { tenantId: response.tenantId, applicationDetails: citizenResponse, pdfData: response };
   },
+
   allVehicles: (tenantId, filters) => {
     return FSMService.vehicleSearch(tenantId, filters);
   },

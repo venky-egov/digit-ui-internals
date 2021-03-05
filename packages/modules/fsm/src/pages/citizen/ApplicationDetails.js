@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Header,
@@ -38,8 +38,14 @@ const ApplicationDetails = () => {
   const { id } = useParams();
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, isError, error, data: application } = Digit.Hooks.fsm.useCitizenApplicationDetails(tenantId, { applicationNos: id });
-  const state = tenantId?.split(".")[0] || "pb";
+  const { isLoading, isError, error, data: application, error: errorApplication } = Digit.Hooks.fsm.useApplicationDetail(
+    t,
+    tenantId,
+    id,
+    {},
+    "CITIZEN"
+  );
+  const state = tenantId?.split(".")[0];
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
   const pdfVehicleType = getVehicleType(vehicle, t);
@@ -47,33 +53,29 @@ const ApplicationDetails = () => {
   const slumCode = application?.address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
 
-  // const { data: dsoData, isLoading: isDsoLoading } = Digit.Hooks.fsm.useDsoSearch(
-  //   tenantId,
-  //   { ids: application?.dsoId },
-  //   {
-  //     enabled: !!application?.dsoId,
-  //     select: ([data]) => data,
-  //   }
-  // );
-
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.tenantId,
     id,
     moduleCode: "FSM",
     serviceData: application,
+    config: { enabled: application?.tenantId ? true : false },
   });
   const coreData = Digit.Hooks.useCoreData();
   const key = globalConfigs.getConfig("GMAPS_API_KEY");
 
-  if (isLoading) {
+  useEffect(() => {
+    console.log(application, errorApplication);
+  }, [application, errorApplication]);
+
+  if (isLoading || !application) {
     return <Loader />;
   }
 
-  if (application.length === 0) {
+  if (application?.applicationDetails?.length === 0) {
     history.goBack();
   }
 
-  const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application.tenantId);
+  const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application?.tenantId);
 
   const handleDownloadPdf = async () => {
     const data = getPDFData({ ...application, pdfVehicleType, slum }, tenantInfo, t);
@@ -85,7 +87,7 @@ const ApplicationDetails = () => {
       case "PAY":
         return (
           <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${application.applicationNo}`}>
+            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${id}`}>
               <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
             </Link>
           </div>
@@ -93,7 +95,7 @@ const ApplicationDetails = () => {
       case "SUBMIT_FEEDBACK":
         return (
           <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/fsm/rate/${application.applicationNo}`}>
+            <Link to={`/digit-ui/citizen/fsm/rate/${id}`}>
               <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
             </Link>
           </div>
@@ -120,77 +122,15 @@ const ApplicationDetails = () => {
           onClick={handleDownloadPdf}
         />
 
-        {application.map(({ title, value, child, caption }, index) => {
+        {application?.applicationDetails?.map(({ title, value, child, caption }, index) => {
           return (
-            <KeyNote key={index} keyValue={title} note={value} {...{ caption }}>
+            <KeyNote key={index} keyValue={t(title)} note={t(value)} caption={t(caption)}>
               {child && typeof child === "object" ? React.createElement(child.element, { ...child }) : child}
             </KeyNote>
           );
         })}
 
-        {/* <KeyNote keyValue={t("CS_FSM_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
-        <KeyNote keyValue={t("CS_FSM_APPLICATION_SERVICE_CATEGORY")} note={application.serviceCategory || t("CS_TITLE_FSM")} />
-        <KeyNote keyValue={t("CS_FSM_APPLICATION_TYPE")} note={application.applicationType || t("CS_FSM_APPLICATION_TYPE_DESLUDGING")} />
-        <KeyNote keyValue={t("CS_FSM_APPLICATION_DETAIL_STATUS")} note={t("CS_COMMON_" + application.applicationStatus)} />
-        <KeyNote keyValue={t("CS_FSM_APPLICATION_DATE")} note={Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime)} />
-        <KeyNote
-          keyValue={t("CS_FSM_APPLICATION_PROPERTY_TYPE")}
-          note={t(getPropertyTypeLocale(application.propertyUsage)) + " / " + t(getPropertySubtypeLocale(application.propertyUsage))}
-        />
-        <KeyNote keyValue={t("CS_COMMON_MYCITY_CODE_LABEL")} note={application.address.city} />
-        <KeyNote
-          keyValue={t("CS_FSM_APPLICATION_MOHALLA")}
-          note={t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`)}
-        />
-        <KeyNote keyValue={t("CS_FSM_APPLICATION_PINCODE")} note={application.address.pincode ? application.address.pincode : "NA"} />
-        <KeyNote
-          keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL")}
-          note={application.address.street ? application.address.street : "NA"}
-        />
-        <KeyNote
-          keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL")}
-          note={application.address.doorNo ? application.address.doorNo : "NA"}
-        />
-        <KeyNote
-          keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL")}
-          note={application.address.landmark ? application.address.landmark : "NA"}
-        />
-        <KeyNote keyValue={t("CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL")} note={slum?.i18nKey ? t(slum?.i18nKey) : "NA"} />
-        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION")}>
-          {application.address?.geoLocation?.latitude && application.address?.geoLocation?.longitude ? (
-            <img src={Digit.Utils.getStaticMapUrl(application.address?.geoLocation?.latitude, application.address?.geoLocation?.longitude)} />
-          ) : (
-            "NA"
-          )}
-        </KeyNote>
-        <KeyNote keyValue={t("CS_COMMON_PIT_TYPE")} note={!!application.sanitationtype ? t(`PITTYPE_MASTERS_${application.sanitationtype}`) : "NA"} />
-        <KeyNote
-          keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
-          note={
-            displayPitDimension({
-              length: application.pitDetail.length,
-              width: application.pitDetail.width,
-              height: application.pitDetail.height,
-              diameter: application.pitDetail.diameter,
-            }) || "NA"
-          }
-          caption={getPitDimensionCaption(application?.pitDetail?.diameter, application?.pitDetail?.length, t)}
-        />
-        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_ASSIGNED_DSO")} note={dsoData?.name || "NA"} />
-        <KeyNote keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_MAKE")} note={application?.vehicleType || "NA"} />
-        <KeyNote
-          keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_NO")}
-          note={dsoData?.vehicles.find((vehicle) => vehicle.id === application?.vehicleId)?.registrationNumber || "NA"}
-        />
-        <KeyNote
-          keyValue={t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY")}
-          note={dsoData?.vehicles.find((vehicle) => vehicle.id === application?.vehicleId)?.capacity || "NA"}
-        />
-        <KeyNote
-          keyValue={t("ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE")}
-          note={application?.possibleServiceDate ? Digit.DateUtils.ConvertTimestampToDate(application?.possibleServiceDate) : "NA"}
-        /> */}
-        {!workflowDetails?.isLoading && (
+        {!workflowDetails?.isLoading && workflowDetails.data && (
           <Fragment>
             {workflowDetails?.data?.timeline?.length > 0 && (
               <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>

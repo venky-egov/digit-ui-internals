@@ -192,19 +192,19 @@ const ApplicationDetails = (props) => {
             {applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
                 {index === 0 ? (
-                  <CardSubHeader style={{ marginBottom: "16px" }}>{detail.title}</CardSubHeader>
+                  <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
                 ) : (
-                  <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{detail.title}</CardSectionHeader>
+                  <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>
                 )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => {
                     if (value.map === true && value.value !== "N/A") {
-                      return <Row key={value.title} label={value.title} text={<img src={value.value} alt="" />} />;
+                      return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                     }
                     return (
                       <Row
-                        key={value.title}
-                        label={value.title}
+                        key={t(value.title)}
+                        label={t(value.title)}
                         text={value.value || "N/A"}
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}

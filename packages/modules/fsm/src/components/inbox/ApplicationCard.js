@@ -15,16 +15,15 @@ export const ApplicationCard = ({
   serviceRequestIdKey,
   isFstpOperator,
   isLoading,
+  isSearch,
   searchParams,
   searchFields,
   sortParams,
   linkPrefix,
   removeParam,
-  popup,
-  setPopup,
-  type,
-  setType,
 }) => {
+  const [type, setType] = useState(isSearch ? "SEARCH" : "");
+  const [popup, setPopup] = useState(isSearch ? true : false);
   const [params, setParams] = useState(searchParams);
   const [_sortparams, setSortParams] = useState(sortParams);
 
@@ -67,7 +66,7 @@ export const ApplicationCard = ({
   }
 
   let result;
-  if (data && data?.length === 0) {
+  if (!data || data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
         {t("CS_MYAPPLICATIONS_NO_APPLICATION")
@@ -101,7 +100,7 @@ export const ApplicationCard = ({
             }}
           />
         )}
-        {onFilterChange && (
+        {!isSearch && onFilterChange && (
           <FilterAction
             text="FILTER"
             handleActionClick={() => {

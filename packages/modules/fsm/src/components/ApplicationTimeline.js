@@ -20,7 +20,6 @@ export const ApplicationTimeline = (props) => {
     tenantId: props.application?.tenantId,
     id: props.id,
     moduleCode: "FSM",
-    serviceData: props.application,
   });
 
   const showNextActions = (nextAction) => {
@@ -28,7 +27,7 @@ export const ApplicationTimeline = (props) => {
       case "PAY":
         return (
           <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${props.application.applicationNo}`}>
+            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${props.id}`}>
               <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
             </Link>
           </div>
@@ -36,7 +35,7 @@ export const ApplicationTimeline = (props) => {
       case "SUBMIT_FEEDBACK":
         return (
           <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/fsm/rate/${props.application.applicationNo}`}>
+            <Link to={`/digit-ui/citizen/fsm/rate/${props.id}`}>
               <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE")} />
             </Link>
           </div>

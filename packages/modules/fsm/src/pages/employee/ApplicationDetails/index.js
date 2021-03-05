@@ -57,29 +57,6 @@ const ApplicationDetails = (props) => {
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => applicationData?.vehicleType === vehicle?.code);
 
-  const getVehicleValue = (vehicle, text, t) => {
-    if (text?.includes("Vehicle Make")) return t(vehicle?.i18nKey);
-    else if (text?.includes("Vehicle Capacity")) return vehicle?.capacity;
-    return "N/A";
-  };
-
-  const applicationDetailsWithVehicle = applicationDetails?.map((application) =>
-    application?.title?.includes("DSO")
-      ? {
-          ...application,
-          values: application?.values?.map((value) =>
-            value?.title?.includes("Vehicle")
-              ? {
-                  ...value,
-                  value: value?.value !== "N/A" ? t(value?.value) : getVehicleValue(vehicle, value?.title, t),
-                }
-              : value
-          ),
-        }
-      : application
-  );
-
-  // console.log("find application details here", applicationDetails)
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
@@ -214,22 +191,22 @@ const ApplicationDetails = (props) => {
                 }}
               />
             )}
-            {applicationDetailsWithVehicle.map((detail, index) => (
+            {applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
                 {index === 0 ? (
-                  <CardSubHeader style={{ marginBottom: "16px" }}>{detail.title}</CardSubHeader>
+                  <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
                 ) : (
-                  <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{detail.title}</CardSectionHeader>
+                  <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>
                 )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => {
                     if (value.map === true && value.value !== "N/A") {
-                      return <Row key={value.title} label={value.title} text={<img src={value.value} alt="" />} />;
+                      return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                     }
                     return (
                       <Row
-                        key={value.title}
-                        label={value.title}
+                        key={t(value.title)}
+                        label={t(value.title)}
                         text={value.value || "N/A"}
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}
@@ -252,7 +229,7 @@ const ApplicationDetails = (props) => {
                   <CheckPoint
                     isCompleted={true}
                     label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)}
-                    customChild={getTimelineCaptions(workflowDetails?.data?.timeline[0]?.status)}
+                    customChild={getTimelineCaptions(workflowDetails?.data?.timeline[0])}
                   />
                 ) : (
                   <ConnectingCheckPoints>

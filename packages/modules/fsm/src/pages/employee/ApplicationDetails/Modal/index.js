@@ -123,7 +123,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     if (vehicleNo && action === "ACCEPT") applicationData.vehicleId = vehicleNo.id;
     if (vehicleNo && action === "DSO_ACCEPT") applicationData.vehicleId = vehicleNo.id;
     if (vehicle && action === "ASSIGN") applicationData.vehicleType = vehicle.code;
-    if (data.date) applicationData.possibleServiceDate = new Date(`${data.date} 23:59:59 GMT+0530`).getTime();
+    if (data.date) applicationData.possibleServiceDate = new Date(`${data.date}`).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
 
     if (rejectionReason) workflow.comments = rejectionReason.code;

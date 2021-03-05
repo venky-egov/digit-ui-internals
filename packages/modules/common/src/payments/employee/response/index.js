@@ -12,6 +12,12 @@ export const SuccessfulPayment = (props) => {
   let { consumerCode, receiptNumber, businessService } = useParams();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
 
+  useEffect(() => {
+    return () => {
+      queryClient.clear();
+    };
+  }, []);
+
   const getMessage = () => t("ES_PAYMENT_COLLECTED");
   // console.log("--------->", consumerCode);
 
@@ -25,7 +31,6 @@ export const SuccessfulPayment = (props) => {
       // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
-    queryClient.clear();
     queryClient.refetchQueries("FSM_CITIZEN_SEARCH");
     window.open(fileStore[response.filestoreIds[0]], "_blank");
   };

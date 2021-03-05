@@ -47,7 +47,7 @@ const getPDFData = (application, tenantInfo, t) => {
           { title: t("CS_APPLICATION_DETAILS_CITY"), value: application?.address?.city || "NA" },
           {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
-            value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_ADMIN_${application?.address?.locality?.code}`) || "NA",
+            value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${application?.address?.locality?.code}`) || "NA",
           },
           {
             title: t("CS_APPLICATION_DETAILS_SLUM_NAME"),

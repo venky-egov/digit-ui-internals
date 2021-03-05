@@ -10,4 +10,12 @@ export const LocationService = {
       useCache: true,
     });
   },
+  getRevenueLocalities: ({ tenantId }) => {
+    return ServiceRequest({
+      serviceName: "getRevenueLocalities",
+      url: Urls.location.revenue_localities,
+      params: { tenantId: tenantId.toLowerCase() },
+      useCache: true,
+    });
+  },
 };

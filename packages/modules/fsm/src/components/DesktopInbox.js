@@ -63,7 +63,7 @@ const DesktopInbox = (props) => {
         },
         {
           Header: t("ES_INBOX_LOCALITY"),
-          accessor: (row) => GetCell(t(Digit.Utils.locale.getLocalityCode(row.address.locality.code, row.tenantId))),
+          accessor: (row) => GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.address.locality.code, row.tenantId))),
         },
         {
           Header: t("ES_INBOX_STATUS"),
@@ -125,16 +125,11 @@ const DesktopInbox = (props) => {
                 `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
               );
             },
-            // Cell: (row) => {
-            //   return GetCell(
-            //     t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
-            //   );
-            // },
           },
           {
             Header: t("ES_INBOX_LOCALITY"),
             Cell: ({ row }) => {
-              return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
+              return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));
             },
             // Cell: (row) => {
             //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));

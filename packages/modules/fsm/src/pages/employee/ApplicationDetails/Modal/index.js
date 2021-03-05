@@ -59,16 +59,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   const [vehicleNo, setVehicleNo] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
-  const [rejectMenu, setRejectMenu] = useState([
-    { code: "ES_FSM_REJECTION_OPTION_A", name: "Vehicle under maintenance" },
-    { code: "ES_FSM_REJECTION_OPTION_B", name: "Cannot service within provided service date, multiple request in pipeline" },
+  const { data: Reason, isLoading: isReasonLoaded } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
+    "ReassignReason",
+    "RejectionReason",
+    "DeclineReason",
+    "CancelReason",
   ]);
-  const [reassignReasonMenu, setReassignReasonMenu] = useState([
-    "ES_FSM_REASSIGN_OPTION_A",
-    "ES_FSM_REASSIGN_OPTION_B",
-    "ES_FSM_REASSIGN_OPTION_C",
-    "ES_FSM_REASSIGN_OPTION_D",
-  ]);
+
+  console.log("find mdms data here", Reason);
   const [rejectionReason, setReason] = useState(null);
   const [reassignReason, selectReassignReason] = useState(null);
   const [formValve, setFormValve] = useState(false);

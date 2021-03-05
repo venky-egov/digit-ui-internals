@@ -234,6 +234,21 @@ const getSlumLocalityCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getReasonCriteria = (tenantId, moduleCode, type, payload) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: payload.map((mdmsLoad) => ({
+          name: mdmsLoad,
+        })),
+      },
+    ],
+  },
+});
+
 const getBillingServiceForBusinessServiceCriteria = () => ({
   moduleDetails: [
     {
@@ -312,6 +327,9 @@ const GetSlumLocalityMapping = (MdmsRes) =>
         };
   }, {});
 
+const GetReasonType = (MdmsRes, type, moduleCode) =>
+  MdmsRes[moduleCode][type].filter((reason) => reason.active).map((reason) => ({ ...reason, i18nKey: `ES_ACTION_REASON_${reason.code}` }));
+
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
     case "citymodule":
@@ -334,6 +352,11 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetVehicleType(MdmsRes);
     case "Slum":
       return GetSlumLocalityMapping(MdmsRes);
+    case "CancelReason":
+    case "DeclineReason":
+    case "ReassignReason":
+    case "RejectionReason":
+      return GetReasonType(MdmsRes, type, moduleCode);
     default:
       return MdmsRes;
   }
@@ -397,4 +420,7 @@ export const MdmsService = {
   },
   getSlumLocalityMapping: (tenantId, moduleCode, type) =>
     MdmsService.getDataByCriteria(tenantId, getSlumLocalityCriteria(tenantId, moduleCode, type), moduleCode),
+
+  getReason: (tenantId, moduleCode, type, payload) =>
+    MdmsService.getDataByCriteria(tenantId, getReasonCriteria(tenantId, moduleCode, type, payload), moduleCode),
 };

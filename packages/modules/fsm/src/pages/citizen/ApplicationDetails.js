@@ -6,24 +6,6 @@ import getPDFData from "../../getPDFData";
 import { getVehicleType } from "../../utils";
 import { ApplicationTimeline } from "../../components/ApplicationTimeline";
 
-// const displayPitDimension = (pitDeminsion) => {
-//   return Object.values(pitDeminsion)
-//     .reduce((acc, current) => {
-//       if (!current) {
-//         return acc;
-//       } else {
-//         acc.push(`${current}m`);
-//         return acc;
-//       }
-//     }, [])
-//     .join(" x ");
-// };
-
-// const getPitDimensionCaption = (diameter, length, t) => {
-//   if (diameter && diameter > 0) return `(${t("CS_COMMON_DIAMETER")} x ${t("CS_COMMON_DEPTH")})`;
-//   if (length && length > 0) return `(${t("CS_COMMON_LENGTH")} x ${t("CS_COMMON_BREADTH")} x ${t("CS_COMMON_DEPTH")})`;
-// };
-
 const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();

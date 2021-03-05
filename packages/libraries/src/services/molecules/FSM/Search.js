@@ -41,8 +41,8 @@ export const Search = {
 
   applicationDetails: async (t, tenantId, applicationNos, userType) => {
     const filter = { applicationNos };
-    let dsoDetails = {},
-      vehicle = {};
+    let dsoDetails = {};
+    let vehicle = {};
     const response = await Search.application(tenantId, filter);
     if (response?.dsoId) {
       const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
@@ -69,6 +69,13 @@ export const Search = {
         }
       }
     }
+
+    const state = tenantId.split(".")[0];
+    const vehicleMenu = await MdmsService.getVehicleType(state, "Vehicle", "VehicleType");
+    const _vehicle = vehicleMenu?.find((vehicle) => response?.vehicleType === vehicle?.code);
+
+    const vehicleMake = _vehicle?.i18nKey;
+    const vehicleCapacity = _vehicle?.capacity;
 
     const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
     // console.log("find demand detail here", demandDetails)
@@ -161,9 +168,9 @@ export const Search = {
         title: "ES_APPLICATION_DETAILS_DSO_DETAILS",
         values: [
           { title: "ES_APPLICATION_DETAILS_ASSIGNED_DSO", value: dsoDetails?.name || "N/A" },
-          { title: "ES_APPLICATION_DETAILS_VEHICLE_MAKE", value: vehicle?.type || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_VEHICLE_MAKE", value: vehicleMake || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_NO", value: vehicle?.registrationNumber || "N/A" },
-          { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: vehicle?.capacity || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: vehicleCapacity || "N/A" },
           { title: "ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE", value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
         ],
       },

@@ -15,7 +15,7 @@ const SelectChannel = ({ t, config, onSelect, formData = {}, userType }) => {
   function selectChannel(value) {
     //   console.log(value)
     setChannel(value);
-    onSelect(config.key, { channel: value });
+    onSelect(config.key, value);
   }
 
   return channelMenu ? (

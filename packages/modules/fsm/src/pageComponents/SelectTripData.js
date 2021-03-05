@@ -6,7 +6,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId?.split(".")[0] || "pb";
 
-  const [vehicle, setVehicle] = useState(null);
+  const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleType);
 
   const { isLoading: isVehicleMenuLoading, data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
@@ -52,6 +52,10 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   useEffect(() => {
     (async () => {
       // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
+
+      if (formData?.tripData?.vehicleType !== vehicle) {
+        setVehicle(formData?.tripData?.vehicleType);
+      }
 
       if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.code) {
         const { capacity } = formData?.tripData?.vehicleType;

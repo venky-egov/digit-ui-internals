@@ -5,6 +5,7 @@ import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import TripDetails from "../../../config/Employee/TripDetailsConfig";
 import ApplicantDetails from "../../../config/Employee/ApplicantConfig";
+import { getVehicleType } from "../../../utils";
 
 const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitationMenu }) => {
   const { t } = useTranslation();
@@ -21,7 +22,9 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       noOfTrips: applicationData.noOfTrips,
       amountPerTrip: applicationData.additionalDetails.tripAmount,
       amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || "",
-      vehicleType: vehicleMenu.filter((vehicle) => vehicle?.code === applicationData?.vehicleType)[0],
+      vehicleType: vehicleMenu
+        .filter((vehicle) => vehicle?.code === applicationData?.vehicleType)
+        .map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))[0],
     },
     propertyType: applicationData.propertyUsage.split(".")[0],
     subtype: applicationData.propertyUsage,

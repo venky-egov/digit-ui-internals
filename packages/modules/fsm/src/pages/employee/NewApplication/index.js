@@ -65,8 +65,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const doorNo = data?.address?.doorNo;
     const slum = data?.address?.slum;
     const landmark = data?.address?.landmark;
-    const noOfTrips = data.noOfTrips;
-    const amount = data.amountPerTrip;
+    const noOfTrips = data.tripData.noOfTrips;
+    const amount = data.tripData.amountPerTrip;
     const cityCode = data?.address?.city?.code;
     const city = data?.address?.city?.name;
     const state = data?.address?.city?.state;
@@ -85,7 +85,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           tripAmount: amount,
         },
         propertyUsage: data?.subtype,
-        vehicleType: formData?.tripData?.vehicleType?.code,
+        vehicleType: data?.tripData?.vehicleType?.code,
         pitDetail: {
           ...pitDimension,
           distanceFromRoad: data?.distanceFromRoad,

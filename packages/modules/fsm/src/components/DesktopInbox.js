@@ -216,8 +216,8 @@ const DesktopInbox = (props) => {
         </div>
       )}
       <div style={{ flex: 1 }}>
-        <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={!isSearch} />
-        <div style={{ marginTop: "24px", marginLeft: !isSearch ? "24px" : "", flex: 1 }}>{result}</div>
+        <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={!props?.isSearch} />
+        <div style={{ marginTop: "24px", marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

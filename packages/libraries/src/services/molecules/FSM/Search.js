@@ -184,7 +184,7 @@ export const Search = {
     }, []);
 
     const citizenResponse = citizenResp.map((detail) => {
-      detail.title = detail.title?.replace("ES_", "CS_");
+      // detail.title = detail.title?.replace("ES_", "CS_");
       if (!detail.map) return detail;
       delete detail.value;
       return detail;

@@ -93,7 +93,7 @@ const ApplicationDetails = () => {
         <KeyNote keyValue={t("CS_COMMON_MYCITY_CODE_LABEL")} note={application.address.city} />
         <KeyNote
           keyValue={t("CS_FSM_APPLICATION_MOHALLA")}
-          note={t(`${application.tenantId.toUpperCase().split(".").join("_")}_ADMIN_${application.address.locality.code}`)}
+          note={t(`${application.tenantId.toUpperCase().split(".").join("_")}_REVENUE_${application.address.locality.code}`)}
         />
         <KeyNote keyValue={t("CS_FSM_APPLICATION_PINCODE")} note={application.address.pincode ? application.address.pincode : "NA"} />
         <KeyNote

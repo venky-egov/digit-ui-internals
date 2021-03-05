@@ -108,7 +108,7 @@ export const Search = {
         values: [
           {
             title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"),
-            value: t(`${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_ADMIN_${response?.address?.locality?.code}`),
+            value: t(`${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`),
           },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: response?.address?.city },
           { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: response?.address?.pincode },

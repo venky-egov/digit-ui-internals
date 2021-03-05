@@ -100,8 +100,8 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           t={t}
         />
       </LabelFieldPair>
-      {inputs?.map((input) => (
-        <LabelFieldPair>
+      {inputs?.map((input, index) => (
+        <LabelFieldPair key={index}>
           <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
             {t(input.label)}
             {input.isMandatory ? " * " : null}

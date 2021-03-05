@@ -1,9 +1,10 @@
 import React from "react";
-import { LabelFieldPair, CardLabel, TextInput } from "@egovernments/digit-ui-react-components";
+import { LabelFieldPair, CardLabel, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
-const SelectName = ({ t, config, onSelect, formData = {}, userType }) => {
+const SelectName = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
+  // console.log("find errors here", errors)
   const editScreen = url.includes("/modify-application/");
   const inputs = [
     {
@@ -12,6 +13,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType }) => {
       name: "applicantName",
       validation: {
         required: true,
+        pattern: "/[A-Za-z]/",
       },
       error: "CORE_COMMON_APPLICANT_NAME_INVALID",
     },
@@ -21,6 +23,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType }) => {
       name: "mobileNumber",
       validation: {
         required: true,
+        pattern: "/^[6-9]d{9}$/",
       },
       error: "CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID",
     },
@@ -33,22 +36,25 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType }) => {
 
   return (
     <div>
-      {inputs?.map((input) => (
-        <LabelFieldPair>
-          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
-            {t(input.label)}
-            {config.isMandatory ? " * " : null}
-          </CardLabel>
-          <div className="field">
-            <TextInput
-              key={input.name}
-              value={formData && formData[config.key] ? formData[config.key][input.name] : null}
-              onChange={(e) => setValue(e.target.value, input.name)}
-              {...input.validation}
-              disable={editScreen}
-            />
-          </div>
-        </LabelFieldPair>
+      {inputs?.map((input, index) => (
+        <React.Fragment key={index}>
+          {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
+          <LabelFieldPair>
+            <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+              {t(input.label)}
+              {config.isMandatory ? " * " : null}
+            </CardLabel>
+            <div className="field">
+              <TextInput
+                key={input.name}
+                value={formData && formData[config.key] ? formData[config.key][input.name] : null}
+                onChange={(e) => setValue(e.target.value, input.name)}
+                inputRef={register(input.validation)}
+                disable={editScreen}
+              />
+            </div>
+          </LabelFieldPair>
+        </React.Fragment>
       ))}
     </div>
   );

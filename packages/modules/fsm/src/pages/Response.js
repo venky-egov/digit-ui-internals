@@ -170,9 +170,14 @@ const Response = (props) => {
       <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
-      {props.parentRoute.includes("employee") && state?.applicationData?.applicationNo && paymentAccess && mutation.isSuccess ? (
+      {props.parentRoute.includes("employee") &&
+      (state?.applicationData?.applicationNo || (mutation.isSuccess && mutation.data.fsm[0].applicationNo)) &&
+      mutation.isSuccess &&
+      paymentAccess ? (
         <div className="secondary-action">
-          <Link to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo}`}>
+          <Link
+            to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || mutation.data.fsm[0].applicationNo}`}
+          >
             <SubmitBar label={t("ES_COMMON_PAY")} />
           </Link>
         </div>

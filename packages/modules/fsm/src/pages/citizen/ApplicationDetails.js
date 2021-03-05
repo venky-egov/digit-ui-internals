@@ -18,6 +18,7 @@ const ApplicationDetails = () => {
     {},
     "CITIZEN"
   );
+
   const state = tenantId?.split(".")[0];
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
@@ -73,7 +74,7 @@ const ApplicationDetails = () => {
             </KeyNote>
           );
         })}
-        <ApplicationTimeline application={application} id={id} />
+        <ApplicationTimeline application={application?.pdfData} id={id} />
       </Card>
     </React.Fragment>
   );

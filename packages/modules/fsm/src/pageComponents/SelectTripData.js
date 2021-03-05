@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getVehicleType } from "../utils";
-import { LabelFieldPair, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
+import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
 
 const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId?.split(".")[0] || "pb";
 
   const [vehicle, setVehicle] = useState(null);
-  const [kill, setKill] = useState(false);
 
   const { isLoading: isVehicleMenuLoading, data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
@@ -46,16 +45,15 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
     console.log("find value here", value, formData);
   }
 
-  function setValue(value, input) {
-    onSelect(config.key, { ...formData[config.key], [input]: value });
-    console.log("find value here", value, input, formData);
+  function setValue(object) {
+    onSelect(config.key, { ...formData[config.key], ...object });
+    // console.log("find value here", formData);
   }
   useEffect(() => {
-    // setNoOfTrips(formData?.noOfTrips || 1);
     (async () => {
       // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
-      if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.code && !kill) {
+      if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.code) {
         const { capacity } = formData?.tripData?.vehicleType;
         // console.log("find bill slab form data", formData)
         const { slum: slumDetails } = formData.address;
@@ -68,20 +66,21 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
 
         const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
         if (billSlab?.price) {
-          setKill(true);
           console.log("find bill slab here", billSlab.price);
-          setValue(billSlab.price, "amountPerTrip");
-          setValue(billSlab.price * formData.tripData.noOfTrips, "amount");
+          setValue({
+            amountPerTrip: billSlab.price,
+            amount: billSlab.price * formData.tripData.noOfTrips,
+          });
           // console.log("find formdata here", formData);
         }
       }
     })();
-    // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
-
     // console.log("find form data here helllo", formData);
-  }, [formData]);
+  }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.code]);
 
-  return (
+  return isVehicleMenuLoading ? (
+    <Loader />
+  ) : (
     <div>
       <LabelFieldPair>
         <CardLabel style={{ marginBottom: "revert", width: "30%" }}>{t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED") + " * "}</CardLabel>

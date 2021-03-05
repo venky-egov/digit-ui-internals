@@ -19,16 +19,12 @@ const MobileInbox = ({
   onFilterChange,
   onSort,
   searchParams,
-  searchFields: initialSearchFields,
+  searchFields,
   linkPrefix,
   removeParam,
   sortParams,
 }) => {
-  const [type, setType] = useState(isSearch ? "SEARCH" : "");
-  const [popup, setPopup] = useState(isSearch ? true : false);
-  const [searchFields, setSearchFields] = useState(initialSearchFields);
   const { t } = useTranslation();
-
   const getData = () => {
     if (isSearch) {
       return data?.map(({ applicationNo, applicationStatus, propertyUsage, tenantId, address, citizen }) => ({
@@ -39,7 +35,7 @@ const MobileInbox = ({
         [t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE")]: GetCell(t(`PROPERTYTYPE_MASTERS_${propertyUsage}`)),
         [t("ES_INBOX_LOCALITY")]: GetCell(t(Digit.Utils.locale.getLocalityCode(address.locality.code, tenantId))),
         [t("ES_INBOX_STATUS")]: GetCell(t(`CS_COMMON_FSM_${applicationStatus}`)),
-      }))
+      }));
     } else {
       return data?.map(({ locality, applicationNo, createdTime, tenantId, status, sla }) => ({
         [t("ES_INBOX_APPLICATION_NO")]: applicationNo,
@@ -49,7 +45,7 @@ const MobileInbox = ({
         [t("ES_INBOX_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
       }));
     }
-  }
+  };
 
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
 
@@ -62,15 +58,11 @@ const MobileInbox = ({
     [t("ES_INBOX_WASTE_COLLECTED")]: vehicle?.tripDetails[0]?.volume,
   }));
 
-  useEffect(() => {
-    if (!popup) setSearchFields(initialSearchFields);
-  }, [popup]);
-
   return (
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {(!isFstpOperator && !isSearch) && <ApplicationLinks isMobile={true} setPopup={setPopup} setType={setType} setSearchFields={setSearchFields} />}
+          {!isFstpOperator && !isSearch && <ApplicationLinks isMobile={true} />}
           <ApplicationCard
             t={t}
             data={isFstpOperator ? fstpOperatorData : getData()}
@@ -86,10 +78,6 @@ const MobileInbox = ({
             linkPrefix={linkPrefix}
             removeParam={removeParam}
             sortParams={sortParams}
-            popup={popup}
-            setPopup={setPopup}
-            type={type}
-            setType={setType}
           />
         </div>
       </div>

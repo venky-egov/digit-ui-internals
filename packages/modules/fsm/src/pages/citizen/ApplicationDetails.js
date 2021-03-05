@@ -64,7 +64,7 @@ const ApplicationDetails = () => {
   const key = globalConfigs.getConfig("GMAPS_API_KEY");
 
   useEffect(() => {
-    console.log(application, errorApplication);
+    console.log(application?.pdfData, errorApplication);
   }, [application, errorApplication]);
 
   if (isLoading || !application) {
@@ -78,7 +78,7 @@ const ApplicationDetails = () => {
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application?.tenantId);
 
   const handleDownloadPdf = async () => {
-    const data = getPDFData({ ...application, pdfVehicleType, slum }, tenantInfo, t);
+    const data = getPDFData({ ...application?.pdfData, pdfVehicleType, slum }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 

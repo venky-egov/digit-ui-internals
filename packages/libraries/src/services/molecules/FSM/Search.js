@@ -182,7 +182,7 @@ export const Search = {
       return detail;
     });
 
-    return { tenantId: response.tenantId, applicationDetails: citizenResponse };
+    return { tenantId: response.tenantId, applicationDetails: citizenResponse, pdfData: response };
   },
 
   allVehicles: (tenantId, filters) => {

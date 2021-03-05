@@ -3,13 +3,13 @@ import Axios from "axios";
 Axios.interceptors.response.use(
   (res) => res,
   (err) => {
-    const { userInfo } = userServiceData();
+    // const { userInfo } = userServiceData();
+    const isEmployee = window.location.pathname.split("/").includes("employee");
     if (err?.response?.data?.Errors) {
       for (const error of err.response.data.Errors) {
         if (error.message.includes("InvalidAccessTokenException")) {
           window.location.href =
-            (userInfo?.type !== "CITIZEN" ? "/digit-ui/employee/login" : "/digit-ui/citizen/login") +
-            `?from=${encodeURIComponent(window.location.pathname)}`;
+            (isEmployee ? "/digit-ui/employee/login" : "/digit-ui/citizen/login") + `?from=${encodeURIComponent(window.location.pathname)}`;
         }
       }
     }

@@ -58,7 +58,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const { isLoading: isSearchLoading, isIdle: isSearchIdle, isError: isSearchError, data, error } = Digit.Hooks.fsm.useSearchAll(
     tenantId,
     {
-      limit: pageSize + 1,
+      limit: pageSize,
       offset: pageOffset,
       ...searchParams,
       fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
@@ -193,6 +193,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
             onPageSizeChange={handlePageSizeChange}
             parentRoute={parentRoute}
             searchParams={searchParams}
+            totalRecords={isInbox ? Number(applications?.[0].totalCount) : null}
           />
         </div>
       );

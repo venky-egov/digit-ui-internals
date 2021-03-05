@@ -46,7 +46,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <Link to={DSO ? "/digit-ui/citizen/fsm/dso-dashboard" : "/digit-ui/employee"} style={{ cursor: "pointer", color: "#666" }}>
             {t("ES_COMMON_HOME")}
           </Link>{" "}
-          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
+          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? t("ES_TITLE_INBOX") : "FSM"}</span>
         </p>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
         <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />

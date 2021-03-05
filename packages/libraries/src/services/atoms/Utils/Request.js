@@ -3,7 +3,6 @@ import Axios from "axios";
 Axios.interceptors.response.use(
   (res) => res,
   (err) => {
-    // const { userInfo } = userServiceData();
     const isEmployee = window.location.pathname.split("/").includes("employee");
     if (err?.response?.data?.Errors) {
       for (const error of err.response.data.Errors) {

@@ -177,7 +177,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
           searchParams={searchParams}
           sortParams={sortParams}
           removeParam={removeParam}
-          linkPrefix={"/digit-ui/employee/fsm/application-details/"}
+          linkPrefix={`${parentRoute}/${DSO ? 'dso-application-details' : 'application-details'}/`}
         />
       );
     } else {

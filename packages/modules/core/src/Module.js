@@ -50,7 +50,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
   const DSO = Digit.UserService.hasAccess("FSM_DSO");
 
   return (
-    <div className={DSO ? "employee" : userType}>
+    <div>
       <QueryClientProvider client={queryClient}>
         <ComponentProvider.Provider value={registry}>
           <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />

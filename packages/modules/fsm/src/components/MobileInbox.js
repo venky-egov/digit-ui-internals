@@ -62,7 +62,7 @@ const MobileInbox = ({
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {!isFstpOperator && !isSearch && <ApplicationLinks isMobile={true} />}
+          {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={linkPrefix} isMobile={true} />}
           <ApplicationCard
             t={t}
             data={isFstpOperator ? fstpOperatorData : getData()}

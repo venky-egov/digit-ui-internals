@@ -96,8 +96,12 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
 
   const onSearch = (params = {}) => {
     if (isSearch) {
+      if (Object.keys(params).length === 0) {
+        setShouldSearch(false);
+      } else {
+        setShouldSearch(true);
+      }
       setSearchParams({ ...params });
-      setShouldSearch(true);
     }
     else {
       setSearchParams(({ applicationStatus, locality, uuid }) => ({ applicationStatus, locality, uuid, ...params }));

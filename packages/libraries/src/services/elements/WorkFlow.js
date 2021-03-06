@@ -63,14 +63,12 @@ export const WorkflowService = {
             status: "COMPLAINT_FILED",
           });
         }
-        if (moduleCode === "FSM") {
-          const isCreatedPresent = details.timeline.some(checkpoint => checkpoint.status === "CREATED");
-          if (!isCreatedPresent) {
-            details.timeline.push({
-              status: "CREATED",
-            });
-          }
-        }
+        // if (role !== "CITIZEN" && moduleCode === "FSM") {
+        //   details.timeline.push({
+        //     status: "APPLICATION_FILED",
+        //   });
+        // }
+
         return details;
       }
     } else {

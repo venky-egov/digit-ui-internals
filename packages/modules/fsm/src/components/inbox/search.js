@@ -7,7 +7,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const { t } = useTranslation();
   const [applicationNo, setApplicationNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm();
   const mobileView = innerWidth <= 640;
 
   const onSubmitInput = (data) => {
@@ -69,7 +69,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
               {searchFields?.map((input, index) => (
                 <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
                   <Label>{input.label}</Label>
-                  <TextInput {...input} inputRef={register} />
+                  <TextInput {...input} inputRef={register} watch={watch} shouldUpdate={true} />
                 </span>
               ))}
               {/* <span className="complaint-input">

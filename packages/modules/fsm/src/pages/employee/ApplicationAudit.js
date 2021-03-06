@@ -77,7 +77,7 @@ const ApplicationAudit = ({ parentRoute }) => {
   if (isLoading || userList.isLoading) return <Loader />;
 
   return (
-    <div>
+    <div style={{ overflow: "auto" }}>
       <Header>{t("ES_TITLE_APPLICATION_AUDIT")}</Header>
       <Table
         t={t}

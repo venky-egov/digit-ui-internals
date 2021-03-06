@@ -11,9 +11,6 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo.info.roles;
 
-  const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
-  const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
-  const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
   const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 

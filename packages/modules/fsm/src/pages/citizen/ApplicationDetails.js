@@ -68,7 +68,7 @@ const ApplicationDetails = () => {
 
         {application?.applicationDetails?.map(({ title, value, child, caption }, index) => {
           return (
-            <KeyNote key={index} keyValue={t(title)} note={t(value)} caption={t(caption)}>
+            <KeyNote key={index} keyValue={t(title)} note={t(value) || "N/A"} caption={t(caption)}>
               {child && typeof child === "object" ? React.createElement(child.element, { ...child }) : child}
             </KeyNote>
           );

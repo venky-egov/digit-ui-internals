@@ -74,7 +74,7 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
       },
     ],
   };
-  pdfMake.createPdf(dd).open();
+  pdfMake.createPdf(dd).download();
 };
 
 export default { generate: jsPdfGenerator };

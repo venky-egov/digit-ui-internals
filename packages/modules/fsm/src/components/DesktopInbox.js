@@ -10,6 +10,7 @@ import SearchApplication from "./inbox/search";
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
   const GetCell = (value) => <span className="cell-text">{value}</span>;
+  const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const GetSlaCell = (value) => {
     if (isNaN(value)) value = "-";
@@ -63,7 +64,7 @@ const DesktopInbox = (props) => {
         },
         {
           Header: t("ES_INBOX_LOCALITY"),
-          accessor: (row) => GetCell(t(Digit.Utils.locale.getLocalityCode(row.address.locality.code, row.tenantId))),
+          accessor: (row) => GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.address.locality.code, row.tenantId))),
         },
         {
           Header: t("ES_INBOX_STATUS"),
@@ -125,16 +126,11 @@ const DesktopInbox = (props) => {
                 `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
               );
             },
-            // Cell: (row) => {
-            //   return GetCell(
-            //     t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
-            //   );
-            // },
           },
           {
             Header: t("ES_INBOX_LOCALITY"),
             Cell: ({ row }) => {
-              return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
+              return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));
             },
             // Cell: (row) => {
             //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
@@ -217,7 +213,7 @@ const DesktopInbox = (props) => {
       )}
       <div style={{ flex: 1 }}>
         <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={!props?.isSearch} />
-        <div style={{ marginTop: "24px", marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
+        <div style={{ marginTop: "24px", marginLeft: FSTP ? "" : !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

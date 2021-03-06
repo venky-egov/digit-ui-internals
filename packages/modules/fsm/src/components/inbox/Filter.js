@@ -22,7 +22,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const localities = useSelector((state) => state.common.localities[tenantId]);
+  const localities = useSelector((state) => state.common.revenue_localities[tenantId]);
   const selectLocality = (d) => {
     onFilterChange({ locality: [...searchParams?.locality, d] });
   };

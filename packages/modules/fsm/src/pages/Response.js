@@ -172,8 +172,8 @@ const Response = (props) => {
       </Link>
       {props.parentRoute.includes("employee") &&
       (state?.applicationData?.applicationNo || (mutation.isSuccess && mutation.data.fsm[0].applicationNo)) &&
-      mutation.isSuccess &&
-      paymentAccess ? (
+      paymentAccess &&
+      mutation.isSuccess ? (
         <div className="secondary-action">
           <Link
             to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || mutation.data.fsm[0].applicationNo}`}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Header, Card, RadioButtons, CardSubHeader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Header, Card, RadioButtons, CardSubHeader, SubmitBar, BackButton } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useRouteMatch, useHistory, useLocation } from "react-router-dom";
@@ -12,7 +12,7 @@ export const SelectPaymentType = (props) => {
   const { path: currentPath } = useRouteMatch();
   const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = state.tenantId || Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
   const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
 
@@ -60,6 +60,7 @@ export const SelectPaymentType = (props) => {
 
   return (
     <React.Fragment>
+      <BackButton>Back</BackButton>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>Payment</Header>
         <Card>

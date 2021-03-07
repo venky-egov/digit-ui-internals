@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Banner, Card, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -63,6 +63,7 @@ export const FailedPayment = (props) => {
   return (
     <Card>
       <Banner message={getMessage()} complaintNumber={consumerCode} successful={false} />
+      <CardText>{t("ES_PAYMENT_FAILED_DETAILS")}</CardText>
       <Link to="/digit-ui/employee">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

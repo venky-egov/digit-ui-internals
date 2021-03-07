@@ -73,7 +73,13 @@ const CheckPage = ({ onSubmit, value }) => {
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/landmark" />}
           />
         )}
-        {address?.slumArea?.code === true && <Row label={t("CS_APPLICATION_DETAILS_SLUM_NAME")} text={t(address?.slumData?.i18nKey)} />}
+        {address?.slumArea?.code === true && (
+          <Row
+            label={t("CS_APPLICATION_DETAILS_SLUM_NAME")}
+            text={t(address?.slumData?.i18nKey)}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/slum-details" />}
+          />
+        )}
         {pitType && (
           <Row
             label={t("CS_CHECK_PIT_TYPE")}

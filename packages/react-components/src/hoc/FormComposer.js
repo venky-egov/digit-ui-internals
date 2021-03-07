@@ -71,6 +71,7 @@ export const FormComposer = (props) => {
               isRequired={isMandatory}
               type={type}
               disable={disable}
+              watch={watch}
             />
           </div>
         );

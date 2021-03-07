@@ -1,7 +1,7 @@
-import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import FSMLink from "./inbox/FSMLink";
 import ApplicationTable from "./inbox/ApplicationTable";
 import Filter from "./inbox/Filter";
@@ -9,10 +9,12 @@ import SearchApplication from "./inbox/search";
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const GetCell = (value) => <span className="cell-text">{value}</span>;
+  const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const GetSlaCell = (value) => {
-    if (isNaN(value)) value = "-";
+    if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };
 
@@ -31,7 +33,9 @@ const DesktopInbox = (props) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                  <Link to={`${props.parentRoute}/${DSO ? "dso-application-details" : "application-details"}/` + row.original["applicationNo"]}>
+                    {row.original["applicationNo"]}
+                  </Link>
                 </span>
                 {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
               </div>
@@ -63,7 +67,7 @@ const DesktopInbox = (props) => {
         },
         {
           Header: t("ES_INBOX_LOCALITY"),
-          accessor: (row) => GetCell(t(Digit.Utils.locale.getLocalityCode(row.address.locality.code, row.tenantId))),
+          accessor: (row) => GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.address.locality.code, row.tenantId))),
         },
         {
           Header: t("ES_INBOX_STATUS"),
@@ -110,7 +114,9 @@ const DesktopInbox = (props) => {
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                    <Link to={`${props.parentRoute}/${DSO ? "dso-application-details" : "application-details"}/` + row.original["applicationNo"]}>
+                      {row.original["applicationNo"]}
+                    </Link>
                   </span>
                   {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
                 </div>
@@ -125,16 +131,11 @@ const DesktopInbox = (props) => {
                 `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
               );
             },
-            // Cell: (row) => {
-            //   return GetCell(
-            //     t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
-            //   );
-            // },
           },
           {
             Header: t("ES_INBOX_LOCALITY"),
             Cell: ({ row }) => {
-              return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
+              return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));
             },
             // Cell: (row) => {
             //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
@@ -201,6 +202,8 @@ const DesktopInbox = (props) => {
         onSort={props.onSort}
         disableSort={props.disableSort}
         onPageSizeChange={props.onPageSizeChange}
+        sortParams={props.sortParams}
+        totalRecords={props.totalRecords}
       />
     );
   }
@@ -209,7 +212,7 @@ const DesktopInbox = (props) => {
     <div className="inbox-container">
       {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
-          <FSMLink />
+          <FSMLink parentRoute={props.parentRoute} />
           <div>
             <Filter searchParams={props.searchParams} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>
@@ -217,7 +220,7 @@ const DesktopInbox = (props) => {
       )}
       <div style={{ flex: 1 }}>
         <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={!props?.isSearch} />
-        <div style={{ marginTop: "24px", marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
+        <div style={{ marginTop: "24px", marginLeft: FSTP ? "" : !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

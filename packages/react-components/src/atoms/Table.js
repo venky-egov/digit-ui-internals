@@ -62,12 +62,11 @@ const Table = ({
       manualSortBy: true,
       autoResetPage: false,
       autoResetSortBy: false,
-      useControlledState: state => {
-        return React.useMemo(
-          () => ({
-            ...state,
-            pageIndex: currentPage,
-          }))
+      useControlledState: (state) => {
+        return React.useMemo(() => ({
+          ...state,
+          pageIndex: currentPage,
+        }));
       },
     },
     useSortBy,
@@ -158,7 +157,7 @@ const Table = ({
           })}
         </tbody>
       </table>
-      {(
+      {
         <div className="pagination">
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
           <select className="cp" value={pageSize} style={{ marginRight: "15px" }} onChange={onPageSizeChange}>
@@ -172,7 +171,8 @@ const Table = ({
             <span>
               {currentPage * pageSizeLimit + 1}
               {"-"}
-              {(currentPage + 1) * pageSizeLimit > totalRecords ? totalRecords : (currentPage + 1) * pageSizeLimit} {totalRecords ? `of ${totalRecords}` : ""}
+              {(currentPage + 1) * pageSizeLimit > totalRecords ? totalRecords : (currentPage + 1) * pageSizeLimit}{" "}
+              {totalRecords ? `of ${totalRecords}` : ""}
             </span>{" "}
           </span>
           {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
@@ -183,7 +183,7 @@ const Table = ({
           {canPreviousPage && <ArrowBack onClick={() => onPrevPage()} className={"cp"} />}
           {canNextPage && <ArrowForward onClick={() => onNextPage()} className={"cp"} />}
         </div>
-      )}
+      }
     </React.Fragment>
   );
 };

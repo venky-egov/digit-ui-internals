@@ -6,7 +6,6 @@ export const ULBService = {
     // TODO: change when setter is done.
     const user = UserService.getUser();
     if (user?.extraRoleInfo) {
-
       const isDsoRoute = Digit.Utils.detectDsoRoute(window.location.pathname);
       // Check if route is employee route
       // if (window.location.pathname.split("/").includes("employee")) return user.extraRoleInfo.tenantId;

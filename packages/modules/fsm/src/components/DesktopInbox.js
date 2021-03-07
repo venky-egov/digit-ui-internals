@@ -14,7 +14,7 @@ const DesktopInbox = (props) => {
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const GetSlaCell = (value) => {
-    if (isNaN(value)) return  <span className="sla-cell-success">0</span>;
+    if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };
 
@@ -33,7 +33,9 @@ const DesktopInbox = (props) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={`${props.parentRoute}/${DSO ? 'dso-application-details' : 'application-details'}/` + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                  <Link to={`${props.parentRoute}/${DSO ? "dso-application-details" : "application-details"}/` + row.original["applicationNo"]}>
+                    {row.original["applicationNo"]}
+                  </Link>
                 </span>
                 {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
               </div>
@@ -112,7 +114,9 @@ const DesktopInbox = (props) => {
               return (
                 <div>
                   <span className="link">
-                    <Link to={`${props.parentRoute}/${DSO ? 'dso-application-details' : 'application-details'}/` + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                    <Link to={`${props.parentRoute}/${DSO ? "dso-application-details" : "application-details"}/` + row.original["applicationNo"]}>
+                      {row.original["applicationNo"]}
+                    </Link>
                   </span>
                   {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
                 </div>

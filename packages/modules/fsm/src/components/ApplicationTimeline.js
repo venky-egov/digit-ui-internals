@@ -79,17 +79,15 @@ export const ApplicationTimeline = (props) => {
             </CardSectionHeader>
           )}
           {data?.timeline && data?.timeline?.length === 1 ? (
-            <CheckPoint isCompleted={true}
-              label={t("CS_COMMON_" + data?.timeline[0]?.status)}
-              customChild={getTimelineCaptions(data?.timeline[0])}
-            />
+            <CheckPoint isCompleted={true} label={t("CS_COMMON_" + data?.timeline[0]?.status)} customChild={getTimelineCaptions(data?.timeline[0])} />
           ) : (
             <ConnectingCheckPoints>
               {data?.timeline &&
                 data?.timeline.map((checkpoint, index, arr) => {
                   return (
                     <React.Fragment key={index}>
-                      <CheckPoint keyValue={index}
+                      <CheckPoint
+                        keyValue={index}
                         isCompleted={index === 0}
                         label={t("CS_COMMON_" + checkpoint.status)}
                         customChild={getTimelineCaptions(checkpoint)}

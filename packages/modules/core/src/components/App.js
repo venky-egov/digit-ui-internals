@@ -20,7 +20,7 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
   const history = useHistory();
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
 
   const [isSidebarOpen, toggleSidebar] = useState(false);

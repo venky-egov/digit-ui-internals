@@ -17,14 +17,9 @@ const getStaticMapUrl = (latitude, longitude) => {
 };
 
 const detectDsoRoute = (pathname) => {
-  const employeePages = [
-    'search',
-    'inbox',
-    'dso-dashboard',
-    'dso-application-details'
-  ];
+  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details"];
 
-  return employeePages.some(url => pathname.split("/").includes(url));
-}
+  return employeePages.some((url) => pathname.split("/").includes(url));
+};
 
 export default { pdf: PDFUtil, browser: BrowserUtil, locale, GetParamFromUrl, getStaticMapUrl, detectDsoRoute };

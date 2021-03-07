@@ -52,7 +52,13 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     }
   );
 
-  const { isLoading: isSearchLoading, isIdle: isSearchIdle, isError: isSearchError, data: { data, totalCount } = {}, error } = Digit.Hooks.fsm.useSearchAll(
+  const {
+    isLoading: isSearchLoading,
+    isIdle: isSearchIdle,
+    isError: isSearchError,
+    data: { data, totalCount } = {},
+    error,
+  } = Digit.Hooks.fsm.useSearchAll(
     tenantId,
     {
       limit: pageSize,
@@ -99,10 +105,8 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
         setShouldSearch(true);
       }
       setSearchParams({ ...params });
-    }
-    else {
+    } else {
       setSearchParams(({ applicationStatus, locality, uuid }) => ({ applicationStatus, locality, uuid, ...params }));
-
     }
   };
 
@@ -175,7 +179,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
           searchParams={searchParams}
           sortParams={sortParams}
           removeParam={removeParam}
-          linkPrefix={`${parentRoute}/${DSO ? 'dso-application-details' : 'application-details'}/`}
+          linkPrefix={`${parentRoute}/${DSO ? "dso-application-details" : "application-details"}/`}
         />
       );
     } else {

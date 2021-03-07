@@ -86,7 +86,7 @@ const DsoDashboard = () => {
   const links = useMemo(
     () => [
       {
-        pathname: "/digit-ui/employee/fsm/inbox",
+        pathname: "/digit-ui/citizen/fsm/inbox",
         label: "ES_TITLE_INBOX",
         total: total,
       },

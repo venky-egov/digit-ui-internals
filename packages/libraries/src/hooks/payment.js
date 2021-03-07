@@ -31,7 +31,6 @@ export const usePaymentUpdate = ({ egId }, businessService) => {
     const payments = await Digit.PaymentService.getReciept(transaction.Transaction[0].tenantId, businessService, {
       consumerCodes: transaction.Transaction[0].consumerCode,
     });
-
     return { payments, applicationNo: transaction.consumerCode };
   };
 

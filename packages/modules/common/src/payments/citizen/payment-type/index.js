@@ -12,7 +12,7 @@ export const SelectPaymentType = (props) => {
   const { path: currentPath } = useRouteMatch();
   const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = state.tenantId || Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
   const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
 

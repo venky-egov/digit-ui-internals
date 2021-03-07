@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Header, Card, KeyNote, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
 import { getVehicleType } from "../../utils";
 import { ApplicationTimeline } from "../../components/ApplicationTimeline";
@@ -10,7 +10,9 @@ const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const history = useHistory();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { state: locState } = useLocation();
+  console.log("------------->>>>", locState);
+  const tenantId = locState?.tenantId || Digit.ULBService.getCurrentTenantId();
   const { isLoading, isError, error, data: application, error: errorApplication } = Digit.Hooks.fsm.useApplicationDetail(
     t,
     tenantId,
@@ -18,6 +20,7 @@ const ApplicationDetails = () => {
     {},
     "CITIZEN"
   );
+
   const state = tenantId?.split(".")[0];
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => application?.pdfData?.vehicleType === vehicle?.code);
@@ -68,12 +71,12 @@ const ApplicationDetails = () => {
 
         {application?.applicationDetails?.map(({ title, value, child, caption }, index) => {
           return (
-            <KeyNote key={index} keyValue={t(title)} note={t(value)} caption={t(caption)}>
+            <KeyNote key={index} keyValue={t(title)} note={t(value) || "N/A"} caption={t(caption)}>
               {child && typeof child === "object" ? React.createElement(child.element, { ...child }) : child}
             </KeyNote>
           );
         })}
-        <ApplicationTimeline application={application} id={id} />
+        <ApplicationTimeline application={application?.pdfData} id={id} />
       </Card>
     </React.Fragment>
   );

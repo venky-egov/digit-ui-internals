@@ -30,6 +30,7 @@ import useVehicleUpdate from "./fsm/useVehicleUpdate";
 import useInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
+import useRouteSubscription from "./fsm/useRouteSubscription";
 import useDsoSearch from "./fsm/useDsoSearch";
 import usePropertySearch from "./pt/usePropertySearch";
 import usePropertyPayment from "./pt/usePropertyPayment";
@@ -61,6 +62,7 @@ const fsm = {
   useDesludging: useDesludging,
   useMDMS: useMDMS,
   useSearch,
+  useRouteSubscription,
   useSearchAll,
   useInbox,
   useApplicationUpdate,

@@ -80,18 +80,18 @@ const initTokens = (stateCode) => {
   const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
   const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
 
-  const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
-  window.Digit.SessionStorage.set("user_type", userTypeInfo);
-  window.Digit.SessionStorage.set("userType", userTypeInfo);
+  // const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
+  // window.Digit.SessionStorage.set("user_type", userTypeInfo);
+  // window.Digit.SessionStorage.set("userType", userTypeInfo);
 
   // if (userType !== "CITIZEN") {
-  window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
+  // window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
   // } else {
   // if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
   // }
 
-  window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
-  window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+  // window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
+  // window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
 };
 
 const initDigitUI = () => {

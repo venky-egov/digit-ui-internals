@@ -18,7 +18,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const [shouldSearch, setShouldSearch] = useState(false);
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [sortParams, setSortParams] = useState({ key: "createdTime", sortOrder: "DESC" });
+  const [sortParams, setSortParams] = useState([{ id: "createdTime", desc: false }]);
   const [searchParams, setSearchParams] = useState(() => {
     return isInbox
       ? {
@@ -34,8 +34,8 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
 
   let isMobile = window.Digit.Utils.browser.isMobile();
   let paginationParms = isMobile
-    ? { limit: 100, offset: 0, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder }
-    : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
+    ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
+    : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
   // TODO: Here fromDate and toDate is only for mobile and it is not working for search application for mobile screen
   const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(
@@ -52,10 +52,16 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     }
   );
 
-  const { isLoading: isSearchLoading, isIdle: isSearchIdle, isError: isSearchError, data, error } = Digit.Hooks.fsm.useSearchAll(
+  const {
+    isLoading: isSearchLoading,
+    isIdle: isSearchIdle,
+    isError: isSearchError,
+    data: { data, totalCount } = {},
+    error,
+  } = Digit.Hooks.fsm.useSearchAll(
     tenantId,
     {
-      limit: pageSize + 1,
+      limit: pageSize,
       offset: pageOffset,
       ...searchParams,
       fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
@@ -82,8 +88,9 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
 
   const handleSort = useCallback((args) => {
     if (args.length === 0) return;
-    const [sortBy] = args;
-    setSortParams({ key: sortBy.id, sortOrder: sortBy.desc ? "DESC" : "ASC" });
+    setSortParams(args);
+    // const [sortBy] = args;
+    // setSortParams({ key: sortBy.id, sortOrder: sortBy.desc ? "DESC" : "ASC" });
   }, []);
 
   const handlePageSizeChange = (e) => {
@@ -91,9 +98,15 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   };
 
   const onSearch = (params = {}) => {
-    setSearchParams({ ...searchParams, ...params });
     if (isSearch) {
-      setShouldSearch(true);
+      if (Object.keys(params).length === 0) {
+        setShouldSearch(false);
+      } else {
+        setShouldSearch(true);
+      }
+      setSearchParams({ ...params });
+    } else {
+      setSearchParams(({ applicationStatus, locality, uuid }) => ({ applicationStatus, locality, uuid, ...params }));
     }
   };
 
@@ -162,10 +175,11 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
           onFilterChange={handleFilterChange}
           onSearch={onSearch}
           onSort={handleSort}
+          parentRoute={parentRoute}
           searchParams={searchParams}
           sortParams={sortParams}
           removeParam={removeParam}
-          linkPrefix={"/digit-ui/employee/fsm/application-details/"}
+          linkPrefix={`${parentRoute}/${DSO ? "dso-application-details" : "application-details"}/`}
         />
       );
     } else {
@@ -190,6 +204,8 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
             onPageSizeChange={handlePageSizeChange}
             parentRoute={parentRoute}
             searchParams={searchParams}
+            sortParams={sortParams}
+            totalRecords={isInbox ? Number(applications?.[0]?.totalCount) : totalCount}
           />
         </div>
       );

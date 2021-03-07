@@ -44,7 +44,7 @@ const TextInput = (props) => {
             type={props.type || "text"}
             name={props.name}
             id={props.id}
-            className={`${user_type ? "employee-card-input" : "card-input"} ${props.disable && "disabled"} focus-visible`}
+            className={`${user_type ? "employee-card-input" : "citizen-card-input"} ${props.disable && "disabled"} focus-visible`}
             placeholder={props.placeholder}
             onChange={(event) => {
               if (props?.onChange) {
@@ -88,6 +88,17 @@ TextInput.defaultProps = {
 };
 
 function DatePicker(props) {
+  const data = {
+    fromDate: props?.watch("fromDate"),
+    toDate: props?.watch("toDate"),
+  };
+
+  useEffect(() => {
+    if (props?.shouldUpdate) {
+      props?.setDate(getDDMMYYYY(data[props.name], "yyyymmdd"));
+    }
+  }, [data]);
+
   useEffect(() => {
     props.setDate(getDDMMYYYY(props?.defaultValue));
   }, []);
@@ -104,10 +115,10 @@ function DatePicker(props) {
   );
 }
 
-function getDDMMYYYY(mmddyyyy) {
-  if (!mmddyyyy) return "";
-  const dateArray = mmddyyyy?.split("-");
-  return `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
+function getDDMMYYYY(date) {
+  if (!date) return "";
+
+  return new Date(date).toLocaleString("en-In").split(",")[0];
 }
 
 export default TextInput;

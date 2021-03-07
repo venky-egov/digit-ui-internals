@@ -171,6 +171,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
           onFilterChange={handleFilterChange}
           onSearch={onSearch}
           onSort={handleSort}
+          parentRoute={parentRoute}
           searchParams={searchParams}
           sortParams={sortParams}
           removeParam={removeParam}

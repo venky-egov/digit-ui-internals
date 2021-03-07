@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const ApplicationLinks = () => {
+const ApplicationLinks = ({ linkPrefix }) => {
   const { t } = useTranslation();
 
   const allLinks = [

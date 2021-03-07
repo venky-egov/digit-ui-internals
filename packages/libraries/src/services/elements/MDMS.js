@@ -328,7 +328,17 @@ const GetSlumLocalityMapping = (MdmsRes) =>
   }, {});
 
 const GetReasonType = (MdmsRes, type, moduleCode) =>
-  MdmsRes[moduleCode][type].filter((reason) => reason.active).map((reason) => ({ ...reason, i18nKey: `ES_ACTION_REASON_${reason.code}` }));
+  Object.assign(
+    {},
+    ...Object.keys(MdmsRes[moduleCode]).map((collection) => ({
+      [collection]: MdmsRes[moduleCode][collection]
+        .filter((reason) => reason.active)
+        .map((reason) => ({
+          ...reason,
+          i18nKey: `ES_ACTION_REASON_${reason.code}`,
+        })),
+    }))
+  );
 
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
@@ -352,10 +362,7 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetVehicleType(MdmsRes);
     case "Slum":
       return GetSlumLocalityMapping(MdmsRes);
-    case "CancelReason":
-    case "DeclineReason":
-    case "ReassignReason":
-    case "RejectionReason":
+    case "Reason":
       return GetReasonType(MdmsRes, type, moduleCode);
     default:
       return MdmsRes;
@@ -380,7 +387,7 @@ export const MdmsService = {
       params: { tenantId },
     }),
   getDataByCriteria: async (tenantId, mdmsDetails, moduleCode) => {
-    console.log("mdms request details ---->", mdmsDetails);
+    console.log("mdms request details ---->", mdmsDetails, moduleCode);
     const { MdmsRes } = await MdmsService.call(tenantId, mdmsDetails.details);
     return transformResponse(mdmsDetails.type, MdmsRes, moduleCode.toUpperCase());
   },

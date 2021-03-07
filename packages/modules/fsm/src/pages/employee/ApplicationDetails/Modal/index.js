@@ -59,7 +59,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   const [vehicleNo, setVehicleNo] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
-  const { data: Reason, isLoading: isReasonLoaded } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
+  const { data: Reason, isLoading: isReasonLoading } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
     "ReassignReason",
     "RejectionReason",
     "DeclineReason",
@@ -222,7 +222,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     }
   }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList]);
 
-  return action && config.form && !isDsoLoading ? (
+  return action && config.form && !isDsoLoading && !isReasonLoading ? (
     <Modal
       headerBarMain={<Heading label={t(config.label.heading)} />}
       headerBarEnd={<CloseBtn onClick={closeModal} />}

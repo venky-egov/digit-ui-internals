@@ -10,6 +10,7 @@ import SearchApplication from "./inbox/search";
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
   const GetCell = (value) => <span className="cell-text">{value}</span>;
+  const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const GetSlaCell = (value) => {
     if (isNaN(value)) return  <span className="sla-cell-success">0</span>;
@@ -214,7 +215,7 @@ const DesktopInbox = (props) => {
       )}
       <div style={{ flex: 1 }}>
         <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={!props?.isSearch} />
-        <div style={{ marginTop: "24px", marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
+        <div style={{ marginTop: "24px", marginLeft: FSTP ? "" : !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

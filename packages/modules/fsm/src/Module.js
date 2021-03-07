@@ -84,7 +84,7 @@ const CitizenApp = ({ path }) => {
   );
 };
 
-const FSMModule = ({ stateCode, userType }) => {
+const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
@@ -96,6 +96,7 @@ const FSMModule = ({ stateCode, userType }) => {
   }
 
   console.log("fsm", userType, path, state, store);
+  Digit.SessionStorage.set("FSM_TENANTS", tenants);
 
   if (userType === "citizen") {
     return <CitizenApp path={path} />;

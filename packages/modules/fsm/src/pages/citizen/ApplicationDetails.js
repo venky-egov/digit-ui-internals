@@ -21,10 +21,10 @@ const ApplicationDetails = () => {
 
   const state = tenantId?.split(".")[0];
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
-  const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
+  const vehicle = vehicleMenu?.find((vehicle) => application?.pdfData?.vehicleType === vehicle?.code);
   const pdfVehicleType = getVehicleType(vehicle, t);
-  const localityCode = application?.address?.locality?.code;
-  const slumCode = application?.address?.slumName;
+  const localityCode = application?.pdfData?.address?.locality?.code;
+  const slumCode = application?.pdfData?.address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
 
   const coreData = Digit.Hooks.useCoreData();

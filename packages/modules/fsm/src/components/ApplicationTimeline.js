@@ -38,8 +38,6 @@ export const ApplicationTimeline = (props) => {
     if (checkpoint.status === "CREATED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
-        name: props.application?.citizen.name,
-        mobileNumber: props.application?.citizen.mobileNumber,
         source: props.application?.source || "",
       };
       return <TLCaption data={caption} />;

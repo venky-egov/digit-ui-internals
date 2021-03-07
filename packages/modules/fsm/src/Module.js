@@ -32,6 +32,7 @@ import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectSlumName from "./pageComponents/SelectSlumName";
 import CheckSlum from "./pageComponents/CheckSlum";
 import FSMCard from "./components/FsmCard";
+import { Redirect } from "react-router-dom";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -69,12 +70,18 @@ const CitizenApp = ({ path }) => {
     <React.Fragment>
       {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
       <Switch>
-        {Digit.UserService.hasAccess("FSM_DSO") && <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />}
+        <PrivateRoute path={`${path}/inbox`}
+          component={() => Digit.UserService.hasAccess("FSM_DSO") ? <Inbox parentRoute={path} isInbox={true} /> : <Redirect to="/digit-ui/citizen" />}
+        />
+        <PrivateRoute path={`${path}/search`}
+          component={() => Digit.UserService.hasAccess("FSM_DSO") ? <Inbox parentRoute={path} isSearch={true} /> : <Redirect to="/digit-ui/citizen" />}
+        />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplicationCitizen parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
+        <PrivateRoute path={`${path}/dso-application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
         <PrivateRoute
           path={`${path}/application-details/:id`}
-          component={Digit.UserService.hasAccess("FSM_DSO") ? <EmployeeApplicationDetails parentRoute={path} /> : ApplicationDetails}
+          component={() => <ApplicationDetails parentRoute={path} />}
         />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response parentRoute={path} {...props} />} />

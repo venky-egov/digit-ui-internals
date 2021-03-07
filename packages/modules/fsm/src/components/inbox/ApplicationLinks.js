@@ -16,7 +16,7 @@ const ApplicationLinks = () => {
     // { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },
     {
       text: t("ES_TITILE_SEARCH_APPLICATION"),
-      link: "/digit-ui/employee/fsm/search",
+      link: `${linkPrefix}/search`,
     },
   ];
 

@@ -1,7 +1,7 @@
-import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import FSMLink from "./inbox/FSMLink";
 import ApplicationTable from "./inbox/ApplicationTable";
 import Filter from "./inbox/Filter";
@@ -9,6 +9,7 @@ import SearchApplication from "./inbox/search";
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
+  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
   const GetCell = (value) => <span className="cell-text">{value}</span>;
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
@@ -32,7 +33,7 @@ const DesktopInbox = (props) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                  <Link to={`${props.parentRoute}/${DSO ? 'dso-application-details' : 'application-details'}/` + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
                 </span>
                 {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
               </div>
@@ -111,7 +112,7 @@ const DesktopInbox = (props) => {
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                    <Link to={`${props.parentRoute}/${DSO ? 'dso-application-details' : 'application-details'}/` + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
                   </span>
                   {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
                 </div>
@@ -207,7 +208,7 @@ const DesktopInbox = (props) => {
     <div className="inbox-container">
       {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
-          <FSMLink />
+          <FSMLink parentRoute={props.parentRoute} />
           <div>
             <Filter searchParams={props.searchParams} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>

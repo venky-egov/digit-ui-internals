@@ -68,6 +68,7 @@ export const WorkflowService = {
         //     status: "APPLICATION_FILED",
         //   });
         // }
+
         return details;
       }
     } else {

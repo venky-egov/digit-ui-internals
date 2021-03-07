@@ -10,7 +10,7 @@ export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...fi
   return { isLoading, error, isError, data, revalidate: () => queryClient.invalidateQueries(["citizenBillsForBuisnessService", businessService]) };
 };
 
-export const useFetchPayment = ({ tenantId, consumerCode, businessService }) => {
+export const useFetchPayment = ({ tenantId, consumerCode, businessService }, config) => {
   const queryClient = useQueryClient();
   const { isLoading, error, isError, data } = useQuery(["paymentFetchDetails", tenantId, consumerCode, businessService], () =>
     Digit.PaymentService.fetchBill(tenantId, { consumerCode, businessService })

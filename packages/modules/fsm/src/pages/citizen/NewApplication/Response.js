@@ -24,7 +24,7 @@ const BannerPicker = (props) => {
 const Response = ({ data, onSuccess }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const mutation = Digit.Hooks.fsm.useDesludging(data.city ? data.city.code : tenantId);
+  const mutation = Digit.Hooks.fsm.useDesludging(data?.address?.city ? data.address?.city?.code : tenantId);
   const coreData = Digit.Hooks.useCoreData();
   const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   const slumCode = mutation?.data?.fsm[0].address?.slumName;

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Header, Card, KeyNote, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import getPDFData from "../../getPDFData";
 import { getVehicleType } from "../../utils";
 import { ApplicationTimeline } from "../../components/ApplicationTimeline";
@@ -10,7 +10,9 @@ const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const history = useHistory();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { state: locState } = useLocation();
+  console.log("------------->>>>", locState);
+  const tenantId = locState?.tenantId || Digit.ULBService.getCurrentTenantId();
   const { isLoading, isError, error, data: application, error: errorApplication } = Digit.Hooks.fsm.useApplicationDetail(
     t,
     tenantId,

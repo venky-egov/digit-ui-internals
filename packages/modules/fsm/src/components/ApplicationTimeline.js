@@ -28,6 +28,8 @@ const TLCaption = ({ data }) => {
 export const ApplicationTimeline = (props) => {
   const { t } = useTranslation();
 
+  console.log(".......>>>>> props here", props);
+
   const { isLoading, data } = Digit.Hooks.useWorkflowDetails({
     tenantId: props.application?.tenantId,
     id: props.id,
@@ -49,7 +51,9 @@ export const ApplicationTimeline = (props) => {
       case "PAY":
         return (
           <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${props.id}`}>
+            <Link
+              to={{ pathname: `/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${props.id}`, state: { tenantId: props.application.tenantId } }}
+            >
               <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
             </Link>
           </div>

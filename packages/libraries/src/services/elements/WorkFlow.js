@@ -41,10 +41,10 @@ export const WorkflowService = {
       }));
 
       if (processInstances.length > 0) {
-        const details = {
-          timeline: processInstances
-            .filter((e) => e.action !== "COMMENT")
-            .map((instance) => ({
+        const timeline = processInstances
+          .filter((e) => e.action !== "COMMENT")
+          .map((instance, ind) => {
+            const checkPoint = {
               performedAction: instance.action,
               status: instance.state.applicationStatus,
               caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
@@ -55,19 +55,24 @@ export const WorkflowService = {
               timeLineActions: instance.nextActions
                 ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action.action)
                 : null,
-            })),
-          nextActions: actionRolePair,
-        };
+            };
+            return checkPoint;
+          });
+
+        const nextActions = actionRolePair;
+
         if (role !== "CITIZEN" && moduleCode === "PGR") {
-          details.timeline.push({
+          timeline.push({
             status: "COMPLAINT_FILED",
           });
         }
-        // if (role !== "CITIZEN" && moduleCode === "FSM") {
-        //   details.timeline.push({
-        //     status: "APPLICATION_FILED",
-        //   });
-        // }
+
+        if (timeline[timeline.length - 1].status !== "CREATED" && moduleCode === "FSM")
+          timeline.push({
+            status: "CREATED",
+          });
+
+        const details = { timeline, nextActions };
         return details;
       }
     } else {

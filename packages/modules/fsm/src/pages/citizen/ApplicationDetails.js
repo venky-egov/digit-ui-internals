@@ -18,12 +18,13 @@ const ApplicationDetails = () => {
     {},
     "CITIZEN"
   );
+
   const state = tenantId?.split(".")[0];
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
-  const vehicle = vehicleMenu?.find((vehicle) => application?.vehicleType === vehicle?.code);
+  const vehicle = vehicleMenu?.find((vehicle) => application?.pdfData?.vehicleType === vehicle?.code);
   const pdfVehicleType = getVehicleType(vehicle, t);
-  const localityCode = application?.address?.locality?.code;
-  const slumCode = application?.address?.slumName;
+  const localityCode = application?.pdfData?.address?.locality?.code;
+  const slumCode = application?.pdfData?.address?.slumName;
   const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
 
   const coreData = Digit.Hooks.useCoreData();
@@ -68,12 +69,12 @@ const ApplicationDetails = () => {
 
         {application?.applicationDetails?.map(({ title, value, child, caption }, index) => {
           return (
-            <KeyNote key={index} keyValue={t(title)} note={t(value)} caption={t(caption)}>
+            <KeyNote key={index} keyValue={t(title)} note={t(value) || "N/A"} caption={t(caption)}>
               {child && typeof child === "object" ? React.createElement(child.element, { ...child }) : child}
             </KeyNote>
           );
         })}
-        <ApplicationTimeline application={application} id={id} />
+        <ApplicationTimeline application={application?.pdfData} id={id} />
       </Card>
     </React.Fragment>
   );

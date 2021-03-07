@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const ApplicationLinks = () => {
+const ApplicationLinks = ({ linkPrefix }) => {
   const { t } = useTranslation();
 
   const allLinks = [
@@ -16,7 +16,7 @@ const ApplicationLinks = () => {
     // { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },
     {
       text: t("ES_TITILE_SEARCH_APPLICATION"),
-      link: "/digit-ui/employee/fsm/search",
+      link: `${linkPrefix}/search`,
     },
   ];
 

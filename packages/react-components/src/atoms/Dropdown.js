@@ -44,6 +44,10 @@ const TextField = (props) => {
   );
 };
 
+const translateDummy = (text) => {
+  return text;
+};
+
 const Dropdown = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
   const [dropdownStatus, setDropdownStatus] = useState(false);
@@ -52,6 +56,7 @@ const Dropdown = (props) => {
   const [forceSet, setforceSet] = useState(0);
   const optionRef = useRef(null);
   const hasCustomSelector = props.customSelector ? true : false;
+  const t = props.t || translateDummy;
   // const [outsideClicked, setOutsideClicked] = useState(false);
 
   useEffect(() => {
@@ -156,7 +161,7 @@ const Dropdown = (props) => {
           <div className={`${hasCustomSelector ? "margin-top-10" : ""} options-card`} style={{ ...props.style }} ref={optionRef}>
             {props.option &&
               props.option
-                .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
+                .filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
                 .map((option, index) => {
                   if (props.t) {
                     // console.log(props.t(option[props.optionKey]));
@@ -172,7 +177,7 @@ const Dropdown = (props) => {
         ) : (
           <div className="options-card" style={props.optionCardStyles}>
             {props.option
-              .filter((option) => option.toUpperCase().includes(filterVal.toUpperCase()))
+              .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
               .map((option, index) => {
                 return (
                   <p key={index} onClick={() => onSelect(option)}>

@@ -104,6 +104,7 @@ const ApplicationDetails = (props) => {
       case "DSO_REJECT":
       case "REJECT":
       case "DECLINE":
+      case "REASSING":
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":

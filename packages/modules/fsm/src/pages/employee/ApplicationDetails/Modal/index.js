@@ -67,8 +67,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   ]);
 
   console.log("find mdms data here", Reason);
-  const [rejectionReason, setReason] = useState(null);
+
   const [reassignReason, selectReassignReason] = useState(null);
+  const [rejectionReason, setRejectionReason] = useState(null);
+  const [declineReason, setDeclineReason] = useState(null);
+  const [cancelReason, selectCancelReason] = useState(null);
+
   const [formValve, setFormValve] = useState(false);
 
   useEffect(() => {
@@ -94,6 +98,22 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     }
   }, [isSuccess, isDsoSuccess]);
 
+  useEffect(() => {
+    setFormValve(reassignReason ? true : false);
+  }, [reassignReason]);
+
+  useEffect(() => {
+    setFormValve(rejectionReason ? true : false);
+  }, [rejectionReason]);
+
+  useEffect(() => {
+    setFormValve(declineReason ? true : false);
+  }, [declineReason]);
+
+  useEffect(() => {
+    setFormValve(cancelReason ? true : false);
+  }, [cancelReason]);
+
   function selectDSO(dsoDetails) {
     // console.log("find dso details here", dsoDetails);
     setDSO(dsoDetails);
@@ -109,10 +129,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     setVehicle(value);
   }
 
-  function selectReason(value) {
-    setReason(value);
-  }
-
   function submit(data) {
     // console.log("find submit here",data);
     const workflow = { action: action };
@@ -124,7 +140,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     if (data.date) applicationData.possibleServiceDate = new Date(`${data.date}`).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
 
+    if (reassignReason) workflow.comments = reassignReason.code;
     if (rejectionReason) workflow.comments = rejectionReason.code;
+    if (declineReason) workflow.comments = declineReason.code;
+    if (cancelReason) workflow.comments = cancelReason.code;
 
     submitAction({ fsm: applicationData, workflow });
   }
@@ -146,6 +165,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
             vehicleNo,
             vehicleNoList,
             selectVehicleNo,
+            action,
           })
         );
 
@@ -163,10 +183,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
             vehicleMenu,
             vehicle,
             selectVehicle,
+            action,
           })
         );
       case "REASSIGN":
-        setFormValve(dso && vehicle ? true : false);
+      case "REASSING":
+      case "FSM_REASSING":
+        setFormValve(dso && vehicle && reassignReason ? true : false);
+        // console.log("find reasiign reason data here",Reason?.ReassignReason)
         return setConfig(
           configReassignDSO({
             t,
@@ -176,40 +200,57 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
             vehicleMenu,
             vehicle,
             selectVehicle,
-            reassignReasonMenu,
+            reassignReasonMenu: Reason?.ReassignReason,
             reassignReason,
             selectReassignReason,
+            action,
           })
         );
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        defaultValues = { capacity: vehicle?.capacity };
-        return setConfig(configCompleteApplication({ t, vehicle, applicationCreatedTime: applicationData?.auditDetails?.createdTime }));
+        // console.log("find vehicle cpacity", vehicle?.capacity)
+        return setConfig(configCompleteApplication({ t, vehicle, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
-      case "CANCEL":
       case "DECLINE":
-      case "SENDBACK":
       case "DSO_REJECT":
-        setFormValve(rejectionReason ? true : false);
+        //declinereason
+        // console.log("find action", action, declineReason)
+        setFormValve(declineReason ? true : false);
         return setConfig(
           configRejectApplication({
             t,
-            rejectMenu,
-            selectReason,
-            rejectionReason,
+            rejectMenu: Reason?.DeclineReason,
+            setReason: setDeclineReason,
+            reason: declineReason,
+            action,
           })
         );
       case "REJECT":
+      case "SENDBACK":
+        // rejectionReason
         setFormValve(rejectionReason ? true : false);
         return setConfig(
           configRejectApplication({
             t,
-            rejectMenu,
-            rejectionReason,
-            selectReason,
+            rejectMenu: Reason?.RejectionReason,
+            setReason: setRejectionReason,
+            reason: rejectionReason,
+            action,
+          })
+        );
+      case "CANCEL":
+        ///cancellreason
+        setFormValve(cancelReason ? true : false);
+        return setConfig(
+          configRejectApplication({
+            t,
+            rejectMenu: Reason?.CancelReason,
+            setReason: selectCancelReason,
+            reason: cancelReason,
+            action,
           })
         );
       case "PAY":
@@ -220,9 +261,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
         console.log("default case");
         break;
     }
-  }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList]);
+  }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason]);
 
-  return action && config.form && !isDsoLoading && !isReasonLoading ? (
+  return action && config.form && !isDsoLoading && !isReasonLoading && isVehicleDataLoaded ? (
     <Modal
       headerBarMain={<Heading label={t(config.label.heading)} />}
       headerBarEnd={<CloseBtn onClick={closeModal} />}

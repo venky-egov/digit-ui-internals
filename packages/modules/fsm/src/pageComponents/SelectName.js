@@ -15,6 +15,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
         required: true,
         pattern: "/[A-Za-z]/",
       },
+      isMandatory: true,
       error: "CORE_COMMON_APPLICANT_NAME_INVALID",
     },
     {
@@ -25,6 +26,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
         required: true,
         pattern: "/^[6-9]d{9}$/",
       },
+      isMandatory: true,
       error: "CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID",
     },
   ];
@@ -42,7 +44,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
           <LabelFieldPair>
             <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
               {t(input.label)}
-              {config.isMandatory ? " * " : null}
+              {input.isMandatory ? " * " : null}
             </CardLabel>
             <div className="field">
               <TextInput

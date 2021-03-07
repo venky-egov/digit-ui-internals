@@ -40,6 +40,7 @@ const TextField = (props) => {
       onClick={props.onClick}
       onFocus={broadcastToOpen}
       onBlur={broadcastToClose}
+      readOnly={props.disable}
     />
   );
 };

@@ -92,7 +92,7 @@ export const CollectPayment = (props) => {
 
     if (data.transactionNumber) {
       if (data.transactionNumber !== data.reTransanctionNumber) {
-        setToast({ key: "error", action: t("ES_TRANSANCTION_ID_NOT_MATCHED") });
+        setToast({ key: "error", action: t("ERR_TRASACTION_NUMBERS_DONT_MATCH") });
         setTimeout(() => setToast(null), 5000);
         return;
       }

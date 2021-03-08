@@ -22,4 +22,14 @@ const detectDsoRoute = (pathname) => {
   return employeePages.some((url) => pathname.split("/").includes(url));
 };
 
-export default { pdf: PDFUtil, browser: BrowserUtil, locale, GetParamFromUrl, getStaticMapUrl, detectDsoRoute };
+const routeSubscription = (pathname) => {
+  let classname = "citizen";
+  const isEmployeeUrl = detectDsoRoute(pathname);
+  if (isEmployeeUrl && classname === "citizen") {
+    return (classname = "employee");
+  } else if (!isEmployeeUrl && classname === "employee") {
+    return (classname = "citizen");
+  }
+};
+
+export default { pdf: PDFUtil, browser: BrowserUtil, locale, GetParamFromUrl, getStaticMapUrl, detectDsoRoute, routeSubscription };

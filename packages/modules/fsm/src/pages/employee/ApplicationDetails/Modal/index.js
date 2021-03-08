@@ -1,4 +1,4 @@
-import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
+import { Loader, Modal, FormComposer, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
 
@@ -59,6 +59,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   const [vehicleNo, setVehicleNo] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
+  const [toastError, setToastError] = useState(false);
   const { data: Reason, isLoading: isReasonLoading } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
     "ReassignReason",
     "RejectionReason",
@@ -129,6 +130,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     setVehicle(value);
   }
 
+  function setTostError(errorMsg) {
+    setToastError({ label: errorMsg, error: true, style: { left: "36.80%" } });
+  }
+
   function submit(data) {
     // console.log("find submit here",data);
     const workflow = { action: action };
@@ -175,6 +180,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
       case "FSM_GENERATE_DEMAND":
         // console.log("find vehicle menu here", vehicleMenu)
         setFormValve(dso && vehicle ? true : false);
+        let dsoWithVehicle = dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.type == vehicle?.code));
+        if (dsoWithVehicle && !dsoWithVehicle.length) {
+          return setTostError("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE");
+        }
         return setConfig(
           configAssignDso({
             t,
@@ -284,6 +293,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
         defaultValues={defaultValues}
         formId="modal-action"
       />
+      {toastError && <Toast {...toastError} />}
     </Modal>
   ) : (
     <Loader />

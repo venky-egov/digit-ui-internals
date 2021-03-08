@@ -11,7 +11,6 @@ const ApplicationDetails = () => {
   const { id } = useParams();
   const history = useHistory();
   const { state: locState } = useLocation();
-  console.log("------------->>>>", locState);
   const tenantId = locState?.tenantId || Digit.ULBService.getCurrentTenantId();
   const { isLoading, isError, error, data: application, error: errorApplication } = Digit.Hooks.fsm.useApplicationDetail(
     t,

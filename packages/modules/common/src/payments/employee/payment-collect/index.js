@@ -85,6 +85,13 @@ export const CollectPayment = (props) => {
         }
       }
 
+      if (data.transactionNumber) {
+        if (data.transactionNumber !== data.reTransanctionNumber) {
+          setToast({ key: "error", action: t("ES_TRANSANCTION_ID_NOT_MATCHED") });
+          setTimeout(() => setToast(null), 5000);
+        }
+      }
+
       recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime();
       recieptRequest.Payment.transactionNumber = "12345678";
     }

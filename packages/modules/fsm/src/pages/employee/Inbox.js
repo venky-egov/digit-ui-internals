@@ -7,7 +7,6 @@ import MobileInbox from "../../components/MobileInbox";
 
 const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  console.log("current TenantId in ", tenantId);
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo.info.roles;
 
@@ -70,6 +69,10 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     null,
     { enabled: shouldSearch && isSearch }
   );
+
+  useEffect(() => {
+    setPageOffset(0);
+  }, [searchParams])
 
   const fetchNextPage = () => {
     setPageOffset((prevState) => prevState + pageSize);

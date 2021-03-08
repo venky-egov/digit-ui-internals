@@ -88,7 +88,7 @@ const EmployeeHome = ({ modules }) => {
             </div>
           </div>
         ) : null}
-        {PGR_ACCESS.length === 0 ? addModuleCards() : null}
+        {addModuleCards()}
       </div>
     </div>
   );

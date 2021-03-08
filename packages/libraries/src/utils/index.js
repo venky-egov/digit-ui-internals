@@ -32,4 +32,57 @@ const routeSubscription = (pathname) => {
   }
 };
 
-export default { pdf: PDFUtil, browser: BrowserUtil, locale, GetParamFromUrl, getStaticMapUrl, detectDsoRoute, routeSubscription };
+const pgrAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+
+  const PGR_ACCESS = userRoles.filter(
+    (role) =>
+      role === "PGR_LME" ||
+      role === "PGR-ADMIN" ||
+      role === "CSR" ||
+      role === "CEMP" ||
+      role === "FEMP" ||
+      role === "DGRO" ||
+      role === "ULB Operator" ||
+      role === "GRO" ||
+      role === "GO" ||
+      role === "RO" ||
+      role === "GA"
+  );
+
+  return PGR_ACCESS.length > 0;
+};
+
+const fsmAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+
+  const FSM_ACCESS = userRoles.filter(
+    (role) =>
+      role === "FSM_CREATOR_EMP" ||
+      role === "FSM_EDITOR_EMP" ||
+      role === "FSM_VIEW_EMP" ||
+      role === "FSM_REPORT_VIEWER" ||
+      role === "FSM_DASHBOARD_VIEWER" ||
+      role === "FSM_ADMIN" ||
+      role === "FSM_DSO" ||
+      role === "FSM_DRIVER" ||
+      role === "FSM_EMP_FSTPO" ||
+      role === "FSM_COLLECTOR"
+  );
+
+  return FSM_ACCESS.length > 0;
+};
+
+export default {
+  pdf: PDFUtil,
+  browser: BrowserUtil,
+  locale,
+  GetParamFromUrl,
+  getStaticMapUrl,
+  detectDsoRoute,
+  routeSubscription,
+  pgrAccess,
+  fsmAccess,
+};

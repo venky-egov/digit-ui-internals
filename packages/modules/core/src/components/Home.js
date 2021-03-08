@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+
 const CitizenHome = ({ modules }) => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const registry = useContext(ComponentProvider);
@@ -21,74 +20,30 @@ const CitizenHome = ({ modules }) => {
   );
 };
 
-const allLinks = [
-  { text: "Inbox", link: "/digit-ui/employee/pgr/inbox" },
-  { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
-];
-
 const EmployeeHome = ({ modules }) => {
-  const allModules = modules.filter(({ code }) => code === "FSM");
-  const moduleCards = allModules.map((module) => Digit.ComponentRegistryService.getComponent(`${module.code}Card`));
+  const fsmAllModules = modules.filter(({ code }) => code === "FSM");
+  const pgrAllModules = modules.filter(({ code }) => code === "PGR");
+  const fsmModuleCards = fsmAllModules.map((module) => Digit.ComponentRegistryService.getComponent(`${module.code}Card`));
+  const pgrModuleCards = pgrAllModules.map((module) => Digit.ComponentRegistryService.getComponent(`${module.code}Card`));
 
-  const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-
-  const PGR_ACCESS = userRoles.filter(
-    (role) =>
-      role === "PGR_LME" ||
-      role === "PGR-ADMIN" ||
-      role === "CSR" ||
-      role === "CEMP" ||
-      role === "FEMP" ||
-      role === "DGRO" ||
-      role === "ULB Operator" ||
-      role === "GRO" ||
-      role === "GO" ||
-      role === "RO" ||
-      role === "GA"
-  );
-  // console.log("find user roles here", userRoles, PGR_ACCESS)
-
-  const addModuleCards = () => {
-    return moduleCards.map((Card) => {
-      return <Card />;
-    });
+  const addFsmModuleCards = () => {
+    return fsmModuleCards.map((Card, index) => <Card key={index} />);
   };
+
+  const addPgrModuleCards = () => {
+    return pgrModuleCards.map((Card, index) => <Card key={index} />);
+  };
+
+  const pgr = Digit.Utils.pgrAccess();
+  console.log("%c 🇩🇪: EmployeeHome -> pgr ", "font-size:16px;background-color:#97bd46;color:white;", pgr);
+  const fsm = Digit.Utils.fsmAccess();
+  console.log("%c 🌉: EmployeeHome -> fsm ", "font-size:16px;background-color:#adc888;color:black;", fsm);
 
   return (
     <div className="employee-app-container">
       <div className="ground-container">
-        {/* PGR Card */}
-        {PGR_ACCESS.length > 0 ? (
-          <div className="employeeCard card-home">
-            <div className="complaint-links-container">
-              <div className="header">
-                <span className="logo">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                    <path d="M0 0h24v24H0z" fill="none"></path>
-                    <path
-                      d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"
-                      fill="white"
-                    ></path>
-                  </svg>
-                </span>
-                <span className="text">Complaints</span>
-              </div>
-              <div className="body">
-                {allLinks.map((link, index) => {
-                  if (!link.accessTo || Digit.UserService.hasAccess(link.accessTo)) {
-                    return (
-                      <span className="link" key={index}>
-                        <Link to={link.link}>{link.text}</Link>
-                      </span>
-                    );
-                  }
-                })}
-              </div>
-            </div>
-          </div>
-        ) : null}
-        {addModuleCards()}
+        {pgr ? addPgrModuleCards() : null}
+        {fsm ? addFsmModuleCards() : null}
       </div>
     </div>
   );

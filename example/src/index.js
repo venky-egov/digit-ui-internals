@@ -5,6 +5,7 @@ import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
 import { initFSMComponents } from "@egovernments/digit-ui-module-fsm";
+import { initPGRComponents } from "@egovernments/digit-ui-module-pgr";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
@@ -97,8 +98,6 @@ const initTokens = (stateCode) => {
 const initDigitUI = () => {
   Digit.ComponentRegistryService.setupRegistry({
     ...pgrComponents,
-    PGRLinks,
-    PGRModule,
     PaymentModule,
     PaymentLinks,
     PTModule,
@@ -106,6 +105,7 @@ const initDigitUI = () => {
   });
 
   initFSMComponents();
+  initPGRComponents();
 
   const moduleReducers = (initData) => ({
     pgr: PGRReducers(initData),

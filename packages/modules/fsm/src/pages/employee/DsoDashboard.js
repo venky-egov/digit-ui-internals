@@ -26,7 +26,7 @@ const DsoDashboard = () => {
   const { data: statusCodes, isFetching: statusFetching } = Digit.Hooks.fsm.useApplicationStatus(null, isDsoLoaded);
   useEffect(() => {
     if (statusCodes) {
-      const [inProgress, pendingApproval] = statusCodes.filter((e) => e.roles?.includes("FSM_DSO"));
+      const [pendingApproval, inProgress] = statusCodes.filter((e) => e.roles?.includes("FSM_DSO"));
       console.log("here", inProgress, pendingApproval);
       setProgressStatusCode(inProgress);
       setPendingApprCode(pendingApproval);

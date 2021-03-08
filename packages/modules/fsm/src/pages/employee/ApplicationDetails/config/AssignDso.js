@@ -57,7 +57,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
               <Dropdown
                 option={getFilteredDsoData(dsoData, vehicle)}
                 autoComplete="off"
-                optionKey="name"
+                optionKey="displayName"
                 id="dso"
                 selected={dso}
                 select={selectDSO}

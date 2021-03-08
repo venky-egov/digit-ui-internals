@@ -133,6 +133,8 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
           label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
           name: "mobileNumber",
           maxlength: 10,
+          pattern: "[6-9][0-9]{9}",
+          title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
         },
         {
           label: t("ES_SEARCH_FROM_DATE"),

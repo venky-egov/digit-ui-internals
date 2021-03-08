@@ -8,7 +8,7 @@ export const FSMService = {
       useCache: false,
       method: "POST",
       auth: true,
-      userService: true,
+      userService: false,
       params: { tenantId, ...filters },
     }),
   create: (details, tenantId) =>

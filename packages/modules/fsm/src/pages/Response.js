@@ -164,6 +164,7 @@ const Response = (props) => {
               <span className="download-button">{t("CS_COMMON_DOWNLOAD")}</span>
             </div>
           }
+          style={{ width: "100px" }}
           onClick={handleDownloadPdf}
         />
       )}

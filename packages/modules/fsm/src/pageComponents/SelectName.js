@@ -12,23 +12,23 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
       type: "text",
       name: "applicantName",
       validation: {
-        required: true,
-        pattern: "[A-Za-z]",
+        isRequired: true,
+        pattern: "[A-Za-z ]{1,255}",
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
       },
       isMandatory: true,
-      error: "CORE_COMMON_APPLICANT_NAME_INVALID",
     },
     {
       label: "ES_NEW_APPLICATION_APPLICANT_MOBILE_NO",
       type: "text",
       name: "mobileNumber",
       validation: {
-        required: true,
+        isRequired: true,
         pattern: "[6-9]{1}[0-9]{9}",
         type: "tel",
+        title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
       },
       isMandatory: true,
-      error: "CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID",
     },
   ];
 
@@ -50,13 +50,10 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
             <div className="field">
               <TextInput
                 key={input.name}
-                type={input.validation.type}
-                pattern={input.validation.pattern}
-                title={t(input.validation.error)}
                 value={formData && formData[config.key] ? formData[config.key][input.name] : null}
                 onChange={(e) => setValue(e.target.value, input.name)}
-                inputRef={register(input.validation)}
                 disable={editScreen}
+                {...input.validation}
               />
             </div>
           </LabelFieldPair>

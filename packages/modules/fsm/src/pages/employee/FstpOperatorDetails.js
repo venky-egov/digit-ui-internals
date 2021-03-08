@@ -132,7 +132,7 @@ const FstpOperatorDetails = () => {
       value: vehicle.vehicle.registrationNumber,
     },
     {
-      title: `${t("ES_VEHICLE CAPACITY")} (ltrs)`,
+      title: `${t("ES_VEHICLE CAPACITY")}`,
       value: vehicle.vehicle.tankCapacity,
     },
   ];

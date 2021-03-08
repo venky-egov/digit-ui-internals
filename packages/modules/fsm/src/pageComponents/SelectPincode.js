@@ -1,7 +1,7 @@
 import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 
-const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
+const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => formData?.address?.pincode || "");
 
@@ -13,8 +13,10 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
       validation: {
         minlength: 6,
         maxlength: 7,
+        pattern: "[0-9]+",
+        max: "9999999",
+        title: t("CORE_COMMON_PINCODE_INVALID"),
       },
-      error: "CORE_COMMON_PINCODE_INVALID",
     },
   ];
   const [pincodeServicability, setPincodeServicability] = useState(null);

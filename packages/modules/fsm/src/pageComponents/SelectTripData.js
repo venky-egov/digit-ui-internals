@@ -1,38 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { getVehicleType } from "../utils";
-import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
+import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader, CardLabelError } from "@egovernments/digit-ui-react-components";
 
 const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId?.split(".")[0] || "pb";
 
   const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleType);
+  const [billError, setError] = useState(false);
 
   const { isLoading: isVehicleMenuLoading, data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
   const inputs = [
     {
       label: "ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS",
+      type: "text",
       name: "noOfTrips",
       error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-      validation: { required: true },
+      validation: {
+        isRequired: true,
+      },
       default: formData?.tripData?.noOfTrips,
       disable: true,
       isMandatory: true,
     },
     {
       label: "ES_NEW_APPLICATION_AMOUNT_PER_TRIP",
+      type: "text",
       name: "amountPerTrip",
       error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
-      validation: { required: true },
+      validation: {
+        isRequired: true,
+        pattern: "[0-9]{1,10}",
+        title: t("ES_APPLICATION_BILL_SLAB_ERROR"),
+      },
       default: formData?.tripData?.amountPerTrip,
       disable: true,
       isMandatory: true,
     },
     {
       label: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT",
+      type: "text",
       name: "amount",
-      validation: { required: true },
+      validation: {
+        isRequired: true,
+        title: t("ES_APPLICATION_BILL_SLAB_ERROR"),
+      },
       default: formData?.tripData?.amount,
       disable: true,
       isMandatory: true,
@@ -76,6 +89,8 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
             amount: billSlab.price * formData.tripData.noOfTrips,
           });
           // console.log("find formdata here", formData);
+        } else {
+          setError(true);
         }
       }
     })();
@@ -116,6 +131,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           </div>
         </LabelFieldPair>
       ))}
+      {billError ? <CardLabelError>{t("ES_APPLICATION_BILL_SLAB_ERROR")}</CardLabelError> : null}
     </div>
   );
 };

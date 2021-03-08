@@ -69,7 +69,7 @@ export const CollectPayment = (props) => {
         totalAmountPaid: bill.totalAmount,
       },
     };
-    debugger;
+
     recieptRequest.Payment.paymentMode = data?.paymentMode?.code;
     if (data.chequeDetails) {
       recieptRequest.Payment = { ...recieptRequest.Payment, ...data.chequeDetails };

@@ -41,7 +41,7 @@ export const SelectPaymentType = (props) => {
           tenantId: tenantId,
         },
         // success
-        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/CS/payment/success/${businessService}/${consumerCode}`,
+        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}`,
         additionalDetails: {
           isWhatsapp: false,
         },
@@ -49,7 +49,7 @@ export const SelectPaymentType = (props) => {
     };
 
     try {
-      const data = await Digit.PaymentService.createCSReciept(tenantId, filterData);
+      const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
       const redirectUrl = data?.Transaction?.redirectUrl;
       window.location = redirectUrl;
     } catch (error) {

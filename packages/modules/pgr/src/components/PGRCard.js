@@ -7,6 +7,10 @@ const PGRCard = () => {
     { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
   ];
 
+  if (!Digit.Utils.pgrAccess()) {
+    return null;
+  }
+
   return (
     <div className="employeeCard card-home">
       <div className="complaint-links-container">

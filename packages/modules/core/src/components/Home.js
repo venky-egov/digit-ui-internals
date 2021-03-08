@@ -21,27 +21,13 @@ const CitizenHome = ({ modules }) => {
 };
 
 const EmployeeHome = ({ modules }) => {
-  const fsmAllModules = modules.filter(({ code }) => code === "FSM");
-  const pgrAllModules = modules.filter(({ code }) => code === "PGR");
-  const fsmModuleCards = fsmAllModules.map((module) => Digit.ComponentRegistryService.getComponent(`${module.code}Card`));
-  const pgrModuleCards = pgrAllModules.map((module) => Digit.ComponentRegistryService.getComponent(`${module.code}Card`));
-
-  const addFsmModuleCards = () => {
-    return fsmModuleCards.map((Card, index) => <Card key={index} />);
-  };
-
-  const addPgrModuleCards = () => {
-    return pgrModuleCards.map((Card, index) => <Card key={index} />);
-  };
-
-  const pgr = Digit.Utils.pgrAccess();
-  const fsm = Digit.Utils.fsmAccess();
-
   return (
     <div className="employee-app-container">
       <div className="ground-container">
-        {pgr ? addPgrModuleCards() : null}
-        {fsm ? addFsmModuleCards() : null}
+        {modules.map(({ code }, index) => {
+          const Card = Digit.ComponentRegistryService.getComponent(`${code}Card`) || (() => <React.Fragment />);
+          return <Card key={index} />;
+        })}
       </div>
     </div>
   );

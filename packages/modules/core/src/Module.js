@@ -47,7 +47,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
   });
 
   const ComponentProvider = Digit.Contexts.ComponentProvider;
-  const DSO = Digit.UserService.hasAccess("FSM_DSO");
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
 
   return (
     <div>

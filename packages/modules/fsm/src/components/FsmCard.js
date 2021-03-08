@@ -11,7 +11,7 @@ const ArrowRight = ({ to }) => (
 
 const FSMCard = () => {
   const { t } = useTranslation();
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
   const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
@@ -24,6 +24,10 @@ const FSMCard = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
   // TO DO get day time
+
+  if (!Digit.Utils.fsmAccess()) {
+    return null;
+  }
 
   const config = {
     enabled: isFSTPOperator ? true : false,

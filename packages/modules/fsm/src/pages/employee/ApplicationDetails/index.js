@@ -37,7 +37,7 @@ const ApplicationDetails = (props) => {
   const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   // console.log("find DSO here", DSO)
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
@@ -185,7 +185,7 @@ const ApplicationDetails = (props) => {
       {!isLoading ? (
         <React.Fragment>
           <Card style={{ position: "relative" }}>
-            {!DSO && (
+            {/* {!DSO && (
               <LinkButton
                 label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
                 style={{ position: "absolute", top: 0, right: 20 }}
@@ -193,7 +193,7 @@ const ApplicationDetails = (props) => {
                   history.push(props.parentRoute + "/application-audit/" + applicationNumber);
                 }}
               />
-            )}
+            )} */}
             {applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
                 {index === 0 ? (

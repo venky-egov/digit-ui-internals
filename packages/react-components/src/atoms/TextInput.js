@@ -111,6 +111,7 @@ function DatePicker(props) {
       id={props.id}
       placeholder={props.placeholder}
       defaultValue={props.date}
+      readOnly={true}
     />
   );
 }

@@ -29,6 +29,7 @@ const DesktopInbox = (props) => {
         {
           Header: t("ES_INBOX_APPLICATION_NO"),
           accessor: "applicationNo",
+          disableSortBy: true,
           Cell: ({ row }) => {
             return (
               <div>
@@ -44,10 +45,12 @@ const DesktopInbox = (props) => {
         },
         {
           Header: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"),
+          disableSortBy: true,
           accessor: (row) => GetCell(row.citizen?.name || ""),
         },
         {
           Header: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"),
+          disableSortBy: true,
           accessor: (row) => GetCell(row.citizen?.mobileNumber || ""),
         },
         {
@@ -57,6 +60,7 @@ const DesktopInbox = (props) => {
             // console.log(PropertyType.data && PropertyType.data[key]);
             return key;
           },
+          disableSortBy: true,
         },
         {
           Header: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"),
@@ -64,16 +68,19 @@ const DesktopInbox = (props) => {
             const key = t(`PROPERTYTYPE_MASTERS_${row.propertyUsage}`);
             return key;
           },
+          disableSortBy: true,
         },
         {
           Header: t("ES_INBOX_LOCALITY"),
           accessor: (row) => GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.address.locality.code, row.tenantId))),
+          disableSortBy: true,
         },
         {
           Header: t("ES_INBOX_STATUS"),
           accessor: (row) => {
             return GetCell(t(`CS_COMMON_FSM_${row.applicationStatus}`));
           },
+          disableSortBy: true,
         },
       ];
     }

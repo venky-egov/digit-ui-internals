@@ -72,7 +72,7 @@
 
 .upload-file {
   height: 56px;
-  @apply relative border-2 border-input-border w-full;
+  @apply relative border border-input-border w-full;
 
   div {
     @apply flex flex-row h-full items-center pl-md;

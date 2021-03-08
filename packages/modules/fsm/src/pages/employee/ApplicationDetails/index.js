@@ -23,6 +23,7 @@ import ActionModal from "./Modal";
 import { useQueryClient } from "react-query";
 
 import { useHistory, useParams } from "react-router-dom";
+import { actions } from "react-table";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -89,7 +90,8 @@ const ApplicationDetails = (props) => {
   };
 
   useEffect(() => {
-    console.log("action selected", selectedAction);
+    console.log("action selected in case", selectedAction);
+    debugger;
     switch (selectedAction) {
       case "DSO_ACCEPT":
       case "ACCEPT":
@@ -134,8 +136,8 @@ const ApplicationDetails = (props) => {
   //   };
 
   const closeModal = () => {
-    setShowModal(false);
     setSelectedAction(null);
+    setShowModal(false);
   };
 
   const closeToast = () => {
@@ -252,6 +254,7 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
+          {console.log("above show modal", showModal)}
           {showModal ? (
             <ActionModal
               t={t}

@@ -12,7 +12,7 @@ export const configRejectApplication = ({ t, rejectMenu, setReason, reason, acti
       {
         body: [
           {
-            label: t("ES_FSM_ACTION_DECLINE_REASON"),
+            label: t(`ES_FSM_ACTION_${action.toUpperCase()}_REASON`),
             type: "dropdown",
             populators: <Dropdown t={t} option={rejectMenu} id="reason" optionKey="i18nKey" selected={reason} select={setReason} />,
             isMandatory: true,

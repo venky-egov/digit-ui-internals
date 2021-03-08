@@ -35,7 +35,7 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
   const clearAll = () => {
     return (
       <LinkLabel className="clear-search-label" onClick={clearSearch}>
-        {t("CS_COMMON_CLEAR_SEARCH")}
+        {t("ES_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
   };
@@ -49,7 +49,7 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmitInput)}>
+    <form onSubmit={handleSubmit(onSubmitInput)} style={{ marginLeft: "24px" }}>
       <React.Fragment>
         <div className="search-container" style={{ width: "auto" }}>
           <div className="search-complaint-container">
@@ -71,7 +71,7 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
                   inputRef={register({
                     pattern: /(?!^$)([^\s])/,
                   })}
-                  style={{ width: "280px", marginBottom: "8px" }}
+                  style={{ marginBottom: "8px" }}
                 ></TextInput>
               </span>
               <span className="mobile-input">
@@ -83,12 +83,11 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
                   inputRef={register({
                     pattern: /^[6-9]\d{9}$/,
                   })}
-                  style={{ width: "280px" }}
                 ></TextInput>
               </span>
               {type === "desktop" && (
                 <SubmitBar
-                  style={{ marginTop: 32, marginLeft: "auto" }}
+                  style={{ marginTop: 32, marginLeft: "96px", maxWidth: "256px" }}
                   label={t("ES_COMMON_SEARCH")}
                   submit={true}
                   disabled={Object.keys(errors).filter((i) => errors[i]).length}

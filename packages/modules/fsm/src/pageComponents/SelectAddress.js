@@ -47,6 +47,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
 
       if (formData?.address?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
+        setSelectedLocality();
       }
 
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 import { Header } from "@egovernments/digit-ui-react-components";
 
 import DesktopInbox from "../../components/DesktopInbox";
@@ -15,6 +16,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const { t } = useTranslation();
+  const queryClient = useQueryClient()
   const [shouldSearch, setShouldSearch] = useState(false);
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -101,6 +103,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     if (isSearch) {
       if (Object.keys(params).length === 0) {
         setShouldSearch(false);
+        queryClient.resetQueries("FSM_CITIZEN_SEARCH");
       } else {
         setShouldSearch(true);
       }
@@ -126,16 +129,19 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
         {
           label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
           name: "mobileNumber",
+          maxlength: 10
         },
         {
           label: t("ES_SEARCH_FROM_DATE"),
           name: "fromDate",
           type: "date",
+          isRequired: true,
         },
         {
           label: t("ES_SEARCH_TO_DATE"),
           name: "toDate",
           type: "date",
+          isRequired: true,
         },
       ];
     }
@@ -159,6 +165,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
         {
           label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
           name: "mobileNumber",
+          maxlength: 10
         },
       ];
     }

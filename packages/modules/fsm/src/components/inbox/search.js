@@ -3,11 +3,13 @@ import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg } = require("@egovernments/digit-ui-react-components");
 import { useTranslation } from "react-i18next";
 
-const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFields, isInboxPage }) => {
+const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFields, searchParams, isInboxPage }) => {
   const { t } = useTranslation();
   const [applicationNo, setApplicationNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
-  const { register, handleSubmit, reset, watch } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm({
+    defaultValues: searchParams
+  });
   const mobileView = innerWidth <= 640;
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
@@ -31,7 +33,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const clearAll = (mobileView) => {
     const mobileViewStyles = mobileView ? { margin: 0 } : {};
     return (
-      <LinkLabel style={{ color: "#F47738", cursor: "pointer", ...mobileViewStyles }} onClick={clearSearch}>
+      <LinkLabel style={{ color: "#F47738", cursor: "pointer", display: "inline", ...mobileViewStyles }} onClick={clearSearch}>
         {t("ES_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );

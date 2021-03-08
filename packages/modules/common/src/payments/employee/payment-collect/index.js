@@ -45,10 +45,11 @@ export const CollectPayment = (props) => {
   };
 
   const getPaymentModes = () => defaultPaymentModes;
-  const paidByMenu = ["Owner", "Other"];
+  const paidByMenu = [t("COMMON_OWNER"), t("COMMON_OTHER")];
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
 
   const onSubmit = async (data) => {
+    console.log(data);
     bill.totalAmount = Math.round(bill.totalAmount);
     // console.log(data, bill.totalAmount);
     const recieptRequest = {
@@ -88,6 +89,15 @@ export const CollectPayment = (props) => {
       recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime();
       recieptRequest.Payment.transactionNumber = "12345678";
     }
+
+    if (data.transactionNumber) {
+      if (data.transactionNumber !== data.reTransanctionNumber) {
+        setToast({ key: "error", action: t("ERR_TRASACTION_NUMBERS_DONT_MATCH") });
+        setTimeout(() => setToast(null), 5000);
+        return;
+      }
+    }
+
     try {
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();
@@ -125,7 +135,7 @@ export const CollectPayment = (props) => {
       body: [
         ...additionalCharges,
         {
-          label: "Total Amount",
+          label: t("PAY_TOTAL_AMOUNT"),
           populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill.totalAmount}`} </CardSectionHeader>,
         },
       ],

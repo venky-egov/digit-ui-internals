@@ -25,6 +25,7 @@
 
 @screen dt {
   .toast-success {
-    left: 30%;
+    width: 100%;
+    left: calc(50% - 240px);
   }
 }

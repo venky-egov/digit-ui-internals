@@ -22,17 +22,17 @@ export const CollectPayment = (props) => {
   // TODO: enhancement to disablePayerDetails
   const [disablePayerDetails, setDisablePayerDetails] = useState(true);
 
-  const { cardConfig } = useCardPaymentDetails(props);
-  const { chequeConfig, date } = useChequeDetails(props);
+  const { cardConfig } = useCardPaymentDetails(props, t);
+  const { chequeConfig, date } = useChequeDetails(props, t);
   const additionalCharges = getAdditionalCharge() || [];
 
   const [formState, setFormState] = useState({});
   const [toast, setToast] = useState(null);
 
   const defaultPaymentModes = [
-    { code: "CASH", label: "Cash" },
-    { code: "CHEQUE", label: "Cheque" },
-    { code: "CARD", label: "Debit/Credit Card" },
+    { code: "CASH", label: t("COMMON_MASTERS_PAYMENTMODE_CASH") },
+    { code: "CHEQUE", label: t("COMMON_MASTERS_PAYMENTMODE_CHEQUE") },
+    { code: "CARD", label: t("COMMON_MASTERS_PAYMENTMODE_CREDIT/DEBIT CARD") },
     // { code: "DD", label: "Demand Draft" },
     // { code: "OFFLINE_NEFT", label: "Offline NEFT" },
     // { code: "OFFLINE_RTGS", label: "Offline RTGS" },
@@ -121,7 +121,7 @@ export const CollectPayment = (props) => {
 
   const config = [
     {
-      head: "Payment Details",
+      head: t("NOC_PAYMENT_HEAD"),
       body: [
         ...additionalCharges,
         {
@@ -131,10 +131,10 @@ export const CollectPayment = (props) => {
       ],
     },
     {
-      head: "Payer Details",
+      head: t("NOC_PAYMENT_PAID_BY_HEAD"),
       body: [
         {
-          label: "Paid By",
+          label: t("NOC_PAYMENT_PAID_BY_LABEL"),
           isMandatory: true,
           type: "custom",
           populators: {
@@ -162,7 +162,7 @@ export const CollectPayment = (props) => {
           },
         },
         {
-          label: "Payer Name",
+          label: t("NOC_PAYMENT_PAYER_NAME_LABEL"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -177,7 +177,7 @@ export const CollectPayment = (props) => {
           disable: disablePayerDetails,
         },
         {
-          label: "Payer Mobile",
+          label: t("NOC_PAYMENT_PAYER_MOB_LABEL"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -194,7 +194,7 @@ export const CollectPayment = (props) => {
       ],
     },
     {
-      head: "Payment Mode",
+      head: t("NOC_PAYMENT_MODE_HEAD"),
       body: [
         {
           withoutLabel: true,
@@ -238,8 +238,8 @@ export const CollectPayment = (props) => {
     <React.Fragment>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
-        heading={"Collect Payment"}
-        label={"Generate Reciept"}
+        heading={t("NOC_PAYMENT_COLLECT")}
+        label={t("NOC_PAYMENT_COLLECT_LABEL")}
         config={getFormConfig()}
         onSubmit={onSubmit}
         formState={formState}
@@ -255,7 +255,7 @@ export const CollectPayment = (props) => {
       {toast && (
         <Toast
           error={toast.key === "error" ? true : false}
-          label={t(toast.key === "success" ? `ES_FSM_${toast.action}_UPDATE_SUCCESS` : toast.action)}
+          label={t(toast.key === "success" ? `ES_${businessService.split(".")[0].toLowerCase()}_${toast.action}_UPDATE_SUCCESS` : toast.action)}
           onClose={() => setToast(null)}
         />
       )}

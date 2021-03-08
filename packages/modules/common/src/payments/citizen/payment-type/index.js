@@ -62,7 +62,7 @@ export const SelectPaymentType = (props) => {
     <React.Fragment>
       <BackButton>Back</BackButton>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Header>Payment</Header>
+        <Header>{t("PAYMENT_HEADER_CITIZEN")}</Header>
         <Card>
           <div
             className="detail"
@@ -76,14 +76,14 @@ export const SelectPaymentType = (props) => {
             }}
           >
             <span className="label">
-              <h2>Total Amount Due</h2>
+              <h2>{t("PAY_FULL_AMOUNT")}</h2>
             </span>
             <span style={{ fontSize: "20px" }} className="name">
               ₹ {paymentAmount || billDetails.totalAmount}
             </span>
           </div>
 
-          <CardSubHeader>Select Payment Method</CardSubHeader>
+          <CardSubHeader>{t("PAY_SELECT_METHOD")}</CardSubHeader>
 
           {menu?.length && (
             <Controller
@@ -93,7 +93,7 @@ export const SelectPaymentType = (props) => {
               render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
             />
           )}
-          <SubmitBar label="Pay" submit={true} />
+          <SubmitBar label={t("PAY_BUTTON_LABEL")} submit={true} />
         </Card>
       </form>
     </React.Fragment>

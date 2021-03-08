@@ -1,13 +1,13 @@
 import React from "react";
 
-export const useCardPaymentDetails = (props) => {
+export const useCardPaymentDetails = (props, t) => {
   const config = [
     {
-      head: "Card Details",
+      head: t("NOC_PAYMENT_CARD_HEAD"),
       headId: "paymentInfo",
       body: [
         {
-          label: "Last 4 Digits",
+          label: t("NOC_PAYMENT_CARD_LAST_DIGITS_LABEL"),
           type: "text",
           populators: {
             name: "instrumentNumber",
@@ -21,7 +21,7 @@ export const useCardPaymentDetails = (props) => {
           },
         },
         {
-          label: "Transanction Number",
+          label: t("NOC_PAYMENT_TRANS_NO_LABEL"),
           type: "text",
           populators: {
             name: "transactionNumber",
@@ -35,7 +35,7 @@ export const useCardPaymentDetails = (props) => {
           },
         },
         {
-          label: "Re-enter Transanction Number",
+          label: t("NOC_PAYMENT_RENTR_TRANS_LABEL"),
           type: "text",
           populators: {
             name: "reTransanctionNumber",

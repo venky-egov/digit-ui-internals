@@ -37,7 +37,7 @@ const PitDimension = ({ sanitationType, t, size = {}, handleChange, disable = fa
       </div>
       <span>x</span>
       <div>
-        <TextInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} pattern="[1-9]{1,2}" />
+        <TextInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} pattern="[0-9]{1,2}" min="01" max="99" />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_HEIGHT")}
         </CardText>

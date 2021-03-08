@@ -78,7 +78,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       formData?.address?.locality?.code &&
       formData?.tripData?.vehicleType &&
       formData?.pitType &&
-      formData?.pitDetail
+      formData?.pitDetail &&
+      formData?.tripData?.amountPerTrip
     ) {
       setSubmitValve(true);
     } else {

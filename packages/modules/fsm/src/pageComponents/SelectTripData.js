@@ -91,6 +91,10 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           setError(false);
           // console.log("find formdata here", formData);
         } else {
+          setValue({
+            amountPerTrip: null,
+            amount: null,
+          });
           setError(true);
         }
       }

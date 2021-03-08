@@ -1,11 +1,11 @@
 import React from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 
-export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoList, vehicleNo, vehicle }) => {
+export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoList, vehicleNo, vehicle, action }) => {
   return {
     label: {
-      heading: "ES_FSM_ACTION_TITLE_ASSIGN_VEHICLE",
-      submit: "CS_COMMON_ASSIGN_VEHICLE",
+      heading: `ES_FSM_ACTION_TITLE_${action}`,
+      submit: `CS_COMMON_${action}`,
       cancel: "CS_COMMON_CANCEL",
     },
     form: [

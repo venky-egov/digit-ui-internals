@@ -1,11 +1,11 @@
 import React from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 
-export const configRejectApplication = ({ t, rejectMenu, rejectionReason, selectReason }) => {
+export const configRejectApplication = ({ t, rejectMenu, setReason, reason, action }) => {
   return {
     label: {
-      heading: "ES_FSM_ACTION_TITLE_DECLINE_REQUEST",
-      submit: "CS_COMMON_DECLINE",
+      heading: `ES_FSM_ACTION_TITLE_${action}`,
+      submit: `CS_COMMON_${action}`,
       cancel: "CS_COMMON_CANCEL",
     },
     form: [
@@ -14,7 +14,8 @@ export const configRejectApplication = ({ t, rejectMenu, rejectionReason, select
           {
             label: t("ES_FSM_ACTION_DECLINE_REASON"),
             type: "dropdown",
-            populators: <Dropdown t={t} option={rejectMenu} id="reason" optionKey="code" selected={rejectionReason} select={selectReason} />,
+            populators: <Dropdown t={t} option={rejectMenu} id="reason" optionKey="i18nKey" selected={reason} select={setReason} />,
+            isMandatory: true,
           },
           {
             label: t("ES_FSM_ACTION_COMMENTS"),

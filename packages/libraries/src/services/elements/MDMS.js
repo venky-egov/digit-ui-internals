@@ -234,6 +234,21 @@ const getSlumLocalityCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getReasonCriteria = (tenantId, moduleCode, type, payload) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: payload.map((mdmsLoad) => ({
+          name: mdmsLoad,
+        })),
+      },
+    ],
+  },
+});
+
 const getBillingServiceForBusinessServiceCriteria = () => ({
   moduleDetails: [
     {
@@ -312,6 +327,19 @@ const GetSlumLocalityMapping = (MdmsRes) =>
         };
   }, {});
 
+const GetReasonType = (MdmsRes, type, moduleCode) =>
+  Object.assign(
+    {},
+    ...Object.keys(MdmsRes[moduleCode]).map((collection) => ({
+      [collection]: MdmsRes[moduleCode][collection]
+        .filter((reason) => reason.active)
+        .map((reason) => ({
+          ...reason,
+          i18nKey: `ES_ACTION_REASON_${reason.code}`,
+        })),
+    }))
+  );
+
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
     case "citymodule":
@@ -334,6 +362,8 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetVehicleType(MdmsRes);
     case "Slum":
       return GetSlumLocalityMapping(MdmsRes);
+    case "Reason":
+      return GetReasonType(MdmsRes, type, moduleCode);
     default:
       return MdmsRes;
   }
@@ -357,7 +387,7 @@ export const MdmsService = {
       params: { tenantId },
     }),
   getDataByCriteria: async (tenantId, mdmsDetails, moduleCode) => {
-    console.log("mdms request details ---->", mdmsDetails);
+    console.log("mdms request details ---->", mdmsDetails, moduleCode);
     const { MdmsRes } = await MdmsService.call(tenantId, mdmsDetails.details);
     return transformResponse(mdmsDetails.type, MdmsRes, moduleCode.toUpperCase());
   },
@@ -397,4 +427,7 @@ export const MdmsService = {
   },
   getSlumLocalityMapping: (tenantId, moduleCode, type) =>
     MdmsService.getDataByCriteria(tenantId, getSlumLocalityCriteria(tenantId, moduleCode, type), moduleCode),
+
+  getReason: (tenantId, moduleCode, type, payload) =>
+    MdmsService.getDataByCriteria(tenantId, getReasonCriteria(tenantId, moduleCode, type, payload), moduleCode),
 };

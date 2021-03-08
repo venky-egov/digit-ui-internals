@@ -5,16 +5,20 @@ import DsoDetails from "./DsoDetails";
 import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "../../../utils/fsm";
 
 const displayPitDimension = (pitDeminsion) => {
-  return Object.values(pitDeminsion)
-    .reduce((acc, current) => {
-      if (!current) {
-        return acc;
-      } else {
-        acc.push(`${current}m`);
-        return acc;
-      }
-    }, [])
-    .join(" x ");
+  const result = [];
+  if (pitDeminsion.length) {
+    result.push(`${pitDeminsion.length}m`);
+  }
+  if (pitDeminsion.width) {
+    result.push(`${pitDeminsion.width}m`);
+  }
+  if (pitDeminsion.diameter) {
+    result.push(`${pitDeminsion.diameter}m`);
+  }
+  if (pitDeminsion.height) {
+    result.push(`${pitDeminsion.height}m`);
+  }
+  return result.join(" x ");
 };
 
 const getPitDimensionCaption = (sanitationtype, diameter, length, t) => {

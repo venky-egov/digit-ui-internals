@@ -31,6 +31,9 @@ import SelectPitType from "./pageComponents/SelectPitType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectSlumName from "./pageComponents/SelectSlumName";
 import CheckSlum from "./pageComponents/CheckSlum";
+import SelectChannel from "./pageComponents/SelectChannel";
+import SelectName from "./pageComponents/SelectName";
+import SelectTripData from "./pageComponents/SelectTripData";
 import FSMCard from "./components/FsmCard";
 import { Redirect } from "react-router-dom";
 
@@ -211,6 +214,9 @@ const componentsToRegister = {
   FSMCard,
   FSMModule,
   FSMLinks,
+  SelectChannel,
+  SelectName,
+  SelectTripData,
 };
 
 export const initFSMComponents = () => {

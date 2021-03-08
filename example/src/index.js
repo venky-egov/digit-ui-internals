@@ -84,11 +84,11 @@ const initTokens = (stateCode) => {
   window.Digit.SessionStorage.set("user_type", userTypeInfo);
   window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-  // if (userType !== "CITIZEN") {
-  window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
-  // } else {
-  // if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
-  // }
+  if (userType !== "CITIZEN") {
+    window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
+  } else {
+    if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+  }
 
   window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
   window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);

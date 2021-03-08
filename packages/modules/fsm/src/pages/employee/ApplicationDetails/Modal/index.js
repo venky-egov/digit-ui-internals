@@ -254,6 +254,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
             action,
           })
         );
+
       case "PAY":
       case "ADDITIONAL_PAY_REQUEST":
       case "FSM_PAY":

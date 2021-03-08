@@ -14,18 +14,18 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
       type: "text",
       name: "street",
       validation: {
-        pattern: "^[\\w\\s]{1,256}$",
+        pattern: "[a-zA-Z0-9 ]{1,255}",
+        title: t("CORE_COMMON_STREET_INVALID"),
       },
-      error: "CORE_COMMON_STREET_INVALID",
     },
     {
       label: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL",
       type: "text",
       name: "doorNo",
       validation: {
-        pattern: "^[\\w]([\\w\\/,\\s])*$",
+        pattern: "([A-z0-9À-ž/s]){1,}",
+        title: t("CORE_COMMON_DOOR_INVALID"),
       },
-      error: "CORE_COMMON_DOOR_INVALID",
     },
   ];
   if (userType === "employee") {

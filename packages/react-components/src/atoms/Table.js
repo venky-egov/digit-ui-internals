@@ -32,7 +32,7 @@ const Table = ({
   onPrevPage,
   onSort = noop,
   onPageSizeChange,
-  sortParams = {},
+  sortParams = [],
 }) => {
   const {
     getTableProps,

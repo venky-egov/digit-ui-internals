@@ -4,10 +4,12 @@ import PropTypes from "prop-types";
 const TextInput = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
   const [date, setDate] = useState();
-  const data = {
-    fromDate: props?.watch("fromDate"),
-    toDate: props?.watch("toDate"),
-  };
+  const data = props?.watch
+    ? {
+        fromDate: props?.watch("fromDate"),
+        toDate: props?.watch("toDate"),
+      }
+    : {};
 
   const handleDate = (event) => {
     const { value } = event.target;

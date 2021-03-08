@@ -1,6 +1,6 @@
 import { Card } from "@egovernments/digit-ui-react-components";
-import { forEach } from "lodash";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const ComplaintsLink = ({ isMobile, data }) => {
   const allLinks = [
@@ -53,7 +53,7 @@ const ComplaintsLink = ({ isMobile, data }) => {
         <div className="body">
           {links.map(({ link, text }, index) => (
             <span className="link" key={index}>
-              <a href={link}>{text}</a>
+              <Link to={link}>{text}</Link>
             </span>
           ))}
         </div>

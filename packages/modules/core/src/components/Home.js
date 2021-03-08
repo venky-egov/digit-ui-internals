@@ -35,9 +35,7 @@ const EmployeeHome = ({ modules }) => {
   };
 
   const pgr = Digit.Utils.pgrAccess();
-  console.log("%c 🇩🇪: EmployeeHome -> pgr ", "font-size:16px;background-color:#97bd46;color:white;", pgr);
   const fsm = Digit.Utils.fsmAccess();
-  console.log("%c 🌉: EmployeeHome -> fsm ", "font-size:16px;background-color:#adc888;color:black;", fsm);
 
   return (
     <div className="employee-app-container">

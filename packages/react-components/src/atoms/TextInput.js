@@ -4,6 +4,10 @@ import PropTypes from "prop-types";
 const TextInput = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
   const [date, setDate] = useState();
+  const data = {
+    fromDate: props?.watch("fromDate"),
+    toDate: props?.watch("toDate"),
+  };
 
   const handleDate = (event) => {
     const { value } = event.target;
@@ -61,13 +65,13 @@ const TextInput = (props) => {
             minLength={props.minlength}
             maxLength={props.maxlength}
             max={props.max}
-            required={props.isRequired}
+            required={props.isRequired || (props.type === "date" && (props.name === "fromDate" ? data.toDate : data.fromDate))}
             pattern={props.pattern}
             min={props.min}
             readOnly={props.disable}
           />
         )}
-        {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} />}
+        {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} data={data} />}
       </div>
     </React.Fragment>
   );
@@ -88,16 +92,11 @@ TextInput.defaultProps = {
 };
 
 function DatePicker(props) {
-  const data = {
-    fromDate: props?.watch("fromDate"),
-    toDate: props?.watch("toDate"),
-  };
-
   useEffect(() => {
     if (props?.shouldUpdate) {
-      props?.setDate(getDDMMYYYY(data[props.name], "yyyymmdd"));
+      props?.setDate(getDDMMYYYY(props?.data[props.name], "yyyymmdd"));
     }
-  }, [data]);
+  }, [props?.data]);
 
   useEffect(() => {
     props.setDate(getDDMMYYYY(props?.defaultValue));

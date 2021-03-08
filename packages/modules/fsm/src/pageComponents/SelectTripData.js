@@ -88,6 +88,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
             amountPerTrip: billSlab.price,
             amount: billSlab.price * formData.tripData.noOfTrips,
           });
+          setError(false);
           // console.log("find formdata here", formData);
         } else {
           setError(true);

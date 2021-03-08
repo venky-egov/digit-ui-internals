@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 export const useChequeDetails = (props, t) => {
   const config = [
     {
-      head: t("NOC_PAYMENT_CHEQUE_HEAD"),
+      head: t("PAYMENT_CHEQUE_HEAD"),
       headId: "paymentInfo",
       body: [
         {
@@ -63,7 +63,7 @@ export const ChequeDetailsComponent = (props) => {
   return (
     <React.Fragment>
       <div className="label-field-pair">
-        <h2 className="card-label">{t("NOC_PAYMENT_CHQ_NO_LABEL")} *</h2>
+        <h2 className="card-label">{t("PAYMENT_CHQ_NO_LABEL")} *</h2>
         <div className="field">
           <div className="field-container">
             <input
@@ -79,7 +79,7 @@ export const ChequeDetailsComponent = (props) => {
         </div>
       </div>
       <div className="label-field-pair">
-        <h2 className="card-label">{t("NOC_PAYMENT_CHEQUE_DATE_LABEL")} *</h2>
+        <h2 className="card-label">{t("PAYMENT_CHEQUE_DATE_LABEL")} *</h2>
         <div className="field">
           <div className="field-container">
             <input
@@ -104,7 +104,7 @@ export const ChequeDetailsComponent = (props) => {
         // chequeDate && chequeNo &&
         <React.Fragment>
           <div className="label-field-pair">
-            <h2 className="card-label">{t("NOC_PAYMENT_IFSC_CODE_LABEL")} *</h2>
+            <h2 className="card-label">{t("PAYMENT_IFSC_CODE_LABEL")} *</h2>
             <div className="field">
               <div>
                 <div style={{ border: "2px solid #0b0c0c", borderRadius: "2px", display: "flex", alignItems: "center", marginBottom: "24px" }}>
@@ -135,7 +135,7 @@ export const ChequeDetailsComponent = (props) => {
             </div>
           </div>
           <div className="label-field-pair">
-            <h2 className="card-label">{t("NOC_PAYMENT_BANK_NAME_LABEL")}</h2>
+            <h2 className="card-label">{t("PAYMENT_BANK_NAME_LABEL")}</h2>
             <div className="field">
               <div className="field-container">
                 <input
@@ -151,7 +151,7 @@ export const ChequeDetailsComponent = (props) => {
             </div>
           </div>
           <div className="label-field-pair">
-            <h2 className="card-label">{t("NOC_PAYMENT_BANK_BRANCH_LABEL")}</h2>
+            <h2 className="card-label">{t("PAYMENT_BANK_BRANCH_LABEL")}</h2>
             <div className="field">
               <div className="field-container">
                 <input className="employee-card-input" value={bankBranch} type="text" className="employee-card-input" readOnly disabled />

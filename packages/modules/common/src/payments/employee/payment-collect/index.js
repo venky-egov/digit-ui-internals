@@ -131,7 +131,7 @@ export const CollectPayment = (props) => {
 
   const config = [
     {
-      head: t("NOC_PAYMENT_HEAD"),
+      head: t("COMMON_PAYMENT_HEAD"),
       body: [
         ...additionalCharges,
         {
@@ -141,10 +141,10 @@ export const CollectPayment = (props) => {
       ],
     },
     {
-      head: t("NOC_PAYMENT_PAID_BY_HEAD"),
+      head: t("PAYMENT_PAID_BY_HEAD"),
       body: [
         {
-          label: t("NOC_PAYMENT_PAID_BY_LABEL"),
+          label: t("PAYMENT_PAID_BY_LABEL"),
           isMandatory: true,
           type: "custom",
           populators: {
@@ -172,7 +172,7 @@ export const CollectPayment = (props) => {
           },
         },
         {
-          label: t("NOC_PAYMENT_PAYER_NAME_LABEL"),
+          label: t("PAYMENT_PAYER_NAME_LABEL"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -187,7 +187,7 @@ export const CollectPayment = (props) => {
           disable: disablePayerDetails,
         },
         {
-          label: t("NOC_PAYMENT_PAYER_MOB_LABEL"),
+          label: t("PAYMENT_PAYER_MOB_LABEL"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -204,7 +204,7 @@ export const CollectPayment = (props) => {
       ],
     },
     {
-      head: t("NOC_PAYMENT_MODE_HEAD"),
+      head: t("PAYMENT_MODE_HEAD"),
       body: [
         {
           withoutLabel: true,
@@ -248,8 +248,8 @@ export const CollectPayment = (props) => {
     <React.Fragment>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
-        heading={t("NOC_PAYMENT_COLLECT")}
-        label={t("NOC_PAYMENT_COLLECT_LABEL")}
+        heading={t("PAYMENT_COLLECT")}
+        label={t("PAYMENT_COLLECT_LABEL")}
         config={getFormConfig()}
         onSubmit={onSubmit}
         formState={formState}

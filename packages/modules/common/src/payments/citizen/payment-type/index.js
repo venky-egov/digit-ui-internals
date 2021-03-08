@@ -41,7 +41,7 @@ export const SelectPaymentType = (props) => {
           tenantId: tenantId,
         },
         // success
-        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}`,
+        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/CS/payment/success/${businessService}/${consumerCode}`,
         additionalDetails: {
           isWhatsapp: false,
         },
@@ -49,7 +49,7 @@ export const SelectPaymentType = (props) => {
     };
 
     try {
-      const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
+      const data = await Digit.PaymentService.createCSReciept(tenantId, filterData);
       const redirectUrl = data?.Transaction?.redirectUrl;
       window.location = redirectUrl;
     } catch (error) {
@@ -62,7 +62,7 @@ export const SelectPaymentType = (props) => {
     <React.Fragment>
       <BackButton>Back</BackButton>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Header>{t("PAYMENT_HEADER_CITIZEN")}</Header>
+        <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>
           <div
             className="detail"
@@ -76,14 +76,14 @@ export const SelectPaymentType = (props) => {
             }}
           >
             <span className="label">
-              <h2>{t("PAY_FULL_AMOUNT")}</h2>
+              <h2>{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</h2>
             </span>
             <span style={{ fontSize: "20px" }} className="name">
               ₹ {paymentAmount || billDetails.totalAmount}
             </span>
           </div>
 
-          <CardSubHeader>{t("PAY_SELECT_METHOD")}</CardSubHeader>
+          <CardSubHeader>{t("PAYMENT_CS_SELECT_METHOD")}</CardSubHeader>
 
           {menu?.length && (
             <Controller
@@ -93,7 +93,7 @@ export const SelectPaymentType = (props) => {
               render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
             />
           )}
-          <SubmitBar label={t("PAY_BUTTON_LABEL")} submit={true} />
+          <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />
         </Card>
       </form>
     </React.Fragment>

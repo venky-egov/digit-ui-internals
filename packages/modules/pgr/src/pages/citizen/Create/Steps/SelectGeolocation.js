@@ -5,10 +5,10 @@ const SelectGeolocation = ({ onSelect, onSkip, value, t }) => {
   let pincode = "";
   return (
     <LocationSearchCard
-      header={`CS_ADDCOMPLAINT_SELECT_GEOLOCATION_HEADER`}
-      cardText={`CS_ADDCOMPLAINT_SELECT_GEOLOCATION_TEXT`}
-      nextText={"CS_COMMON_NEXT"}
-      skipAndContinueText={"CS_COMMON_SKIP"}
+      header={t("CS_ADDCOMPLAINT_SELECT_GEOLOCATION_HEADER")}
+      cardText={t("CS_ADDCOMPLAINT_SELECT_GEOLOCATION_TEXT")}
+      nextText={t("CS_COMMON_NEXT")}
+      skipAndContinueText={t("CS_COMMON_SKIP")}
       skip={() => onSelect()}
       onSave={() => onSelect({ pincode })}
       onChange={(code) => (pincode = code)}

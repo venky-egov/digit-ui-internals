@@ -45,7 +45,7 @@ export const CollectPayment = (props) => {
   };
 
   const getPaymentModes = () => defaultPaymentModes;
-  const paidByMenu = ["Owner", "Other"];
+  const paidByMenu = [t("COMMON_OWNER"), t("COMMON_OTHER")];
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
 
   const onSubmit = async (data) => {
@@ -135,7 +135,7 @@ export const CollectPayment = (props) => {
       body: [
         ...additionalCharges,
         {
-          label: "Total Amount",
+          label: t("PAY_TOTAL_AMOUNT"),
           populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill.totalAmount}`} </CardSectionHeader>,
         },
       ],

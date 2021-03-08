@@ -131,7 +131,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
   }
 
   function setTostError(errorMsg) {
-    setToastError({ label: errorMsg, error: true, style: { left: "36.80%" } });
+    setToastError({ label: errorMsg, error: true });
   }
 
   function submit(data) {

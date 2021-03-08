@@ -30,7 +30,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
   const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
-  const DSO = Digit.UserService.hasAccess("FSM_DSO");
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
 
   history.listen(() => {
     window?.scrollTo({ top: 0, left: 0, behavior: "smooth" });

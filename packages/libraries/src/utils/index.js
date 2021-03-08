@@ -32,4 +32,45 @@ const routeSubscription = (pathname) => {
   }
 };
 
-export default { pdf: PDFUtil, browser: BrowserUtil, locale, GetParamFromUrl, getStaticMapUrl, detectDsoRoute, routeSubscription };
+const pgrAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const pgrRoles = ["PGR_LME", "PGR-ADMIN", "CSR", "CEMP", "FEMP", "DGRO", "ULB Operator", "GRO", "GO", "RO", "GA"];
+
+  const PGR_ACCESS = userRoles.filter((role) => pgrRoles.includes(role));
+
+  return PGR_ACCESS.length > 0;
+};
+
+const fsmAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const fsmRoles = [
+    "FSM_CREATOR_EMP",
+    "FSM_EDITOR_EMP",
+    "FSM_VIEW_EMP",
+    "FSM_REPORT_VIEWER",
+    "FSM_DASHBOARD_VIEWER",
+    "FSM_ADMIN",
+    "FSM_DSO",
+    "FSM_DRIVER",
+    "FSM_EMP_FSTPO",
+    "FSM_COLLECTOR",
+  ];
+
+  const FSM_ACCESS = userRoles.filter((role) => fsmRoles.includes(role));
+
+  return FSM_ACCESS.length > 0;
+};
+
+export default {
+  pdf: PDFUtil,
+  browser: BrowserUtil,
+  locale,
+  GetParamFromUrl,
+  getStaticMapUrl,
+  detectDsoRoute,
+  routeSubscription,
+  pgrAccess,
+  fsmAccess,
+};

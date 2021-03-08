@@ -68,6 +68,7 @@ export const SuccessfulPayment = (props) => {
         applicationNumber={paymentData?.paymentDetails[0].receiptNumber}
         successful={true}
       />
+      <CardText>{t("CS_PAYMENT_SUCCESSFUL_DESCRIPTION")}</CardText>
       <React.Fragment>
         <div className="primary-label-btn d-grid" onClick={printReciept}>
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -78,7 +79,7 @@ export const SuccessfulPayment = (props) => {
         </div>
       </React.Fragment>
       <StatusTable>
-        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_APPLICATION_NO")} text={applicationNo} />
+        {/* <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_APPLICATION_NO")} text={applicationNo} /> */}
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PAID")} text={amount} />
         <Row

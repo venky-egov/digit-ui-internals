@@ -162,13 +162,13 @@ const Filter = (props) => {
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">{t("FILTER_BY")}:</div>
+            <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
-              {t("CS_COMMON_CLEAR_ALL")}
+              {t("ES_COMMON_CLEAR_ALL")}
             </div>
             {props.type === "desktop" && (
               <span className="clear-search" onClick={clearAll}>
-                {t("CS_COMMON_CLEAR_ALL")}
+                {t("ES_COMMON_CLEAR_ALL")}
               </span>
             )}
             {props.type === "mobile" && (
@@ -206,8 +206,8 @@ const Filter = (props) => {
       <ActionBar>
         {props.type === "mobile" && (
           <ApplyFilterBar
-            labelLink={t("CS_COMMON_CLEAR_ALL")}
-            buttonLink={t("CS_COMMON_FILTER")}
+            labelLink={t("ES_COMMON_CLEAR_ALL")}
+            buttonLink={t("ES_COMMON_FILTER")}
             onClear={clearAll}
             onSubmit={applyFiltersAndClose}
           />

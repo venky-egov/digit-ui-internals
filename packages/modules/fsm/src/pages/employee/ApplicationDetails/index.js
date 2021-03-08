@@ -91,7 +91,6 @@ const ApplicationDetails = (props) => {
 
   useEffect(() => {
     console.log("action selected in case", selectedAction);
-    debugger;
     switch (selectedAction) {
       case "DSO_ACCEPT":
       case "ACCEPT":

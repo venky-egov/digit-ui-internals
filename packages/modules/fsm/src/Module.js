@@ -41,7 +41,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const mobileView = innerWidth <= 640;
-  const DSO = Digit.UserService.hasAccess("FSM_DSO");
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
   return (
     <Switch>
       <div className="ground-container">
@@ -76,13 +76,13 @@ const CitizenApp = ({ path }) => {
         <PrivateRoute
           path={`${path}/inbox`}
           component={() =>
-            Digit.UserService.hasAccess("FSM_DSO") ? <Inbox parentRoute={path} isInbox={true} /> : <Redirect to="/digit-ui/citizen" />
+            Digit.UserService.hasAccess(["FSM_DSO"]) ? <Inbox parentRoute={path} isInbox={true} /> : <Redirect to="/digit-ui/citizen" />
           }
         />
         <PrivateRoute
           path={`${path}/search`}
           component={() =>
-            Digit.UserService.hasAccess("FSM_DSO") ? <Inbox parentRoute={path} isSearch={true} /> : <Redirect to="/digit-ui/citizen" />
+            Digit.UserService.hasAccess(["FSM_DSO"]) ? <Inbox parentRoute={path} isSearch={true} /> : <Redirect to="/digit-ui/citizen" />
           }
         />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplicationCitizen parentRoute={path} />} />

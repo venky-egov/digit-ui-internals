@@ -48,7 +48,7 @@ const MobileInbox = ({
     }
   };
 
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
   const isFstpOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 

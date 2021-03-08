@@ -23,7 +23,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
       type: "text",
       name: "doorNo",
       validation: {
-        pattern: "([A-z0-9À-ž/s]){1,}",
+        pattern: "([A-z0-9À-ž/s ]){1,}",
         title: t("CORE_COMMON_DOOR_INVALID"),
       },
     },

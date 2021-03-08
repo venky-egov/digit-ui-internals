@@ -112,7 +112,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const propertyUsage = data?.subtype;
-    const { height, length, width } = pitDimension;
+    const { height, length, width, diameter } = pitDimension;
 
     const formData = {
       ...applicationData,
@@ -131,6 +131,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         height,
         length,
         width,
+        diameter,
       },
       address: {
         ...applicationData.address,

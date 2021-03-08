@@ -15,7 +15,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const { t } = useTranslation();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [shouldSearch, setShouldSearch] = useState(false);
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -132,19 +132,17 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
         {
           label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
           name: "mobileNumber",
-          maxlength: 10
+          maxlength: 10,
         },
         {
           label: t("ES_SEARCH_FROM_DATE"),
           name: "fromDate",
           type: "date",
-          isRequired: true,
         },
         {
           label: t("ES_SEARCH_TO_DATE"),
           name: "toDate",
           type: "date",
-          isRequired: true,
         },
       ];
     }
@@ -168,7 +166,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
         {
           label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
           name: "mobileNumber",
-          maxlength: 10
+          maxlength: 10,
         },
       ];
     }

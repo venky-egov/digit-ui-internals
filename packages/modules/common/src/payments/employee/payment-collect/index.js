@@ -49,6 +49,7 @@ export const CollectPayment = (props) => {
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
 
   const onSubmit = async (data) => {
+    console.log(data);
     bill.totalAmount = Math.round(bill.totalAmount);
     // console.log(data, bill.totalAmount);
     const recieptRequest = {
@@ -68,7 +69,7 @@ export const CollectPayment = (props) => {
         totalAmountPaid: bill.totalAmount,
       },
     };
-
+    debugger;
     recieptRequest.Payment.paymentMode = data?.paymentMode?.code;
     if (data.chequeDetails) {
       recieptRequest.Payment = { ...recieptRequest.Payment, ...data.chequeDetails };
@@ -85,16 +86,18 @@ export const CollectPayment = (props) => {
         }
       }
 
-      if (data.transactionNumber) {
-        if (data.transactionNumber !== data.reTransanctionNumber) {
-          setToast({ key: "error", action: t("ES_TRANSANCTION_ID_NOT_MATCHED") });
-          setTimeout(() => setToast(null), 5000);
-        }
-      }
-
       recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime();
       recieptRequest.Payment.transactionNumber = "12345678";
     }
+
+    if (data.transactionNumber) {
+      if (data.transactionNumber !== data.reTransanctionNumber) {
+        setToast({ key: "error", action: t("ES_TRANSANCTION_ID_NOT_MATCHED") });
+        setTimeout(() => setToast(null), 5000);
+        return;
+      }
+    }
+
     try {
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();

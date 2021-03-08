@@ -92,10 +92,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
 
   return userType === "employee" ? (
     <LabelFieldPair>
-      <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
-        {t("ES_NEW_APPLICATION_SLUM_NAME")}
-        {config.isMandatory ? " * " : null}
-      </CardLabel>
+      <CardLabel style={{ marginBottom: "revert", width: "30%" }}>{t("ES_NEW_APPLICATION_SLUM_NAME")}</CardLabel>
       <Dropdown t={t} option={slumMenu} style={{ width: "50%" }} optionKey="i18nKey" id="slum" selected={slum} select={selectSlum} />
     </LabelFieldPair>
   ) : (

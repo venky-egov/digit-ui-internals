@@ -6,3 +6,9 @@
     @apply text-link-normal font-bold mt-xs text-heading-s;
   }
 }
+
+@screen dt {
+  .citizen-info-label {
+    margin: 0;
+  }
+}

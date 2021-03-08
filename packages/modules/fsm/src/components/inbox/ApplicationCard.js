@@ -45,7 +45,7 @@ export const ApplicationCard = ({
     if (type) setPopup(true);
   }, [type]);
 
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
   const handlePopupClose = () => {
     setPopup(false);

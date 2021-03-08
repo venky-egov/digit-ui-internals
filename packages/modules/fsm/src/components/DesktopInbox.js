@@ -9,7 +9,7 @@ import SearchApplication from "./inbox/search";
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const GetCell = (value) => <span className="cell-text">{value}</span>;
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 

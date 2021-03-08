@@ -18,7 +18,7 @@ import Status from "./Status";
 const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
   const { t } = useTranslation();
 
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();

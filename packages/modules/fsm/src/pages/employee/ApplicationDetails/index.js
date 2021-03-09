@@ -55,9 +55,6 @@ const ApplicationDetails = (props) => {
     mutate,
   } = Digit.Hooks.fsm.useApplicationActions(tenantId);
 
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
-  const vehicle = vehicleMenu?.find((vehicle) => applicationData?.vehicleType === vehicle?.code);
-
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,

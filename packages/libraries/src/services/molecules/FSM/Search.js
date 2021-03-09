@@ -74,6 +74,7 @@ export const Search = {
         }
       }
     }
+    const slumName = slumLabel ? slumLabel.i18nKey : "N/A";
 
     const state = tenantId.split(".")[0];
     const vehicleMenu = await MdmsService.getVehicleType(state, "Vehicle", "VehicleType");
@@ -84,7 +85,10 @@ export const Search = {
 
     const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
     // console.log("find demand detail here", demandDetails)
-    const amountPerTrip = response?.additionalDetails && response?.additionalDetails.tripAmount ? response.additionalDetails.tripAmount : "N/A";
+    const amountPerTrip =
+      response?.additionalDetails && response?.additionalDetails.tripAmount
+        ? response.additionalDetails.tripAmount
+        : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
     // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
     const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
 
@@ -122,7 +126,7 @@ export const Search = {
           { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_STREET_NAME_LABEL", value: response?.address?.street },
           { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_DOOR_NO_LABEL", value: response?.address?.doorNo },
           { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL", value: response?.address?.landmark },
-          { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL", value: slumLabel ? slumLabel.i18nKey : "N/A" },
+          { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL", value: slumName },
           {
             title: "ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION",
             value:
@@ -194,7 +198,11 @@ export const Search = {
       return detail;
     });
 
-    return { tenantId: response.tenantId, applicationDetails: citizenResponse, pdfData: response };
+    return {
+      tenantId: response.tenantId,
+      applicationDetails: citizenResponse,
+      pdfData: { ...response, amountPerTrip, totalAmount, vehicleMake, vehicleCapacity, slumName },
+    };
   },
 
   allVehicles: (tenantId, filters) => {

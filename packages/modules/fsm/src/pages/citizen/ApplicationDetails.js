@@ -20,14 +20,6 @@ const ApplicationDetails = () => {
     "CITIZEN"
   );
 
-  const state = tenantId?.split(".")[0];
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
-  const vehicle = vehicleMenu?.find((vehicle) => application?.pdfData?.vehicleType === vehicle?.code);
-  const pdfVehicleType = getVehicleType(vehicle, t);
-  const localityCode = application?.pdfData?.address?.locality?.code;
-  const slumCode = application?.pdfData?.address?.slumName;
-  const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
-
   const coreData = Digit.Hooks.useCoreData();
 
   useEffect(() => {
@@ -45,7 +37,7 @@ const ApplicationDetails = () => {
   const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application?.tenantId);
 
   const handleDownloadPdf = async () => {
-    const data = getPDFData({ ...application?.pdfData, pdfVehicleType, slum }, tenantInfo, t);
+    const data = getPDFData({ ...application?.pdfData }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
 

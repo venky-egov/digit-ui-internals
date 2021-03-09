@@ -1,7 +1,38 @@
-import { getPropertyTypeLocale, getPropertySubtypeLocale } from "./utils";
+import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "./utils";
 
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
+
+const getSlumName = (application, t) => {
+  if (application?.slumName) {
+    return t(application.slumName);
+  }
+  return application?.slum?.i18nKey ? t(`${application?.slum?.i18nKey}`) : "N/A";
+};
+
+const getApplicationVehicleType = (application, t) => {
+  if (application?.vehicleMake && application?.vehicleCapacity) {
+    return getVehicleType({ i18nKey: application?.vehicleMake, capacity: application?.vehicleCapacity }, t);
+  }
+  return application?.pdfVehicleType ? application?.pdfVehicleType : "N/A";
+};
+
+const getAmountPerTrip = (application) => {
+  if (application?.amountPerTrip) {
+    return `₹ ${application?.amountPerTrip}`;
+  }
+  return application?.additionalDetails?.tripAmount
+    ? application?.additionalDetails?.tripAmount !== 0 && `₹ ${application?.additionalDetails?.tripAmount}`
+    : "N/A";
+};
+const getTotalAmount = (application) => {
+  if (application?.totalAmount) {
+    return `₹ ${application?.totalAmount}`;
+  }
+  return application?.additionalDetails?.tripAmount && application?.additionalDetails?.tripAmount !== 0
+    ? `₹ ${application?.additionalDetails?.tripAmount * application?.noOfTrips}`
+    : "N/A";
+};
 
 const getPDFData = (application, tenantInfo, t) => {
   return {
@@ -22,40 +53,40 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_APPLICATION_DETAILS_APPLICATION_CHANNEL"),
-            value: t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${application?.source}`) || "NA",
+            value: t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${application?.source}`) || "N/A",
           },
         ],
       },
       {
         title: t("CS_APPLICATION_DETAILS_APPLICANT_DETAILS"),
         values: [
-          { title: t("CS_APPLICATION_DETAILS_APPLICANT_NAME"), value: application?.citizen?.name || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_APPLICANT_MOBILE"), value: application?.citizen?.mobileNumber || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_APPLICANT_NAME"), value: application?.citizen?.name || "N/A" },
+          { title: t("CS_APPLICATION_DETAILS_APPLICANT_MOBILE"), value: application?.citizen?.mobileNumber || "N/A" },
         ],
       },
       {
         title: t("CS_APPLICATION_DETAILS_PROPERTY_DETAILS"),
         values: [
-          { title: t("CS_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(application?.propertyUsage)) || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_PROPERTY_SUB_TYPE"), value: t(getPropertySubtypeLocale(application?.propertyUsage)) || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_PROPERTY_TYPE"), value: t(getPropertyTypeLocale(application?.propertyUsage)) || "N/A" },
+          { title: t("CS_APPLICATION_DETAILS_PROPERTY_SUB_TYPE"), value: t(getPropertySubtypeLocale(application?.propertyUsage)) || "N/A" },
         ],
       },
       {
         title: t("CS_APPLICATION_DETAILS_PROPERTY_LOCATION_DETAILS"),
         values: [
-          { title: t("CS_APPLICATION_DETAILS_PINCODE"), value: application?.address?.pincode || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_CITY"), value: application?.address?.city || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_PINCODE"), value: application?.address?.pincode || "N/A" },
+          { title: t("CS_APPLICATION_DETAILS_CITY"), value: application?.address?.city || "N/A" },
           {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
-            value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${application?.address?.locality?.code}`) || "NA",
+            value: t(`${application?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${application?.address?.locality?.code}`) || "N/A",
           },
           {
             title: t("CS_APPLICATION_DETAILS_SLUM_NAME"),
-            value: application?.slum?.i18nKey ? t(`${application?.slum?.i18nKey}`) : "NA",
+            value: getSlumName(application, t),
           },
-          { title: t("CS_APPLICATION_DETAILS_STREET"), value: application?.address?.street || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_DOOR_NO"), value: application?.address?.doorNo || "NA" },
-          { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application?.address?.landmark || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_STREET"), value: application?.address?.street || "N/A" },
+          { title: t("CS_APPLICATION_DETAILS_DOOR_NO"), value: application?.address?.doorNo || "N/A" },
+          { title: t("CS_APPLICATION_DETAILS_LANDMARK"), value: application?.address?.landmark || "N/A" },
         ],
       },
       {
@@ -63,7 +94,7 @@ const getPDFData = (application, tenantInfo, t) => {
         values: [
           {
             title: t("CS_APPLICATION_DETAILS_PIT_TYPE"),
-            value: application?.sanitationtype ? t("PITTYPE_MASTERS_" + application?.sanitationtype) : "NA",
+            value: application?.sanitationtype ? t("PITTYPE_MASTERS_" + application?.sanitationtype) : "N/A",
           },
           {
             title: t("CS_APPLICATION_DETAILS_DIMENSION"),
@@ -77,25 +108,20 @@ const getPDFData = (application, tenantInfo, t) => {
                   : `${application?.pitDetail?.diameter}m * ${application?.pitDetail?.height}m                                  (${t(
                       "CS_COMMON_DIAMETER"
                     )} x ${t("CS_COMMON_DEPTH")})`
-                : "NA",
+                : "N/A",
           },
           {
             title: t("ES_FSM_ACTION_VEHICLE_TYPE"),
-            value: application?.pdfVehicleType ? application?.pdfVehicleType : "NA",
+            value: getApplicationVehicleType(application, t),
           },
-          { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "NA" },
+          { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "N/A" },
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),
-            value: application?.additionalDetails?.tripAmount
-              ? application?.additionalDetails?.tripAmount !== 0 && `₹ ${application?.additionalDetails?.tripAmount}`
-              : "NA",
+            value: getAmountPerTrip(application),
           },
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_DUE"),
-            value:
-              application?.additionalDetails?.tripAmount && application?.additionalDetails?.tripAmount !== 0
-                ? `₹ ${application?.additionalDetails?.tripAmount * application?.noOfTrips}`
-                : "NA",
+            value: getTotalAmount(application),
           },
         ],
       },

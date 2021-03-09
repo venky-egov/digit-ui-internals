@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 
 const MenuItem = ({ item }) => {
   let itemComponent;
@@ -7,12 +8,27 @@ const MenuItem = ({ item }) => {
   } else {
     itemComponent = item.text;
   }
-  return (
+  const Item = () => (
     <span className="menu-item" {...item.populators}>
       {item?.icon && item.icon}
       <div className="menu-label">{itemComponent}</div>
     </span>
   );
+  if (item.type === "external-link") {
+    return (
+      <a href={item.link}>
+        <Item />
+      </a>
+    );
+  }
+  if (item.type === "link") {
+    return (
+      <Link to={item.link}>
+        <Item />
+      </Link>
+    );
+  }
+  return <Item />;
 };
 
 const NavBar = ({ open, profileItem, menuItems, onClose }) => {
@@ -59,24 +75,8 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
           {profileItem}
           <div className="drawer-list">
             {menuItems.map((item, index) => (
-              <div
-                key={index}
-                // style={{
-                //   marginLeft: 0,
-                //   padding: 0,
-                //   position: "relative",
-                //   display: "flex",
-                //   alignItems: "center",
-                //   justifyContent: "flex-start"
-                // }}
-              >
-                {item.type === "external-link" ? (
-                  <a href={item.link}>
-                    <MenuItem item={item} />
-                  </a>
-                ) : (
-                  <MenuItem item={item} />
-                )}
+              <div key={index}>
+                <MenuItem item={item} />
               </div>
             ))}
           </div>

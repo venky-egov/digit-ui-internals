@@ -4,9 +4,9 @@ import ChangeLanguage from "../components/ChangeLanguage";
 
 const SideBarMenu = (t) => [
   {
-    type: "external-link",
+    type: "link",
     text: t("COMMON_BOTTOM_NAVIGATION_HOME"),
-    link: "/citizen/",
+    link: "/digit-ui/citizen/",
     icon: <HomeIcon className="icon" />,
   },
   {

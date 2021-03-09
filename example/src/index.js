@@ -33,6 +33,7 @@ import QA_FSM_COLLECTOR from "./userInfo/QACOLL.json";
 import QA_FSM_DSO from "./userInfo/QADSO.json";
 import QA_FSM_FSTP from "./userInfo/QAFSTPO.json";
 import QA_CECOLL from "./userInfo/qa-cecoll.json";
+import QACREDITOR from "./userInfo/QACREDITOR.json";
 
 import QAFSTP from "./userInfo/fstp.json";
 import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
@@ -65,6 +66,7 @@ const userInfo = {
   QA_FSM_EDITOR,
   QA_FSM_FSTP,
   QA_CECOLL,
+  QACREDITOR,
 };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
@@ -87,11 +89,11 @@ const initTokens = (stateCode) => {
   window.Digit.SessionStorage.set("user_type", userTypeInfo);
   window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-  // if (userType !== "CITIZEN") {
-  window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
-  // } else {
-  //   if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
-  // }
+  if (userType !== "CITIZEN") {
+    window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
+  } else {
+    if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+  }
 
   window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
   window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);

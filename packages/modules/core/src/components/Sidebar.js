@@ -50,7 +50,14 @@ export const CitizenSidebar = ({ isOpen, isMobile, toggleSidebar, onLogout }) =>
   const { stateInfo } = useSelector((state) => state.common);
   const user = Digit.UserService.getUser();
   const { t } = useTranslation();
-  let menuItems = [...SideBarMenu(t)];
+
+  const closeSidebar = () => {
+    console.log();
+    Digit.clikOusideFired = true;
+    toggleSidebar(false);
+  };
+
+  let menuItems = [...SideBarMenu(t, closeSidebar)];
   let profileItem;
   if (user && user.access_token) {
     profileItem = <Profile info={user.info} stateName={stateInfo.name} />;
@@ -67,15 +74,7 @@ export const CitizenSidebar = ({ isOpen, isMobile, toggleSidebar, onLogout }) =>
   }
   return (
     <div>
-      <NavBar
-        open={isOpen}
-        profileItem={profileItem}
-        menuItems={menuItems}
-        onClose={() => {
-          Digit.clikOusideFired = true;
-          toggleSidebar(false);
-        }}
-      />
+      <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} />
     </div>
   );
 };

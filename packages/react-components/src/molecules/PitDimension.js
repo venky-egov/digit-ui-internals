@@ -25,29 +25,29 @@ const PitDimension = ({ sanitationType, t, size = {}, handleChange, disable = fa
       </div>
     </div>
   ) : (
-    <div className="inputWrapper">
-      <div>
-        <DimentionInput name="length" value={size["length"] || ""} onChange={handleChange} disable={disable} />
-        <CardText style={{ textAlign: "center" }} disable={disable}>
-          {t("CS_FILE_PROPERTY_LENGTH")}
-        </CardText>
+      <div className="inputWrapper">
+        <div>
+          <DimentionInput name="length" value={size["length"] || ""} onChange={handleChange} disable={disable} />
+          <CardText style={{ textAlign: "center" }} disable={disable}>
+            {t("CS_FILE_PROPERTY_LENGTH")}
+          </CardText>
+        </div>
+        <span>x</span>
+        <div>
+          <DimentionInput name="width" value={size["width"] || ""} onChange={handleChange} disable={disable} />
+          <CardText style={{ textAlign: "center" }} disable={disable}>
+            {t("CS_FILE_PROPERTY_WIDTH")}
+          </CardText>
+        </div>
+        <span>x</span>
+        <div>
+          <DimentionInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} />
+          <CardText style={{ textAlign: "center" }} disable={disable}>
+            {t("CS_FILE_PROPERTY_HEIGHT")}
+          </CardText>
+        </div>
       </div>
-      <span>x</span>
-      <div>
-        <DimentionInput name="width" value={size["width"] || ""} onChange={handleChange} disable={disable} />
-        <CardText style={{ textAlign: "center" }} disable={disable}>
-          {t("CS_FILE_PROPERTY_WIDTH")}
-        </CardText>
-      </div>
-      <span>x</span>
-      <div>
-        <DimentionInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} />
-        <CardText style={{ textAlign: "center" }} disable={disable}>
-          {t("CS_FILE_PROPERTY_HEIGHT")}
-        </CardText>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default PitDimension;

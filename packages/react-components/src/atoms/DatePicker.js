@@ -6,12 +6,15 @@ const DatePicker = (props) => {
   const dateInp = useRef();
 
   function defaultFormatFunc(date) {
-    const operationDate = typeof date === "string" ? new Date(date) : date;
-    const years = operationDate?.getFullYear();
-    const month = operationDate?.getMonth() + 1;
-    const _date = operationDate?.getDate() + 1;
-    // console.log("find current date", _date, month, years)
-    return _date && month && years ? `${_date}/${month}/${years}` : null;
+    if (date) {
+      const operationDate = typeof date === "string" ? new Date(date) : date;
+      const years = operationDate?.getFullYear();
+      const month = operationDate?.getMonth() + 1;
+      const _date = operationDate?.getDate() + 1;
+      // console.log("find current date", _date, month, years)
+      return _date && month && years ? `${_date}/${month}/${years}` : null;
+    }
+    return null;
   }
 
   const getDatePrint = () => props?.formattingFn?.(props?.date) || defaultFormatFunc(props?.date);

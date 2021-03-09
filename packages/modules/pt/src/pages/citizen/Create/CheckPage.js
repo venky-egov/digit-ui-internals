@@ -67,27 +67,37 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
         />
       </StatusTable>
-      <CardSubHeader>{t("PT_OWNER_SUB_HEADER")}</CardSubHeader>
-      <StatusTable>
-        <Row
-          label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
-          text={`${t(owners && Array.isArray(owners) && owners.length > 0 ? owners[0]?.name : "NA")}`}
-          actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
-        />
-        <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(owners[0]?.gender?.code)}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
-        <Row
-          label={t("PT_GUARDIAN_SUB_HEADER")}
-          text={`${t(owners[0]?.fatherOrHusbandName)}`}
-          actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
-        />
-        <Row
-          label={t("Owner address")}
-          text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
+      <div>
+        {owners.map((owners, index) => (
+          <div key={index}>
+            <CardSubHeader>
+              {t("PT_OWNER_SUB_HEADER")} - {index + 1}
+            </CardSubHeader>
+            <StatusTable>
+              <Row
+                label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
+                //text={`${t(owners && Array.isArray(owners) && owners.length > 0 ? owners[0]?.name : "NA")}`}
+                text={`${t(owners?.name)}`}
+                actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+              />
+              <Row
+                label={t("PT_COMMON_GENDER_LABEL")}
+                text={`${t(owners?.gender?.code)}`}
+                actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+              />
+              <Row label={t("Gender")} text={`${t(owners?.fatherOrHusbandName)}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
+              <Row
+                label={t("Owner address")}
+                /* text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
             address?.city.code
-          )}`}
-          actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
-        />
-      </StatusTable>
+          )}`} */
+                text={`${t(owners?.permanentAddress)}`}
+                actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+              />
+            </StatusTable>
+          </div>
+        ))}
+      </div>
       <CardSubHeader>{t("PT_ASSESMENT_INFO_SUB_HEADER")}</CardSubHeader>
       <StatusTable>
         <Row label={t("Residental Property")} text="yes" actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />

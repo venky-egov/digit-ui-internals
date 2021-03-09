@@ -43,7 +43,7 @@ export const configReassignDSO = ({
         },
         {
           label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
-          isMandatory: true,
+          isMandatory: vehicle ? false : true,
           type: "dropdown",
           populators: (
             <Dropdown
@@ -68,7 +68,6 @@ export const configReassignDSO = ({
         },
         {
           label: t("ES_FSM_ACTION_VEHICLE_CAPACITY_IN_LTRS"),
-          isMandatory: true,
           type: "text",
           populators: {
             name: "capacity",

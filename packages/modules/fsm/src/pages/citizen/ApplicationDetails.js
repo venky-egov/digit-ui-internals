@@ -60,9 +60,9 @@ const ApplicationDetails = () => {
           onClick={handleDownloadPdf}
         />
 
-        {application?.applicationDetails?.map(({ title, value, child, caption }, index) => {
+        {application?.applicationDetails?.map(({ title, value, child, caption, map }, index) => {
           return (
-            <KeyNote key={index} keyValue={t(title)} note={t(value) || "N/A"} caption={t(caption)}>
+            <KeyNote key={index} keyValue={t(title)} note={t(value) || ((!map || !child) && "N/A")} caption={t(caption)}>
               {child && typeof child === "object" ? React.createElement(child.element, { ...child }) : child}
             </KeyNote>
           );

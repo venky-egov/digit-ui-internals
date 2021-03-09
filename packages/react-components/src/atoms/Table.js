@@ -62,6 +62,7 @@ const Table = ({
       manualSortBy: true,
       autoResetPage: false,
       autoResetSortBy: false,
+      disableSortRemove: true,
       useControlledState: (state) => {
         return React.useMemo(() => ({
           ...state,

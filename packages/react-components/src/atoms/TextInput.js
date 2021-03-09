@@ -45,6 +45,7 @@ const TextInput = (props) => {
             min={props.min}
             readOnly={props.disable}
             title={props.title}
+            step={props.step}
           />
         ) : (
           <input
@@ -73,6 +74,7 @@ const TextInput = (props) => {
             min={props.min}
             readOnly={props.disable}
             title={props.title}
+            step={props.step}
           />
         )}
         {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} data={data} />}

@@ -7,14 +7,30 @@ const PitDimension = ({ sanitationType, t, size = {}, handleChange, disable = fa
   return sanitationType?.dimension === "dd" ? (
     <div className="inputWrapper">
       <div>
-        <TextInput name="diameter" value={size["diameter"] || ""} onChange={handleChange} disable={disable} pattern="[0-9]{1,2}" min="01" max="99" />
+        <TextInput
+          name="diameter"
+          value={size["diameter"] || ""}
+          onChange={handleChange}
+          disable={disable}
+          min="0"
+          max="100"
+          pattern="^\d*(\.\d{0,1})?$"
+        />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_DIAMETER")}
         </CardText>
       </div>
       <span>x</span>
       <div>
-        <TextInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} pattern="[0-9]{1,2}" min="01" max="99" />
+        <TextInput
+          name="height"
+          value={size["height"] || ""}
+          onChange={handleChange}
+          disable={disable}
+          min="0"
+          max="100"
+          pattern="^\d*(\.\d{0,1})?$"
+        />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_HEIGHT")}
         </CardText>
@@ -23,21 +39,37 @@ const PitDimension = ({ sanitationType, t, size = {}, handleChange, disable = fa
   ) : (
     <div className="inputWrapper">
       <div>
-        <TextInput name="length" value={size["length"] || ""} onChange={handleChange} disable={disable} pattern="[0-9]{1,2}" min="01" max="99" />
+        <TextInput
+          name="length"
+          value={size["length"] || ""}
+          onChange={handleChange}
+          disable={disable}
+          min="0"
+          max="100"
+          pattern="^\d*(\.\d{0,1})?$"
+        />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_LENGTH")}
         </CardText>
       </div>
       <span>x</span>
       <div>
-        <TextInput name="width" value={size["width"] || ""} onChange={handleChange} disable={disable} pattern="[0-9]{1,2}" min="01" max="99" />
+        <TextInput name="width" value={size["width"] || ""} onChange={handleChange} disable={disable} min="0" max="100" pattern="^\d*(\.\d{0,1})?$" />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_WIDTH")}
         </CardText>
       </div>
       <span>x</span>
       <div>
-        <TextInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} pattern="[0-9]{1,2}" min="01" max="99" />
+        <TextInput
+          name="height"
+          value={size["height"] || ""}
+          onChange={handleChange}
+          disable={disable}
+          min="0"
+          max="100"
+          pattern="^\d*(\.\d{0,1})?$"
+        />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_HEIGHT")}
         </CardText>

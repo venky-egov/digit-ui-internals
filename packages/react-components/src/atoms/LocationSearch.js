@@ -214,129 +214,156 @@ const mapStyles = [
   },
 ];
 
+const setLocationText = (location, onChange) => {
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode(
+    {
+      location,
+    },
+    function (results, status) {
+      if (status === "OK") {
+        if (results[0]) {
+          let pincode = GetPinCode(results[0]);
+          const infoWindowContent = document.getElementById("pac-input");
+          infoWindowContent.value = getName(results[0]);
+          if (onChange) {
+            onChange(pincode, { longitude: location.lng, latitude: location.lat });
+          }
+        } else {
+          console.log("No results found");
+        }
+      } else {
+        console.log("Geocoder failed due to: " + status);
+      }
+    }
+  );
+};
+
+const onMarkerDragged = (marker, onChange) => {
+  if (!marker) return;
+  const { latLng } = marker;
+  const currLat = latLng.lat();
+  const currLang = latLng.lng();
+  const location = {
+    lat: currLat,
+    lng: currLang,
+  };
+  setLocationText(location, onChange);
+};
+
+const initAutocomplete = (onChange, position) => {
+  const map = new window.google.maps.Map(document.getElementById("map"), {
+    center: position,
+    zoom: 15,
+    mapTypeId: "roadmap",
+    styles: mapStyles,
+  }); // Create the search box and link it to the UI element.
+
+  const input = document.getElementById("pac-input");
+  updateDefaultBounds(position);
+  const options = {
+    bounds: defaultBounds,
+    componentRestrictions: { country: "in" },
+    fields: ["address_components", "geometry", "icon", "name"],
+    origin: position,
+    strictBounds: false,
+    types: ["address"],
+  };
+  const searchBox = new window.google.maps.places.Autocomplete(input, options);
+  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); // Bias the SearchBox results towards current map's viewport.
+
+  map.addListener("bounds_changed", () => {
+    searchBox.setBounds(map.getBounds());
+  });
+
+  let markers = [
+    new window.google.maps.Marker({
+      map,
+      title: "a",
+      position: position,
+      draggable: true,
+      clickable: true,
+    }),
+  ];
+
+  setLocationText(position);
+
+  // Listen for the event fired when the user selects a prediction and retrieve
+  // more details for that place.
+  markers[0].addListener("dragend", (marker) => onMarkerDragged(marker, onChange));
+  searchBox.addListener("place_changed", () => {
+    const place = searchBox.getPlace();
+
+    if (!place) {
+      return;
+    } // Clear out the old markers.
+    let pincode = GetPinCode(place);
+    if (pincode) {
+      const { geometry } = place;
+      const geoLocation = {
+        latitude: geometry.location.lat(),
+        longitude: geometry.location.lng(),
+      };
+      onChange(pincode, geoLocation);
+    }
+    markers.forEach((marker) => {
+      marker.setMap(null);
+    });
+    markers = []; // For each place, get the icon, name and location.
+
+    const bounds = new window.google.maps.LatLngBounds();
+    if (!place.geometry) {
+      console.log("Returned place contains no geometry");
+      return;
+    }
+
+    markers.push(
+      new window.google.maps.Marker({
+        map,
+        title: place.name,
+        position: place.geometry.location,
+        draggable: true,
+        clickable: true,
+      })
+    );
+    markers[0].addListener("dragend", (marker) => onMarkerDragged(marker, onChange));
+    if (place.geometry.viewport) {
+      // Only geocodes have viewport.
+      bounds.union(place.geometry.viewport);
+    } else {
+      bounds.extend(place.geometry.location);
+    }
+
+    map.fitBounds(bounds);
+  });
+};
+
 const LocationSearch = (props) => {
   useEffect(() => {
-    //AIzaSyCvzuo69lmgwc2XoqhACHcQhrGLALBUZAU
-
     async function mapScriptCall() {
-      const initAutocomplete = function () {
+      const getLatLng = (position) => {
+        initAutocomplete(props.onChange, { lat: position.coords.latitude, lng: position.coords.longitude });
+      };
+      const getLatLngError = (error) => {
+        console.log("geo location error", error);
         const defaultLatLong = {
           lat: 31.6160638,
           lng: 74.8978579,
         };
-        const map = new window.google.maps.Map(document.getElementById("map"), {
-          center: defaultLatLong,
-          zoom: 15,
-          mapTypeId: "roadmap",
-          styles: mapStyles,
-        }); // Create the search box and link it to the UI element.
-
-        const input = document.getElementById("pac-input");
-        updateDefaultBounds(defaultLatLong);
-        const options = {
-          bounds: defaultBounds,
-          componentRestrictions: { country: "in" },
-          fields: ["address_components", "geometry", "icon", "name"],
-          origin: defaultLatLong,
-          strictBounds: false,
-          types: ["address"],
-        };
-        const searchBox = new window.google.maps.places.Autocomplete(input, options);
-        // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); // Bias the SearchBox results towards current map's viewport.
-
-        map.addListener("bounds_changed", () => {
-          searchBox.setBounds(map.getBounds());
-        });
-
-        let markers = [
-          new window.google.maps.Marker({
-            map,
-            title: "a",
-            position: defaultLatLong,
-            draggable: true,
-            clickable: true,
-          }),
-        ]; // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-        markers[0].addListener("dragend", onMarkerDragged);
-        searchBox.addListener("place_changed", () => {
-          const place = searchBox.getPlace();
-
-          if (!place) {
-            return;
-          } // Clear out the old markers.
-          let pincode = GetPinCode(place);
-          if (pincode) {
-            const { geometry } = place;
-            const geoLocation = {
-              latitude: geometry.location.lat(),
-              longitude: geometry.location.lng(),
-            };
-            props.onChange(pincode, geoLocation);
-          }
-          markers.forEach((marker) => {
-            marker.setMap(null);
-          });
-          markers = []; // For each place, get the icon, name and location.
-
-          const bounds = new window.google.maps.LatLngBounds();
-          if (!place.geometry) {
-            console.log("Returned place contains no geometry");
-            return;
-          }
-
-          markers.push(
-            new window.google.maps.Marker({
-              map,
-              title: place.name,
-              position: place.geometry.location,
-              draggable: true,
-              clickable: true,
-            })
-          );
-          markers[0].addListener("dragend", onMarkerDragged);
-          if (place.geometry.viewport) {
-            // Only geocodes have viewport.
-            bounds.union(place.geometry.viewport);
-          } else {
-            bounds.extend(place.geometry.location);
-          }
-
-          map.fitBounds(bounds);
-        });
-      };
-      const onMarkerDragged = (marker) => {
-        if (!marker) return;
-        const { latLng } = marker;
-        const currLat = latLng.lat();
-        const currLang = latLng.lng();
-        const location = {
-          lat: currLat,
-          lng: currLang,
-        };
-        const geocoder = new google.maps.Geocoder();
-        geocoder.geocode(
-          {
-            location,
-          },
-          function (results, status) {
-            if (status === "OK") {
-              if (results[0]) {
-                let pincode = GetPinCode(results[0]);
-                props.onChange(pincode, { longitude: location.lng, latitude: location.lat });
-                const infoWindowContent = document.getElementById("pac-input");
-                infoWindowContent.value = getName(results[0]);
-              } else {
-                console.log("No results found");
-              }
-            } else {
-              console.log("Geocoder failed due to: " + status);
-            }
-          }
-        );
+        initAutocomplete(props.onChange, defaultLatLong);
       };
 
-      loadGoogleMaps(initAutocomplete);
+      const initMaps = () => {
+        if (props.position?.latitude && props.position?.longitude) {
+          getLatLng({ coords: props.position });
+        } else if (navigator?.geoLocation) {
+          navigator.geolocation.getCurrentPosition(getLatLng, getLatLngError);
+        } else {
+          getLatLngError();
+        }
+      };
+
+      loadGoogleMaps(initMaps);
     }
     mapScriptCall();
   }, []);

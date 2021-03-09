@@ -12,7 +12,7 @@ export const SelectPaymentType = (props) => {
   const { path: currentPath } = useRouteMatch();
   const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = state.tenantId || Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
   const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
 
@@ -62,7 +62,7 @@ export const SelectPaymentType = (props) => {
     <React.Fragment>
       <BackButton>Back</BackButton>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Header>Payment</Header>
+        <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>
           <div
             className="detail"
@@ -76,14 +76,14 @@ export const SelectPaymentType = (props) => {
             }}
           >
             <span className="label">
-              <h2>Total Amount Due</h2>
+              <h2>{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</h2>
             </span>
             <span style={{ fontSize: "20px" }} className="name">
               ₹ {paymentAmount || billDetails.totalAmount}
             </span>
           </div>
 
-          <CardSubHeader>Select Payment Method</CardSubHeader>
+          <CardSubHeader>{t("PAYMENT_CS_SELECT_METHOD")}</CardSubHeader>
 
           {menu?.length && (
             <Controller
@@ -93,7 +93,7 @@ export const SelectPaymentType = (props) => {
               render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
             />
           )}
-          <SubmitBar label="Pay" submit={true} />
+          <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />
         </Card>
       </form>
     </React.Fragment>

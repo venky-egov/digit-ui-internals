@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 
 import { AppModules } from "./AppModules";
 import { CitizenSidebar } from "./Sidebar";
+import { useLocation } from "react-router-dom";
 
 const TextToImg = (props) => (
   <span className="user-img-txt" onClick={props.toggleMenu} title={props.name}>
@@ -19,6 +20,9 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
   const history = useHistory();
+  const { pathname } = useLocation();
+  const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
+
   const [isSidebarOpen, toggleSidebar] = useState(false);
   const [displayMenu, toggleMenu] = useState(false);
   const innerWidth = window.innerWidth;
@@ -26,7 +30,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userDetails = Digit.UserService.getUser();
   const { stateInfo } = useSelector((state) => state.common);
   const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
-  const DSO = Digit.UserService.hasAccess("FSM_DSO");
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
 
   history.listen(() => {
     window?.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -50,41 +54,45 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   return (
     <Switch>
       <Route path="/digit-ui/employee">
-        <TopBarSideBar
-          t={t}
-          stateInfo={stateInfo}
-          toggleSidebar={toggleSidebar}
-          isSidebarOpen={isSidebarOpen}
-          handleLogout={handleLogout}
-          userDetails={userDetails}
-          CITIZEN={CITIZEN}
-          cityDetails={cityDetails}
-          mobileView={mobileView}
-          userOptions={userOptions}
-          handleUserDropdownSelection={handleUserDropdownSelection}
-          logoUrl={logoUrl}
-        />
-        <div className={`main ${DSO ? "m-auto" : ""}`} style={{ ...sideBarOpenStyles }}>
-          <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
+        <div className="employee">
+          <TopBarSideBar
+            t={t}
+            stateInfo={stateInfo}
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            handleLogout={handleLogout}
+            userDetails={userDetails}
+            CITIZEN={CITIZEN}
+            cityDetails={cityDetails}
+            mobileView={mobileView}
+            userOptions={userOptions}
+            handleUserDropdownSelection={handleUserDropdownSelection}
+            logoUrl={logoUrl}
+          />
+          <div className={`main ${DSO ? "m-auto" : ""}`} style={{ ...sideBarOpenStyles }}>
+            <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
+          </div>
         </div>
       </Route>
       <Route path="/digit-ui/citizen">
-        <TopBarSideBar
-          t={t}
-          stateInfo={stateInfo}
-          toggleSidebar={toggleSidebar}
-          isSidebarOpen={isSidebarOpen}
-          handleLogout={handleLogout}
-          userDetails={userDetails}
-          CITIZEN={CITIZEN}
-          cityDetails={cityDetails}
-          mobileView={mobileView}
-          userOptions={userOptions}
-          handleUserDropdownSelection={handleUserDropdownSelection}
-          logoUrl={logoUrl}
-        />
-        <div className="main center-container">
-          <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
+        <div className={classname}>
+          <TopBarSideBar
+            t={t}
+            stateInfo={stateInfo}
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            handleLogout={handleLogout}
+            userDetails={userDetails}
+            CITIZEN={CITIZEN}
+            cityDetails={cityDetails}
+            mobileView={mobileView}
+            userOptions={userOptions}
+            handleUserDropdownSelection={handleUserDropdownSelection}
+            logoUrl={logoUrl}
+          />
+          <div className={`main center-container`}>
+            <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
+          </div>
         </div>
       </Route>
       <Route>

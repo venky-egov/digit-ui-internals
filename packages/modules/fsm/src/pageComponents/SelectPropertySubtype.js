@@ -19,10 +19,14 @@ const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
   useEffect(() => {
     if (!propertySubtypesDataLoading && propertySubtypesData) {
       const preFillSubtype = propertySubtypesData?.filter((subType) => subType.code === (formData?.subtype?.code || formData?.subtype))[0];
-      // console.log("find pre fill subtype here", preFillSubtype)
-      setSubtype(preFillSubtype);
+      // console.log("find pre fill subtype here", propertyType, preFillSubtype)
+      if (preFillSubtype?.code.split(".")[0] === propertyType) {
+        setSubtype(preFillSubtype);
+      } else {
+        setSubtype(null);
+      }
     }
-  }, [formData?.subtype, propertySubtypesData]);
+  }, [propertyType, formData?.subtype, propertySubtypesData]);
 
   useEffect(() => {
     // console.log("find proptype here", propertyType, propertySubtypesDataLoading, propertySubtypesData);

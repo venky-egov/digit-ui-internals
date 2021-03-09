@@ -21,6 +21,7 @@ const MobileInbox = ({
   searchParams,
   searchFields,
   linkPrefix,
+  parentRoute,
   removeParam,
   sortParams,
 }) => {
@@ -47,7 +48,7 @@ const MobileInbox = ({
     }
   };
 
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
   const isFstpOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
@@ -62,7 +63,7 @@ const MobileInbox = ({
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {!isFstpOperator && !isSearch && <ApplicationLinks isMobile={true} />}
+          {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />}
           <ApplicationCard
             t={t}
             data={isFstpOperator ? fstpOperatorData : getData()}

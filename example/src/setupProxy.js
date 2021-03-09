@@ -1,6 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_API || "https://dev.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
   changeOrigin: true,
 });

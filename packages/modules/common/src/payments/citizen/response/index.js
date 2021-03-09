@@ -7,13 +7,12 @@ import { useQueryClient } from "react-query";
 export const SuccessfulPayment = (props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { eg_pg_txnid: egId, pc_Amount: amount } = Digit.Hooks.useQueryParams();
+  const { eg_pg_txnid: egId } = Digit.Hooks.useQueryParams();
   const [printing, setPrinting] = useState(false);
   const { businessService: business_service } = useParams();
   const { isLoading, data, isError } = Digit.Hooks.usePaymentUpdate({ egId }, business_service);
 
   const payments = data?.payments;
-  const applicationNo = data?.applicationNo;
 
   useEffect(() => {
     return () => {
@@ -37,7 +36,11 @@ export const SuccessfulPayment = (props) => {
     );
   }
 
-  const paymentData = payments?.Payments[0];
+  const paymentData = data?.payments?.Payments[0];
+  const amount = paymentData.totalAmountPaid;
+  const transactionDate = paymentData.transactionDate;
+  const applicationNo = data?.applicationNo;
+
   const printReciept = async () => {
     if (printing) return;
     setPrinting(true);
@@ -65,6 +68,7 @@ export const SuccessfulPayment = (props) => {
         applicationNumber={paymentData?.paymentDetails[0].receiptNumber}
         successful={true}
       />
+      <CardText>{t("CS_PAYMENT_SUCCESSFUL_DESCRIPTION")}</CardText>
       <React.Fragment>
         <div className="primary-label-btn d-grid" onClick={printReciept}>
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -75,9 +79,15 @@ export const SuccessfulPayment = (props) => {
         </div>
       </React.Fragment>
       <StatusTable>
-        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_APPLICATION_NO")} text={applicationNo} />
+        {/* <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_APPLICATION_NO")} text={applicationNo} /> */}
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PAID")} text={amount} />
+        <Row
+          rowContainerStyle={{ padding: "4px 10px" }}
+          last
+          label={t("CS_PAYMENT_TRANSANCTION_DATE")}
+          text={transactionDate && new Date(transactionDate).toLocaleDateString("in")}
+        />
       </StatusTable>
       <Link to="/digit-ui/citizen">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />

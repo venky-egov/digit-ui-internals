@@ -4,6 +4,12 @@ import PropTypes from "prop-types";
 const TextInput = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
   const [date, setDate] = useState();
+  const data = props?.watch
+    ? {
+        fromDate: props?.watch("fromDate"),
+        toDate: props?.watch("toDate"),
+      }
+    : {};
 
   const handleDate = (event) => {
     const { value } = event.target;
@@ -38,13 +44,14 @@ const TextInput = (props) => {
             pattern={props.pattern}
             min={props.min}
             readOnly={props.disable}
+            title={props.title}
           />
         ) : (
           <input
             type={props.type || "text"}
             name={props.name}
             id={props.id}
-            className={`${user_type ? "employee-card-input" : "card-input"} ${props.disable && "disabled"} focus-visible`}
+            className={`${user_type ? "employee-card-input" : "citizen-card-input"} ${props.disable && "disabled"} focus-visible`}
             placeholder={props.placeholder}
             onChange={(event) => {
               if (props?.onChange) {
@@ -61,13 +68,14 @@ const TextInput = (props) => {
             minLength={props.minlength}
             maxLength={props.maxlength}
             max={props.max}
-            required={props.isRequired}
+            required={props.isRequired || (props.type === "date" && (props.name === "fromDate" ? data.toDate : data.fromDate))}
             pattern={props.pattern}
             min={props.min}
             readOnly={props.disable}
+            title={props.title}
           />
         )}
-        {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} />}
+        {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} data={data} />}
       </div>
     </React.Fragment>
   );
@@ -89,6 +97,12 @@ TextInput.defaultProps = {
 
 function DatePicker(props) {
   useEffect(() => {
+    if (props?.shouldUpdate) {
+      props?.setDate(getDDMMYYYY(props?.data[props.name], "yyyymmdd"));
+    }
+  }, [props?.data]);
+
+  useEffect(() => {
     props.setDate(getDDMMYYYY(props?.defaultValue));
   }, []);
 
@@ -100,14 +114,15 @@ function DatePicker(props) {
       id={props.id}
       placeholder={props.placeholder}
       defaultValue={props.date}
+      readOnly={true}
     />
   );
 }
 
-function getDDMMYYYY(mmddyyyy) {
-  if (!mmddyyyy) return "";
-  const dateArray = mmddyyyy?.split("-");
-  return `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
+function getDDMMYYYY(date) {
+  if (!date) return "";
+
+  return new Date(date).toLocaleString("en-In").split(",")[0];
 }
 
 export default TextInput;

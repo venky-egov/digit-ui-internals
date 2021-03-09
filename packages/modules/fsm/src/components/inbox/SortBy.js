@@ -6,7 +6,7 @@ import { ApplyFilterBar, CloseSvg } from "@egovernments/digit-ui-react-component
 const SortBy = (props) => {
   const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState(() => {
-    return props.sortParams?.sortOrder === "DESC"
+    return props.sortParams?.[0]?.desc
       ? { code: "DESC", name: t("ES_INBOX_DATE_LATEST_FIRST") }
       : { code: "ASC", name: t("ES_INBOX_DATE_LATEST_LAST") };
   });

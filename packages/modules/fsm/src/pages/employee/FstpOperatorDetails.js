@@ -46,7 +46,7 @@ const FstpOperatorDetails = () => {
   });
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
-  const { isLoading: isSearchLoading, isIdle, data: tripDetails } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
+  const { isLoading: isSearchLoading, isIdle, data: { data: tripDetails } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
     enabled: !!isVehicleSearchCompleted,
   });
 
@@ -132,7 +132,7 @@ const FstpOperatorDetails = () => {
       value: vehicle.vehicle.registrationNumber,
     },
     {
-      title: `${t("ES_VEHICLE CAPACITY")} (ltrs)`,
+      title: `${t("ES_VEHICLE CAPACITY")}`,
       value: vehicle.vehicle.tankCapacity,
     },
   ];

@@ -23,6 +23,7 @@ import ActionModal from "./Modal";
 import { useQueryClient } from "react-query";
 
 import { useHistory, useParams } from "react-router-dom";
+import { actions } from "react-table";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -36,7 +37,7 @@ const ApplicationDetails = (props) => {
   const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   // console.log("find DSO here", DSO)
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
@@ -89,7 +90,7 @@ const ApplicationDetails = (props) => {
   };
 
   useEffect(() => {
-    console.log("action selected", selectedAction);
+    console.log("action selected in case", selectedAction);
     switch (selectedAction) {
       case "DSO_ACCEPT":
       case "ACCEPT":
@@ -104,6 +105,7 @@ const ApplicationDetails = (props) => {
       case "DSO_REJECT":
       case "REJECT":
       case "DECLINE":
+      case "REASSING":
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":
@@ -133,8 +135,8 @@ const ApplicationDetails = (props) => {
   //   };
 
   const closeModal = () => {
-    setShowModal(false);
     setSelectedAction(null);
+    setShowModal(false);
   };
 
   const closeToast = () => {
@@ -182,7 +184,7 @@ const ApplicationDetails = (props) => {
       {!isLoading ? (
         <React.Fragment>
           <Card style={{ position: "relative" }}>
-            {!DSO && (
+            {/* {!DSO && (
               <LinkButton
                 label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
                 style={{ position: "absolute", top: 0, right: 20 }}
@@ -190,7 +192,7 @@ const ApplicationDetails = (props) => {
                   history.push(props.parentRoute + "/application-audit/" + applicationNumber);
                 }}
               />
-            )}
+            )} */}
             {applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
                 {index === 0 ? (
@@ -251,6 +253,7 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
+          {console.log("above show modal", showModal)}
           {showModal ? (
             <ActionModal
               t={t}

@@ -22,31 +22,16 @@ function getFilteredDsoData(dsoData, vehicle) {
   return dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.type == vehicle?.code));
 }
 
-export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehicle, selectVehicle }) => {
+export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehicle, selectVehicle, action }) => {
   return {
     label: {
-      heading: "ES_FSM_ACTION_TITLE_ASSIGN_DSO",
-      submit: "CS_COMMON_ASSIGN",
+      heading: `ES_FSM_ACTION_TITLE_${action}`,
+      submit: `CS_COMMON_${action}`,
       cancel: "CS_COMMON_CANCEL",
     },
     form: [
       {
         body: [
-          {
-            label: t("ES_FSM_ACTION_DSO_NAME"),
-            isMandatory: true,
-            type: "dropdown",
-            populators: (
-              <Dropdown
-                option={getFilteredDsoData(dsoData, vehicle)}
-                autoComplete="off"
-                optionKey="name"
-                id="dso"
-                selected={dso}
-                select={selectDSO}
-              />
-            ),
-          },
           {
             label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
             isMandatory: true,
@@ -61,6 +46,21 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
                 select={selectVehicle}
                 disable={vehicle ? true : false}
                 t={t}
+              />
+            ),
+          },
+          {
+            label: t("ES_FSM_ACTION_DSO_NAME"),
+            isMandatory: true,
+            type: "dropdown",
+            populators: (
+              <Dropdown
+                option={getFilteredDsoData(dsoData, vehicle)}
+                autoComplete="off"
+                optionKey="displayName"
+                id="dso"
+                selected={dso}
+                select={selectDSO}
               />
             ),
           },

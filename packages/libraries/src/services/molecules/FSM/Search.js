@@ -5,16 +5,20 @@ import DsoDetails from "./DsoDetails";
 import { getPropertyTypeLocale, getPropertySubtypeLocale, getVehicleType } from "../../../utils/fsm";
 
 const displayPitDimension = (pitDeminsion) => {
-  return Object.values(pitDeminsion)
-    .reduce((acc, current) => {
-      if (!current) {
-        return acc;
-      } else {
-        acc.push(`${current}m`);
-        return acc;
-      }
-    }, [])
-    .join(" x ");
+  const result = [];
+  if (pitDeminsion.length) {
+    result.push(`${pitDeminsion.length}m`);
+  }
+  if (pitDeminsion.width) {
+    result.push(`${pitDeminsion.width}m`);
+  }
+  if (pitDeminsion.diameter) {
+    result.push(`${pitDeminsion.diameter}m`);
+  }
+  if (pitDeminsion.height) {
+    result.push(`${pitDeminsion.height}m`);
+  }
+  return result.join(" x ");
 };
 
 const getPitDimensionCaption = (sanitationtype, diameter, length, t) => {
@@ -168,7 +172,7 @@ export const Search = {
       {
         title: "ES_APPLICATION_DETAILS_DSO_DETAILS",
         values: [
-          { title: "ES_APPLICATION_DETAILS_ASSIGNED_DSO", value: dsoDetails?.name || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_ASSIGNED_DSO", value: dsoDetails?.displayName || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_MAKE", value: vehicleMake || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_NO", value: vehicle?.registrationNumber || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: vehicleCapacity || "N/A" },

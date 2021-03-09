@@ -18,7 +18,7 @@ import Status from "./Status";
 const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
   const { t } = useTranslation();
 
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -42,7 +42,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
       <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">{t("FILTER_BY")}:</div>
+            <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
               {t("ES_COMMON_CLEAR_ALL")}
             </div>
@@ -103,8 +103,8 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
         <ActionBar>
           <ApplyFilterBar
             submit={false}
-            labelLink={t("CS_COMMON_CLEAR_ALL")}
-            buttonLink={t("CS_COMMON_FILTER")}
+            labelLink={t("ES_COMMON_CLEAR_ALL")}
+            buttonLink={t("ES_COMMON_FILTER")}
             onClear={clearAll}
             onSubmit={() => {
               if (props.type === "mobile") onSearch({ delete: ["applicationNos"] });

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const FSMLink = ({ isMobile, data }) => {
+const FSMLink = ({ parentRoute, isMobile, data }) => {
   const { t } = useTranslation();
 
   const allLinks = [
@@ -16,7 +16,7 @@ const FSMLink = ({ isMobile, data }) => {
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
     {
       text: t("ES_TITILE_SEARCH_APPLICATION"),
-      link: "/digit-ui/employee/fsm/search",
+      link: `${parentRoute}/search`,
     },
   ];
 

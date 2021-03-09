@@ -1,7 +1,7 @@
-import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import FSMLink from "./inbox/FSMLink";
 import ApplicationTable from "./inbox/ApplicationTable";
 import Filter from "./inbox/Filter";
@@ -9,10 +9,12 @@ import SearchApplication from "./inbox/search";
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const GetCell = (value) => <span className="cell-text">{value}</span>;
+  const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const GetSlaCell = (value) => {
-    if (isNaN(value)) value = "-";
+    if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };
 
@@ -27,11 +29,14 @@ const DesktopInbox = (props) => {
         {
           Header: t("ES_INBOX_APPLICATION_NO"),
           accessor: "applicationNo",
+          disableSortBy: true,
           Cell: ({ row }) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                  <Link to={`${props.parentRoute}/${DSO ? "dso-application-details" : "application-details"}/` + row.original["applicationNo"]}>
+                    {row.original["applicationNo"]}
+                  </Link>
                 </span>
                 {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
               </div>
@@ -40,10 +45,12 @@ const DesktopInbox = (props) => {
         },
         {
           Header: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"),
+          disableSortBy: true,
           accessor: (row) => GetCell(row.citizen?.name || ""),
         },
         {
           Header: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"),
+          disableSortBy: true,
           accessor: (row) => GetCell(row.citizen?.mobileNumber || ""),
         },
         {
@@ -53,6 +60,7 @@ const DesktopInbox = (props) => {
             // console.log(PropertyType.data && PropertyType.data[key]);
             return key;
           },
+          disableSortBy: true,
         },
         {
           Header: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"),
@@ -60,16 +68,19 @@ const DesktopInbox = (props) => {
             const key = t(`PROPERTYTYPE_MASTERS_${row.propertyUsage}`);
             return key;
           },
+          disableSortBy: true,
         },
         {
           Header: t("ES_INBOX_LOCALITY"),
           accessor: (row) => GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.address.locality.code, row.tenantId))),
+          disableSortBy: true,
         },
         {
           Header: t("ES_INBOX_STATUS"),
           accessor: (row) => {
             return GetCell(t(`CS_COMMON_FSM_${row.applicationStatus}`));
           },
+          disableSortBy: true,
         },
       ];
     }
@@ -110,7 +121,9 @@ const DesktopInbox = (props) => {
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/application-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                    <Link to={`${props.parentRoute}/${DSO ? "dso-application-details" : "application-details"}/` + row.original["applicationNo"]}>
+                      {row.original["applicationNo"]}
+                    </Link>
                   </span>
                   {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
                 </div>
@@ -196,6 +209,8 @@ const DesktopInbox = (props) => {
         onSort={props.onSort}
         disableSort={props.disableSort}
         onPageSizeChange={props.onPageSizeChange}
+        sortParams={props.sortParams}
+        totalRecords={props.totalRecords}
       />
     );
   }
@@ -204,7 +219,7 @@ const DesktopInbox = (props) => {
     <div className="inbox-container">
       {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
-          <FSMLink />
+          <FSMLink parentRoute={props.parentRoute} />
           <div>
             <Filter searchParams={props.searchParams} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>
@@ -212,7 +227,7 @@ const DesktopInbox = (props) => {
       )}
       <div style={{ flex: 1 }}>
         <SearchApplication onSearch={props.onSearch} type="desktop" searchFields={props.searchFields} isInboxPage={!props?.isSearch} />
-        <div style={{ marginTop: "24px", marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
+        <div style={{ marginTop: "24px", marginLeft: FSTP ? "" : !props?.isSearch ? "24px" : "", flex: 1 }}>{result}</div>
       </div>
     </div>
   );

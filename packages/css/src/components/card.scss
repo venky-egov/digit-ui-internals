@@ -31,7 +31,7 @@
   }
 
   .card-label {
-    @apply font-bold text-legend text-text-primary mb-md;
+    @apply text-legend text-text-primary mb-md;
   }
 
   .card-label-error {
@@ -48,7 +48,7 @@
 }
 
 .employeeCard {
-  @apply bg-white shadow-card p-md mt-md mb-xl;
+  @apply bg-white shadow-card p-md mb-xl;
   border-radius: 4px;
 
   .field-container {
@@ -89,7 +89,7 @@
   }
 
   .card-label {
-    @apply font-bold text-legend text-text-primary mb-md;
+    @apply text-legend text-text-primary mb-md;
   }
 
   .card-label-error {

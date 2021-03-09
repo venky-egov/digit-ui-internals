@@ -1,7 +1,7 @@
 import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 
-const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
+const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => formData?.address?.pincode || "");
 
@@ -13,8 +13,10 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
       validation: {
         minlength: 6,
         maxlength: 7,
+        pattern: "[0-9]+",
+        max: "9999999",
+        title: t("CORE_COMMON_PINCODE_INVALID"),
       },
-      error: "CORE_COMMON_PINCODE_INVALID",
     },
   ];
   const [pincodeServicability, setPincodeServicability] = useState(null);
@@ -32,9 +34,9 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType }) => {
       const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item.toString() === e.target.value));
       if (foundValue) {
         const city = tenants.filter((obj) => obj.pincode?.find((item) => item == e.target.value))[0];
-        onSelect(config.key, { city, pincode: e.target.value });
+        onSelect(config.key, { ...formData.address, city, pincode: e.target.value, slum: null, locality: null });
       } else {
-        onSelect(config.key, { pincode: e.target.value });
+        onSelect(config.key, { ...formData.address, pincode: e.target.value });
         setPincodeServicability("CS_COMMON_PINCODE_NOT_SERVICABLE");
       }
     }

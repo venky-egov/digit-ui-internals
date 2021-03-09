@@ -13,8 +13,22 @@ import {
   Loader,
 } from "@egovernments/digit-ui-react-components";
 
+const TLCaption = ({ data }) => {
+  const { t } = useTranslation();
+  return (
+    <div>
+      {data.date && <p>{data.date}</p>}
+      <p>{data.name}</p>
+      <p>{data.mobileNumber}</p>
+      {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
+    </div>
+  );
+};
+
 export const ApplicationTimeline = (props) => {
   const { t } = useTranslation();
+
+  console.log(".......>>>>> props here", props);
 
   const { isLoading, data } = Digit.Hooks.useWorkflowDetails({
     tenantId: props.application?.tenantId,
@@ -22,12 +36,24 @@ export const ApplicationTimeline = (props) => {
     moduleCode: "FSM",
   });
 
+  const getTimelineCaptions = (checkpoint) => {
+    if (checkpoint.status === "CREATED") {
+      const caption = {
+        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
+        source: props.application?.source || "",
+      };
+      return <TLCaption data={caption} />;
+    }
+  };
+
   const showNextActions = (nextAction) => {
     switch (nextAction?.action) {
       case "PAY":
         return (
           <div style={{ marginTop: "24px" }}>
-            <Link to={`/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${props.id}`}>
+            <Link
+              to={{ pathname: `/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${props.id}`, state: { tenantId: props.application.tenantId } }}
+            >
               <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
             </Link>
           </div>
@@ -57,14 +83,19 @@ export const ApplicationTimeline = (props) => {
             </CardSectionHeader>
           )}
           {data?.timeline && data?.timeline?.length === 1 ? (
-            <CheckPoint isCompleted={true} label={t("CS_COMMON_" + data?.timeline[0]?.status)} />
+            <CheckPoint isCompleted={true} label={t("CS_COMMON_" + data?.timeline[0]?.status)} customChild={getTimelineCaptions(data?.timeline[0])} />
           ) : (
             <ConnectingCheckPoints>
               {data?.timeline &&
                 data?.timeline.map((checkpoint, index, arr) => {
                   return (
                     <React.Fragment key={index}>
-                      <CheckPoint keyValue={index} isCompleted={index === 0} label={t("CS_COMMON_" + checkpoint.status)} />
+                      <CheckPoint
+                        keyValue={index}
+                        isCompleted={index === 0}
+                        label={t("CS_COMMON_" + checkpoint.status)}
+                        customChild={getTimelineCaptions(checkpoint)}
+                      />
                     </React.Fragment>
                   );
                 })}

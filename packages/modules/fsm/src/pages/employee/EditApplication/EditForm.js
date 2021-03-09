@@ -3,29 +3,29 @@ import { newConfig } from "../../../config/NewApplication/config";
 import { useHistory } from "react-router-dom";
 import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import TripDetails from "../configs/TripDetails";
-import ApplicantDetails from "../configs/ApplicantDetails";
+import TripDetails from "../../../config/Employee/TripDetailsConfig";
+import ApplicantDetails from "../../../config/Employee/ApplicantConfig";
+import { getVehicleType } from "../../../utils";
 
 const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitationMenu }) => {
   const { t } = useTranslation();
   const history = useHistory();
-
-  const [vehicle, setVehicle] = useState(applicationData.vehicleType || null);
   const [canSubmit, setSubmitValve] = useState(false);
-  const [channel, setChannel] = useState(() => channelMenu.filter((channel) => channel.code === applicationData.source)[0]);
-  const [kill, setKill] = useState(false);
-
-  function selectVehicle(data) {
-    setVehicle(data);
-    setKill(false);
-  }
 
   const defaultValues = {
-    applicantName: applicationData.citizen.name,
-    mobileNumber: applicationData.citizen.mobileNumber,
-    noOfTrips: applicationData.noOfTrips,
-    amountPerTrip: applicationData.additionalDetails.tripAmount,
-    amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || "",
+    channel: channelMenu.filter((channel) => channel.code === applicationData.source)[0],
+    applicationData: {
+      applicantName: applicationData.citizen.name,
+      mobileNumber: applicationData.citizen.mobileNumber,
+    },
+    tripData: {
+      noOfTrips: applicationData.noOfTrips,
+      amountPerTrip: applicationData.additionalDetails.tripAmount,
+      amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || undefined,
+      vehicleType: vehicleMenu
+        .filter((vehicle) => vehicle?.code === applicationData?.vehicleType)
+        .map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))[0],
+    },
     propertyType: applicationData.propertyUsage.split(".")[0],
     subtype: applicationData.propertyUsage,
     address: {
@@ -44,35 +44,43 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   };
 
   const onFormValueChange = (setValue, formData) => {
-    // setNoOfTrips(formData?.noOfTrips || 1);
+    // // setNoOfTrips(formData?.noOfTrips || 1);
 
-    (async () => {
-      // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
+    // (async () => {
+    //   // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
-      if (formData?.propertyType && formData?.subtype && formData?.address && vehicle?.code && !kill) {
-        const { capacity } = vehicle;
-        // console.log("find bill slab form data", formData)
-        const { slum: slumDetails } = formData.address;
-        const slum = slumDetails ? "YES" : "NO";
-        const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-          propertyType: formData?.subtype,
-          capacity,
-          slum,
-        });
+    //   if (formData?.propertyType && formData?.subtype && formData?.address && vehicle?.code && !kill) {
+    //     const { capacity } = vehicle;
+    //     // console.log("find bill slab form data", formData)
+    //     const { slum: slumDetails } = formData.address;
+    //     const slum = slumDetails ? "YES" : "NO";
+    //     const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
+    //       propertyType: formData?.subtype,
+    //       capacity,
+    //       slum,
+    //     });
 
-        const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
-        if (billSlab?.price) {
-          setKill(true);
-          console.log("find bill slab here", billSlab.price);
-          setValue("amountPerTrip", billSlab.price);
-          setValue("amount", billSlab.price * formData.noOfTrips);
-        }
-      }
-    })();
-    // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
+    //     const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+    //     if (billSlab?.price) {
+    //       setKill(true);
+    //       console.log("find bill slab here", billSlab.price);
+    //       setValue("amountPerTrip", billSlab.price);
+    //       setValue("amount", billSlab.price * formData.noOfTrips);
+    //     }
+    //   }
+    // })();
+    // // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
 
     console.log("find form data here", formData);
-    if (formData?.propertyType && formData?.subtype && formData?.address?.locality?.code && vehicle && formData?.pitType && formData?.pitDetail) {
+    if (
+      formData?.propertyType &&
+      formData?.subtype &&
+      formData?.address?.locality?.code &&
+      formData?.tripData?.vehicleType &&
+      formData?.pitType &&
+      formData?.pitDetail &&
+      formData?.tripData?.amountPerTrip
+    ) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -87,25 +95,25 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
 
   const onSubmit = (data) => {
     console.log("find submit data", data);
-    const applicationChannel = channel;
+    const applicationChannel = data.channel;
     const sanitationtype = data.pitType.code;
     const pitDimension = data?.pitDetail;
-    const applicantName = data.applicantName;
-    const mobileNumber = data.mobileNumber;
+    const applicantName = data.applicationData.applicantName;
+    const mobileNumber = data.applicationData.mobileNumber;
     const pincode = data?.address?.pincode;
     const street = data?.address?.street;
     const doorNo = data?.address?.doorNo;
     const slum = data?.address?.slum;
     const landmark = data?.address?.landmark;
-    const noOfTrips = data.noOfTrips;
-    const amount = data.amountPerTrip;
+    const noOfTrips = data.tripData.noOfTrips;
+    const amount = data.tripData.amountPerTrip;
     const cityCode = data?.address?.city?.code;
     const city = data?.address?.city?.name;
     // const state = data?.address?.city?.state;
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const propertyUsage = data?.subtype;
-    const { height, length, width } = pitDimension;
+    const { height, length, width, diameter } = pitDimension;
 
     const formData = {
       ...applicationData,
@@ -116,7 +124,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         tripAmount: amount,
       },
       propertyUsage,
-      vehicleType: vehicle.code,
+      vehicleType: data.tripData.vehicleType.code,
       noOfTrips,
       pitDetail: {
         ...applicationData.pitDetail,
@@ -124,6 +132,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         height,
         length,
         width,
+        diameter,
       },
       address: {
         ...applicationData.address,
@@ -161,19 +170,13 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     });
   };
 
-  const disable = {
-    channel: true,
-    name: true,
-    number: true,
-  };
-
-  const configs = [ApplicantDetails(channelMenu, channel, setChannel, disable), ...newConfig, TripDetails(vehicleMenu, vehicle, selectVehicle)];
+  const configs = [...ApplicantDetails, ...newConfig, ...TripDetails];
 
   return (
     <FormComposer
       heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
-      label={t("ES_COMMON_UPDATE_DEMAND")}
+      label={t("ES_FSM_APPLICATION_UPDATE")}
       config={configs.map((config) => {
         return {
           ...config,

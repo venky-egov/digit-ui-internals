@@ -31,14 +31,13 @@ export const SuccessfulPayment = (props) => {
       // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
-    queryClient.refetchQueries("FSM_CITIZEN_SEARCH");
     window.open(fileStore[response.filestoreIds[0]], "_blank");
   };
 
   return (
     <Card>
       <Banner message={getMessage()} info="Receipt No." applicationNumber={receiptNumber} successful={true} />
-      {/* <CardText>{t("ES_PAYMENT_FAILED")}</CardText> */}
+      <CardText>{t("ES_PAYMENT_SUCCESSFUL_DESCRIPTION")}</CardText>
       <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={printReciept}>
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
           <path d="M0 0h24v24H0z" fill="none" />

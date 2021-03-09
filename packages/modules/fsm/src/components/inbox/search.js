@@ -3,12 +3,15 @@ import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg } = require("@egovernments/digit-ui-react-components");
 import { useTranslation } from "react-i18next";
 
-const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFields, isInboxPage }) => {
+const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFields, searchParams, isInboxPage }) => {
   const { t } = useTranslation();
   const [applicationNo, setApplicationNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm({
+    defaultValues: searchParams,
+  });
   const mobileView = innerWidth <= 640;
+  const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const onSubmitInput = (data) => {
     console.log("data", data);
@@ -24,13 +27,13 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
 
   function clearSearch() {
     reset();
-    onSearch([]);
+    onSearch({});
   }
 
   const clearAll = (mobileView) => {
     const mobileViewStyles = mobileView ? { margin: 0 } : {};
     return (
-      <LinkLabel style={{ color: "#F47738", cursor: "pointer", ...mobileViewStyles }} onClick={clearSearch}>
+      <LinkLabel style={{ color: "#F47738", cursor: "pointer", display: "inline", ...mobileViewStyles }} onClick={clearSearch}>
         {t("ES_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
@@ -47,7 +50,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   return (
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
-        <div className="search-container" style={{ width: "auto", marginLeft: isInboxPage ? "24px" : "revert" }}>
+        <div className="search-container" style={{ width: "auto", marginLeft: FSTP ? "" : isInboxPage ? "24px" : "revert" }}>
           <div className="search-complaint-container">
             {(type === "mobile" || mobileView) && (
               <div
@@ -69,7 +72,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
               {searchFields?.map((input, index) => (
                 <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
                   <Label>{input.label}</Label>
-                  <TextInput {...input} inputRef={register} />
+                  <TextInput {...input} inputRef={register} watch={watch} shouldUpdate={true} />
                 </span>
               ))}
               {/* <span className="complaint-input">

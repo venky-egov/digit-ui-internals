@@ -42,7 +42,7 @@ const FstpOperatorDetails = () => {
     const today = new Date();
     const hour = (today.getHours() < 10 ? "0" : "") + today.getHours();
     const minutes = (today.getMinutes() < 10 ? "0" : "") + today.getMinutes();
-    return `${hour}:${minutes}` || "10:00";
+    return `${hour}:${minutes}`;
   });
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });

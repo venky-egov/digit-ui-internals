@@ -73,9 +73,16 @@
     display: none;
   }
 
+  .react-time-picker__inputGroup__leadingZero {
+    padding-right: 8px;
+    display: inline !important;
+  }
+
   .react-time-picker__inputGroup__input {
     padding: 0;
     min-width: none;
+    outline: none !important;
+    border: none !important;
   }
 
   .react-time-picker__wrapper {

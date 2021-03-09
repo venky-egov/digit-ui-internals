@@ -286,7 +286,7 @@ const initAutocomplete = (onChange, position) => {
     }),
   ];
 
-  setLocationText(position);
+  setLocationText(position, onChange);
 
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.

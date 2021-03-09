@@ -1,23 +1,6 @@
 import React from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 
-function todayDate() {
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth() + 1;
-  var yyyy = today.getFullYear();
-
-  if (dd < 10) {
-    dd = "0" + dd;
-  }
-
-  if (mm < 10) {
-    mm = "0" + mm;
-  }
-
-  return yyyy + "-" + mm + "-" + dd;
-}
-
 function getFilteredDsoData(dsoData, vehicle) {
   return dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.type == vehicle?.code));
 }
@@ -104,8 +87,8 @@ export const configReassignDSO = ({
             validation: {
               required: true,
             },
-            min: todayDate(),
-            defaultValue: todayDate(),
+            min: Digit.Utils.date.getDate(),
+            defaultValue: Digit.Utils.date.getDate(),
           },
         },
       ],

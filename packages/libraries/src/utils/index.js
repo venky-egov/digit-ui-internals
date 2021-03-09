@@ -1,6 +1,7 @@
 import PDFUtil from "./pdf";
 import BrowserUtil from "./browser";
 import * as locale from "./locale";
+import * as date from "./date";
 
 const GetParamFromUrl = (key, fallback, search) => {
   if (typeof window !== "undefined") {
@@ -67,6 +68,7 @@ export default {
   pdf: PDFUtil,
   browser: BrowserUtil,
   locale,
+  date,
   GetParamFromUrl,
   getStaticMapUrl,
   detectDsoRoute,

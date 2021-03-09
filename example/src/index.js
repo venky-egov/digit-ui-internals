@@ -32,6 +32,7 @@ import QA_FSM_EDITOR from "./userInfo/QAEE.json";
 import QA_FSM_COLLECTOR from "./userInfo/QACOLL.json";
 import QA_FSM_DSO from "./userInfo/QADSO.json";
 import QA_FSM_FSTP from "./userInfo/QAFSTPO.json";
+import QA_CECOLL from "./userInfo/qa-cecoll.json";
 
 import QAFSTP from "./userInfo/fstp.json";
 import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
@@ -63,6 +64,7 @@ const userInfo = {
   QA_FSM_DSO,
   QA_FSM_EDITOR,
   QA_FSM_FSTP,
+  QA_CECOLL,
 };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
@@ -70,7 +72,7 @@ const enabledModules = ["PGR", "FSM", "Payment", "PT"];
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-  const token = process.env[`REACT_APP_${userType}_TOKEN`];
+  const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
   // console.log(token);
 

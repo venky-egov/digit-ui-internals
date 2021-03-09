@@ -7,14 +7,14 @@ const DatePicker = (props) => {
 
   function defaultFormatFunc(date) {
     const operationDate = typeof date === "string" ? new Date(date) : date;
-    const years = operationDate.getFullYear();
-    const month = operationDate.getMonth() + 1;
-    const _date = operationDate.getDate() + 1;
+    const years = operationDate?.getFullYear();
+    const month = operationDate?.getMonth() + 1;
+    const _date = operationDate?.getDate() + 1;
     // console.log("find current date", _date, month, years)
-    return `${_date}/${month}/${years}`;
+    return _date && month && years ? `${_date}/${month}/${years}` : null;
   }
 
-  const getDatePrint = () => props?.formattingFn?.(props.date) || defaultFormatFunc(props.date);
+  const getDatePrint = () => props?.formattingFn?.(props?.date) || defaultFormatFunc(props?.date);
   const selectDate = (e) => {
     const date = e.target.value;
     // setDate(date);

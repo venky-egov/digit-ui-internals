@@ -4,7 +4,7 @@ import { ApplicationCard } from "./inbox/ApplicationCard";
 import ApplicationLinks from "./inbox/ApplicationLinks";
 
 const GetSlaCell = (value) => {
-  if (isNaN(value)) value = "-";
+  if (isNaN(value)) return <span className="sla-cell-success">0</span>;
   return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
 };
 

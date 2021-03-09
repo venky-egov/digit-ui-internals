@@ -8,7 +8,7 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   const [slumArea, setSlumArea] = useState(formData?.address?.slumArea);
 
   const locality = formData?.address?.locality?.code.split("_")[3];
-  const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "Slum");
+  const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "Slum");
 
   const onSkip = () => onSelect();
   function goNext() {

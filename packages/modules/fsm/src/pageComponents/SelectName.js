@@ -13,7 +13,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
       name: "applicantName",
       validation: {
         isRequired: true,
-        pattern: "[A-Za-z ]{1,255}",
+        pattern: "^[a-zA-Z]+( [a-zA-Z]+)*$",
         title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
       },
       isMandatory: true,

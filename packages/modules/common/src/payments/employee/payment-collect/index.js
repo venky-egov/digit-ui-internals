@@ -45,7 +45,7 @@ export const CollectPayment = (props) => {
   };
 
   const getPaymentModes = () => defaultPaymentModes;
-  const paidByMenu = [t("COMMON_OWNER"), t("COMMON_OTHER")];
+  const paidByMenu = [{ name: t("COMMON_OWNER") }, { name: t("COMMON_OTHER") }];
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
 
   const onSubmit = async (data) => {
@@ -149,7 +149,7 @@ export const CollectPayment = (props) => {
           type: "custom",
           populators: {
             name: "paidBy",
-            customProps: { t, isMendatory: true, option: paidByMenu },
+            customProps: { t, isMendatory: true, option: paidByMenu, optionKey: "name" },
             component: (props, customProps) => (
               <Dropdown
                 {...customProps}

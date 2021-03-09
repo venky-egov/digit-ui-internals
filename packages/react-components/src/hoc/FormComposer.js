@@ -7,6 +7,7 @@ import CardLabel from "../atoms/CardLabel";
 import CardSubHeader from "../atoms/CardSubHeader";
 import CardSectionHeader from "../atoms/CardSectionHeader";
 import CardLabelDesc from "../atoms/CardLabelDesc";
+import CardLabelError from "../atoms/CardLabelError";
 import TextArea from "../atoms/TextArea";
 import TextInput from "../atoms/TextInput";
 import ActionBar from "../atoms/ActionBar";
@@ -41,6 +42,7 @@ export const FormComposer = (props) => {
     switch (type) {
       case "text":
       case "date":
+      case "number":
       case "password":
         // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (
@@ -130,6 +132,9 @@ export const FormComposer = (props) => {
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
+                    {errors && errors[field.populators.name] && Object.keys(errors[field.populators.name]).length ? (
+                      <CardLabelError>{field.populators.error}</CardLabelError>
+                    ) : null}
                     <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
                       {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                     </div>

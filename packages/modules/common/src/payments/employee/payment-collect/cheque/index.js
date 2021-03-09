@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, SearchIconSvg } from "@egovernments/digit-ui-react-components";
+import { TextInput, SearchIconSvg, DatePicker } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-
 export const useChequeDetails = (props, t) => {
   const config = [
     {
@@ -58,8 +57,6 @@ export const ChequeDetailsComponent = (props) => {
     }
   };
 
-  const getDatePrint = () => instrumentDate && new Date(instrumentDate).toLocaleString("en-In").split(",")[0];
-
   return (
     <React.Fragment>
       <div className="label-field-pair">
@@ -82,7 +79,7 @@ export const ChequeDetailsComponent = (props) => {
         <h2 className="card-label">{t("PAYMENT_CHEQUE_DATE_LABEL")} *</h2>
         <div className="field">
           <div className="field-container">
-            <input
+            {/* <input
               type="text"
               value={getDatePrint()}
               readOnly
@@ -96,6 +93,12 @@ export const ChequeDetailsComponent = (props) => {
               style={{ width: "62px", borderLeft: "0px" }}
               name="instrumentDate"
               onChange={(e) => setChequeDate(e.target.value)}
+            /> */}
+            <DatePicker
+              date={instrumentDate}
+              onChange={(d) => {
+                setChequeDate(d);
+              }}
             />
           </div>
         </div>

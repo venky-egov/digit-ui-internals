@@ -41,6 +41,7 @@ export const FormComposer = (props) => {
     switch (type) {
       case "text":
       case "date":
+      case "number":
       case "password":
         // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (

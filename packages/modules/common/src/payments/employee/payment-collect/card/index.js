@@ -8,44 +8,40 @@ export const useCardPaymentDetails = (props, t) => {
       body: [
         {
           label: t("PAYMENT_CARD_LAST_DIGITS_LABEL"),
-          type: "text",
+          type: "number",
           populators: {
             name: "instrumentNumber",
             validation: {
               required: true,
               pattern: /^\d{4}$/,
             },
-            error: "a valid mobile no. required",
-            minlength: "4",
-            maxlength: "4",
+            error: t("PAYMENT_CARD_LAST_DIGITS_ERROR"),
+            min: "0",
+            max: "9999",
           },
         },
         {
           label: t("PAYMENT_TRANS_NO_LABEL"),
-          type: "text",
+          type: "number",
           populators: {
             name: "transactionNumber",
             validation: {
               required: true,
               pattern: /^\d{5,}$/,
             },
-            error: "a valid mobile no. required",
-            minlength: "12",
-            maxlength: "20",
+            error: t("PAYMENT_TRANS_NO_ERROR"),
           },
         },
         {
           label: t("PAYMENT_RENTR_TRANS_LABEL"),
-          type: "text",
+          type: "number",
           populators: {
             name: "reTransanctionNumber",
             validation: {
               required: true,
               pattern: /^\d{5,}$/,
             },
-            error: "a valid mobile no. required",
-            minlength: "12",
-            maxlength: "20",
+            error: t("PAYMENT_RENTR_TRANS_ERROR"),
           },
         },
       ],

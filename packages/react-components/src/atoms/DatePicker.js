@@ -13,25 +13,22 @@ const DatePicker = (props) => {
   };
 
   return (
-    <React.Fragment>
-      <input type="text" value={getDatePrint()} readOnly className="employee-card-input" style={{ width: "calc(100%-62px)" }} />
-      <div style={{ position: "relative" }}>
-        <CalendarIcon
-          onClick={() => {
-            dateInp.current.focus();
-            dateInp.current.click();
-          }}
-          style={{ right: 0, zIndex: "10", bottom: 0, position: "absolute" }}
-        />
+    <div style={{ position: "relative", width: "100%" }}>
+      <React.Fragment>
+        <input type="text" value={getDatePrint()} readOnly className="employee-card-input" style={{ width: "calc(100%-62px)" }} />
+        <CalendarIcon style={{ right: "6px", zIndex: "10", top: 6, position: "absolute" }} />
         <input
-          style={{ right: 0, zIndex: "100", bottom: 0, position: "absolute", opacity: 0, borderLeft: "0px" }}
+          style={{ right: "6px", zIndex: "100", top: 6, position: "absolute", opacity: 0, width: "100%" }}
           value={props.date}
           type="date"
           ref={dateInp}
           onChange={selectDate}
+          defaultValue={props.defaultValue}
+          min={props.min}
+          max={props.max}
         />
-      </div>
-    </React.Fragment>
+      </React.Fragment>
+    </div>
   );
 };
 

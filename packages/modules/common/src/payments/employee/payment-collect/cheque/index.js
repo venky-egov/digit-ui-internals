@@ -57,8 +57,6 @@ export const ChequeDetailsComponent = (props) => {
     }
   };
 
-  const getDatePrint = () => instrumentDate && new Date(instrumentDate).toLocaleString("en-In").split(",")[0];
-
   return (
     <React.Fragment>
       <div className="label-field-pair">
@@ -96,7 +94,12 @@ export const ChequeDetailsComponent = (props) => {
               name="instrumentDate"
               onChange={(e) => setChequeDate(e.target.value)}
             /> */}
-            {<DatePicker />}
+            <DatePicker
+              date={instrumentDate}
+              onChange={(d) => {
+                setChequeDate(d);
+              }}
+            />
           </div>
         </div>
       </div>

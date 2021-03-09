@@ -2,13 +2,13 @@ import React, { useState, useRef } from "react";
 import { CalendarIcon } from "../atoms/svgindex";
 
 const DatePicker = (props) => {
-  const [date, setDate] = useState(() => props.initialDate || null);
+  // const [date, setDate] = useState(() => props.initialDate || null);
   const dateInp = useRef();
 
-  const getDatePrint = () => props?.formattingFn?.(date) || date?.toLocaleString("in");
+  const getDatePrint = () => props?.formattingFn?.(props.date) || props.date?.toLocaleString("in");
   const selectDate = (e) => {
     const date = e.target.value;
-    setDate(date);
+    // setDate(date);
     props?.onChange?.(date);
   };
 
@@ -25,7 +25,7 @@ const DatePicker = (props) => {
         />
         <input
           style={{ right: 0, zIndex: "100", bottom: 0, position: "absolute", opacity: 0, borderLeft: "0px" }}
-          value={date}
+          value={props.date}
           type="date"
           ref={dateInp}
           onChange={selectDate}

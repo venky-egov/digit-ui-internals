@@ -5,7 +5,16 @@ const DatePicker = (props) => {
   // const [date, setDate] = useState(() => props.initialDate || null);
   const dateInp = useRef();
 
-  const getDatePrint = () => props?.formattingFn?.(props.date) || props.date?.toLocaleString("in");
+  function defaultFormatFunc(date) {
+    const operationDate = typeof date === "string" ? new Date(date) : date;
+    const years = operationDate.getFullYear();
+    const month = operationDate.getMonth() + 1;
+    const _date = operationDate.getDate() + 1;
+    // console.log("find current date", _date, month, years)
+    return `${_date}/${month}/${years}`;
+  }
+
+  const getDatePrint = () => props?.formattingFn?.(props.date) || defaultFormatFunc(props.date);
   const selectDate = (e) => {
     const date = e.target.value;
     // setDate(date);

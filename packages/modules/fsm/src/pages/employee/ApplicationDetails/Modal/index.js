@@ -154,7 +154,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
     submitAction({ fsm: applicationData, workflow });
   }
 
-  let defaultValues = { capacity: vehicle?.capacity };
+  let defaultValues = {
+    capacity: vehicle?.capacity,
+    wasteCollected: vehicle?.capacity,
+  };
 
   useEffect(() => {
     switch (action) {

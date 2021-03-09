@@ -1,4 +1,5 @@
 import React from "react";
+import { DatePicker } from "@egovernments/digit-ui-react-components";
 
 export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime = 0, action }) => ({
   label: {
@@ -12,12 +13,18 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
         {
           label: t("ES_FSM_ACTION_DESLUGED_DATE_LABEL"),
           isMandatory: true,
-          type: "date",
+          type: "custom",
           populators: {
             name: "desluged",
-            min: Digit.Utils.date.getDate(applicationCreatedTime),
-            max: Digit.Utils.date.getDate(),
+            validation: {
+              required: true,
+            },
             defaultValue: Digit.Utils.date.getDate(),
+            customProps: {
+              min: Digit.Utils.date.getDate(applicationCreatedTime),
+              max: Digit.Utils.date.getDate(),
+            },
+            component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
           },
         },
         {
@@ -30,8 +37,7 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
               required: true,
               validate: (value) => parseInt(value) <= parseInt(vehicle.capacity),
             },
-            error: `${t("ES_FSM_ACTION_INVALID_WASTE_VOLUME")} ${vehicle?.capacity}`,
-            defaultValue: vehicle?.capacity,
+            error: `${t("ES_FSM_ACTION_INVALID_WASTE_VOLUME")} ${vehicle?.capacity} ${t("CS_COMMON_LITRES")}`,
           },
         },
       ],

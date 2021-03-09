@@ -61,7 +61,7 @@ const CheckPage = ({ onSubmit, value }) => {
         />
         <Row
           label={t("CS_CHECK_ADDRESS")}
-          text={`${address?.doorNo?.trim() ? `${address?.doorNo}, ` : ""} ${address?.street?.trim() ? `${address?.street}, ` : ""}${t(
+          text={`${address?.doorNo?.trim() ? `${address?.doorNo?.trim()}, ` : ""} ${address?.street?.trim() ? `${address?.street?.trim()}, ` : ""}${t(
             address?.locality.code
           )}, ${t(address?.city.code)}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />}
@@ -69,7 +69,7 @@ const CheckPage = ({ onSubmit, value }) => {
         {address?.landmark?.trim() && (
           <Row
             label={t("CS_CHECK_LANDMARK")}
-            text={address?.landmark}
+            text={address?.landmark?.trim()}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/landmark" />}
           />
         )}

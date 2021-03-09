@@ -1,6 +1,4 @@
-const useSlum = (slumCode, localityCode) => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId?.split(".")[0];
+const useSlum = (tenantId, slumCode, localityCode) => {
   const { data: slumData } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "Slum");
 
   if (!slumData || !slumCode || !localityCode) return;

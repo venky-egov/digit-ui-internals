@@ -23,7 +23,6 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { pathname } = useLocation();
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
 
-  const [isSidebarOpen, toggleSidebar] = useState(false);
   const [displayMenu, toggleMenu] = useState(false);
   const innerWidth = window.innerWidth;
   const cityDetails = Digit.ULBService.getCurrentUlb();
@@ -49,7 +48,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
 
   const mobileView = innerWidth <= 640;
 
-  const sideBarOpenStyles = isSidebarOpen ? { width: "100%", position: "fixed" } : { width: "", position: "" };
+  const sideBarOpenStyles = { width: "100%", position: "fixed" };
 
   return (
     <Switch>
@@ -58,8 +57,6 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           <TopBarSideBar
             t={t}
             stateInfo={stateInfo}
-            toggleSidebar={toggleSidebar}
-            isSidebarOpen={isSidebarOpen}
             handleLogout={handleLogout}
             userDetails={userDetails}
             CITIZEN={CITIZEN}
@@ -79,8 +76,6 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           <TopBarSideBar
             t={t}
             stateInfo={stateInfo}
-            toggleSidebar={toggleSidebar}
-            isSidebarOpen={isSidebarOpen}
             handleLogout={handleLogout}
             userDetails={userDetails}
             CITIZEN={CITIZEN}
@@ -103,20 +98,9 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
 };
 
 function TopBarSideBar(props) {
-  const {
-    t,
-    stateInfo,
-    toggleSidebar,
-    isSidebarOpen,
-    handleLogout,
-    userDetails,
-    CITIZEN,
-    cityDetails,
-    mobileView,
-    userOptions,
-    handleUserDropdownSelection,
-    logoUrl,
-  } = props;
+  const [isSidebarOpen, toggleSidebar] = useState(false);
+
+  const { t, stateInfo, handleLogout, userDetails, CITIZEN, cityDetails, mobileView, userOptions, handleUserDropdownSelection, logoUrl } = props;
   return (
     <React.Fragment>
       <TopBar

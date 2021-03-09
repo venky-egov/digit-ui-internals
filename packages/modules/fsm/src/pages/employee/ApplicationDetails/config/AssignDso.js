@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { DatePicker, Dropdown } from "@egovernments/digit-ui-react-components";
 
 function todayDate() {
   var today = new Date();
@@ -76,17 +76,31 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
             },
             disable: true,
           },
+          // {
+          //   label: t("ES_FSM_ACTION_SERVICE_DATE"),
+          //   isMandatory: true,
+          //   type: "date",
+          //   populators: {
+          //     name: "date",
+          //     validation: {
+          //       required: true,
+          //     },
+          //     min: Digit.Utils.date.getDate(),
+          //     defaultValue: Digit.Utils.date.getDate(),
+          //   },
+          // },
           {
             label: t("ES_FSM_ACTION_SERVICE_DATE"),
             isMandatory: true,
-            type: "date",
+            type: "custom",
             populators: {
               name: "date",
               validation: {
                 required: true,
               },
-              min: Digit.Utils.date.getDate(),
+              // customProps: { min: Digit.Utils.date.getDate() },
               defaultValue: Digit.Utils.date.getDate(),
+              component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
             },
           },
         ],

@@ -181,7 +181,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction 
         // console.log("find vehicle menu here", vehicleMenu)
         setFormValve(dso && vehicle ? true : false);
         let dsoWithVehicle = dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.type == vehicle?.code));
-        if (dsoWithVehicle && !dsoWithVehicle.length) {
+        if (dsoData && dsoWithVehicle && !dsoWithVehicle.length) {
           return setTostError(t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE"));
         }
         return setConfig(

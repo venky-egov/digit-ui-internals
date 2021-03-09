@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-const { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg } = require("@egovernments/digit-ui-react-components");
+import { useForm, Controller } from "react-hook-form";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
 const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFields, searchParams, isInboxPage }) => {
   const { t } = useTranslation();
   const [applicationNo, setApplicationNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
-  const { register, handleSubmit, reset, watch } = useForm({
+  const { register, handleSubmit, reset, watch, control } = useForm({
     defaultValues: searchParams,
   });
   const mobileView = innerWidth <= 640;
@@ -72,7 +72,16 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
               {searchFields?.map((input, index) => (
                 <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
                   <Label>{input.label}</Label>
-                  <TextInput {...input} inputRef={register} watch={watch} shouldUpdate={true} />
+                  {input.type !== "date" ? (
+                    <TextInput {...input} inputRef={register} watch={watch} shouldUpdate={true} />
+                  ) : (
+                    <Controller
+                      render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
+                      name={input.name}
+                      control={control}
+                      defaultValue={null}
+                    />
+                  )}{" "}
                 </span>
               ))}
               {/* <span className="complaint-input">

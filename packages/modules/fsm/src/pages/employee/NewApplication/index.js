@@ -63,10 +63,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const applicantName = data.applicationData.applicantName;
     const mobileNumber = data.applicationData.mobileNumber;
     const pincode = data?.address?.pincode;
-    const street = data?.address?.street;
-    const doorNo = data?.address?.doorNo;
+    const street = data?.address?.street?.trim();
+    const doorNo = data?.address?.doorNo?.trim();
     const slum = data?.address?.slum;
-    const landmark = data?.address?.landmark;
+    const landmark = data?.address?.landmark?.trim();
     const noOfTrips = data.tripData.noOfTrips;
     const amount = data.tripData.amountPerTrip;
     const cityCode = data?.address?.city?.code;

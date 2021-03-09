@@ -42,9 +42,9 @@ const Response = ({ data, onSuccess }) => {
           address: {
             tenantId: city.code,
             additionalDetails: null,
-            street,
-            doorNo,
-            landmark,
+            street: street?.trim(),
+            doorNo: doorNo?.trim(),
+            landmark: landmark?.trim(),
             slumName: slum,
             city: city.name,
             pincode,

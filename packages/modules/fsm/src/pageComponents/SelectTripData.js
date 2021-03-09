@@ -92,8 +92,8 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           // console.log("find formdata here", formData);
         } else {
           setValue({
-            amountPerTrip: null,
-            amount: null,
+            amountPerTrip: "",
+            amount: "",
           });
           setError(true);
         }
@@ -136,7 +136,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           </div>
         </LabelFieldPair>
       ))}
-      {billError ? <CardLabelError>{t("ES_APPLICATION_BILL_SLAB_ERROR")}</CardLabelError> : null}
+      {billError ? <CardLabelError style={{ width: "100%", textAlign: "center" }}>{t("ES_APPLICATION_BILL_SLAB_ERROR")}</CardLabelError> : null}
     </div>
   );
 };

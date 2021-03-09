@@ -20,7 +20,7 @@ export const CollectPayment = (props) => {
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
   // TODO: enhancement to disablePayerDetails
-  const [disablePayerDetails, setDisablePayerDetails] = useState(false);
+  const [disablePayerDetails, setDisablePayerDetails] = useState(true);
 
   const { cardConfig } = useCardPaymentDetails(props, t);
   const { chequeConfig, date } = useChequeDetails(props, t);
@@ -45,7 +45,7 @@ export const CollectPayment = (props) => {
   };
 
   const getPaymentModes = () => defaultPaymentModes;
-  const paidByMenu = [t("COMMON_OWNER"), t("COMMON_OTHER")];
+  const paidByMenu = [{ name: t("COMMON_OWNER") }, { name: t("COMMON_OTHER") }];
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
 
   const onSubmit = async (data) => {
@@ -149,7 +149,7 @@ export const CollectPayment = (props) => {
           type: "custom",
           populators: {
             name: "paidBy",
-            customProps: { t, isMendatory: true, option: paidByMenu },
+            customProps: { t, isMendatory: true, option: paidByMenu, optionKey: "name" },
             component: (props, customProps) => (
               <Dropdown
                 {...customProps}
@@ -158,9 +158,11 @@ export const CollectPayment = (props) => {
                   if (isEqual(d, paidByMenu[0])) {
                     props.setValue("payerName", bill?.payerName);
                     props.setValue("payerMobile", bill?.mobileNumber);
+                    setDisablePayerDetails(true);
                   } else {
                     props.setValue("payerName", "");
                     props.setValue("payerMobile", "");
+                    setDisablePayerDetails(false);
                   }
                   props.onChange(d);
                 }}

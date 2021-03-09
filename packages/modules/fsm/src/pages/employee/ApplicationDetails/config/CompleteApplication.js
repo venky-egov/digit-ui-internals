@@ -28,8 +28,9 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
             name: "wasteCollected",
             validation: {
               required: true,
-              validate: (value) => value <= vehicle.capacity,
+              validate: (value) => parseInt(value) <= parseInt(vehicle.capacity),
             },
+            error: `${t("ES_FSM_ACTION_INVALID_WASTE_VOLUME")} ${vehicle?.capacity}`,
             defaultValue: vehicle?.capacity,
           },
         },

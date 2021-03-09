@@ -5,7 +5,8 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const [slum, setSlum] = useState();
-  const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "Slum");
+  const slumTenantId = formData?.address?.city ? formData?.address?.city.code : tenantId;
+  const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(slumTenantId, "FSM", "Slum");
   // console.log("find slum data here", locality,slumData && slumData[locality]), formData?.address?.locality;
 
   const [slumMenu, setSlumMenu] = useState();

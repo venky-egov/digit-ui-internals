@@ -61,7 +61,7 @@ export const Search = {
     const stateId = tenantId?.split(".")[0];
     let slumLabel = "";
     if (response?.address?.slumName && response?.address?.locality?.code) {
-      const slumData = await MdmsService.getSlumLocalityMapping(stateId, "FSM", "Slum");
+      const slumData = await MdmsService.getSlumLocalityMapping(tenantId, "FSM", "Slum");
       if (slumData[response?.address?.locality?.code]) {
         slumLabel = slumData[response?.address?.locality?.code].find((slum) => slum?.code === response?.address?.slumName);
       } else {

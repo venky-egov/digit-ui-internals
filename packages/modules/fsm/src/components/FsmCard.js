@@ -40,7 +40,7 @@ const FSMCard = () => {
         },
         { [t("ES_READY_FOR_DISPOSAL")]: 0 }
       );
-      info[t("ES_READY_FOR_DISPOSAL")] = info[t("ES_READY_FOR_DISPOSAL")] + " (KL)";
+      info[t("ES_READY_FOR_DISPOSAL")] = `(${info[t("ES_READY_FOR_DISPOSAL")]} KL)`;
       return info;
     },
   };
@@ -89,8 +89,8 @@ const FSMCard = () => {
                 {Object.keys(info).map((key, index) => {
                   return (
                     <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                      <span>{t(key)}</span>
                       <span>{t(info[key])}</span>
-                      <span style={{}}>{t(key)}</span>
                     </div>
                   );
                 })}

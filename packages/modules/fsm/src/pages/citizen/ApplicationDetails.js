@@ -41,6 +41,7 @@ const ApplicationDetails = () => {
     Digit.Utils.pdf.generate(data);
   };
 
+  console.log("%c 🐉: ApplicationDetails -> application ", "font-size:16px;background-color:#8790fc;color:white;", application);
   return (
     <React.Fragment>
       <Header>{t("CS_FSM_APPLICATION_DETAIL_TITLE_APPLICATION_DETAILS")}</Header>
@@ -60,9 +61,9 @@ const ApplicationDetails = () => {
           onClick={handleDownloadPdf}
         />
 
-        {application?.applicationDetails?.map(({ title, value, child, caption }, index) => {
+        {application?.applicationDetails?.map(({ title, value, child, caption, map }, index) => {
           return (
-            <KeyNote key={index} keyValue={t(title)} note={t(value) || "N/A"} caption={t(caption)}>
+            <KeyNote key={index} keyValue={t(title)} note={t(value) || ((!map || !child) && "N/A")} caption={t(caption)}>
               {child && typeof child === "object" ? React.createElement(child.element, { ...child }) : child}
             </KeyNote>
           );

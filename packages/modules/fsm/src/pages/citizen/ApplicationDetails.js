@@ -41,7 +41,6 @@ const ApplicationDetails = () => {
     Digit.Utils.pdf.generate(data);
   };
 
-  console.log("%c 🐉: ApplicationDetails -> application ", "font-size:16px;background-color:#8790fc;color:white;", application);
   return (
     <React.Fragment>
       <Header>{t("CS_FSM_APPLICATION_DETAIL_TITLE_APPLICATION_DETAILS")}</Header>

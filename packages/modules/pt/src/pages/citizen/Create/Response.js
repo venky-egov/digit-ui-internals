@@ -24,7 +24,7 @@ const BannerPicker = (props) => {
 const Response = ({ data, onSuccess }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  let mutation ={};
+  let mutation = {};
   //const coreData = Digit.Hooks.useCoreData();
   //const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   //const slumCode = mutation?.data?.fsm[0].address?.slumName;
@@ -36,15 +36,15 @@ const Response = ({ data, onSuccess }) => {
       //const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
       const formdata = {
         Property: {
-          tenantId: 'pb.amritsar',
+          tenantId: "pb.amritsar",
           address: {
             city: address?.city.code,
             doorNo: address?.doorNo,
-            buildingName:address?.buildingName,
-            "locality": {
-              "code": "SUN23",
-              "area": "Area1"
-          }
+            buildingName: address?.buildingName,
+            locality: {
+              code: "SUN23",
+              area: "Area1",
+            },
           },
           usageCategoryMinor: null,
           units: [
@@ -62,7 +62,7 @@ const Response = ({ data, onSuccess }) => {
           landArea: null,
           propertyType: "BUILTUP.SHAREDPROPERTY",
           noOfFloors: 2,
-          ownershipCategory:"INDIVIDUAL.SINGLEOWNER",
+          ownershipCategory: "INDIVIDUAL.SINGLEOWNER",
           owners: [
             {
               name: t(owners[0]?.name),
@@ -116,7 +116,7 @@ const Response = ({ data, onSuccess }) => {
       /* temp line to override proeprty value should be removed  */
 
       console.log(formdata);
-      formdata.Property=     {
+      /*  formdata.Property=     {
         "tenantId": "pb.amritsar",
         "address": {
             "city": "Amritsar",
@@ -191,12 +191,12 @@ const Response = ({ data, onSuccess }) => {
         "creationReason": "CREATE",
         "superBuiltUpArea": null,
         "usageCategory": "RESIDENTIAL"
-    }
+    } */
 
       /* TODO */
-   
-       mutation = Digit.Hooks.pt.usePropertyAPI(formdata,tenantId);
-       console.log(mutation)
+
+      mutation = Digit.Hooks.pt.usePropertyAPI(formdata, tenantId);
+      console.log(mutation);
     } catch (err) {
       console.log(err);
     }
@@ -228,7 +228,7 @@ const Response = ({ data, onSuccess }) => {
               <span className="download-button">{t("CS_COMMON_DOWNLOAD")}</span>
             </div>
           }
-          onClick={ handleDownloadPdf }
+          onClick={handleDownloadPdf}
         />
       )}
       <Link to={`/digit-ui/citizen`}>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { Dropdown, CardLabelError } from "@egovernments/digit-ui-react-components";
 
 function todayDate() {
   var today = new Date();
@@ -54,14 +54,19 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
             isMandatory: true,
             type: "dropdown",
             populators: (
-              <Dropdown
-                option={getFilteredDsoData(dsoData, vehicle)}
-                autoComplete="off"
-                optionKey="displayName"
-                id="dso"
-                selected={dso}
-                select={selectDSO}
-              />
+              <React.Fragment>
+                {getFilteredDsoData() && !getFilteredDsoData().length ? (
+                  <CardLabelError>{t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}</CardLabelError>
+                ) : null}
+                <Dropdown
+                  option={getFilteredDsoData(dsoData, vehicle)}
+                  autoComplete="off"
+                  optionKey="displayName"
+                  id="dso"
+                  selected={dso}
+                  select={selectDSO}
+                />
+              </React.Fragment>
             ),
           },
           {

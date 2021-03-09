@@ -28,7 +28,7 @@ const Response = ({ data, onSuccess }) => {
   const coreData = Digit.Hooks.useCoreData();
   const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   const slumCode = mutation?.data?.fsm[0].address?.slumName;
-  const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm[0].address?.city.code, slumCode, localityCode);
+  const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm[0].address?.tenantId, slumCode, localityCode);
 
   useEffect(() => {
     try {

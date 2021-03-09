@@ -51,6 +51,7 @@ export const CollectPayment = (props) => {
   const onSubmit = async (data) => {
     console.log(data);
     bill.totalAmount = Math.round(bill.totalAmount);
+    data.paidBy = data.paidBy.name;
     // console.log(data, bill.totalAmount);
     const recieptRequest = {
       Payment: {

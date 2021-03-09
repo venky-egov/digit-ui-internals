@@ -13,7 +13,7 @@ const DatePicker = (props) => {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", width: "100%" }}>
       <React.Fragment>
         <input type="text" value={getDatePrint()} readOnly className="employee-card-input" style={{ width: "calc(100%-62px)" }} />
         <CalendarIcon style={{ right: "6px", zIndex: "10", top: 6, position: "absolute" }} />

@@ -60,6 +60,7 @@ import CustomButton from "./atoms/CustomButton";
 import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
 import RoundedLabel from "./atoms/RoundedLabel";
 import BreadCrumb from "./atoms/BreadCrumb";
+import DatePicker from "./atoms/DatePicker";
 
 import { SearchIconSvg } from "./atoms/svgindex";
 
@@ -150,6 +151,7 @@ export {
   RoundedLabel,
   LabelFieldPair,
   BreadCrumb,
+  DatePicker,
   // Icons
   GetApp,
   ArrowLeft,

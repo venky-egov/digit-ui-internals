@@ -20,7 +20,7 @@ export const CollectPayment = (props) => {
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
   // TODO: enhancement to disablePayerDetails
-  const [disablePayerDetails, setDisablePayerDetails] = useState(true);
+  const [disablePayerDetails, setDisablePayerDetails] = useState(false);
 
   const { cardConfig } = useCardPaymentDetails(props, t);
   const { chequeConfig, date } = useChequeDetails(props, t);
@@ -158,11 +158,9 @@ export const CollectPayment = (props) => {
                   if (isEqual(d, paidByMenu[0])) {
                     props.setValue("payerName", bill?.payerName);
                     props.setValue("payerMobile", bill?.mobileNumber);
-                    setDisablePayerDetails(true);
                   } else {
                     props.setValue("payerName", "");
                     props.setValue("payerMobile", "");
-                    setDisablePayerDetails(false);
                   }
                   props.onChange(d);
                 }}

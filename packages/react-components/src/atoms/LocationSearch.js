@@ -356,7 +356,7 @@ const LocationSearch = (props) => {
       const initMaps = () => {
         if (props.position?.latitude && props.position?.longitude) {
           getLatLng({ coords: props.position });
-        } else if (navigator?.geoLocation) {
+        } else if (navigator?.geolocation) {
           navigator.geolocation.getCurrentPosition(getLatLng, getLatLngError);
         } else {
           getLatLngError();

@@ -34,13 +34,15 @@ const Response = ({ data, onSuccess }) => {
     try {
       const { subtype, pitDetail, address, pitType, source, ownershipCategory, owners } = data;
       //const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
+      debugger;
+      console.log(owners[0]?.permanentAddress);
       const formdata = {
         Property: {
           tenantId: "pb.amritsar",
           address: {
-            city: address?.city.code,
+            city: address?.city.name,
             doorNo: address?.doorNo,
-            buildingName: address?.buildingName,
+            buildingName: "NA",
             locality: {
               code: "SUN23",
               area: "Area1",
@@ -59,25 +61,30 @@ const Response = ({ data, onSuccess }) => {
             },
           ],
           usageCategoryMajor: "RESIDENTIAL",
-          landArea: null,
+          landArea: "2000",
           propertyType: "BUILTUP.SHAREDPROPERTY",
-          noOfFloors: 2,
+          noOfFloors: 1,
           ownershipCategory: "INDIVIDUAL.SINGLEOWNER",
           owners: [
             {
-              name: t(owners[0]?.name),
+              name: owners[0]?.name,
               mobileNumber: "7838038768",
-              fatherOrHusbandName: t(owners[0]?.fatherOrHusbandName),
+              fatherOrHusbandName: owners[0]?.fatherOrHusbandName,
               emailId: "tutul.tulika@gmail.com",
-              permanentAddress: `${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(
+              /* permanentAddress: `${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(
                 address?.locality.code
-              )}, ${t(address?.city.code)}`,
+              )}, ${t(address?.city.code)}` */
+              permanentAddress: owners[0]?.permanentAddress,
               relationship: "FATHER",
               ownerType: "NONE",
               gender: "Male",
-              isCorrespondenceAddress: true,
+              isCorrespondenceAddress: null,
             },
           ],
+          additionalDetails: {
+            inflammable: false,
+            heightAbove36Feet: false,
+          },
           source: "MUNICIPAL_RECORDS",
           channel: "CFC_COUNTER",
           documents: [

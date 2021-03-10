@@ -20,6 +20,14 @@ import SelectProofIdentity from "./pageComponents/SelectProofIdentity";
 import SelectSpecialProofIdentity from "./pageComponents/SelectSpecialProofIdentity";
 import PropertyTax from "./pageComponents/PropertyTax";
 
+import IsThisFloorSelfOccupied from "./pageComponents/IsThisFloorSelfOccupied";
+import ProvideSubUsageType from "./pageComponents/ProvideSubUsageType";
+import RentalDetails from "./pageComponents/RentalDetails";
+import ProvideSubUsageTypeOfRentedArea from "./pageComponents/ProvideSubUsageTypeOfRentedArea";
+import IsAnyPartOfThisFloorUnOccupied from "./pageComponents/IsAnyPartOfThisFloorUnOccupied";
+import UnOccupiedArea from "./pageComponents/UnOccupiedArea";
+import Area from "./pageComponents/Area";
+
 const componentsToRegister = {
   PropertyTax,
   SelectGeolocation,
@@ -35,6 +43,14 @@ const componentsToRegister = {
   SelectInistitutionOwnerDetails,
   SelectProofIdentity,
   SelectSpecialProofIdentity,
+
+  IsThisFloorSelfOccupied,
+  ProvideSubUsageType,
+  RentalDetails,
+  ProvideSubUsageTypeOfRentedArea,
+  IsAnyPartOfThisFloorUnOccupied,
+  UnOccupiedArea,
+  Area
 };
 
 const addComponentsToRegistry = () => {

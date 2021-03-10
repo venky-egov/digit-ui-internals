@@ -57,16 +57,18 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
         <CardLabel>Before you Start</CardLabel>
         <CardText>Scans or photos of the following documents are mandatory to complete the application.</CardText>
         <div>
-          {docs.map(({ code, dropdownData }, index) => (
-            <div key={index}>
-              <CardLabel>
-                {index + 1}. {code}
-              </CardLabel>
-              {dropdownData.map((dropdownData) => (
-                <CardText>{dropdownData?.code}</CardText>
-              ))}
-            </div>
-          ))}
+          {Array.isArray(docs)
+            ? docs.map(({ code, dropdownData }, index) => (
+                <div key={index}>
+                  <CardLabel>
+                    {index + 1}. {code}
+                  </CardLabel>
+                  {dropdownData.map((dropdownData) => (
+                    <CardText>{dropdownData?.code}</CardText>
+                  ))}
+                </div>
+              ))
+            : console.log("error")}
         </div>
 
         <SubmitBar label="Next" onSubmit={onSelect} />

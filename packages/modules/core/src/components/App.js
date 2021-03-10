@@ -35,16 +35,9 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
     window?.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   });
 
-  const handleLogout = () => {
-    toggleSidebar(false);
-    Digit.UserService.logout();
-  };
-
   const handleUserDropdownSelection = (option) => {
     option.func();
   };
-
-  const userOptions = [{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
 
   const mobileView = innerWidth <= 640;
 
@@ -57,16 +50,14 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           <TopBarSideBar
             t={t}
             stateInfo={stateInfo}
-            handleLogout={handleLogout}
             userDetails={userDetails}
             CITIZEN={CITIZEN}
             cityDetails={cityDetails}
             mobileView={mobileView}
-            userOptions={userOptions}
             handleUserDropdownSelection={handleUserDropdownSelection}
             logoUrl={logoUrl}
           />
-          <div className={`main ${DSO ? "m-auto" : ""}`} style={{ ...sideBarOpenStyles }}>
+          <div className={`main ${DSO ? "m-auto" : ""}`}>
             <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
           </div>
         </div>
@@ -76,12 +67,10 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           <TopBarSideBar
             t={t}
             stateInfo={stateInfo}
-            handleLogout={handleLogout}
             userDetails={userDetails}
             CITIZEN={CITIZEN}
             cityDetails={cityDetails}
             mobileView={mobileView}
-            userOptions={userOptions}
             handleUserDropdownSelection={handleUserDropdownSelection}
             logoUrl={logoUrl}
           />
@@ -98,9 +87,16 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
 };
 
 function TopBarSideBar(props) {
+  const { t, stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleUserDropdownSelection, logoUrl } = props;
   const [isSidebarOpen, toggleSidebar] = useState(false);
 
-  const { t, stateInfo, handleLogout, userDetails, CITIZEN, cityDetails, mobileView, userOptions, handleUserDropdownSelection, logoUrl } = props;
+  const handleLogout = () => {
+    toggleSidebar(false);
+    Digit.UserService.logout();
+  };
+
+  const userOptions = [{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
+
   return (
     <React.Fragment>
       <TopBar

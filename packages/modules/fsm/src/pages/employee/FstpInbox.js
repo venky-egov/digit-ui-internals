@@ -7,7 +7,12 @@ import MobileInbox from "../../components/MobileInbox";
 const config = {
   placeholderData: [],
   select: (response) => {
-    return response?.vehicleTrip;
+    return response?.vehicleTrip.map((trip) => {
+      const owner = trip.tripOwner;
+      const displayName = owner.name + (owner.userName ? `- ${owner.userName}` : "");
+      const tripOwner = { ...owner, displayName };
+      return { ...trip, tripOwner };
+    });
   },
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import PGRCard from "./components/PGRCard";
 
 import getRootReducer from "./redux/reducers";
 import CitizenApp from "./pages/citizen";
@@ -11,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { LOCALE } from "./constants/Localization";
 export const PGRReducers = getRootReducer;
 
-export const PGRModule = ({ stateCode, userType, tenants }) => {
+const PGRModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "PGR";
   const state = useSelector((state) => state["pgr"]);
   const language = state?.common?.selectedLanguage;
@@ -30,7 +31,7 @@ export const PGRModule = ({ stateCode, userType, tenants }) => {
   }
 };
 
-export const PGRLinks = ({ matchPath }) => {
+const PGRLinks = ({ matchPath }) => {
   const { t } = useTranslation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
 
@@ -49,4 +50,16 @@ export const PGRLinks = ({ matchPath }) => {
       </div>
     </React.Fragment>
   );
+};
+
+const componentsToRegister = {
+  PGRModule,
+  PGRLinks,
+  PGRCard,
+};
+
+export const initPGRComponents = () => {
+  Object.entries(componentsToRegister).forEach(([key, value]) => {
+    Digit.ComponentRegistryService.setComponent(key, value);
+  });
 };

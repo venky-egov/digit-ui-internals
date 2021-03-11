@@ -5,7 +5,8 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const [slum, setSlum] = useState();
-  const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "Slum");
+  const slumTenantId = formData?.address?.city ? formData?.address?.city.code : tenantId;
+  const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(slumTenantId, "FSM", "Slum");
   // console.log("find slum data here", locality,slumData && slumData[locality]), formData?.address?.locality;
 
   const [slumMenu, setSlumMenu] = useState();
@@ -92,10 +93,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
 
   return userType === "employee" ? (
     <LabelFieldPair>
-      <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
-        {t("ES_NEW_APPLICATION_SLUM_NAME")}
-        {config.isMandatory ? " * " : null}
-      </CardLabel>
+      <CardLabel style={{ marginBottom: "revert", width: "30%" }}>{t("ES_NEW_APPLICATION_SLUM_NAME")}</CardLabel>
       <Dropdown t={t} option={slumMenu} style={{ width: "50%" }} optionKey="i18nKey" id="slum" selected={slum} select={selectSlum} />
     </LabelFieldPair>
   ) : (

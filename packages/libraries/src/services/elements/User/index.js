@@ -30,7 +30,7 @@ export const UserService = {
     window.localStorage.clear();
     window.sessionStorage.clear();
     if (userType === "citizen") {
-      window.location.replace("/citizen");
+      window.location.replace("/digit-ui/citizen");
     } else {
       window.location.replace("/employee");
     }

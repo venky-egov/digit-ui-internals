@@ -11,7 +11,6 @@ import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 
 import { NewApplication } from "./pages/employee/NewApplication";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
-import CollectPayment from "./pages/employee/CollectPayment";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
@@ -19,7 +18,6 @@ import Inbox from "./pages/employee/Inbox";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import DsoDashboard from "./pages/employee/DsoDashboard";
 
-import SearchApplication from "./pages/employee/SearchApplication";
 import FstpInbox from "./pages/employee/FstpInbox";
 
 import SelectPropertySubtype from "./pageComponents/SelectPropertySubtype";
@@ -33,32 +31,36 @@ import SelectPitType from "./pageComponents/SelectPitType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectSlumName from "./pageComponents/SelectSlumName";
 import CheckSlum from "./pageComponents/CheckSlum";
+import SelectChannel from "./pageComponents/SelectChannel";
+import SelectName from "./pageComponents/SelectName";
+import SelectTripData from "./pageComponents/SelectTripData";
 import FSMCard from "./components/FsmCard";
+import { Redirect } from "react-router-dom";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const mobileView = innerWidth <= 640;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
   return (
     <Switch>
       <div className="ground-container">
         <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
-          <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
+          <Link to={DSO ? "/digit-ui/citizen/fsm/dso-dashboard" : "/digit-ui/employee"} style={{ cursor: "pointer", color: "#666" }}>
             {t("ES_COMMON_HOME")}
           </Link>{" "}
-          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? "Applications" : "FSM"}</span>
+          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? t("ES_TITLE_INBOX") : "FSM"}</span>
         </p>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
-        <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />
+        <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
         <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
         <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
         <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
-        <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
-        <PrivateRoute path={`${path}/search`} component={() => <SearchApplication />} />
+        <PrivateRoute path={`${path}/search`} component={() => <Inbox parentRoute={path} isSearch={true} />} />
         <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />
       </div>
     </Switch>
@@ -71,13 +73,22 @@ const CitizenApp = ({ path }) => {
     <React.Fragment>
       {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
       <Switch>
-        {Digit.UserService.hasAccess("FSM_DSO") && <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} />} />}
+        <PrivateRoute
+          path={`${path}/inbox`}
+          component={() =>
+            Digit.UserService.hasAccess(["FSM_DSO"]) ? <Inbox parentRoute={path} isInbox={true} /> : <Redirect to="/digit-ui/citizen" />
+          }
+        />
+        <PrivateRoute
+          path={`${path}/search`}
+          component={() =>
+            Digit.UserService.hasAccess(["FSM_DSO"]) ? <Inbox parentRoute={path} isSearch={true} /> : <Redirect to="/digit-ui/citizen" />
+          }
+        />
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplicationCitizen parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
-        <PrivateRoute
-          path={`${path}/application-details/:id`}
-          component={Digit.UserService.hasAccess("FSM_DSO") ? <EmployeeApplicationDetails parentRoute={path} /> : ApplicationDetails}
-        />
+        <PrivateRoute path={`${path}/dso-application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
+        <PrivateRoute path={`${path}/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response parentRoute={path} {...props} />} />
         <PrivateRoute path={`${path}/dso-dashboard`} component={() => <DsoDashboard parentRoute={path} />} />
@@ -86,7 +97,7 @@ const CitizenApp = ({ path }) => {
   );
 };
 
-const FSMModule = ({ stateCode, userType }) => {
+const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
@@ -98,6 +109,7 @@ const FSMModule = ({ stateCode, userType }) => {
   }
 
   console.log("fsm", userType, path, state, store);
+  Digit.SessionStorage.set("FSM_TENANTS", tenants);
 
   if (userType === "citizen") {
     return <CitizenApp path={path} />;
@@ -202,6 +214,9 @@ const componentsToRegister = {
   FSMCard,
   FSMModule,
   FSMLinks,
+  SelectChannel,
+  SelectName,
+  SelectTripData,
 };
 
 export const initFSMComponents = () => {

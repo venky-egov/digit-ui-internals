@@ -7,6 +7,7 @@ import CardLabel from "../atoms/CardLabel";
 import CardSubHeader from "../atoms/CardSubHeader";
 import CardSectionHeader from "../atoms/CardSectionHeader";
 import CardLabelDesc from "../atoms/CardLabelDesc";
+import CardLabelError from "../atoms/CardLabelError";
 import TextArea from "../atoms/TextArea";
 import TextInput from "../atoms/TextInput";
 import ActionBar from "../atoms/ActionBar";
@@ -34,12 +35,14 @@ export const FormComposer = (props) => {
 
   useEffect(() => {
     props.onFormValueChange && props.onFormValueChange(setValue, formData, formState);
+    console.log("find formData", formData);
   }, [formData]);
 
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
     switch (type) {
       case "text":
       case "date":
+      case "number":
       case "password":
         // if (populators.defaultValue) setTimeout(setValue(populators.name, populators.defaultValue));
         return (
@@ -70,6 +73,7 @@ export const FormComposer = (props) => {
               isRequired={isMandatory}
               type={type}
               disable={disable}
+              watch={watch}
             />
           </div>
         );
@@ -89,7 +93,7 @@ export const FormComposer = (props) => {
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Controller
-            as={
+            render={(props) => (
               <Component
                 userType={"employee"}
                 t={t}
@@ -100,8 +104,9 @@ export const FormComposer = (props) => {
                 formData={formData}
                 register={register}
                 errors={errors}
+                props={props}
               />
-            }
+            )}
             name={config.key}
             control={control}
           />
@@ -127,6 +132,9 @@ export const FormComposer = (props) => {
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
+                    {errors && errors[field.populators.name] && Object.keys(errors[field.populators.name]).length ? (
+                      <CardLabelError>{field.populators.error}</CardLabelError>
+                    ) : null}
                     <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
                       {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
                     </div>

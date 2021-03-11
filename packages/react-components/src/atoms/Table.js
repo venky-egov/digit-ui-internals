@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useTable, useRowSelect, usePagination, useSortBy } from "react-table";
+import { useTable, useRowSelect, usePagination, useSortBy, useControlledState } from "react-table";
 import { ArrowBack, ArrowForward, SortUp, SortDown } from "./svgindex";
 
 // const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
@@ -32,6 +32,7 @@ const Table = ({
   onPrevPage,
   onSort = noop,
   onPageSizeChange,
+  sortParams = [],
 }) => {
   const {
     getTableProps,
@@ -53,13 +54,21 @@ const Table = ({
     {
       columns,
       data,
-      initialState: { pageIndex: currentPage, pageSize: pageSizeLimit },
+      initialState: { pageIndex: currentPage, pageSize: pageSizeLimit, sortBy: sortParams },
       pageCount: totalRecords > 0 ? Math.ceil(totalRecords / pageSizeLimit) : -1,
       manualPagination: true,
       disableMultiSort: false,
       disableSortBy: disableSort,
       manualSortBy: true,
       autoResetPage: false,
+      autoResetSortBy: false,
+      disableSortRemove: true,
+      useControlledState: (state) => {
+        return React.useMemo(() => ({
+          ...state,
+          pageIndex: currentPage,
+        }));
+      },
     },
     useSortBy,
     usePagination,
@@ -149,7 +158,7 @@ const Table = ({
           })}
         </tbody>
       </table>
-      {canNextPage && (
+      {
         <div className="pagination">
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
           <select className="cp" value={pageSize} style={{ marginRight: "15px" }} onChange={onPageSizeChange}>
@@ -163,7 +172,8 @@ const Table = ({
             <span>
               {currentPage * pageSizeLimit + 1}
               {"-"}
-              {(currentPage + 1) * pageSizeLimit} {totalRecords ? `of ${totalRecords}` : ""}
+              {(currentPage + 1) * pageSizeLimit > totalRecords ? totalRecords : (currentPage + 1) * pageSizeLimit}{" "}
+              {totalRecords ? `of ${totalRecords}` : ""}
             </span>{" "}
           </span>
           {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
@@ -174,7 +184,7 @@ const Table = ({
           {canPreviousPage && <ArrowBack onClick={() => onPrevPage()} className={"cp"} />}
           {canNextPage && <ArrowForward onClick={() => onNextPage()} className={"cp"} />}
         </div>
-      )}
+      }
     </React.Fragment>
   );
 };

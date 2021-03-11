@@ -6,10 +6,6 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
 
-  // const cityWiseLocalities = useSelector((state) => state.common.localities);
-
-  // const localities = cityWiseLocalities[city]
-
   const { pincode, city } = formData?.address || "";
   const cities =
     userType === "employee"
@@ -17,7 +13,10 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       : pincode
       ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
       : allCities;
-  const allLocalities = useSelector((state) => state.common.localities);
+  const allLocalities = useSelector((state) => {
+    // console.log("find redux state here", state)
+    return state.common.revenue_localities;
+  });
   const localitiesObj = JSON.parse(JSON.stringify(allLocalities));
 
   if (pincode && city) {
@@ -48,6 +47,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
 
       if (formData?.address?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
+        setSelectedLocality();
       }
 
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));

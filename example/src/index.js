@@ -5,6 +5,7 @@ import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
 import { initFSMComponents } from "@egovernments/digit-ui-module-fsm";
+import { initPGRComponents } from "@egovernments/digit-ui-module-pgr";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
@@ -31,6 +32,8 @@ import QA_FSM_EDITOR from "./userInfo/QAEE.json";
 import QA_FSM_COLLECTOR from "./userInfo/QACOLL.json";
 import QA_FSM_DSO from "./userInfo/QADSO.json";
 import QA_FSM_FSTP from "./userInfo/QAFSTPO.json";
+import QA_CECOLL from "./userInfo/qa-cecoll.json";
+import QACREDITOR from "./userInfo/QACREDITOR.json";
 
 import QAFSTP from "./userInfo/fstp.json";
 import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
@@ -62,6 +65,8 @@ const userInfo = {
   QA_FSM_DSO,
   QA_FSM_EDITOR,
   QA_FSM_FSTP,
+  QA_CECOLL,
+  QACREDITOR,
 };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
@@ -69,7 +74,7 @@ const enabledModules = ["PGR", "FSM", "Payment", "PT"];
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-  const token = process.env[`REACT_APP_${userType}_TOKEN`];
+  const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
   // console.log(token);
 
@@ -85,9 +90,9 @@ const initTokens = (stateCode) => {
   window.Digit.SessionStorage.set("userType", userTypeInfo);
 
   if (userType !== "CITIZEN") {
-    window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
+    window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
   } else {
-    // if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+    if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
   }
 
   window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
@@ -97,8 +102,6 @@ const initTokens = (stateCode) => {
 const initDigitUI = () => {
   Digit.ComponentRegistryService.setupRegistry({
     ...pgrComponents,
-    PGRLinks,
-    PGRModule,
     PaymentModule,
     PaymentLinks,
     PTModule,
@@ -106,6 +109,7 @@ const initDigitUI = () => {
   });
 
   initFSMComponents();
+  initPGRComponents();
 
   const moduleReducers = (initData) => ({
     pgr: PGRReducers(initData),

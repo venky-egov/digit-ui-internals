@@ -12,12 +12,12 @@ import Response from "./Response";
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
-  console.log("pgr citizen", { path, url, ...match });
   const location = useLocation();
   return (
-    <Switch>
-      <AppContainer>
-        {!location.pathname.includes("/response") && <BackButton>Back</BackButton>}
+    <React.Fragment>
+      {!location.pathname.includes("/response") && <BackButton>Back</BackButton>}
+      <Switch>
+        {/* <AppContainer> */}
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id*`} component={ComplaintDetailsPage} />
@@ -27,8 +27,9 @@ const App = () => {
         />
         <PrivateRoute path={`${path}/rate/:id*`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response match={{ ...match, url, path }} />} />
-      </AppContainer>
-    </Switch>
+        {/* </AppContainer> */}
+      </Switch>
+    </React.Fragment>
   );
 };
 

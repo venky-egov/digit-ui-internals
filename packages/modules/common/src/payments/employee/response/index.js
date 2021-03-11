@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Banner, Card, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 
 export const SuccessfulPayment = (props) => {
-  props.setLink("Response");
   const { addParams, clearParams } = props;
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  props.setLink("Response");
   let { consumerCode, receiptNumber, businessService } = useParams();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
+
+  useEffect(() => {
+    return () => {
+      queryClient.clear();
+    };
+  }, []);
 
   const getMessage = () => t("ES_PAYMENT_COLLECTED");
   // console.log("--------->", consumerCode);
@@ -24,17 +31,13 @@ export const SuccessfulPayment = (props) => {
       // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
-    const queryClient = useQueryClient();
-    const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
-    inbox?.revalidate?.();
-    queryClient.refetchQueries("FSM_CITIZEN_SEARCH");
     window.open(fileStore[response.filestoreIds[0]], "_blank");
   };
 
   return (
     <Card>
       <Banner message={getMessage()} info="Receipt No." applicationNumber={receiptNumber} successful={true} />
-      {/* <CardText>{t("ES_PAYMENT_FAILED")}</CardText> */}
+      <CardText>{t("ES_PAYMENT_SUCCESSFUL_DESCRIPTION")}</CardText>
       <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={printReciept}>
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
           <path d="M0 0h24v24H0z" fill="none" />
@@ -59,6 +62,7 @@ export const FailedPayment = (props) => {
   return (
     <Card>
       <Banner message={getMessage()} complaintNumber={consumerCode} successful={false} />
+      <CardText>{t("ES_PAYMENT_FAILED_DETAILS")}</CardText>
       <Link to="/digit-ui/employee">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

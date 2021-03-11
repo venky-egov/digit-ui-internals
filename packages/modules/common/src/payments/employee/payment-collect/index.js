@@ -22,17 +22,17 @@ export const CollectPayment = (props) => {
   // TODO: enhancement to disablePayerDetails
   const [disablePayerDetails, setDisablePayerDetails] = useState(true);
 
-  const { cardConfig } = useCardPaymentDetails(props);
-  const { chequeConfig, date } = useChequeDetails(props);
+  const { cardConfig } = useCardPaymentDetails(props, t);
+  const { chequeConfig, date } = useChequeDetails(props, t);
   const additionalCharges = getAdditionalCharge() || [];
 
   const [formState, setFormState] = useState({});
   const [toast, setToast] = useState(null);
 
   const defaultPaymentModes = [
-    { code: "CASH", label: "Cash" },
-    { code: "CHEQUE", label: "Cheque" },
-    { code: "CARD", label: "Debit/Credit Card" },
+    { code: "CASH", label: t("COMMON_MASTERS_PAYMENTMODE_CASH") },
+    { code: "CHEQUE", label: t("COMMON_MASTERS_PAYMENTMODE_CHEQUE") },
+    { code: "CARD", label: t("COMMON_MASTERS_PAYMENTMODE_CREDIT/DEBIT CARD") },
     // { code: "DD", label: "Demand Draft" },
     // { code: "OFFLINE_NEFT", label: "Offline NEFT" },
     // { code: "OFFLINE_RTGS", label: "Offline RTGS" },
@@ -45,11 +45,13 @@ export const CollectPayment = (props) => {
   };
 
   const getPaymentModes = () => defaultPaymentModes;
-  const paidByMenu = ["Owner", "Other"];
+  const paidByMenu = [{ name: t("COMMON_OWNER") }, { name: t("COMMON_OTHER") }];
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
 
   const onSubmit = async (data) => {
+    console.log(data);
     bill.totalAmount = Math.round(bill.totalAmount);
+    data.paidBy = data.paidBy.name;
     // console.log(data, bill.totalAmount);
     const recieptRequest = {
       Payment: {
@@ -88,6 +90,15 @@ export const CollectPayment = (props) => {
       recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime();
       recieptRequest.Payment.transactionNumber = "12345678";
     }
+
+    if (data.transactionNumber) {
+      if (data.transactionNumber !== data.reTransanctionNumber) {
+        setToast({ key: "error", action: t("ERR_TRASACTION_NUMBERS_DONT_MATCH") });
+        setTimeout(() => setToast(null), 5000);
+        return;
+      }
+    }
+
     try {
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();
@@ -121,25 +132,25 @@ export const CollectPayment = (props) => {
 
   const config = [
     {
-      head: "Payment Details",
+      head: t("COMMON_PAYMENT_HEAD"),
       body: [
         ...additionalCharges,
         {
-          label: "Total Amount",
+          label: t("PAY_TOTAL_AMOUNT"),
           populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill.totalAmount}`} </CardSectionHeader>,
         },
       ],
     },
     {
-      head: "Payer Details",
+      head: t("PAYMENT_PAID_BY_HEAD"),
       body: [
         {
-          label: "Paid By",
+          label: t("PAYMENT_PAID_BY_LABEL"),
           isMandatory: true,
           type: "custom",
           populators: {
             name: "paidBy",
-            customProps: { t, isMendatory: true, option: paidByMenu },
+            customProps: { t, isMendatory: true, option: paidByMenu, optionKey: "name" },
             component: (props, customProps) => (
               <Dropdown
                 {...customProps}
@@ -162,7 +173,7 @@ export const CollectPayment = (props) => {
           },
         },
         {
-          label: "Payer Name",
+          label: t("PAYMENT_PAYER_NAME_LABEL"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -177,7 +188,7 @@ export const CollectPayment = (props) => {
           disable: disablePayerDetails,
         },
         {
-          label: "Payer Mobile",
+          label: t("PAYMENT_PAYER_MOB_LABEL"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -194,7 +205,7 @@ export const CollectPayment = (props) => {
       ],
     },
     {
-      head: "Payment Mode",
+      head: t("PAYMENT_MODE_HEAD"),
       body: [
         {
           withoutLabel: true,
@@ -238,8 +249,8 @@ export const CollectPayment = (props) => {
     <React.Fragment>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
-        heading={"Collect Payment"}
-        label={"Generate Reciept"}
+        heading={t("PAYMENT_COLLECT")}
+        label={t("PAYMENT_COLLECT_LABEL")}
         config={getFormConfig()}
         onSubmit={onSubmit}
         formState={formState}
@@ -255,7 +266,7 @@ export const CollectPayment = (props) => {
       {toast && (
         <Toast
           error={toast.key === "error" ? true : false}
-          label={t(toast.key === "success" ? `ES_FSM_${toast.action}_UPDATE_SUCCESS` : toast.action)}
+          label={t(toast.key === "success" ? `ES_${businessService.split(".")[0].toLowerCase()}_${toast.action}_UPDATE_SUCCESS` : toast.action)}
           onClose={() => setToast(null)}
         />
       )}

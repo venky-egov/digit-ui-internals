@@ -2,19 +2,23 @@ import React from "react";
 import TextInput from "../atoms/TextInput";
 import CardText from "../atoms/CardText";
 
+const DimentionInput = ({ name, value, onChange, disable }) => (
+  <TextInput type="number" name={name} value={value} onChange={onChange} disable={disable} pattern="[0-9]{1,2}" min="0.1" max="99.9" step="0.1" />
+);
+
 const PitDimension = ({ sanitationType, t, size = {}, handleChange, disable = false }) => {
   // console.log("find sanitationType in pitDimensions here",sanitationType.dimension, size)
   return sanitationType?.dimension === "dd" ? (
     <div className="inputWrapper">
       <div>
-        <TextInput name="diameter" value={size["diameter"] || ""} onChange={handleChange} disable={disable} pattern="^[1-9]\d?(\.\d{1,2})?$" />
+        <DimentionInput name="diameter" value={size["diameter"] || ""} onChange={handleChange} disable={disable} />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_DIAMETER")}
         </CardText>
       </div>
       <span>x</span>
       <div>
-        <TextInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} pattern="^[1-9]\d?(\.\d{1,2})?$" />
+        <DimentionInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_HEIGHT")}
         </CardText>
@@ -23,21 +27,21 @@ const PitDimension = ({ sanitationType, t, size = {}, handleChange, disable = fa
   ) : (
     <div className="inputWrapper">
       <div>
-        <TextInput name="length" value={size["length"] || ""} onChange={handleChange} disable={disable} pattern="^[1-9]\d?(\.\d{1,2})?$" />
+        <DimentionInput name="length" value={size["length"] || ""} onChange={handleChange} disable={disable} />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_LENGTH")}
         </CardText>
       </div>
       <span>x</span>
       <div>
-        <TextInput name="width" value={size["width"] || ""} onChange={handleChange} disable={disable} pattern="^[1-9]\d?(\.\d{1,2})?$" />
+        <DimentionInput name="width" value={size["width"] || ""} onChange={handleChange} disable={disable} />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_WIDTH")}
         </CardText>
       </div>
       <span>x</span>
       <div>
-        <TextInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} pattern="^[1-9]\d?(\.\d{1,2})?$" />
+        <DimentionInput name="height" value={size["height"] || ""} onChange={handleChange} disable={disable} />
         <CardText style={{ textAlign: "center" }} disable={disable}>
           {t("CS_FILE_PROPERTY_HEIGHT")}
         </CardText>

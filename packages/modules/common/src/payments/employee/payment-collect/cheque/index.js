@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, SearchIconSvg } from "@egovernments/digit-ui-react-components";
-
-export const useChequeDetails = (props) => {
+import { TextInput, SearchIconSvg, DatePicker } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
+export const useChequeDetails = (props, t) => {
   const config = [
     {
-      head: "Cheque Details",
+      head: t("PAYMENT_CHEQUE_HEAD"),
       headId: "paymentInfo",
       body: [
         {
@@ -27,6 +27,7 @@ export const useChequeDetails = (props) => {
 // to be used in config
 
 export const ChequeDetailsComponent = (props) => {
+  const { t } = useTranslation();
   const [instrumentDate, setChequeDate] = useState(props.chequeDetails.instrumentDate);
   const [instrumentNumber, setChequeNo] = useState(props.chequeDetails.instrumentNumber);
   const [ifscCode, setIfsc] = useState(props.chequeDetails.ifscCode);
@@ -56,12 +57,10 @@ export const ChequeDetailsComponent = (props) => {
     }
   };
 
-  const getDatePrint = () => instrumentDate && new Date(instrumentDate).toLocaleString("en-In").split(",")[0];
-
   return (
     <React.Fragment>
       <div className="label-field-pair">
-        <h2 className="card-label">Cheque Number *</h2>
+        <h2 className="card-label">{t("PAYMENT_CHQ_NO_LABEL")} *</h2>
         <div className="field">
           <div className="field-container">
             <input
@@ -77,10 +76,10 @@ export const ChequeDetailsComponent = (props) => {
         </div>
       </div>
       <div className="label-field-pair">
-        <h2 className="card-label">Cheque Date *</h2>
+        <h2 className="card-label">{t("PAYMENT_CHEQUE_DATE_LABEL")} *</h2>
         <div className="field">
           <div className="field-container">
-            <input
+            {/* <input
               type="text"
               value={getDatePrint()}
               readOnly
@@ -94,6 +93,12 @@ export const ChequeDetailsComponent = (props) => {
               style={{ width: "62px", borderLeft: "0px" }}
               name="instrumentDate"
               onChange={(e) => setChequeDate(e.target.value)}
+            /> */}
+            <DatePicker
+              date={instrumentDate}
+              onChange={(d) => {
+                setChequeDate(d);
+              }}
             />
           </div>
         </div>
@@ -102,7 +107,7 @@ export const ChequeDetailsComponent = (props) => {
         // chequeDate && chequeNo &&
         <React.Fragment>
           <div className="label-field-pair">
-            <h2 className="card-label">IFSC Code *</h2>
+            <h2 className="card-label">{t("PAYMENT_IFSC_CODE_LABEL")} *</h2>
             <div className="field">
               <div>
                 <div style={{ border: "2px solid #0b0c0c", borderRadius: "2px", display: "flex", alignItems: "center", marginBottom: "24px" }}>
@@ -133,7 +138,7 @@ export const ChequeDetailsComponent = (props) => {
             </div>
           </div>
           <div className="label-field-pair">
-            <h2 className="card-label">Bank Name</h2>
+            <h2 className="card-label">{t("PAYMENT_BANK_NAME_LABEL")}</h2>
             <div className="field">
               <div className="field-container">
                 <input
@@ -149,7 +154,7 @@ export const ChequeDetailsComponent = (props) => {
             </div>
           </div>
           <div className="label-field-pair">
-            <h2 className="card-label">Bank Branch</h2>
+            <h2 className="card-label">{t("PAYMENT_BANK_BRANCH_LABEL")}</h2>
             <div className="field">
               <div className="field-container">
                 <input className="employee-card-input" value={bankBranch} type="text" className="employee-card-input" readOnly disabled />

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
 
-const SelectGeolocation = ({ onSelect, t, config }) => {
-  const [pincode, setPincode] = useState("");
-  const [geoLocation, setGeoLocation] = useState({});
+const SelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
+  const [pincode, setPincode] = useState(formData?.address?.pincode || "");
+  const [geoLocation, setGeoLocation] = useState(formData?.address?.geoLocation || {});
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincodeServicability, setPincodeServicability] = useState(null);
 
@@ -29,6 +29,7 @@ const SelectGeolocation = ({ onSelect, t, config }) => {
       skipAndContinueText={t("CORE_COMMON_SKIP_CONTINUE")}
       skip={onSkip}
       t={t}
+      position={geoLocation}
       onSave={() => onSelect(config.key, { geoLocation, pincode })}
       onChange={(code, location) => onChange(code, location)}
       disabled={pincode === ""}

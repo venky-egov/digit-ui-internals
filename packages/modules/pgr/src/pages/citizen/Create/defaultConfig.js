@@ -38,7 +38,7 @@ export const config = {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
         header: "CS_FILE_APPLICATION_PINCODE_LABEL",
         cardText: "CS_ADDCOMPLAINT_CHANGE_PINCODE_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
@@ -61,7 +61,7 @@ export const config = {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
         header: "CS_ADDCOMPLAINT_PROVIDE_COMPLAINT_ADDRESS",
         cardText: "CS_ADDCOMPLAINT_CITY_MOHALLA_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
       },
       nextStep: "landmark",
     },
@@ -71,7 +71,7 @@ export const config = {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
         header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE",
         cardText: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
@@ -88,7 +88,7 @@ export const config = {
       texts: {
         header: "CS_ADDCOMPLAINT_UPLOAD_PHOTO",
         cardText: "CS_ADDCOMPLAINT_UPLOAD_PHOTO_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       nextStep: "additional-details",
@@ -98,7 +98,7 @@ export const config = {
       texts: {
         header: "CS_ADDCOMPLAINT_PROVIDE_ADDITIONAL_DETAILS",
         cardText: "CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
       },
       inputs: [
         {

@@ -1,7 +1,7 @@
 import { MdmsService } from "../../services/elements/MDMS";
 import { useQuery } from "react-query";
 
-const useMDMS = (tenantId, moduleCode, type, config = {}) => {
+const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   const useSanitationType = () => {
     return useQuery("FSM_SANITATION_TYPE", () => MdmsService.getSanitationType(tenantId, moduleCode), config);
   };
@@ -39,7 +39,11 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
   };
 
   const useSlumLocality = () => {
-    return useQuery("SLUM_LOCALITY_MAPPING", () => MdmsService.getSlumLocalityMapping(tenantId, moduleCode, type));
+    return useQuery(["SLUM_LOCALITY_MAPPING", tenantId, moduleCode], () => MdmsService.getSlumLocalityMapping(tenantId, moduleCode, type));
+  };
+
+  const useReason = () => {
+    return useQuery("CANCELLATION_REASON", () => MdmsService.getReason(tenantId, moduleCode, type, payload));
   };
 
   switch (type) {
@@ -69,6 +73,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
 
     case "Slum":
       return useSlumLocality();
+
+    case "Reason":
+      return useReason();
   }
 };
 

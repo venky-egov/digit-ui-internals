@@ -40,13 +40,13 @@ const FstpOperatorDetails = () => {
   // const [tripTime, setTripTime] = useState(null);
   const [tripTime, setTripTime] = useState(() => {
     const today = new Date();
-    const hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
-    const minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
-    return `${hour}:${minutes}` || "10:00";
+    const hour = (today.getHours() < 10 ? "0" : "") + today.getHours();
+    const minutes = (today.getMinutes() < 10 ? "0" : "") + today.getMinutes();
+    return `${hour}:${minutes}`;
   });
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
-  const { isLoading: isSearchLoading, isIdle, data: tripDetails } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
+  const { isLoading: isSearchLoading, isIdle, data: { data: tripDetails } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
     enabled: !!isVehicleSearchCompleted,
   });
 
@@ -132,7 +132,7 @@ const FstpOperatorDetails = () => {
       value: vehicle.vehicle.registrationNumber,
     },
     {
-      title: `${t("ES_VEHICLE CAPACITY")} (ltrs)`,
+      title: `${t("ES_VEHICLE CAPACITY")}`,
       value: vehicle.vehicle.tankCapacity,
     },
   ];
@@ -144,17 +144,17 @@ const FstpOperatorDetails = () => {
           {vehicleData.map((row, index) => (
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
-          <CardLabelError>{ t(errors.wasteRecieved) }</CardLabelError>
+          <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
           <Row
             key={t("ES_VEHICLE_WASTE_RECIEVED")}
             label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `}
             text={
               <div>
-                <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} style={{ width: "auto" }} />
+                <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} style={{ width: "100%", maxWidth: "200px" }} />
               </div>
             }
           />
-          <CardLabelError>{ t(errors.tripTime) }</CardLabelError>
+          <CardLabelError>{t(errors.tripTime)}</CardLabelError>
           <Row
             key={t("ES_COMMON_TIME")}
             label={`${t("ES_COMMON_TIME")} * `}
@@ -200,7 +200,7 @@ const FstpOperatorDetails = () => {
                   <Row
                     key={index}
                     label={t("ES_INBOX_LOCALITY")}
-                    text={t(`${trip?.tenantId?.toUpperCase()?.split(".")?.join("_")}_ADMIN_${trip?.address?.locality?.code}`)}
+                    text={t(`${trip?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${trip?.address?.locality?.code}`)}
                   />
                   <Row key={index} label={t("ES_USAGE")} text={t(`PROPERTYTYPE_MASTERS_${trip.propertyUsage}`)} />
                   <Row key={index} label={t("ES_WASTE_RECIEVED")} text={vehicle.tripDetails[index].volume} />

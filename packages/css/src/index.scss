@@ -132,12 +132,8 @@
 }
 
 .card-date-input {
-  @apply absolute top-0 left-0 w-3/4 bg-white pl-sm;
-  border-top: 2px solid rgb(11, 12, 12);
-  border-bottom: 2px solid rgb(11, 12, 12);
-  border-left: 2px solid rgb(11, 12, 12);
-  border-image: initial;
-  outline: transparent solid 2px;
+  @apply absolute top-0 left-0 w-3/4 bg-white pl-sm border border-input-border border-solid border-r-0;
+  outline: transparent solid 1px;
   height: 2.5rem;
 }
 
@@ -164,4 +160,13 @@
 
 .border-none {
   border: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }

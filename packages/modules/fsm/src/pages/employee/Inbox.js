@@ -1,47 +1,80 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 import { Header } from "@egovernments/digit-ui-react-components";
 
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 
-const Inbox = ({ parentRoute }) => {
+const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  console.log("current TenantId in ", tenantId);
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo.info.roles;
 
-  const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
-  const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
-  const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
-  const DSO = Digit.UserService.hasAccess("FSM_DSO") || false;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const [shouldSearch, setShouldSearch] = useState(false);
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [sortParams, setSortParams] = useState({ key: "createdTime", sortOrder: "DESC" });
-  const [searchParams, setSearchParams] = useState({
-    applicationStatus: [],
-    locality: [],
-    uuid:
-      DSO || isFSTPOperator
-        ? { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") }
-        : { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
+  const [sortParams, setSortParams] = useState([{ id: "createdTime", desc: false }]);
+  const [searchParams, setSearchParams] = useState(() => {
+    return isInbox
+      ? {
+          applicationStatus: [],
+          locality: [],
+          uuid:
+            DSO || isFSTPOperator
+              ? { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") }
+              : { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
+        }
+      : {};
   });
 
   let isMobile = window.Digit.Utils.browser.isMobile();
   let paginationParms = isMobile
-    ? { limit: 100, offset: 0, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder }
-    : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.key, sortOrder: sortParams.sortOrder };
+    ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
+    : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
   // TODO: Here fromDate and toDate is only for mobile and it is not working for search application for mobile screen
-  const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(tenantId, {
-    ...searchParams,
-    ...paginationParms,
-    fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
-    toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
-  });
+  const { data: applications, isLoading, isIdle, refetch, revalidate } = Digit.Hooks.fsm.useInbox(
+    tenantId,
+    {
+      ...searchParams,
+      ...paginationParms,
+      fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
+      toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
+    },
+    null,
+    {
+      enabled: isInbox,
+    }
+  );
+
+  const {
+    isLoading: isSearchLoading,
+    isIdle: isSearchIdle,
+    isError: isSearchError,
+    data: { data, totalCount } = {},
+    error,
+  } = Digit.Hooks.fsm.useSearchAll(
+    tenantId,
+    {
+      limit: pageSize,
+      offset: pageOffset,
+      ...searchParams,
+      fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
+      toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
+    },
+    null,
+    { enabled: shouldSearch && isSearch }
+  );
+
+  useEffect(() => {
+    setPageOffset(0);
+  }, [searchParams]);
 
   const fetchNextPage = () => {
     setPageOffset((prevState) => prevState + pageSize);
@@ -60,8 +93,9 @@ const Inbox = ({ parentRoute }) => {
 
   const handleSort = useCallback((args) => {
     if (args.length === 0) return;
-    const [sortBy] = args;
-    setSortParams({ key: sortBy.id, sortOrder: sortBy.desc ? "DESC" : "ASC" });
+    setSortParams(args);
+    // const [sortBy] = args;
+    // setSortParams({ key: sortBy.id, sortOrder: sortBy.desc ? "DESC" : "ASC" });
   }, []);
 
   const handlePageSizeChange = (e) => {
@@ -69,7 +103,17 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const onSearch = (params = {}) => {
-    setSearchParams({ ...searchParams, ...params });
+    if (isSearch) {
+      if (Object.keys(params).length === 0) {
+        setShouldSearch(false);
+        queryClient.resetQueries("FSM_CITIZEN_SEARCH");
+      } else {
+        setShouldSearch(true);
+      }
+      setSearchParams({ ...params });
+    } else {
+      setSearchParams(({ applicationStatus, locality, uuid }) => ({ applicationStatus, locality, uuid, ...params }));
+    }
   };
 
   const removeParam = (params = {}) => {
@@ -79,6 +123,31 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const getSearchFields = (userRoles) => {
+    if (isSearch) {
+      return [
+        {
+          label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
+          name: "applicationNos",
+        },
+        {
+          label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
+          name: "mobileNumber",
+          maxlength: 10,
+          pattern: "[6-9][0-9]{9}",
+          title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
+        },
+        {
+          label: t("ES_SEARCH_FROM_DATE"),
+          name: "fromDate",
+          type: "date",
+        },
+        {
+          label: t("ES_SEARCH_TO_DATE"),
+          name: "toDate",
+          type: "date",
+        },
+      ];
+    }
     if (userRoles.find((role) => role.code === "FSM_EMP_FSTPO")) {
       return [
         {
@@ -99,6 +168,7 @@ const Inbox = ({ parentRoute }) => {
         {
           label: t("ES_SEARCH_APPLICATION_MOBILE_NO"),
           name: "mobileNumber",
+          maxlength: 10,
         },
       ];
     }
@@ -108,25 +178,29 @@ const Inbox = ({ parentRoute }) => {
     if (isMobile) {
       return (
         <MobileInbox
-          data={applications}
-          isLoading={isLoading || isIdle}
+          data={isInbox ? applications : data}
+          isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
+          isSearch={isSearch}
           searchFields={getSearchFields(userRoles)}
           onFilterChange={handleFilterChange}
           onSearch={onSearch}
           onSort={handleSort}
+          parentRoute={parentRoute}
           searchParams={searchParams}
           sortParams={sortParams}
           removeParam={removeParam}
-          linkPrefix={"/digit-ui/employee/fsm/application-details/"}
+          linkPrefix={`${parentRoute}/${DSO ? "dso-application-details" : "application-details"}/`}
         />
       );
     } else {
       return (
         <div>
-          <Header>{t("ES_COMMON_INBOX")}</Header>
+          {!isSearch && <Header>{t("ES_COMMON_INBOX")}</Header>}
           <DesktopInbox
-            data={applications}
-            isLoading={isLoading || isIdle}
+            data={isInbox ? applications : data}
+            isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
+            isSearch={isSearch}
+            shouldSearch={shouldSearch}
             onFilterChange={handleFilterChange}
             searchFields={getSearchFields(userRoles)}
             onSearch={onSearch}
@@ -140,6 +214,8 @@ const Inbox = ({ parentRoute }) => {
             onPageSizeChange={handlePageSizeChange}
             parentRoute={parentRoute}
             searchParams={searchParams}
+            sortParams={sortParams}
+            totalRecords={isInbox ? Number(applications?.[0]?.totalCount) : totalCount}
           />
         </div>
       );

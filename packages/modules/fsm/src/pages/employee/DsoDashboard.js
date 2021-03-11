@@ -17,16 +17,16 @@ const DsoDashboard = () => {
   const [info, setInfo] = useState({});
   const [total, setTotal] = useState("-");
   const [loader, setLoader] = useState(true);
-
+  const [isDsoLoaded, setIsDsoLoaded] = useState(false);
   const [progressStatusCode, setProgressStatusCode] = useState(null);
   const [pendingApprovalStatusCode, setPendingApprCode] = useState(null);
 
   // fetch Status codes for DSO_ACTIONS
 
-  const { data: statusCodes, isFetching: statusFetching } = Digit.Hooks.fsm.useApplicationStatus();
+  const { data: statusCodes, isFetching: statusFetching } = Digit.Hooks.fsm.useApplicationStatus(null, isDsoLoaded);
   useEffect(() => {
     if (statusCodes) {
-      const [inProgress, pendingApproval] = statusCodes.filter((e) => e.roles?.includes("FSM_DSO"));
+      const [pendingApproval, inProgress] = statusCodes.filter((e) => e.roles?.includes("FSM_DSO"));
       console.log("here", inProgress, pendingApproval);
       setProgressStatusCode(inProgress);
       setPendingApprCode(pendingApproval);
@@ -46,6 +46,7 @@ const DsoDashboard = () => {
     if (data?.vendor) {
       const { vendor } = data;
       Digit.UserService.setExtraRoleDetails(vendor[0]);
+      setIsDsoLoaded(true);
     }
   }, [data]);
 
@@ -54,7 +55,7 @@ const DsoDashboard = () => {
     { ...filters, applicationStatus: [pendingApprovalStatusCode] },
     null,
     {
-      enabled: typeof pendingApprovalStatusCode === "object" && !vendorDetailsFetching && !statusFetching,
+      enabled: typeof pendingApprovalStatusCode === "object" && isDsoLoaded && !statusFetching,
     }
   );
 
@@ -63,7 +64,7 @@ const DsoDashboard = () => {
     { ...filters, applicationStatus: [progressStatusCode] },
     null,
     {
-      enabled: typeof progressStatusCode === "object" && !vendorDetailsFetching && !statusFetching,
+      enabled: typeof progressStatusCode === "object" && isDsoLoaded && !statusFetching,
     }
   );
 
@@ -79,13 +80,13 @@ const DsoDashboard = () => {
   }, [pendingApprovalArray, pendingCompletionArray, progressStatusCode, pendingApprovalStatusCode]);
 
   const { data: inbox, isFetching: inboxFetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters }, null, {
-    enabled: true,
+    enabled: isDsoLoaded,
   });
 
   const links = useMemo(
     () => [
       {
-        pathname: "/digit-ui/employee/fsm/inbox",
+        pathname: "/digit-ui/citizen/fsm/inbox",
         label: "ES_TITLE_INBOX",
         total: total,
       },
@@ -100,8 +101,6 @@ const DsoDashboard = () => {
       if (Object.keys(info).length) setLoader(false);
     }
   }, [info, inbox]);
-
-  console.log(info);
 
   if (loader) {
     return <Loader />;

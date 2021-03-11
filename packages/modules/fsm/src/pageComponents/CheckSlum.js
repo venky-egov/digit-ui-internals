@@ -3,12 +3,12 @@ import { FormStep, RadioOrSelect } from "@egovernments/digit-ui-react-components
 
 const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId?.split(".")[0] || "pb";
+  const stateId = tenantId?.split(".")[0];
 
   const [slumArea, setSlumArea] = useState(formData?.address?.slumArea);
 
   const locality = formData?.address?.locality?.code.split("_")[3];
-  const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "Slum");
+  // const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(formData?.address?.city.code, "FSM", "Slum");
 
   const onSkip = () => onSelect();
   function goNext() {

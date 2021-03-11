@@ -1,35 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, ImageUploadHandler, Loader, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
 
-const Proof = ({ t, config, onSelect, onSkip, value }) => {
-  const [uploadedImages, setUploadedImagesIds] = useState(() => {
-    const { uploadedImages } = ""; //value;
-    return uploadedImages ? uploadedImages : null;
-  });
-
-  const handleUpload = (ids) => {
-    setUploadedImagesIds(ids);
-  };
-
-  const handleSubmit = () => {
-    // if (!uploadedImages || uploadedImages.length === 0) return onSkip();
-    onSelect({ specialProofIdentity: uploadedImages });
-  };
-
-  const [file, setFile] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
+const Proof = ({ t, config, onSelect, userType, formData }) => {
+  let index = window.location.href.charAt(window.location.href.length - 1);
+  const [uploadedFile, setUploadedFile] = useState(formData?.documents?.proofIdentity?.fileStoreId || null);
+  const [file, setFile] = useState(formData?.documents?.proofIdentity);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
+  const onSkip = () => onSelect();
 
   function selectfile(e) {
     setFile(e.target.files[0]);
   }
+
   useEffect(() => {
     (async () => {
       setError(null);
       if (file) {
         if (file.size >= 5242880) {
-          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+          setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
             // TODO: change module in file storage
@@ -37,19 +26,48 @@ const Proof = ({ t, config, onSelect, onSkip, value }) => {
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
-              setError(t("CS_FILE_UPLOAD_ERROR"));
+              setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
             console.error("Modal -> err ", err);
-            setError(t("CS_FILE_UPLOAD_ERROR"));
+            setError(t("PT_FILE_UPLOAD_ERROR"));
           }
         }
       }
     })();
   }, [file]);
 
+  function goNext() {
+    let fileStoreId = uploadedFile;
+    let fileDetails = file;
+    if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
+    let address = formData && formData;
+    if (address && address.documents) {
+      address.documents["specialProofIdentity"] = fileDetails;
+    } else {
+      address["documents"] = [];
+      address.documents["specialProofIdentity"] = fileDetails;
+    }
+
+    console.log(address.documents.specialProofIdentity.name);
+    debugger;
+    onSelect(config.key, address, "", index);
+  }
+
+  function onAdd() {
+    let newIndex = parseInt(index) + 1;
+    onSelect("owner-details", {}, false, newIndex, true);
+  }
   return (
-    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t}>
+    <FormStep
+      t={t}
+      config={config}
+      onSelect={goNext}
+      onSkip={onSkip}
+      isDisabled={!uploadedFile}
+      onAdd={onAdd}
+      isMultipleAllow={formData?.ownershipCategory?.value == "INDIVIDUAL.MULTIPLEOWNERS"}
+    >
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <UploadFile

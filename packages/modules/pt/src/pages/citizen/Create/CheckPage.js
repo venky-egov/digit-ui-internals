@@ -49,9 +49,10 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/pincode" />}
         />
         <Row
-          label={t("PT_PROOF_OF_ADDRESS_SUB_HEADER")}
+          label={t("proof")}
           //text="Adhaar.jpg"
-          text={`${t(owners && Array.isArray(owners) && owners.length > 0 ? owners[0]?.documents.specialProofIdentity : "NA")}`}
+          //text={`${t(owners && Array.isArray(owners) && owners.length > 0 ? owners[0]?.documents.specialProofIdentity : "NA")}`}
+          text={`${address?.documents.specialProofIdentity?.name || "na"}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/proof" />}
         />
         {/* {landmark && (
@@ -85,9 +86,13 @@ const CheckPage = ({ onSubmit, value = {} }) => {
                 text={`${t(owners?.gender?.code)}`}
                 actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
               />
-              <Row label={t("Gender")} text={`${t(owners?.fatherOrHusbandName)}`} actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
               <Row
-                label={t("Owner address")}
+                label={t("PT_FORM3_GUARDIAN_NAME")}
+                text={`${t(owners?.fatherOrHusbandName)}`}
+                actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+              />
+              <Row
+                label={`${t("COMMON_OWNER")} - ${index + 1} ${t("PT_ADDRESS_LABEL")}`}
                 /* text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
             address?.city.code
           )}`} */

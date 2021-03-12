@@ -12,6 +12,7 @@ import {
   SubmitBar,
   LinkButton,
   Loader,
+  TelePhone,
 } from "@egovernments/digit-ui-react-components";
 
 const TLCaption = ({ data }) => {
@@ -20,7 +21,7 @@ const TLCaption = ({ data }) => {
     <div>
       {data.date && <p>{data.date}</p>}
       <p>{data.name}</p>
-      <p>{data.mobileNumber}</p>
+      {data.mobileNumber && <TelePhone mobile={data.mobileNumber} />}
       {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
     </div>
   );
@@ -49,6 +50,13 @@ export const ApplicationTimeline = (props) => {
           </Link>
         </div>
       )
+    } else if (checkpoint.status === "DSO_INPROGRESS") {
+      const caption = {
+        name: props.application?.dsoDetails?.displayName,
+        mobileNumber: props.application?.dsoDetails?.mobileNumber,
+        date: `${t('CS_FSM_EXPECTED_DATE')} ${Digit.DateUtils.ConvertTimestampToDate(props.application?.possibleServiceDate)}`,
+      }
+      return <TLCaption data={caption} />
     }
   };
 

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import {
   Header,
+  ActionLinks,
   Card,
   CardSectionHeader,
   ConnectingCheckPoints,
@@ -27,9 +28,6 @@ const TLCaption = ({ data }) => {
 
 export const ApplicationTimeline = (props) => {
   const { t } = useTranslation();
-
-  console.log(".......>>>>> props here", props);
-
   const { isLoading, data } = Digit.Hooks.useWorkflowDetails({
     tenantId: props.application?.tenantId,
     id: props.id,
@@ -43,6 +41,14 @@ export const ApplicationTimeline = (props) => {
         source: props.application?.source || "",
       };
       return <TLCaption data={caption} />;
+    } else if (checkpoint.status === "CITIZEN_FEEDBACK_PENDING") {
+      return (
+        <div>
+          <Link to={`/digit-ui/citizen/fsm/rate/${props.id}`}>
+            <ActionLinks>{t("CS_FSM_RATE")}</ActionLinks>
+          </Link>
+        </div>
+      )
     }
   };
 

@@ -9,15 +9,9 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
   const stateId = tenantId.split(".")[0];
 
   const { data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
-  //console.log(Documentsob);
   const docs = Documentsob?.PropertyTax?.Documents;
-  //console.log(docs);
-  // console.log(x);
 
-  function onSave() {
-    //history.push(`http://localhost:3000/digit-ui/citizen/pt/property/test/location`);
-    //onclick();
-  }
+  function onSave() {}
 
   function goNext() {
     onSelect();

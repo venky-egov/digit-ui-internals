@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormStep, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
 
 const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData }) => {
-  let index = window.location.href.charAt(window.location.href.length-1);
+  let index = window.location.href.charAt(window.location.href.length - 1);
   const [uploadedFile, setUploadedFile] = useState(formData?.owners[index]?.documents?.specialProofIdentity?.fileStoreId || null);
   const [file, setFile] = useState(formData?.owners[index]?.documents?.specialProofIdentity);
   const [error, setError] = useState(null);
@@ -10,9 +10,9 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData })
   const handleSubmit = () => {
     let fileStoreId = uploadedFile;
     let fileDetails = file;
-    if(fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
+    if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
     let ownerDetails = formData.owners && formData.owners[index];
-    if(ownerDetails && ownerDetails.documents) {
+    if (ownerDetails && ownerDetails.documents) {
       ownerDetails.documents["specialProofIdentity"] = fileDetails;
     } else {
       ownerDetails["documents"] = [];
@@ -27,7 +27,6 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData })
     if (formData.owners && formData.owners[index] && formData.owners[index].ownerType.code === "NONE") onSelect(config.key, {}, true, index);
   }, [formData.owners && formData.owners[index] && formData.owners[index].ownerType.code]);
 
-
   function selectfile(e) {
     setFile(e.target.files[0]);
   }
@@ -39,7 +38,6 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData })
           setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
-            // TODO: change module in file storage
             const response = await Digit.UploadServices.Filestorage("property-upload", file, "pb");
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
@@ -67,7 +65,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData })
         }}
         message={uploadedFile ? `1 ${t(`PT_ACTION_FILEUPLOADED`)}` : t(`PT_ACTION_NO_FILEUPLOADED`)}
       />
-      <CardLabelDesc>{" "}</CardLabelDesc>
+      <CardLabelDesc> </CardLabelDesc>
     </FormStep>
   );
 };

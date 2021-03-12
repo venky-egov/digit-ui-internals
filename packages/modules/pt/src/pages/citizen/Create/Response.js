@@ -29,7 +29,7 @@ const Response = ({ data, onSuccess }) => {
   useEffect(() => {
     try {
       const { subtype, pitDetail, address, pitType, source, ownershipCategory, owners } = data;
-      debugger;
+
       const loc = address?.locality.code;
       const formdata = {
         Property: {
@@ -117,12 +117,7 @@ const Response = ({ data, onSuccess }) => {
         },
       };
 
-      /* temp line to override proeprty value should be removed  */
-
-      console.log(formdata);
-
       mutation = Digit.Hooks.pt.usePropertyAPI(formdata, tenantId);
-      console.log(mutation);
     } catch (err) {
       console.log(err);
     }

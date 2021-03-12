@@ -14,7 +14,6 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
       : allCities;
   const allLocalities = useSelector((state) => {
-    // console.log("find redux state here", state)
     return state.common.revenue_localities;
   });
   const localitiesObj = JSON.parse(JSON.stringify(allLocalities));

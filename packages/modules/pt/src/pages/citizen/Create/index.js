@@ -38,7 +38,6 @@ const CreateProperty = ({ parentRoute }) => {
     }
     if (nextStep === null) {
       console.log(match.path);
-      debugger;
 
       return redirectWithHistory(`${match.path}/check`);
     }
@@ -47,7 +46,6 @@ const CreateProperty = ({ parentRoute }) => {
   };
 
   const submitComplaint = async () => {
-    debugger;
     history.push(`${match.path}/response`);
   };
 

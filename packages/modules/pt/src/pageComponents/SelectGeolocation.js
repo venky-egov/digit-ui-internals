@@ -4,7 +4,7 @@ import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
 const SelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
   const [pincode, setPincode] = useState(formData?.address?.pincode || "");
   const [geoLocation, setGeoLocation] = useState(formData?.address?.geoLocation || {});
-  const tenants = Digit.Hooks.fsm.useTenants();
+  const tenants = Digit.Hooks.pt.useTenants();
   const [pincodeServicability, setPincodeServicability] = useState(null);
 
   const onSkip = () => onSelect();

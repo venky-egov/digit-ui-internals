@@ -2,7 +2,7 @@ import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/di
 import React, { useState, useEffect } from "react";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props }) => {
-  const tenants = Digit.Hooks.fsm.useTenants();
+  const tenants = Digit.Hooks.pt.useTenants();
   const [pincode, setPincode] = useState(() => formData?.address?.pincode || "");
 
   const inputs = [

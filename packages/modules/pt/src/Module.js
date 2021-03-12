@@ -50,7 +50,7 @@ const componentsToRegister = {
   ProvideSubUsageTypeOfRentedArea,
   IsAnyPartOfThisFloorUnOccupied,
   UnOccupiedArea,
-  Area
+  Area,
 };
 
 const addComponentsToRegistry = () => {
@@ -59,11 +59,12 @@ const addComponentsToRegistry = () => {
   });
 };
 
-export const PTModule = ({ userType }) => {
+export const PTModule = ({ userType, tenants }) => {
   const moduleCode = "PT";
   addComponentsToRegistry();
   console.log(moduleCode, "module integrated");
 
+  Digit.SessionStorage.set("PT_TENANTS", tenants);
   if (userType === "citizen") {
     return <CitizenApp />;
   } else {

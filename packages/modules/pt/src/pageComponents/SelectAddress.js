@@ -3,7 +3,7 @@ import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair, RadioOrSel
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
-  const allCities = Digit.Hooks.fsm.useTenants();
+  const allCities = Digit.Hooks.pt.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
 
   const { pincode, city } = formData?.address || "";

@@ -50,12 +50,12 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
   return (
     <React.Fragment>
       <Card>
-        <CardHeader>Property Tax Registration</CardHeader>
-        <CardText>We will be guiding you through this multi-step process</CardText>
-        <CardText>Please take your time at each step and fill this form carefully.</CardText>
-        <CardText>if you loose network or take a break in between, you can always come back later and continue from where you left off.</CardText>
-        <CardLabel>Before you Start</CardLabel>
-        <CardText>Scans or photos of the following documents are mandatory to complete the application.</CardText>
+        <CardHeader>{t("PT_DOC_REQ_SCREEN_HEADER")}</CardHeader>
+        <CardText>{t("PT_DOC_REQ_SCREEN_SUB_HEADER")}</CardText>
+        <CardText>{t("PT_DOC_REQ_SCREEN_TEXT")}</CardText>
+        <CardText>{t("PT_DOC_REQ_SCREEN_SUB_TEXT")}</CardText>
+        <CardLabel>{t("PT_DOC_REQ_SCREEN_LABEL")}</CardLabel>
+        <CardText>{t("PT_DOC_REQ_SCREEN_LABEL_TEXT")}</CardText>
         <div>
           {Array.isArray(docs)
             ? docs.map(({ code, dropdownData }, index) => (

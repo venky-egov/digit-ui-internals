@@ -39,9 +39,9 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       <StatusTable>
         <Row
           label={t("PT_PROPERTY_ADDRESS_SUB_HEADER")}
-          text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
-            address?.city.code
-          )}`}
+          text={`${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+            address?.landmark ? `${address?.landmark}, ` : ""
+          }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`}
           /* text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
             address?.city.code
           )}`} */

@@ -9,31 +9,9 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
   const stateId = tenantId.split(".")[0];
 
   const { data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
-  console.log(Documentsob);
+  //console.log(Documentsob);
   const docs = Documentsob?.PropertyTax?.Documents;
-  console.log(docs);
-  var IdentityProof = [];
-  var RegisProof = [];
-  var OccupancyProof = [];
-  var docshead = [];
-  var d = [];
-  for (var i = 0; i < docs.length; i++) {
-    //console.log(docs[i]);
-    docshead.push(docs[i].code);
-    for (var j = 0; j < docs[i].dropdownData.length; j++) {
-      //console.log(docs[i].dropdownData);
-      d.push(docs[i].dropdownData[j].code);
-      if (i == 1) {
-        //console.log(docs[i].dropdownData[j].code);
-        IdentityProof.push(docs[i].dropdownData[j].code);
-      } else if (i == 2) {
-        RegisProof.push(docs[i].dropdownData[j].code);
-      } else if (i == 6) {
-        OccupancyProof.push(docs[i].dropdownData[j].code);
-      }
-    }
-    d.push("-1");
-  }
+  //console.log(docs);
   // console.log(x);
 
   function onSave() {
@@ -41,9 +19,6 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
     //onclick();
   }
 
-  /*  const goNext = () => {
-    onSelect();
-  }; */
   function goNext() {
     onSelect();
   }

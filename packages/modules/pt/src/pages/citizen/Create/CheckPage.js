@@ -42,28 +42,18 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           text={`${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
             address?.landmark ? `${address?.landmark}, ` : ""
           }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`}
-          /* text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
-            address?.city.code
-          )}`} */
-          //text="002/62 Kayian Mohalla, Nawanshar, Punjab, 144, 514"
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/pincode" />}
         />
         <Row
           label={t("proof")}
-          //text="Adhaar.jpg"
-          //text={`${t(owners && Array.isArray(owners) && owners.length > 0 ? owners[0]?.documents.specialProofIdentity : "NA")}`}
           text={`${address?.documents.specialProofIdentity?.name || "na"}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/proof" />}
         />
-        {/* {landmark && (
-          <Row label={t("landmark")} text={landmark} actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/test/landmark" />} />
-        )} */}
       </StatusTable>
       <CardSubHeader>{t("PT_OWNERSHIP_DETAILS_SUB_HEADER")}</CardSubHeader>
       <StatusTable>
         <Row
           label={t("PT_FORM3_OWNERSHIP_TYPE")}
-          //text = {`${ownershipCategory ? `${ownershipCategory}` : ""}`}
           text={t(ownershipCategory?.i18nKey)}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-ship-details@0" />}
         />
@@ -77,7 +67,6 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             <StatusTable>
               <Row
                 label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
-                //text={`${t(owners && Array.isArray(owners) && owners.length > 0 ? owners[0]?.name : "NA")}`}
                 text={`${t(owners?.name)}`}
                 actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-details/0" />}
               />
@@ -93,9 +82,6 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               />
               <Row
                 label={`${t("COMMON_OWNER")} - ${index + 1} ${t("PT_ADDRESS_LABEL")}`}
-                /* text={`${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(address?.locality.code)}, ${t(
-            address?.city.code
-          )}`} */
                 text={`${t(owners?.permanentAddress)}`}
                 actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/special-owner-category/0" />}
               />
@@ -110,7 +96,6 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row label={t("No. of Floors")} text="Ground + 1" actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
         <Row label={t("No. of Basements")} text="None" actionButton={<ActionButton jumpTo="/digit-ui/citizen" />} />
       </StatusTable>
-      {/* <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_TEXT")} /> */}
       <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );

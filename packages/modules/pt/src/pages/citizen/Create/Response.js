@@ -25,27 +25,27 @@ const Response = ({ data, onSuccess }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   let mutation = {};
-  //const coreData = Digit.Hooks.useCoreData();
-  //const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
-  //const slumCode = mutation?.data?.fsm[0].address?.slumName;
-  //const slum = Digit.Hooks.fsm.useSlum(slumCode, localityCode);
 
   useEffect(() => {
     try {
       const { subtype, pitDetail, address, pitType, source, ownershipCategory, owners } = data;
-      //const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
       debugger;
-      console.log(owners[0]?.permanentAddress);
+      const loc = address?.locality.code;
       const formdata = {
         Property: {
-          tenantId: "pb.amritsar",
+          tenantId: address?.city.code,
           address: {
             city: address?.city.name,
             doorNo: address?.doorNo,
             buildingName: "NA",
             locality: {
-              code: "SUN23",
-              area: "Area1",
+              code:
+                address?.city.code === "pb.amritsar"
+                  ? loc.substring(loc.length - 5, loc.length)
+                  : address?.city.code === "pb.jalandhar"
+                  ? loc.substring(loc.length - 6, loc.length)
+                  : loc.substring(loc.length - 5, loc.length),
+              area: address?.locality.name,
             },
           },
           usageCategoryMinor: null,
@@ -71,9 +71,6 @@ const Response = ({ data, onSuccess }) => {
               mobileNumber: "7838038768",
               fatherOrHusbandName: owners[0]?.fatherOrHusbandName,
               emailId: "tutul.tulika@gmail.com",
-              /* permanentAddress: `${address?.doorNo ? `${address?.doorNo} ` : ""} ${address?.street ? `${address?.street}, ` : ""}${t(
-                address?.locality.code
-              )}, ${t(address?.city.code)}` */
               permanentAddress: owners[0]?.permanentAddress,
               relationship: "FATHER",
               ownerType: "NONE",
@@ -123,84 +120,6 @@ const Response = ({ data, onSuccess }) => {
       /* temp line to override proeprty value should be removed  */
 
       console.log(formdata);
-      /*  formdata.Property=     {
-        "tenantId": "pb.amritsar",
-        "address": {
-            "city": "Amritsar",
-            "locality": {
-                "code": "SUN23",
-                "area": "Area1"
-            }
-        },
-        "usageCategoryMinor": null,
-        "units": [
-            {
-                "floorNo": "0",
-                "occupancyType": "SELFOCCUPIED",
-                "constructionDetail": {
-                    "builtUpArea": 111.11
-                },
-                "tenantId": "pb.amritsar",
-                "usageCategory": "RESIDENTIAL"
-            }
-        ],
-        "usageCategoryMajor": "RESIDENTIAL",
-        "landArea": "2000",
-        "propertyType": "BUILTUP.INDEPENDENTPROPERTY",
-        "noOfFloors": 1,
-        "ownershipCategory": "INDIVIDUAL.SINGLEOWNER",
-        "owners": [
-            {
-                "name": "Jagankumar",
-                "mobileNumber": "9965664222",
-                "fatherOrHusbandName": "E",
-                "emailId": null,
-                "permanentAddress": "No 1, New cross street",
-                "relationship": "FATHER",
-                "ownerType": "NONE",
-                "gender": "Male",
-                "isCorrespondenceAddress": null
-            }
-        ],
-        "additionalDetails": {
-            "inflammable": false,
-            "heightAbove36Feet": false
-        },
-        "source": "MUNICIPAL_RECORDS",
-        "channel": "CFC_COUNTER",
-        "documents": [
-            {
-                "documentType": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-                "fileStoreId": "619e20b3-f486-4197-9e77-4258a5885d89",
-                "documentUid": "619e20b3-f486-4197-9e77-4258a5885d89"
-            },
-            {
-                "documentType": "OWNER.IDENTITYPROOF.AADHAAR",
-                "fileStoreId": "45d1fe0e-a6b8-4d83-a3f2-8e6e78c17c0f",
-                "documentUid": "45d1fe0e-a6b8-4d83-a3f2-8e6e78c17c0f"
-            },
-            {
-                "documentType": "OWNER.REGISTRATIONPROOF.SALEDEED",
-                "fileStoreId": "54185790-8c0f-4979-94f6-31868f1ebe60",
-                "documentUid": "54185790-8c0f-4979-94f6-31868f1ebe60"
-            },
-            {
-                "documentType": "OWNER.USAGEPROOF.ELECTRICITYBILL",
-                "fileStoreId": "ba6d138c-ead5-4605-b577-a9024dd9694b",
-                "documentUid": "ba6d138c-ead5-4605-b577-a9024dd9694b"
-            },
-            {
-                "documentType": "OWNER.CONSTRUCTIONPROOF.BPACERTIFICATE",
-                "fileStoreId": "b03a71ba-0f10-4d09-ac3b-e6b6be2ea691",
-                "documentUid": "b03a71ba-0f10-4d09-ac3b-e6b6be2ea691"
-            }
-        ],
-        "creationReason": "CREATE",
-        "superBuiltUpArea": null,
-        "usageCategory": "RESIDENTIAL"
-    } */
-
-      /* TODO */
 
       mutation = Digit.Hooks.pt.usePropertyAPI(formdata, tenantId);
       console.log(mutation);

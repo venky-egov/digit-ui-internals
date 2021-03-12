@@ -49,7 +49,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
       address.documents["specialProofIdentity"] = fileDetails;
     }
 
-    console.log(address.documents.specialProofIdentity.name);
+    // console.log(address.documents.specialProofIdentity);
     debugger;
     onSelect(config.key, address, "", index);
   }

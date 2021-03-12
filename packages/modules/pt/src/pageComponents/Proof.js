@@ -71,7 +71,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <UploadFile
-        accept=".jpg"
+        accept={(".jpg", "PNG", "PDF")}
         onUpload={selectfile}
         onDelete={() => {
           setUploadedFile(null);

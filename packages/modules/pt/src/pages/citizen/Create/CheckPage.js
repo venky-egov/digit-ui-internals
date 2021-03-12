@@ -65,7 +65,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           label={t("PT_FORM3_OWNERSHIP_TYPE")}
           //text = {`${ownershipCategory ? `${ownershipCategory}` : ""}`}
           text={t(ownershipCategory?.i18nKey)}
-          actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+          actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-ship-details@0" />}
         />
       </StatusTable>
       <div>
@@ -79,17 +79,17 @@ const CheckPage = ({ onSubmit, value = {} }) => {
                 label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
                 //text={`${t(owners && Array.isArray(owners) && owners.length > 0 ? owners[0]?.name : "NA")}`}
                 text={`${t(owners?.name)}`}
-                actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+                actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-details/0" />}
               />
               <Row
                 label={t("PT_COMMON_GENDER_LABEL")}
                 text={`${t(owners?.gender?.code)}`}
-                actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+                actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-details/0" />}
               />
               <Row
                 label={t("PT_FORM3_GUARDIAN_NAME")}
                 text={`${t(owners?.fatherOrHusbandName)}`}
-                actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+                actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-details/0" />}
               />
               <Row
                 label={`${t("COMMON_OWNER")} - ${index + 1} ${t("PT_ADDRESS_LABEL")}`}
@@ -97,7 +97,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             address?.city.code
           )}`} */
                 text={`${t(owners?.permanentAddress)}`}
-                actionButton={<ActionButton jumpTo="/digit-ui/citizen" />}
+                actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/special-owner-category/0" />}
               />
             </StatusTable>
           </div>

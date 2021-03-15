@@ -114,6 +114,10 @@
   flex-direction: row;
   padding: 10px;
   column-gap: 10px;
+
+  &:hover {
+    @apply bg-grey-mid;
+  }
 }
 
 .flex-right {

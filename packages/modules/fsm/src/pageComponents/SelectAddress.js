@@ -84,13 +84,12 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     return (
       <div>
         <LabelFieldPair>
-          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+          <CardLabel className="card-label-smaller">
             {t("MYCITY_CODE_LABEL")}
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <Dropdown
-            className="field"
-            style={{ width: "50%" }}
+            className="field w-half"
             isMandatory
             selected={cities?.length === 1 ? cities[0] : selectedCity}
             disable={cities?.length === 1}
@@ -101,13 +100,12 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
           />
         </LabelFieldPair>
         <LabelFieldPair>
-          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+          <CardLabel className="card-label-smaller">
             {t("CS_CREATECOMPLAINT_MOHALLA")}
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <Dropdown
-            className="field"
-            style={{ width: "50%" }}
+            className="field w-half"
             isMandatory
             selected={selectedLocality}
             option={localities}

@@ -107,10 +107,9 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   ) : (
     <div>
       <LabelFieldPair>
-        <CardLabel style={{ marginBottom: "revert", width: "30%" }}>{t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED") + " * "}</CardLabel>
+        <CardLabel className="card-label-smaller">{t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED") + " * "}</CardLabel>
         <Dropdown
-          className="field"
-          style={{ width: "50%" }}
+          className="field w-half"
           isMandatory
           option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))}
           optionKey="label"
@@ -122,7 +121,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
       </LabelFieldPair>
       {inputs?.map((input, index) => (
         <LabelFieldPair key={index}>
-          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+          <CardLabel className="card-label-smaller">
             {t(input.label)}
             {input.isMandatory ? " * " : null}
           </CardLabel>
@@ -136,7 +135,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           </div>
         </LabelFieldPair>
       ))}
-      {billError ? <CardLabelError style={{ width: "100%", textAlign: "center" }}>{t("ES_APPLICATION_BILL_SLAB_ERROR")}</CardLabelError> : null}
+      {billError ? <CardLabelError className="text-center w-full">{t("ES_APPLICATION_BILL_SLAB_ERROR")}</CardLabelError> : null}
     </div>
   );
 };

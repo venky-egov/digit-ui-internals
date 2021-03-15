@@ -170,3 +170,178 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.bill-summary {
+  border: #e8e7e6 solid 1px;
+  background-color: "#fafafa";
+  width: 99%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 16px;
+
+  .bill-account-details {
+    padding: 5px;
+    display: flex;
+    margin-bottom: 16px;
+
+    .label {
+      width: 50%;
+      font-weight: bold;
+    }
+
+    .value {
+      width: 50%;
+      text-align: right;
+    }
+  }
+
+  .amount-details {
+    padding: 5px;
+    display: flex;
+    margin-bottom: 16px;
+    align-items: center;
+
+    .label {
+      width: 50%;
+      font-weight: bold;
+    }
+
+    .value {
+      width: 50%;
+      font-weight: bold;
+      font-size: 18px;
+      text-align: dropRight;
+    }
+  }
+}
+
+.bill-details {
+  position: sticky;
+  bottom: 0;
+  padding-bottom: 32px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.text-indent-md {
+  text-indent: 30px;
+}
+
+.select-payment-type {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 25px;
+
+  .value {
+    font-size: 20px;
+  }
+}
+
+.cheque-date {
+  border: 2px solid #0b0c0c;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+
+  input {
+    border: 0px;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    text-indent: 5px;
+    padding: 6px 0px;
+  }
+
+  button {
+    border: 0px;
+    background: transparent;
+    outline: none;
+    text-indent: 2px;
+  }
+}
+
+.w-half {
+  width: 50%;
+}
+
+.ifsc-field {
+  border: 2px solid #0b0c0c;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+
+  input {
+    border: 0px;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    text-indent: 5px;
+    padding: 6px 0px;
+  }
+  button {
+    border: 0px;
+    background: transparent;
+    outline: none;
+    text-indent: 2px;
+  }
+}
+
+.text-input {
+  position: relative;
+  width: 100%;
+}
+
+.custom-time-picker {
+  width: 100%;
+  max-width: 200px;
+}
+
+.sla-cell {
+  @apply text-text-secondary;
+}
+
+.submit-bar-search {
+  margin-top: 32px;
+  margin-left: 96px;
+  max-width: 256px;
+}
+
+.clear-search-container {
+  @apply flex justify-between items-center;
+}
+
+.card-label-smaller {
+  margin-bottom: revert;
+  width: 30%;
+}
+
+.underline {
+  border-color: #e7e6e6;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.box-shadow-none {
+  box-shadow: none;
+}
+
+.component-in-front {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.subform-composer {
+  @apply flex;
+}
+
+.inbox-search-container {
+  .result {
+    @apply mt-lg;
+  }
+}

@@ -12,15 +12,7 @@ const CustomTimePicker = ({ name, value, onChange }) => {
     }
   };
   if (timeFormat.includes("AM") || timeFormat.includes("PM")) {
-    return (
-      <TextInput
-        name={name}
-        type="time"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        style={{ width: "100%", maxWidth: "200px" }}
-      />
-    );
+    return <TextInput name={name} type="time" value={value} onChange={(event) => onChange(event.target.value)} className="custom-time-picker" />;
   }
 
   return (

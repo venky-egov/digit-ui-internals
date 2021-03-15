@@ -25,18 +25,6 @@
       display: flex !important;
     }
 
-    .employeeCard-info-box {
-      @apply flex justify-end;
-      background-color: #fafafa;
-      div {
-        margin-right: 32px;
-        span:nth-child(2) {
-          @apply font-bold;
-          color: #4f5a5f;
-        }
-      }
-    }
-
     .inbox-total {
       @apply text-center text-white;
       background-color: #000;
@@ -45,6 +33,22 @@
       padding-left: 3px;
       padding-right: 3px;
     }
+  }
+}
+
+.employeeCard-info-box {
+  @apply flex justify-end ml-md;
+  background-color: #fafafa;
+  div {
+    margin-right: 32px;
+    span:nth-child(2) {
+      @apply font-bold;
+      color: #4f5a5f;
+    }
+  }
+  .employeeCard-info-data {
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -74,6 +78,7 @@
       @apply items-center bg-white p-md;
 
       .complaint-input-container {
+        @apply w-full;
         .complaint-input {
           @apply flex flex-col;
 
@@ -135,7 +140,7 @@
       margin-left: 46px;
 
       .link {
-        @apply p-sm text-link-normal;
+        @apply p-sm text-primary-main;
       }
     }
   }
@@ -173,6 +178,7 @@
         .complaint-header {
           display: flex;
           @apply flex justify-between w-full;
+          margin-bottom: 20px;
         }
 
         .complaint-input-container {

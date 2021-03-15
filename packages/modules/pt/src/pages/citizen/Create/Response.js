@@ -39,12 +39,7 @@ const Response = ({ data, onSuccess }) => {
             doorNo: address?.doorNo,
             buildingName: "NA",
             locality: {
-              code:
-                address?.city.code === "pb.amritsar"
-                  ? loc.substring(loc.length - 5, loc.length)
-                  : address?.city.code === "pb.jalandhar"
-                  ? loc.substring(loc.length - 6, loc.length)
-                  : loc.substring(loc.length - 5, loc.length),
+              code: loc.split("_").length == 4 ? loc.split("_")[3] : "NA",
               area: address?.locality.name,
             },
           },
@@ -65,7 +60,7 @@ const Response = ({ data, onSuccess }) => {
           propertyType: "BUILTUP.SHAREDPROPERTY",
           noOfFloors: 1,
           ownershipCategory: "INDIVIDUAL.SINGLEOWNER",
-          owners: [
+          /* owners: [
             {
               name: owners[0]?.name,
               mobileNumber: "7838038768",
@@ -77,7 +72,18 @@ const Response = ({ data, onSuccess }) => {
               gender: "Male",
               isCorrespondenceAddress: null,
             },
-          ],
+          ],  */
+          owners: owners.map((owners, index) => ({
+            name: owners?.name,
+            mobileNumber: owners?.mobileNumber,
+            fatherOrHusbandName: owners?.fatherOrHusbandName,
+            emailId: null,
+            permanentAddress: owners?.permanentAddress,
+            relationship: owners?.relationship?.code,
+            ownerType: owners?.ownerType?.code,
+            gender: owners?.gender.value,
+            isCorrespondenceAddress: null,
+          })),
           additionalDetails: {
             inflammable: false,
             heightAbove36Feet: false,

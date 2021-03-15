@@ -24,12 +24,6 @@ const BillDetails = ({ paymentRules }) => {
   const getBillBreakDown = () => billDetails?.billAccountDetails || [];
   const getTotal = () => getBillBreakDown()?.reduce((total, tax) => total + tax.amount, 0) || 0;
 
-  const getLabelStyle = () => {
-    if (paymentType === t("CS_PAYMENT_FULL_AMOUNT"))
-      return { position: "absolute", backgroundColor: "#efefef", padding: " 6px 12px", border: "#9a9a9a solid 2px", color: "#9a9a9a" };
-    else return { position: "absolute", backgroundColor: "#efefef", padding: " 6px 12px", border: "2px black solid" };
-  };
-
   const [paymentType, setPaymentType] = useState(t("CS_PAYMENT_FULL_AMOUNT"));
   const [amount, setAmount] = useState(getTotal());
   const [paymentAllowed, setPaymentAllowed] = useState(true);
@@ -71,7 +65,7 @@ const BillDetails = ({ paymentRules }) => {
         <KeyNote keyValue={t("PT_UNIQUE_PROPERTY_ID")} note={consumerCode} />
         <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
         <BillSumary billAccountDetails={getBillBreakDown()} />
-        <div className="bill-details">
+        <div className="bill-payment-amount">
           <hr className="underline" />
           <CardSubHeader>{t("CS_COMMON_PAYMENT_AMOUNT")}</CardSubHeader>
           <RadioButtons
@@ -80,11 +74,16 @@ const BillDetails = ({ paymentRules }) => {
             options={paymentRules.partPaymentAllowed ? [t("CS_PAYMENT_FULL_AMOUNT"), t("CS_PAYMENT_CUSTOM_AMOUNT")] : [t("CS_PAYMENT_FULL_AMOUNT")]}
           />
           <div style={{ position: "relative" }}>
-            <span style={getLabelStyle()}>₹</span>
+            <span
+              className="payment-amount-front"
+              style={{ border: `1px solid ${paymentType === t("CS_PAYMENT_FULL_AMOUNT") ? "#9a9a9a" : "black"}` }}
+            >
+              ₹
+            </span>
             {paymentType !== t("CS_PAYMENT_FULL_AMOUNT") ? (
-              <TextInput className="text-indent-md" onChange={(e) => setAmount(e.target.value)} value={amount} />
+              <TextInput className="text-indent-xl" onChange={(e) => setAmount(e.target.value)} value={amount} />
             ) : (
-              <TextInput className="text-indent-md" value={getTotal()} onChange={() => {}} disable={true} />
+              <TextInput className="text-indent-xl" value={getTotal()} onChange={() => {}} disable={true} />
             )}
           </div>
           <SubmitBar disabled={!paymentAllowed} onSubmit={onSubmit} label={t("CS_COMMON_PAY")}></SubmitBar>

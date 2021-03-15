@@ -14040,10 +14040,10 @@ react-textarea-autosize@^8.1.1:
     use-composed-ref "^1.0.0"
     use-latest "^1.0.0"
 
-react-time-picker@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/react-time-picker/-/react-time-picker-4.1.2.tgz#7e977ba546a2313d622a536494cec6e4d727b57b"
-  integrity sha512-O2lSyv9j11YcpVuxQnJnqanaYiJ7yyCl7/p6jS6HHcR0i+plX95Ko105CKyJeAd40I6LxHqfweR+9DIL2AFmYg==
+react-time-picker@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-time-picker/-/react-time-picker-4.2.0.tgz#01b7eb97b34cb8cbef9fdc025eee962edd5b0e62"
+  integrity sha512-E1URE2c23sDA4/Gw27086+69RxRttLMwZopjfx8nIYEdajseghDaY7oBcNiuQ53d0fJyIgIU5WnSTHTGbENEqQ==
   dependencies:
     "@wojtekmaj/date-utils" "^1.0.0"
     get-user-locale "^1.2.0"

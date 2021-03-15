@@ -7,6 +7,7 @@ const DsoDetails = async (tenantId, filters = {}) => {
 
   const data = dsoDetails.vendor.map((dso) => ({
     displayName: dso.name + (dso.owner?.name ? ` - ${dso.owner?.name}` : ""),
+    mobileNumber: dso.owner?.mobileNumber,
     name: dso.name,
     username: dso.owner?.userName,
     id: dso.id,

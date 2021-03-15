@@ -201,7 +201,7 @@ export const Search = {
     return {
       tenantId: response.tenantId,
       applicationDetails: citizenResponse,
-      pdfData: { ...response, amountPerTrip, totalAmount, vehicleMake, vehicleCapacity, slumName },
+      pdfData: { ...response, amountPerTrip, totalAmount, vehicleMake, vehicleCapacity, slumName, dsoDetails, },
     };
   },
 

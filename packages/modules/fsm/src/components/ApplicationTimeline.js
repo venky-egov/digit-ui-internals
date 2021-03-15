@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import {
   Header,
+  ActionLinks,
   Card,
   CardSectionHeader,
   ConnectingCheckPoints,
@@ -11,6 +12,7 @@ import {
   SubmitBar,
   LinkButton,
   Loader,
+  TelePhone,
 } from "@egovernments/digit-ui-react-components";
 
 const TLCaption = ({ data }) => {
@@ -19,7 +21,7 @@ const TLCaption = ({ data }) => {
     <div>
       {data.date && <p>{data.date}</p>}
       <p>{data.name}</p>
-      <p>{data.mobileNumber}</p>
+      {data.mobileNumber && <TelePhone mobile={data.mobileNumber} />}
       {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
     </div>
   );
@@ -27,9 +29,6 @@ const TLCaption = ({ data }) => {
 
 export const ApplicationTimeline = (props) => {
   const { t } = useTranslation();
-
-  console.log(".......>>>>> props here", props);
-
   const { isLoading, data } = Digit.Hooks.useWorkflowDetails({
     tenantId: props.application?.tenantId,
     id: props.id,
@@ -43,6 +42,21 @@ export const ApplicationTimeline = (props) => {
         source: props.application?.source || "",
       };
       return <TLCaption data={caption} />;
+    } else if (checkpoint.status === "CITIZEN_FEEDBACK_PENDING") {
+      return (
+        <div>
+          <Link to={`/digit-ui/citizen/fsm/rate/${props.id}`}>
+            <ActionLinks>{t("CS_FSM_RATE")}</ActionLinks>
+          </Link>
+        </div>
+      )
+    } else if (checkpoint.status === "DSO_INPROGRESS") {
+      const caption = {
+        name: props.application?.dsoDetails?.displayName,
+        mobileNumber: props.application?.dsoDetails?.mobileNumber,
+        date: `${t('CS_FSM_EXPECTED_DATE')} ${Digit.DateUtils.ConvertTimestampToDate(props.application?.possibleServiceDate)}`,
+      }
+      return <TLCaption data={caption} />
     }
   };
 

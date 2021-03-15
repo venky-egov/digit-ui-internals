@@ -25,9 +25,19 @@ const BillDetails = ({ paymentRules }) => {
   const getTotal = () => getBillBreakDown()?.reduce((total, tax) => total + tax.amount, 0) || 0;
 
   const getLabelStyle = () => {
-    if (paymentType === t("CS_PAYMENT_FULL_AMOUNT"))
-      return { position: "absolute", backgroundColor: "#efefef", padding: " 6px 12px", border: "#9a9a9a solid 2px", color: "#9a9a9a" };
-    else return { position: "absolute", backgroundColor: "#efefef", padding: " 6px 12px", border: "2px black solid" };
+    const isPaymentType = paymentType === t("CS_PAYMENT_FULL_AMOUNT");
+    return {
+      position: "absolute",
+      backgroundColor: "#efefef",
+      padding: " 7px 12px",
+      border: `1px solid ${isPaymentType ? "#9a9a9a" : "black"}`,
+      color: "#9a9a9a",
+      zIndex: 1,
+      width: "40px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    };
   };
 
   const [paymentType, setPaymentType] = useState(t("CS_PAYMENT_FULL_AMOUNT"));
@@ -67,12 +77,14 @@ const BillDetails = ({ paymentRules }) => {
   return (
     <React.Fragment>
       <Header>{t("CS_PAYMENT_BILL_DETAILS")}</Header>
-      <Card>
-        <KeyNote keyValue={t("PT_UNIQUE_PROPERTY_ID")} note={consumerCode} />
-        <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
-        <BillSumary billAccountDetails={getBillBreakDown()} />
-        <div style={{ position: "sticky", bottom: "0", paddingBottom: "32px", backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))" }}>
-          <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
+      <Card className="bill-details">
+        <div className="bill-details-summary">
+          <KeyNote keyValue={t("PT_UNIQUE_PROPERTY_ID")} note={consumerCode} />
+          <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
+          <BillSumary billAccountDetails={getBillBreakDown()} />
+        </div>
+        <div style={{ position: "sticky", bottom: "0", backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))" }}>
+          <hr style={{ borderColor: "#e7e6e6", width: "100%", margin: "8px auto" }} />
           <CardSubHeader>{t("CS_COMMON_PAYMENT_AMOUNT")}</CardSubHeader>
           <RadioButtons
             selectedOption={paymentType}
@@ -82,9 +94,9 @@ const BillDetails = ({ paymentRules }) => {
           <div style={{ position: "relative" }}>
             <span style={getLabelStyle()}>₹</span>
             {paymentType !== t("CS_PAYMENT_FULL_AMOUNT") ? (
-              <TextInput style={{ textIndent: "30px" }} onChange={(e) => setAmount(e.target.value)} value={amount} />
+              <TextInput style={{ textIndent: "40px" }} onChange={(e) => setAmount(e.target.value)} value={amount} />
             ) : (
-              <TextInput style={{ textIndent: "30px" }} value={getTotal()} onChange={() => {}} disable={true} />
+              <TextInput style={{ textIndent: "40px" }} value={getTotal()} onChange={() => {}} disable={true} />
             )}
           </div>
           <SubmitBar disabled={!paymentAllowed} onSubmit={onSubmit} label={t("CS_COMMON_PAY")}></SubmitBar>

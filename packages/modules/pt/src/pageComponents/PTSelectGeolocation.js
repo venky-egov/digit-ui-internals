@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
 
-const SelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
+const PTSelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
   const [pincode, setPincode] = useState(formData?.address?.pincode || "");
   const [geoLocation, setGeoLocation] = useState(formData?.address?.geoLocation || {});
   const tenants = Digit.Hooks.pt.useTenants();
@@ -38,4 +38,4 @@ const SelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
   );
 };
 
-export default SelectGeolocation;
+export default PTSelectGeolocation;

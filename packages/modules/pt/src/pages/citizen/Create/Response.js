@@ -3,7 +3,6 @@ import { Card, Banner, CardText, SubmitBar, LinkButton } from "@egovernments/dig
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Loader } from "@egovernments/digit-ui-react-components";
-//import getPDFData from "../../../getPDFData";
 
 const GetActionMessage = () => {
   const { t } = useTranslation();
@@ -29,7 +28,6 @@ const Response = ({ data, onSuccess }) => {
   useEffect(() => {
     try {
       const { subtype, pitDetail, address, pitType, source, ownershipCategory, owners } = data;
-
       const loc = address?.locality.code;
       const formdata = {
         Property: {
@@ -60,19 +58,6 @@ const Response = ({ data, onSuccess }) => {
           propertyType: "BUILTUP.SHAREDPROPERTY",
           noOfFloors: 1,
           ownershipCategory: "INDIVIDUAL.SINGLEOWNER",
-          /* owners: [
-            {
-              name: owners[0]?.name,
-              mobileNumber: "7838038768",
-              fatherOrHusbandName: owners[0]?.fatherOrHusbandName,
-              emailId: "tutul.tulika@gmail.com",
-              permanentAddress: owners[0]?.permanentAddress,
-              relationship: "FATHER",
-              ownerType: "NONE",
-              gender: "Male",
-              isCorrespondenceAddress: null,
-            },
-          ],  */
           owners: owners.map((owners, index) => ({
             name: owners?.name,
             mobileNumber: owners?.mobileNumber,
@@ -129,13 +114,7 @@ const Response = ({ data, onSuccess }) => {
     }
   }, []);
 
-  const handleDownloadPdf = () => {
-    //const { property} = mutation.data;
-    //const [applicationDetails, ...rest] = property;
-    //const tenantInfo = coreData.tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
-    //const data = getPDFData({ ...applicationDetails, slum }, tenantInfo, t);
-    //Digit.Utils.pdf.generate(data);
-  };
+  const handleDownloadPdf = () => {};
 
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />

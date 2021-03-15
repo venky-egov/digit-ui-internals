@@ -43,10 +43,10 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
     if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
     let address = formData && formData;
     if (address && address.documents) {
-      address.documents["specialProofIdentity"] = fileDetails;
+      address.documents["ProofOfAddress"] = fileDetails;
     } else {
       address["documents"] = [];
-      address.documents["specialProofIdentity"] = fileDetails;
+      address.documents["ProofOfAddress"] = fileDetails;
     }
 
     onSelect(config.key, address, "", index);

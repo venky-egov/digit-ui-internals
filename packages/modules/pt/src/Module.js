@@ -5,11 +5,8 @@ import { BackButton, Header, HomeLink, Loader, PrivateRoute } from "@egovernment
 import { useTranslation } from "react-i18next";
 
 import CitizenApp from "./pages/citizen";
-import SelectGeolocation from "./pageComponents/SelectGeolocation";
-import SelectPincode from "./pageComponents/SelectPincode";
-import SelectAddress from "./pageComponents/SelectAddress";
-import SelectLandmark from "./pageComponents/SelectLandmark";
-import SelectStreet from "./pageComponents/SelectStreet";
+import PTSelectPincode from "./pageComponents/PTSelectPincode";
+import PTSelectAddress from "./pageComponents/PTSelectAddress";
 import Proof from "./pageComponents/Proof";
 import SelectOwnerShipDetails from "./pageComponents/SelectOwnerShipDetails";
 import SelectOwnerDetails from "./pageComponents/SelectOwnerDetails";
@@ -19,6 +16,7 @@ import SelectInistitutionOwnerDetails from "./pageComponents/SelectInistitutionO
 import SelectProofIdentity from "./pageComponents/SelectProofIdentity";
 import SelectSpecialProofIdentity from "./pageComponents/SelectSpecialProofIdentity";
 import PropertyTax from "./pageComponents/PropertyTax";
+import PTSelectGeolocation from "./pageComponents/PTSelectGeolocation";
 
 import IsThisFloorSelfOccupied from "./pageComponents/IsThisFloorSelfOccupied";
 import ProvideSubUsageType from "./pageComponents/ProvideSubUsageType";
@@ -30,12 +28,9 @@ import Area from "./pageComponents/Area";
 
 const componentsToRegister = {
   PropertyTax,
-  SelectGeolocation,
-  SelectPincode,
-  SelectAddress,
-  SelectStreet,
+  PTSelectPincode,
+  PTSelectAddress,
   Proof,
-  SelectLandmark,
   SelectOwnerShipDetails,
   SelectOwnerDetails,
   SelectSpecialOwnerCategoryType,
@@ -43,6 +38,7 @@ const componentsToRegister = {
   SelectInistitutionOwnerDetails,
   SelectProofIdentity,
   SelectSpecialProofIdentity,
+  PTSelectGeolocation,
 
   IsThisFloorSelfOccupied,
   ProvideSubUsageType,

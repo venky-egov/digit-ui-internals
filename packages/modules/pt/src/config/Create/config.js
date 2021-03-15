@@ -121,7 +121,7 @@ export const newConfig = [
         nextStep: "map",
         hideInEmployee: true,
       },
-    ]
+    ],
   },
   {
     head: "ES_NEW_APPLICATION_LOCATION_DETAILS",
@@ -135,14 +135,20 @@ export const newConfig = [
       // },
       {
         route: "map",
-        component: "SelectGeolocation",
+        component: "PTSelectGeolocation",
         nextStep: "pincode",
         hideInEmployee: true,
         key: "address",
+        texts: {
+          header: "PT_GEOLOCATON_HEADER",
+          cardText: "PT_GEOLOCATION_TEXT",
+          nextText: "PT_COMMON_NEXT",
+          skipAndContinueText: "CORE_COMMON_SKIP_CONTINUE",
+        },
       },
       {
         route: "pincode",
-        component: "SelectPincode",
+        component: "PTSelectPincode",
         texts: {
           headerCaption: "PT_PROPERTY_LOCATION_CAPTION",
           header: "PT_PINCODE_LABEL",
@@ -158,7 +164,7 @@ export const newConfig = [
       },
       {
         route: "address",
-        component: "SelectAddress",
+        component: "PTSelectAddress",
         withoutLabel: true,
         texts: {
           headerCaption: "PT_PROPERTY_LOCATION_CAPTION",

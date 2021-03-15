@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
-const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
+const PTSelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.pt.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
 
@@ -137,4 +137,4 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   );
 };
 
-export default SelectAddress;
+export default PTSelectAddress;

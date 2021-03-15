@@ -46,7 +46,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         />
         <Row
           label={t("proof")}
-          text={`${address?.documents.specialProofIdentity?.name || "na"}`}
+          text={`${address?.documents.ProofOfAddress?.name || "na"}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/proof" />}
         />
       </StatusTable>
@@ -68,22 +68,22 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               <Row
                 label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
                 text={`${t(owners?.name)}`}
-                actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-details/0" />}
+                actionButton={<ActionButton jumpTo={`${"/digit-ui/citizen/pt/property/new-application/owner-details/"}${index}`} />}
               />
               <Row
                 label={t("PT_COMMON_GENDER_LABEL")}
                 text={`${t(owners?.gender?.code)}`}
-                actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-details/0" />}
+                actionButton={<ActionButton jumpTo={`${"/digit-ui/citizen/pt/property/new-application/owner-details/"}${index}`} />}
               />
               <Row
                 label={t("PT_FORM3_GUARDIAN_NAME")}
                 text={`${t(owners?.fatherOrHusbandName)}`}
-                actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/owner-details/0" />}
+                actionButton={<ActionButton jumpTo={`${"/digit-ui/citizen/pt/property/new-application/owner-details/"}${index}`} />}
               />
               <Row
                 label={`${t("COMMON_OWNER")} - ${index + 1} ${t("PT_ADDRESS_LABEL")}`}
                 text={`${t(owners?.permanentAddress)}`}
-                actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/special-owner-category/0" />}
+                actionButton={<ActionButton jumpTo={`${"/digit-ui/citizen/pt/property/new-application/owner-address/"}${index}`} />}
               />
             </StatusTable>
           </div>

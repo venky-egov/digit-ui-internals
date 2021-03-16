@@ -72,7 +72,7 @@ export const ApplicationCard = ({
         {t("CS_MYAPPLICATIONS_NO_APPLICATION")
           .split("\\n")
           .map((text, index) => (
-            <p key={index} className="text-center">
+            <p key={index} style={{ textAlign: "center" }}>
               {text}
             </p>
           ))}

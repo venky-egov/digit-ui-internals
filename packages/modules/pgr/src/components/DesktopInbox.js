@@ -81,7 +81,7 @@ const DesktopInbox = ({
         {t(LOCALE.NO_COMPLAINTS_EMPLOYEE)
           .split("\\n")
           .map((text, index) => (
-            <p key={index} className="text-center">
+            <p key={index} style={{ textAlign: "center" }}>
               {text}
             </p>
           ))}

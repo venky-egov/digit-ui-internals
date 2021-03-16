@@ -37,7 +37,7 @@ export const ComplaintsList = (props) => {
         {t(LOCALE.ERROR_LOADING_RESULTS)
           .split("\\n")
           .map((text, index) => (
-            <p key={index} className="text-center">
+            <p key={index} style={{ textAlign: "center" }}>
               {text}
             </p>
           ))}
@@ -49,7 +49,7 @@ export const ComplaintsList = (props) => {
         {t(LOCALE.NO_COMPLAINTS)
           .split("\\n")
           .map((text, index) => (
-            <p key={index} className="text-center">
+            <p key={index} style={{ textAlign: "center" }}>
               {text}
             </p>
           ))}

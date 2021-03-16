@@ -6,10 +6,14 @@ import { useTranslation } from "react-i18next";
 
 const PropertySearchResults = ({ template, header, actionButtonLabel }) => {
   const { t } = useTranslation();
-  const { mobileNumber, propertyIds, oldpropertyids } = Digit.Hooks.useQueryParams();
+  const { mobileNumber, propertyIds, oldPropertyIds } = Digit.Hooks.useQueryParams();
+  const filters = {};
+  if (mobileNumber) filters.mobileNumber = mobileNumber;
+  if (propertyIds) filters.propertyIds = propertyIds;
+  if (oldPropertyIds) filters.oldPropertyIds = oldPropertyIds;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const result = Digit.Hooks.pt.usePropertySearch({ tenantId, filters: { mobileNumber, propertyIds, oldpropertyids } });
+  const result = Digit.Hooks.pt.usePropertySearch({ tenantId, filters });
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
   const paymentDetails = Digit.Hooks.useFetchPayment({ tenantId, consumerCode, businessService: "PT" }, { enabled: consumerCode ? true : false });
 

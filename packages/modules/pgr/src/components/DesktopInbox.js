@@ -116,7 +116,7 @@ const DesktopInbox = ({
         {t(LOCALE.ERROR_LOADING_RESULTS)
           .split("\\n")
           .map((text, index) => (
-            <p key={index} className="text-center">
+            <p key={index} style={{ textAlign: "center" }}>
               {text}
             </p>
           ))}

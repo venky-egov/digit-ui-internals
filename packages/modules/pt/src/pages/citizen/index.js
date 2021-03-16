@@ -9,6 +9,7 @@ import SearchPropertyComponent from "./SearchProperty";
 import SearchResultsComponent from "./SearchResults";
 import ApplicationDetails from "./MyApplications/application-details";
 import CreateProperty from "./Create";
+import { MyProperties } from "./MyProperties";
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
@@ -23,6 +24,7 @@ const App = () => {
         {/* <PrivateRoute path={`${path}/property/bill-details/:uniquePropertyId`} component={() => <BillDetails />}></PrivateRoute> */}
         <PrivateRoute path={`${path}/property/application/:acknowledgementIds`} component={ApplicationDetails}></PrivateRoute>
         <PrivateRoute path={`${path}/property/my-applications`} component={MyApplications}></PrivateRoute>
+        <PrivateRoute path={`${path}/property/my-properties`} component={MyProperties}></PrivateRoute>
         {/* <Redirect to={`${path}/property/my-applications`}></Redirect> */}
       </AppContainer>
     </Switch>

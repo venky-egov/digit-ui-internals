@@ -5,6 +5,7 @@ import { newConfig } from "../../../config/Create/config";
 import { useQueryClient } from "react-query";
 import CheckPage from "./CheckPage";
 import Response from "./Response";
+import { MyProperties } from "../MyProperties";
 const CreateProperty = ({ parentRoute }) => {
   const queryClient = useQueryClient();
   const match = useRouteMatch();
@@ -90,7 +91,9 @@ const CreateProperty = ({ parentRoute }) => {
         <Response data={params} onSuccess={handleSUccess} />
       </Route>
       <Route>
-        <Redirect to={`${match.path}/${config.indexRoute}`} />
+        {/*         <Redirect to={`${match.path}/${config.indexRoute}`} />
+         */}{" "}
+        <Redirect to={`my-properties`} />
       </Route>
     </Switch>
   );

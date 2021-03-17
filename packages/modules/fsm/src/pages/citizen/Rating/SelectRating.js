@@ -14,7 +14,7 @@ const SelectRating = ({ parentRoute }) => {
   const [answers, setAnswers] = useState({});
 
   function handleSubmit(data) {
-    const { rating } = data;
+    const { rating, comments } = data;
     const allAnswers = { ...data, ...answers };
     let checklist = Object.keys(allAnswers).reduce((acc, key) => {
       if (key === "comments" || key === "rating") {
@@ -32,7 +32,7 @@ const SelectRating = ({ parentRoute }) => {
       applicationData: application,
       key: "update",
       action: "SUBMIT_FEEDBACK",
-      actionData: { rating },
+      actionData: { rating, comments },
     });
   }
 

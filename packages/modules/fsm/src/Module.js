@@ -36,6 +36,7 @@ import SelectName from "./pageComponents/SelectName";
 import SelectTripData from "./pageComponents/SelectTripData";
 import FSMCard from "./components/FsmCard";
 import { Redirect } from "react-router-dom";
+import RateView from "./pages/citizen/Rating/RateView";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -90,6 +91,7 @@ const CitizenApp = ({ path }) => {
         <PrivateRoute path={`${path}/dso-application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
+        <PrivateRoute path={`${path}/rate-view/:id`} component={() => <RateView parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response parentRoute={path} {...props} />} />
         <PrivateRoute path={`${path}/dso-dashboard`} component={() => <DsoDashboard parentRoute={path} />} />
       </Switch>

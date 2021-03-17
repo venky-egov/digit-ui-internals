@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 
-const Card = ({ className, onClick, style, children, className, ...props }) => {
+const Card = ({ onClick, style, children, className, ...props }) => {
   const { pathname } = useLocation();
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
   const info = Digit.UserService.getUser()?.info;

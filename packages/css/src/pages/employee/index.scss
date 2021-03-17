@@ -134,10 +134,10 @@
 }
 
 .link {
-  @apply text-link-normal;
+  @apply text-primary-main;
 
   :hover {
-    color: #003078;
+    @apply text-primary-dark;
   }
 }
 

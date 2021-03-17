@@ -43,7 +43,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
         <React.Fragment key={index}>
           {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
           <LabelFieldPair>
-            <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+            <CardLabel className="card-label-smaller">
               {t(input.label)}
               {input.isMandatory ? " * " : null}
             </CardLabel>

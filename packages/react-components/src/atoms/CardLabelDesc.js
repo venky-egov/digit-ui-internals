@@ -1,8 +1,8 @@
 import React from "react";
 
-const CardLabelDesc = ({ children, style }) => {
+const CardLabelDesc = ({ children, style, className }) => {
   return (
-    <h2 className="card-label-desc" style={style}>
+    <h2 className={`card-label-desc ${className ? className : ""}`} style={style}>
       {children}
     </h2>
   );

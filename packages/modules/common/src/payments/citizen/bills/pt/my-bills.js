@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { ArrowLeft, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import MyBill from "./my-bill";
 
@@ -50,19 +50,23 @@ export const BillListPT = ({ billsList, currentPath }) => {
   }
 
   return (
-    <React.Fragment>
-      <div onClick={goToSearch} className="back-btn2">
-        <ArrowLeft />
-        <p>{t("PT_SEARCH_PROPERTY")}</p>
+    <div className="my-bills">
+      <div style={{ flex: 1 }}>
+        <Header>{t("CS_TITLE_MY_BILLS")}</Header>
+        {propertyList?.length > 0 &&
+          propertyList.map((bill, index) => (
+            <div key={index}>
+              <MyBill {...{ bill, currentPath }} />
+            </div>
+          ))}
+        {!propertyList?.length > 0 && <p>{t("PT_NO_BILLS_FOUND")}</p>}
       </div>
-      <Header>{t("CS_TITLE_MY_BILLS")}</Header>
-      {propertyList?.length > 0 &&
-        propertyList.map((bill, index) => (
-          <div key={index}>
-            <MyBill {...{ bill, currentPath }} />
-          </div>
-        ))}
-      {!propertyList?.length > 0 && <p>No Bills Found.</p>}
-    </React.Fragment>
+      <p>
+        {t("PT_TEXT_NOT_ABLE_TO_FIND_THE_PROPERTY")}{" "}
+        <span className="link">
+          <Link to="/digit-ui/citizen/pt/property/search">{t("PT_COMMON_CLICK_HERE")}</Link>
+        </span>
+      </p>
+    </div>
   );
 };

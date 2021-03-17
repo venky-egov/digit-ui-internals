@@ -13,7 +13,7 @@ const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
     <div>
       {data.map((result, i) => {
         return (
-          <Card key={i} style={{ boxShadow: "none" }}>
+          <Card key={i} className="box-shadow-none">
             {template.map((field, j) => {
               return (
                 <KeyNote

@@ -64,23 +64,11 @@ export const SelectPaymentType = (props) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>
-          <div
-            className="detail"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontWeight: "bold",
-              alignItems: "center",
-              paddingTop: "10px",
-              paddingBottom: "25px",
-            }}
-          >
+          <div className="detail select-payment-type">
             <span className="label">
               <h2>{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</h2>
             </span>
-            <span style={{ fontSize: "20px" }} className="name">
-              ₹ {paymentAmount || billDetails.totalAmount}
-            </span>
+            <span className="name value">₹ {paymentAmount || billDetails.totalAmount}</span>
           </div>
 
           <CardSubHeader>{t("PAYMENT_CS_SELECT_METHOD")}</CardSubHeader>

@@ -42,7 +42,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
         .filter((a) => a)
         .join(", "),
       total_due: payment[property?.propertyId]?.total_due || 0,
-      bil_due__date: payment[property?.propertyId]?.bil_due__date || "No Demand Found",
+      bil_due__date: payment[property?.propertyId]?.bil_due__date || t("PT_NO_DEMAND_FOUND"),
     };
   });
 

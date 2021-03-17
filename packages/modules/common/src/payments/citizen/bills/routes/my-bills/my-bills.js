@@ -64,18 +64,24 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
 
   return (
     <React.Fragment>
-      <div onClick={goToSearch} className="back-btn2">
-        <ArrowLeft />
-        <p>{t("PT_SEARCH_PROPERTY")}</p>
+      <div className="my-bills">
+        <div style={{ flex: 1 }}>
+          <Header>{t("CS_TITLE_MY_BILLS")}</Header>
+          {applicationList?.length > 0 &&
+            applicationList.map((bill, index) => (
+              <div key={index}>
+                <MyBill {...{ bill, currentPath, businessService }} />
+              </div>
+            ))}
+          {!applicationList?.length > 0 && <p>No Bills Found.</p>}
+        </div>
+        <p>
+          {t("PT_TEXT_NOT_ABLE_TO_FIND_THE_PROPERTY")}{" "}
+          <span className="link">
+            <Link to="/digit-ui/citizen/pt/property/search">{t("PT_COMMON_CLICK_HERE")}</Link>
+          </span>
+        </p>
       </div>
-      <Header>{t("CS_TITLE_MY_BILLS")}</Header>
-      {applicationList?.length > 0 &&
-        applicationList.map((bill, index) => (
-          <div key={index}>
-            <MyBill {...{ bill, currentPath, businessService }} />
-          </div>
-        ))}
-      {!applicationList?.length > 0 && <p>No Bills Found.</p>}
     </React.Fragment>
   );
 };

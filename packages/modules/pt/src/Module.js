@@ -17,6 +17,12 @@ import SelectProofIdentity from "./pageComponents/SelectProofIdentity";
 import SelectSpecialProofIdentity from "./pageComponents/SelectSpecialProofIdentity";
 import PropertyTax from "./pageComponents/PropertyTax";
 import PTSelectGeolocation from "./pageComponents/PTSelectGeolocation";
+import IsResidential from "./pageComponents/IsResidential";
+import PropertyType from "./pageComponents/PropertyType";
+import PropertyUsageType from "./pageComponents/PropertyUsageType";
+import GroundFloorDetails from "./pageComponents/GroundFloorDetails";
+import PropertyFloorDetails from "./pageComponents/PropertyFloorDetails";
+import PropertyBasementDetails from "./pageComponents/PropertyBasementDetails";
 
 import IsThisFloorSelfOccupied from "./pageComponents/IsThisFloorSelfOccupied";
 import ProvideSubUsageType from "./pageComponents/ProvideSubUsageType";
@@ -47,6 +53,12 @@ const componentsToRegister = {
   IsAnyPartOfThisFloorUnOccupied,
   UnOccupiedArea,
   Area,
+  IsResidential,
+  PropertyType,
+  PropertyUsageType,
+  GroundFloorDetails,
+  PropertyFloorDetails,
+  PropertyBasementDetails,
 };
 
 const addComponentsToRegistry = () => {

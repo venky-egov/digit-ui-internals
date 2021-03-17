@@ -108,17 +108,7 @@ const Table = ({
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
-                  <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <SortDown style={{ display: "inline-block", height: "16px" }} />
-                      ) : (
-                        <SortUp style={{ display: "inline-block", height: "16px" }} />
-                      )
-                    ) : (
-                      ""
-                    )}
-                  </span>
+                  <span>{column.isSorted ? column.isSortedDesc ? <SortDown /> : <SortUp /> : ""}</span>
                 </th>
               ))}
             </tr>

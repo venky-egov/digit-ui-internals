@@ -116,16 +116,8 @@ export const testForm = {
       },
       defaultValue: "",
       component: (props, customProps) => (
-        <div style={{ border: "2px solid #0b0c0c", borderRadius: "2px", display: "flex", alignItems: "center", marginBottom: "24px" }}>
+        <div className="ifsc-field">
           <input
-            style={{
-              border: "0px",
-              background: "transparent",
-              outline: "none",
-              width: "100%",
-              textIndent: "5px",
-              padding: "6px 0px",
-            }}
             value={props.value}
             type="text"
             onChange={(e) => {
@@ -135,7 +127,6 @@ export const testForm = {
           />
           <button
             type="button"
-            style={{ border: "0px", background: "transparent", outline: "none", textIndent: "2px" }}
             onClick={() => {
               customProps.setBankDetailsFromIFSC(props);
             }}

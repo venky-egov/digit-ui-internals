@@ -32,7 +32,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData }) => {
     return inputs?.map((input, index) => {
       return (
         <LabelFieldPair key={index}>
-          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+          <CardLabel className="card-label-smaller">
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>

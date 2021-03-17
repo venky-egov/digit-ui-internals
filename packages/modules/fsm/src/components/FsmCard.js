@@ -85,10 +85,10 @@ const FSMCard = () => {
           </div>
           <div className="body">
             {info && (
-              <div className="employeeCard-info-box" style={{}}>
+              <div className="employeeCard-info-box">
                 {Object.keys(info).map((key, index) => {
                   return (
-                    <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                    <div key={index} className="employeeCard-info-data">
                       <span>{t(key)}</span>
                       <span>{t(info[key])}</span>
                     </div>
@@ -98,7 +98,7 @@ const FSMCard = () => {
             )}
             <span className="link">
               <Link to={`/digit-ui/employee/fsm/fstp-inbox`}>
-                <span style={{ color: "#F47738" }}>{t("ES_TITLE_INBOX")}</span>
+                <span>{t("ES_TITLE_INBOX")}</span>
               </Link>
               {<ArrowRight to={`/digit-ui/employee/fsm/fstp-inbox`} />}
             </span>

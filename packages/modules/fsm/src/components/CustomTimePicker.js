@@ -8,16 +8,7 @@ const CustomTimePicker = ({ name, value, onChange }) => {
     return <TextInput name={name} type="time" value={value} onChange={(event) => onChange(event.target.value)} className="custom-time-picker" />;
   }
 
-  return (
-    <TimePicker
-      name={name}
-      onChange={onChange}
-      value={value}
-      locale="en-US"
-      disableClock={false}
-      clearIcon={null}
-    />
-  );
+  return <TimePicker name={name} onChange={onChange} value={value} locale="en-US" disableClock={false} clearIcon={null} />;
 };
 
 export default CustomTimePicker;

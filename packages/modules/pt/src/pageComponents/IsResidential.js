@@ -20,8 +20,8 @@ const IsResidential = ({ t, config, onSelect, userType, formData }) => {
       <RadioOrSelect
         isMandatory={config.isMandatory}
         options={[
-          { code: true, i18nKey: "CS_COMMON_YES" },
-          { code: false, i18nKey: "CS_COMMON_NO" },
+          { code: true, i18nKey: "PT_COMMON_YES" },
+          { code: false, i18nKey: "PT_COMMON_NO" },
         ]}
         selectedOption={ResidentialType}
         optionKey="i18nKey"

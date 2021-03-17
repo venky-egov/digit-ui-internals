@@ -45,7 +45,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/pincode" />}
         />
         <Row
-          label={t("proof")}
+          label={t("PT_PROOF_OF_ADDRESS_SUB_HEADER")}
           text={`${address?.documents.ProofOfAddress?.name || "na"}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/proof" />}
         />

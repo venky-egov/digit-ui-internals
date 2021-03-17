@@ -37,11 +37,11 @@ const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, link
           <span className="text">{t(header)}</span>
         </div>
         <div className="body ">
-          <div className="employeeCard-info-box" style={{ display: "flex", justifyContent: "flex-end", marginLeft: "16px" }}>
+          <div className="employeeCard-info-box">
             {Object.keys(info).map((key, index) => {
               console.log("key", key);
               return (
-                <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                <div key={index} className="employeeCard-info-data">
                   <span>{t(info[key])}</span>
                   <span style={{ fontWeight: "bold" }}>{t(key)}</span>
                 </div>
@@ -49,12 +49,12 @@ const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, link
             })}
           </div>
         </div>
-        <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
-        <div className="body" style={{}}>
+        <hr className="underline" />
+        <div className="body">
           {links.map((link, index) => (
             <span key={index} className="link">
               <Link to={link.pathname}>
-                <span style={{ color: "#F47738" }}>{t(link.label)}</span>
+                <span>{t(link.label)}</span>
               </Link>
               {!isNaN(link.total) && <span className="inbox-total">{link.total}</span>}
               {<ArrowRight to={link.pathname} />}

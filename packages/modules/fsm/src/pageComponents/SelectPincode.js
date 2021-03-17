@@ -55,7 +55,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register,
     return inputs?.map((input) => {
       return (
         <LabelFieldPair>
-          <CardLabel style={{ marginBottom: "revert", width: "30%" }}>
+          <CardLabel className="card-label-smaller">
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>

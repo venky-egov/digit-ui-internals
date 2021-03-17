@@ -33,7 +33,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const clearAll = (mobileView) => {
     const mobileViewStyles = mobileView ? { margin: 0 } : {};
     return (
-      <LinkLabel style={{ color: "#F47738", cursor: "pointer", display: "inline", ...mobileViewStyles }} onClick={clearSearch}>
+      <LinkLabel style={{ display: "inline", ...mobileViewStyles }} onClick={clearSearch}>
         {t("ES_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
@@ -53,15 +53,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
         <div className="search-container" style={{ width: "auto", marginLeft: FSTP ? "" : isInboxPage ? "24px" : "revert" }}>
           <div className="search-complaint-container">
             {(type === "mobile" || mobileView) && (
-              <div
-                className="complaint-header"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  marginBottom: "20px",
-                }}
-              >
+              <div className="complaint-header">
                 <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
                 <span onClick={onClose}>
                   <CloseSvg />
@@ -98,15 +90,13 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
                 <Label>{isFstpOperator ? t("ES_FSTP_DSO_NAME") : t("ES_SEARCH_APPLICATION_MOBILE_NO")}</Label>
                 <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
               </span> */}
-              {type === "desktop" && !mobileView && (
-                <SubmitBar style={{ marginTop: 32, marginLeft: "96px", maxWidth: "256px" }} label={t("ES_COMMON_SEARCH")} submit />
-              )}
+              {type === "desktop" && !mobileView && <SubmitBar className="submit-bar-search" label={t("ES_COMMON_SEARCH")} submit />}
             </div>
             {type === "desktop" && !mobileView && <span className="clear-search">{clearAll()}</span>}
           </div>
         </div>
         {(type === "mobile" || mobileView) && (
-          <ActionBar style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <ActionBar className="clear-search-container">
             <button className="clear-search" style={{ flex: 1 }}>
               {clearAll(mobileView)}
             </button>

@@ -26,7 +26,7 @@ const UploadFile = (props) => {
           <h2 className="file-upload-status">{props.message}</h2>
         ) : (
           <div className="tag-container">
-            <div className="tag" style={{ height: "2rem", marginTop: "1rem" }}>
+            <div className="tag">
               <span className="text">{inpRef.current.files[0]?.name?.slice(0, 20)}</span>
               <span onClick={() => handleDelete()}>
                 <Close className="close" />

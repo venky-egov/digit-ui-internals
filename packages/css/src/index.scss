@@ -197,6 +197,11 @@ input[type="number"] {
   }
 }
 
+.my-bills {
+  @apply flex flex-col;
+  min-height: 85vh;
+}
+
 .bill-summary {
   border: #e8e7e6 solid 1px;
   width: 99%;

@@ -6,7 +6,7 @@ const GroundFloorDetails = ({ t, config, onSelect, value, userType, formData }) 
 
   const inputs = [
     {
-      label: "Plot Size(sq.yd)",
+      label: "Plot Size(sq.yd)*",
       type: "text",
       name: "PlotSize",
       validation: {
@@ -15,7 +15,7 @@ const GroundFloorDetails = ({ t, config, onSelect, value, userType, formData }) 
       error: "CORE_COMMON_PLOTSIZE_INVALID",
     },
     {
-      label: "Built Up Area(sq.yd)",
+      label: "Built Up Area(sq.yd)*",
       type: "text",
       name: "BuiltUpArea",
       validation: {

@@ -168,6 +168,35 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+.bill-details {
+  height: calc(100vh - 196px);
+
+  &-summary {
+    height: 30vh;
+    overflow: scroll;
+  }
+}
+
+@media (max-width: 360px) {
+  .bill-details {
+    &-summary {
+      height: 20vh;
+      overflow: scroll;
+    }
+  }
+}
+
+@screen dt {
+  .bill-details {
+    height: 100%;
+
+    &-summary {
+      height: 100%;
+      overflow: auto;
+    }
+  }
+}
+
 .my-bills {
   @apply flex flex-col;
   min-height: 85vh;

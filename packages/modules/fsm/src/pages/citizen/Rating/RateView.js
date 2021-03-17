@@ -7,11 +7,12 @@ const RateView = (props) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   let { id: applicationNos } = useParams();
-  const { isError, isLoading, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos });
+  const { isError, isLoading, isSuccess, error, data: application } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos });
   const { isLoading: isWorkflowLoading, data } = Digit.Hooks.useWorkflowDetails({
-    tenantId: props.application?.tenantId,
-    id: props.id,
+    tenantId: application?.tenantId,
+    id: applicationNos,
     moduleCode: "FSM",
+    config: { enabled: isSuccess && !!application }
   });
 
   if (isLoading || isWorkflowLoading) {
@@ -24,7 +25,7 @@ const RateView = (props) => {
     <Card>
       <CardHeader>{t('CS_RATE_HELP_US')}</CardHeader>
       <KeyNote keyValue={t('CS_FSM_YOU_RATED')}>
-        <Rating currentRating={3} />
+        <Rating currentRating={data?.timeline[0]?.rating} />
       </KeyNote>
       {application.additionalDetails.CheckList.map(checklist => (
         <KeyNote keyValue={t(checklist.code)} note={t(checklist.value)} />

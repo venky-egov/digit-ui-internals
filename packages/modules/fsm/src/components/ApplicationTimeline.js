@@ -13,27 +13,8 @@ import {
   LinkButton,
   Loader,
   Rating,
-  TelePhone,
 } from "@egovernments/digit-ui-react-components";
-
-const Reason = ({ children }) => (
-  <p style={{ backgroundColor: "#EEEEEE", padding: "8px", color: "#0B0C0C" }}>
-    {children}
-  </p>
-);
-
-const TLCaption = ({ data }) => {
-  const { t } = useTranslation();
-  return (
-    <div>
-      {data.date && <p>{data.date}</p>}
-      <p>{data.name}</p>
-      {data.mobileNumber && <TelePhone mobile={data.mobileNumber} />}
-      {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
-      {data.comment && <Reason>{data.comment}</Reason>}
-    </div>
-  );
-};
+import TLCaption from "./TLCaption";
 
 export const ApplicationTimeline = (props) => {
   const { t } = useTranslation();
@@ -56,7 +37,7 @@ export const ApplicationTimeline = (props) => {
         name: checkpoint.assigner.name
       }
       return <TLCaption data={caption} />;
-    } else if (checkpoint.status === "DSO_REJECTED") {
+    } else if (checkpoint.status === "DSO_REJECTED" || checkpoint.status === checkpoint.status === "CANCELED" || checkpoint.status === "REJECTED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
         name: checkpoint?.assigner?.name,
@@ -66,7 +47,7 @@ export const ApplicationTimeline = (props) => {
     } else if (checkpoint.status === "CITIZEN_FEEDBACK_PENDING") {
       return (
         <>
-        {checkpoint.timeLineActions.length > 0 &&
+        {data?.nextActions.length > 0 &&
           <div>
             <Link to={`/digit-ui/citizen/fsm/rate/${props.id}`}>
               <ActionLinks>{t("CS_FSM_RATE")}</ActionLinks>
@@ -85,8 +66,7 @@ export const ApplicationTimeline = (props) => {
     } else if (checkpoint.status === "COMPLETED") {
       return (
         <div>
-          {/* <p>{t(`CS_FSM_YOU_RATED`)}</p> */}
-          <Rating withText={true} text={t(`CS_FSM_YOU_RATED`)} currentRating={3} />
+          <Rating withText={true} text={t(`CS_FSM_YOU_RATED`)} currentRating={checkpoint.rating} />
           <Link to={`/digit-ui/citizen/fsm/rate-view/${props.id}`}>
             <ActionLinks>{t("CS_FSM_RATE_VIEW")}</ActionLinks>
           </Link>

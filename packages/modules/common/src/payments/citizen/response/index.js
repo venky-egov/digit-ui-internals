@@ -12,6 +12,10 @@ export const SuccessfulPayment = (props) => {
   const { businessService: business_service } = useParams();
   const { isLoading, data, isError } = Digit.Hooks.usePaymentUpdate({ egId }, business_service);
 
+  const { label } = Digit.Hooks.useApplicationsForBusinessServiceSearch({ businessService: business_service }, { enabled: false });
+
+  console.log(label);
+
   const payments = data?.payments;
 
   useEffect(() => {
@@ -79,7 +83,7 @@ export const SuccessfulPayment = (props) => {
         </div>
       </React.Fragment>
       <StatusTable>
-        {/* <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_APPLICATION_NO")} text={applicationNo} /> */}
+        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t(label)} text={applicationNo} />
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PAID")} text={amount} />
         <Row

@@ -17,8 +17,6 @@ const BillDetails = ({ paymentRules, businessService }) => {
 
   const { key, label } = Digit.Hooks.useApplicationsForBusinessServiceSearch({ businessService }, { enabled: false });
 
-  console.log(">><<", billDetails);
-
   const getBillingPeriod = () => {
     let from = new Date(billDetails.fromPeriod).getFullYear().toString();
     let to = new Date(billDetails.toPeriod).getFullYear().toString();
@@ -78,7 +76,6 @@ const BillDetails = ({ paymentRules, businessService }) => {
         <KeyNote keyValue={t(label)} note={consumerCode} />
         <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
         <BillSumary billAccountDetails={getBillBreakDown()} />
-
         <div className="bill-payment-amount">
           <hr className="underline" />
           <CardSubHeader>{t("CS_COMMON_PAYMENT_AMOUNT")}</CardSubHeader>
@@ -95,7 +92,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
               ₹
             </span>
             {paymentType !== t("CS_PAYMENT_FULL_AMOUNT") ? (
-              <TextInput className="text-indent-xl" onChange={(e) => setAmount(e.target.value)} value={amount} />
+              <TextInput className="text-indent-xl" onChange={(e) => onChangeAmount(e.target.value)} value={amount} />
             ) : (
               <TextInput className="text-indent-xl" value={getTotal()} onChange={() => {}} disable={true} />
             )}

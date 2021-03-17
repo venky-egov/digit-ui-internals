@@ -5,7 +5,7 @@ import { BillList } from "./my-bills/my-bills";
 import BillDetails from "./bill-details/bill-details";
 import { BackButton } from "@egovernments/digit-ui-react-components";
 
-const PTBillRoutes = ({ billsList, paymentRules, businessService }) => {
+const BillRoutes = ({ billsList, paymentRules, businessService }) => {
   const { url: currentPath, ...match } = useRouteMatch();
 
   return (
@@ -19,4 +19,4 @@ const PTBillRoutes = ({ billsList, paymentRules, businessService }) => {
   );
 };
 
-export default PTBillRoutes;
+export default BillRoutes;

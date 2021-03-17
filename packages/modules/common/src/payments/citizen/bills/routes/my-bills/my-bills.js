@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { ArrowLeft, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import MyBill from "./my-bill";
 
@@ -25,6 +25,7 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
   const keyForConsumerCode = searchResult.key;
 
   const [applicationList, setApplicationList] = useState([]);
+  const [getKeyNotesConfig, setConfig] = useState(() => Digit.ComponentRegistryService?.getComponent("getBillDetailsConfigWithBusinessService"));
   const billableApplicationsObj = useMemo(() => ({}), []);
   const billsListObj = useMemo(() => ({}), []);
 
@@ -52,11 +53,7 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
       //console.log(newBillsList);
       setApplicationList(newBillsList);
     }
-  }, [searchResult.data]);
-
-  const goToSearch = () => {
-    history.push(`/digit-ui/citizen/pt/property/search`);
-  };
+  }, [searchResult.data, getKeyNotesConfig]);
 
   if (searchResult.isLoading) {
     return <Loader />;
@@ -68,9 +65,10 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
         <div style={{ flex: 1 }}>
           <Header>{t("CS_TITLE_MY_BILLS")}</Header>
           {applicationList?.length > 0 &&
+            getKeyNotesConfig &&
             applicationList.map((bill, index) => (
               <div key={index}>
-                <MyBill {...{ bill, currentPath, businessService }} />
+                <MyBill {...{ bill, currentPath, businessService, getKeyNotesConfig }} />
               </div>
             ))}
           {!applicationList?.length > 0 && <p>No Bills Found.</p>}

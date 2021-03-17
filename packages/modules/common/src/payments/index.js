@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import EmployeePayment from "./employee";
 import CitizenPayment from "./citizen";
+import { getKeyNotesConfig } from "../payments/citizen/bills/routes/my-bills/keynotesConfig";
 
 export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "Payment", userType }) => {
   const { path, url } = useRouteMatch();
@@ -42,4 +43,8 @@ export const PaymentLinks = ({ matchPath }) => {
       </div>
     </React.Fragment>
   );
+};
+
+export const paymentConfigs = {
+  getBillDetailsConfigWithBusinessService: getKeyNotesConfig,
 };

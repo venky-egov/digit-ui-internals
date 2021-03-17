@@ -5,15 +5,12 @@ import Routes from "./routes";
 
 export const MyBills = ({ ...props }) => {
   const { businessService } = useParams();
-  console.log(">>>>>>", businessService);
 
   const { isLoading, data } = Digit.Hooks.useFetchCitizenBillsForBuissnessService({ businessService });
   const { tenantId } = Digit.UserService.getUser().info;
   const { isLoading: mdmsLoading, data: mdmsBillingData } = Digit.Hooks.useGetPaymentRulesForBusinessServices(tenantId);
 
   const billsList = data?.Bill || [];
-
-  console.log(billsList);
 
   const getPaymentRestrictionDetails = () => {
     const payRestrictiondetails = mdmsBillingData?.MdmsRes?.BillingService?.BusinessService;

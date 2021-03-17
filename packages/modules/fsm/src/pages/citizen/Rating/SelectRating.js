@@ -31,7 +31,7 @@ const SelectRating = ({ parentRoute }) => {
     history.push(`${parentRoute}/response`, {
       applicationData: application,
       key: "update",
-      action: "SUBMIT_FEEDBACK",
+      action: "RATE",
       actionData: { rating },
     });
   }

@@ -25,10 +25,10 @@ body {
 }
 
 .link-label {
-  @apply block text-link text-link-normal mb-md ml-md;
+  @apply block text-link text-primary-main mb-md ml-md cursor-pointer;
 
   &:hover {
-    @apply text-link-hover;
+    @apply text-primary-main;
   }
 }
 

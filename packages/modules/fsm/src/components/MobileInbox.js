@@ -8,7 +8,7 @@ const GetSlaCell = (value) => {
   return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
 };
 
-const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
+const GetCell = (value) => <span className="sla-cell">{value}</span>;
 
 const MobileInbox = ({
   data,

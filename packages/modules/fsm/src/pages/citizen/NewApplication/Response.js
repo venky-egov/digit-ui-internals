@@ -99,8 +99,8 @@ const Response = ({ data, onSuccess }) => {
               <span className="download-button">{t("CS_COMMON_DOWNLOAD")}</span>
             </div>
           }
-          style={{ width: "100px" }}
           onClick={handleDownloadPdf}
+          className="w-full"
         />
       )}
       <Link to={`/digit-ui/citizen`}>

@@ -29,12 +29,6 @@ const BillDetails = ({ paymentRules, businessService }) => {
 
   const getTotal = () => getBillBreakDown()?.reduce((total, tax) => total + tax.amount, 0) || 0;
 
-  const getLabelStyle = () => {
-    if (paymentType === t("CS_PAYMENT_FULL_AMOUNT"))
-      return { position: "absolute", backgroundColor: "#efefef", padding: " 6px 12px", border: "#9a9a9a solid 2px", color: "#9a9a9a" };
-    else return { position: "absolute", backgroundColor: "#efefef", padding: " 6px 12px", border: "2px black solid" };
-  };
-
   const [paymentType, setPaymentType] = useState(t("CS_PAYMENT_FULL_AMOUNT"));
   const [amount, setAmount] = useState(getTotal());
   const [paymentAllowed, setPaymentAllowed] = useState(true);
@@ -84,8 +78,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
         <KeyNote keyValue={t(label)} note={consumerCode} />
         <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
         <BillSumary billAccountDetails={getBillBreakDown()} />
-        <div style={{ position: "sticky", bottom: "0", paddingBottom: "32px", backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))" }}>
-          <hr style={{ borderColor: "#e7e6e6", width: "100%", marginRight: "auto", marginLeft: "auto" }} />
+        <div className="bill-payment-amount">
+          <hr className="underline" />
           <CardSubHeader>{t("CS_COMMON_PAYMENT_AMOUNT")}</CardSubHeader>
           <RadioButtons
             selectedOption={paymentType}
@@ -93,11 +87,16 @@ const BillDetails = ({ paymentRules, businessService }) => {
             options={paymentRules.partPaymentAllowed ? [t("CS_PAYMENT_FULL_AMOUNT"), t("CS_PAYMENT_CUSTOM_AMOUNT")] : [t("CS_PAYMENT_FULL_AMOUNT")]}
           />
           <div style={{ position: "relative" }}>
-            <span style={getLabelStyle()}>₹</span>
+            <span
+              className="payment-amount-front"
+              style={{ border: `1px solid ${paymentType === t("CS_PAYMENT_FULL_AMOUNT") ? "#9a9a9a" : "black"}` }}
+            >
+              ₹
+            </span>
             {paymentType !== t("CS_PAYMENT_FULL_AMOUNT") ? (
-              <TextInput style={{ textIndent: "30px" }} onChange={(e) => onChangeAmount(e.target.value)} value={amount} />
+              <TextInput className="text-indent-xl" onChange={(e) => setAmount(e.target.value)} value={amount} />
             ) : (
-              <TextInput style={{ textIndent: "30px" }} value={getTotal()} onChange={() => {}} disable={true} />
+              <TextInput className="text-indent-xl" value={getTotal()} onChange={() => {}} disable={true} />
             )}
             {<span className="card-label-error">{t(formError)}</span>}
           </div>

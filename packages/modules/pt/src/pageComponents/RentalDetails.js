@@ -19,7 +19,7 @@ const RentalDetails = ({ t, config, onSelect, userType, formData }) => {
       error: "CORE_COMMON_STREET_INVALID",
     },
     {
-      label: "Annual Rent (₹)",
+      label: "Annual Rent (₹)*",
       type: "text",
       name: "doorNo",
       validation: {

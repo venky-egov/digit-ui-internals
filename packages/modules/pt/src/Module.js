@@ -81,6 +81,8 @@ export const PTLinks = ({ matchPath, userType }) => {
       <Header>{t("ACTION_TEST_PROPERTY_TAX")}</Header>
       <div className="d-grid">
         <HomeLink to={`${matchPath}/property/new-application`}>{t("PT_CREATE_PROPERTY ")}</HomeLink>
+        <HomeLink to={`${matchPath}/property/my-properties`}>{t("PT_MY_PROPERTIES")}</HomeLink>
+        <HomeLink to={`${matchPath}/property/my-applications`}>{t("PT_MY_APPLICATION")}</HomeLink>
       </div>
     </React.Fragment>
   );

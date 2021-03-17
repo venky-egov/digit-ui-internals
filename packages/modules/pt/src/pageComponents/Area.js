@@ -8,7 +8,7 @@ const Area = ({ t, config, onSelect, formData, userType }) => {
 
   const inputs = [
     {
-      label: "Plot Size (Square Feet)",
+      label: "Plot Size (Square Feet)*",
       type: "text",
       name: "landmark",
       validation: {

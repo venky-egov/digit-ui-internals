@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons } from "@egovernments/digit-ui-react-components";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
-  let index = window.location.href.charAt(window.location.href.length-1);
+  let index = window.location.href.charAt(window.location.href.length - 1);
   const [name, setName] = useState(formData.owners && formData.owners[index] && formData.owners[index].name);
   const [gender, setGender] = useState(formData.owners && formData.owners[index] && formData.owners[index].gender);
   const [mobileNumber, setMobileNumber] = useState(formData.owners && formData.owners[index] && formData.owners[index].mobileNumber);
-  const [fatherOrHusbandName, setFatherOrHusbandName] = useState(formData.owners && formData.owners[index] && formData.owners[index].fatherOrHusbandName);
+  const [fatherOrHusbandName, setFatherOrHusbandName] = useState(
+    formData.owners && formData.owners[index] && formData.owners[index].fatherOrHusbandName
+  );
   const [relationship, setRelationship] = useState(formData.owners && formData.owners[index] && formData.owners[index].relationship);
 
   function setOwnerName(e) {
@@ -40,34 +42,23 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   ];
 
   const GuardianOptions = [
-    { name: "Father", code: "FATHER", "i18nKey": "PT_RELATION_FATHER" },
-    { name: "Husband", code: "HUSBAND", "i18nKey": "PT_RELATION_HUSBAND" }
+    { name: "Father", code: "FATHER", i18nKey: "PT_RELATION_FATHER" },
+    { name: "Husband", code: "HUSBAND", i18nKey: "PT_RELATION_HUSBAND" },
   ];
 
-
   return (
-    <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={(!name || !mobileNumber || !gender || !relationship || !fatherOrHusbandName)}>
-      <CardLabel>{t("PT_OWNER_NAME")}</CardLabel>
-      <TextInput
-        t={t}
-        isMandatory={false}
-        optionKey="i18nKey"
-        name="name"
-        value={name}
-        onChange={setOwnerName}
-        pattern= "^[a-zA-Z_ ]*$"
-      />
-      <CardLabel>{t("PT_FORM3_GENDER")}</CardLabel>
-      <RadioButtons
-        t={t}
-        options={options}
-        optionsKey="code"
-        name="gender"
-        value={gender}
-        selectedOption={gender}
-        onSelect={setGenderName}
-      />
-      <CardLabel>{t("PT_FORM3_MOBILE_NUMBER")}</CardLabel>
+    <FormStep
+      config={config}
+      onSelect={goNext}
+      onSkip={onSkip}
+      t={t}
+      isDisabled={!name || !mobileNumber || !gender || !relationship || !fatherOrHusbandName}
+    >
+      <CardLabel>{`${t("PT_OWNER_NAME")}*`}</CardLabel>
+      <TextInput t={t} isMandatory={false} optionKey="i18nKey" name="name" value={name} onChange={setOwnerName} pattern="^[a-zA-Z_ ]*$" />
+      <CardLabel>{`${t("PT_FORM3_GENDER")}*`}</CardLabel>
+      <RadioButtons t={t} options={options} optionsKey="code" name="gender" value={gender} selectedOption={gender} onSelect={setGenderName} />
+      <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}*`}</CardLabel>
       <TextInput
         t={t}
         isMandatory={false}
@@ -77,7 +68,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         onChange={setMobileNo}
         pattern="^([0]|((\+\d{1,2}[-]{0,1})))?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
       />
-      <CardLabel>{t("PT_FORM3_GUARDIAN_NAME")}</CardLabel>
+      <CardLabel>{`${t("PT_FORM3_GUARDIAN_NAME")}*`}</CardLabel>
       <TextInput
         t={t}
         isMandatory={false}

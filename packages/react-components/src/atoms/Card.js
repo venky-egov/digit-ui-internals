@@ -8,7 +8,7 @@ const Card = ({ className, onClick, style, children, ...props }) => {
   const userType = info?.type;
   const isEmployee = classname === "employee" || userType === "EMPLOYEE";
   return (
-    <div className={isEmployee ? "employeeCard" : "card"} onClick={onClick} style={style} {...props}>
+    <div className={`${isEmployee ? "employeeCard" : "card"} ${props?.className ? props?.className : ""}`} onClick={onClick} style={style} {...props}>
       {children}
     </div>
   );

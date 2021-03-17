@@ -47,13 +47,13 @@
   }
 }
 
+.field-container {
+  @apply flex justify-center items-center;
+}
+
 .employeeCard {
   @apply bg-white shadow-card p-md mb-xl;
   border-radius: 4px;
-
-  .field-container {
-    @apply flex justify-center items-center;
-  }
 
   .card-header {
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;

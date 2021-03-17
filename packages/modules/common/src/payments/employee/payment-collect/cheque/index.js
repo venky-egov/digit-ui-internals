@@ -110,27 +110,9 @@ export const ChequeDetailsComponent = (props) => {
             <h2 className="card-label">{t("PAYMENT_IFSC_CODE_LABEL")} *</h2>
             <div className="field">
               <div>
-                <div style={{ border: "2px solid #0b0c0c", borderRadius: "2px", display: "flex", alignItems: "center", marginBottom: "24px" }}>
-                  <input
-                    style={{
-                      border: "0px",
-                      background: "transparent",
-                      outline: "none",
-                      width: "100%",
-                      textIndent: "5px",
-                      padding: "6px 0px",
-                    }}
-                    value={ifscCode}
-                    type="text"
-                    onChange={(e) => setIfsc(e.target.value)}
-                    minlength="11"
-                    maxlength="11"
-                  />
-                  <button
-                    type="button"
-                    style={{ border: "0px", background: "transparent", outline: "none", textIndent: "2px" }}
-                    onClick={setBankDetailsFromIFSC}
-                  >
+                <div className="cheque-date">
+                  <input value={ifscCode} type="text" onChange={(e) => setIfsc(e.target.value)} minlength="11" maxlength="11" />
+                  <button type="button" onClick={setBankDetailsFromIFSC}>
                     <SearchIconSvg />
                   </button>
                 </div>

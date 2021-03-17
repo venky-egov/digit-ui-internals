@@ -52,9 +52,9 @@ export const SubformComposer = ({ _key, ...props }) => {
             let _customProps = typeof customProps === "function" ? customProps(state, _setState) : customProps;
             let _defaultValue = typeof defaultValue === "function" ? defaultValue(state, _setState) : defaultValue;
             return (
-              <div key={index} style={{ display: "flex" }}>
-                {label && <div style={{ width: "50%" }}>{label}</div>}
-                <div style={label && { width: "50%" }}>
+              <div key={index} className="subform-composer">
+                {label && <div className="w-half">{label}</div>}
+                <div className={label && "w-half"}>
                   <Controller
                     defaultValue={_defaultValue}
                     name={name}

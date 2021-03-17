@@ -18,7 +18,7 @@ const TextInput = (props) => {
 
   return (
     <React.Fragment>
-      <div style={{ position: "relative", width: "100%" }}>
+      <div className={`text-input ${props.className}`}>
         {props.isMandatory ? (
           <input
             type={props.type || "text"}

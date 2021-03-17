@@ -6,29 +6,20 @@ const BillSumary = ({ billAccountDetails }) => {
   const { t } = useTranslation();
   return (
     <React.Fragment>
-      <div
-        style={{
-          border: "#e8e7e6 solid 1px",
-          backgroundColor: "#fafafa",
-          width: "99%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          marginBottom: "16px",
-        }}
-      >
+      <div className="bill-summary">
         {billAccountDetails.map((amountDetails, index) => {
           return (
-            <div key={index} style={{ padding: "5px", display: "flex", marginBottom: "16px" }}>
-              <div style={{ width: "50%", fontWeight: "bold" }}>{t(amountDetails.taxHeadCode)}</div>
-              <div style={{ width: "50%", textAlign: "right" }}>{amountDetails.amount?.toFixed(2)}</div>
+            <div key={index} className="bill-account-details">
+              <div className="label">{t(amountDetails.taxHeadCode)}</div>
+              <div className="value">{amountDetails.amount?.toFixed(2)}</div>
             </div>
           );
         })}
 
-        <hr style={{ borderColor: "#e7e6e6", width: "90%", marginRight: "auto", marginLeft: "auto" }} />
-        <div style={{ padding: "5px", display: "flex", marginBottom: "16px", alignItems: "center" }}>
-          <div style={{ width: "50%", fontWeight: "bold" }}>Total Amount</div>
-          <div style={{ width: "50%", textAlign: "right", fontWeight: "bold", fontSize: "18px" }}>₹ {total.toFixed(2)}</div>
+        <hr className="underline" />
+        <div className="amount-details">
+          <div className="label">Total Amount</div>
+          <div className="value">₹ {total.toFixed(2)}</div>
         </div>
       </div>
     </React.Fragment>

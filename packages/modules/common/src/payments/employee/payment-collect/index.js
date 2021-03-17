@@ -19,8 +19,6 @@ export const CollectPayment = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
-  // TODO: enhancement to disablePayerDetails
-  const [disablePayerDetails, setDisablePayerDetails] = useState(true);
 
   const { cardConfig } = useCardPaymentDetails(props, t);
   const { chequeConfig, date } = useChequeDetails(props, t);
@@ -159,11 +157,9 @@ export const CollectPayment = (props) => {
                   if (isEqual(d, paidByMenu[0])) {
                     props.setValue("payerName", bill?.payerName);
                     props.setValue("payerMobile", bill?.mobileNumber);
-                    setDisablePayerDetails(true);
                   } else {
                     props.setValue("payerName", "");
                     props.setValue("payerMobile", "");
-                    setDisablePayerDetails(false);
                   }
                   props.onChange(d);
                 }}
@@ -185,7 +181,6 @@ export const CollectPayment = (props) => {
             error: "a valid name required",
             defaultValue: bill?.payerName || formState?.payerName || "",
           },
-          disable: disablePayerDetails,
         },
         {
           label: t("PAYMENT_PAYER_MOB_LABEL"),
@@ -200,7 +195,6 @@ export const CollectPayment = (props) => {
             error: "a valid mobile no. required",
             defaultValue: bill?.mobileNumber || formState?.payerMobile || "",
           },
-          disable: disablePayerDetails,
         },
       ],
     },

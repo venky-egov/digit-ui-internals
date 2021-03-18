@@ -17,24 +17,20 @@ const getApplicationVehicleType = (application, t) => {
   return application?.pdfVehicleType ? application?.pdfVehicleType : "N/A";
 };
 
-const getAmountPerTrip = (application) => {
-  if (application?.amountPerTrip) {
-    return `₹ ${application?.amountPerTrip}`;
-  }
-  return application?.additionalDetails?.tripAmount
-    ? application?.additionalDetails?.tripAmount !== 0 && `₹ ${application?.additionalDetails?.tripAmount}`
-    : "N/A";
+const getAmountPerTrip = (amountPerTrip) => {
+  if (!amountPerTrip) return "N/A";
+  return amountPerTrip !== 0 ? `₹ ${amountPerTrip}` : "N/A";
 };
-const getTotalAmount = (application) => {
-  if (application?.totalAmount) {
-    return `₹ ${application?.totalAmount}`;
-  }
-  return application?.additionalDetails?.tripAmount && application?.additionalDetails?.tripAmount !== 0
-    ? `₹ ${application?.additionalDetails?.tripAmount * application?.noOfTrips}`
-    : "N/A";
+
+const getTotalAmount = (totalAmount) => {
+  if (!totalAmount) return "N/A";
+  return totalAmount !== 0 ? `₹ ${totalAmount}` : "N/A";
 };
 
 const getPDFData = (application, tenantInfo, t) => {
+  const amountPerTrip = application?.amountPerTrip || JSON.parse(application?.address?.additionalDetails)?.tripAmount;
+  const totalAmount = application?.totalAmount || amountPerTrip * application?.noOfTrips;
+
   return {
     t: t,
     tenantId: tenantInfo?.code,
@@ -117,11 +113,11 @@ const getPDFData = (application, tenantInfo, t) => {
           { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "N/A" },
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_PER_TRIP"),
-            value: getAmountPerTrip(application),
+            value: getAmountPerTrip(amountPerTrip),
           },
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_DUE"),
-            value: getTotalAmount(application),
+            value: getTotalAmount(totalAmount),
           },
         ],
       },

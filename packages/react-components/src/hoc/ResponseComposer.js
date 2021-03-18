@@ -26,6 +26,7 @@ const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
             })}
             {actionButtonLabel && (
               <SubmitBar
+                submit={false}
                 label={t(actionButtonLabel)}
                 onSubmit={() => {
                   onSubmit(result);

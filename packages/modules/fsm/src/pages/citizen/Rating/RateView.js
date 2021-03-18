@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { Card, CardLabel, CardHeader, KeyNote, Loader, Rating } from '@egovernments/digit-ui-react-components';
+import { Card, CardLabel, CardHeader, KeyNote, Loader, Rating } from "@egovernments/digit-ui-react-components";
 
 const RateView = (props) => {
   const { t } = useTranslation();
@@ -12,27 +12,25 @@ const RateView = (props) => {
     tenantId: application?.tenantId,
     id: applicationNos,
     moduleCode: "FSM",
-    config: { enabled: isSuccess && !!application }
+    config: { enabled: isSuccess && !!application },
   });
 
   if (isLoading || isWorkflowLoading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   return (
     <Card>
-      <CardHeader>{t('CS_RATE_HELP_US')}</CardHeader>
-      <KeyNote keyValue={t('CS_FSM_YOU_RATED')}>
+      <CardHeader>{t("CS_RATE_HELP_US")}</CardHeader>
+      <KeyNote keyValue={t("CS_FSM_YOU_RATED")}>
         <Rating currentRating={data?.timeline[0]?.rating} />
       </KeyNote>
-      {application.additionalDetails.CheckList.map(checklist => (
+      {application.additionalDetails.CheckList.map((checklist) => (
         <KeyNote keyValue={t(checklist.code)} note={t(checklist.value)} />
       ))}
-      <KeyNote keyValue={t("CS_COMMON_COMMENTS")} note={data?.timeline[0]?.comment || 'N/A'} />
-    </Card>  
-  )
-}
+      <KeyNote keyValue={t("CS_COMMON_COMMENTS")} note={data?.timeline[0]?.comment || "N/A"} />
+    </Card>
+  );
+};
 
 export default RateView;

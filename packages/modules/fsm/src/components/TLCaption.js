@@ -1,8 +1,7 @@
-import React from 'react';
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { TelePhone } from '@egovernments/digit-ui-react-components';
+import { TelePhone } from "@egovernments/digit-ui-react-components";
 import Reason from "./Reason";
-
 
 const TLCaption = ({ data }) => {
   const { t } = useTranslation();

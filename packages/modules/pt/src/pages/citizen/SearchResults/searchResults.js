@@ -2,28 +2,37 @@ import React from "react";
 import { CardSubHeader, ResponseComposer, Loader } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
-  const { mobileNumber, propertyIds, oldpropertyids } = Digit.Hooks.useQueryParams();
-  console.log({ mobileNumber });
-  const result = Digit.Hooks.pt.usePropertySearch({ tenantId: "pb", filters: { mobileNumber, propertyIds, oldpropertyids } });
-  console.log({ property: result });
-  const consumerCodes = result?.data?.Properties?.map((a) => a.propertyId).join(",");
-  const paymentDetails = Digit.Hooks.pt.usePropertyPayment({ tenantId: "pb", consumerCodes });
+const PropertySearchResults = ({ template, header, actionButtonLabel }) => {
+  const { t } = useTranslation();
+  const { mobileNumber, propertyIds, oldPropertyIds } = Digit.Hooks.useQueryParams();
+  const filters = {};
+  if (mobileNumber) filters.mobileNumber = mobileNumber;
+  if (propertyIds) filters.propertyIds = propertyIds;
+  if (oldPropertyIds) filters.oldPropertyIds = oldPropertyIds;
+
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const result = Digit.Hooks.pt.usePropertySearch({ tenantId, filters });
+  const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
+  const paymentDetails = Digit.Hooks.useFetchPayment({ tenantId, consumerCode, businessService: "PT" }, { enabled: consumerCode ? true : false });
+
   const history = useHistory();
-  if (result.error || !consumerCodes) {
-    return <div>No Results</div>;
+
+  if (result.error || !consumerCode) {
+    return <div>{t("CS_PT_NO_PROPERTIES_FOUND")}</div>;
   }
+
   if (paymentDetails.isLoading || result.isLoading) {
     return <Loader />;
   }
 
   const onSubmit = (data) => {
-    console.log("data from composer", data);
-    if (parseFloat(data?.total_due)) history.push(`/digit-ui/citizen/payment/my-bills/PT/${data.property_id}`, { tenantId: "pb" });
+    if (parseFloat(data?.total_due)) history.push(`/digit-ui/citizen/payment/my-bills/PT/${data.property_id}`, { tenantId });
   };
 
   const payment = {};
+
   paymentDetails?.data?.Bill?.forEach((element) => {
     if (element?.consumerCode) {
       payment[element?.consumerCode] = {
@@ -32,6 +41,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
       };
     }
   });
+
   const searchResults = result?.data?.Properties?.map((property) => {
     let addr = property?.address || {};
 

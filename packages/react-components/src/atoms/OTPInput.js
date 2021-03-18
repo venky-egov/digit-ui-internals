@@ -11,7 +11,18 @@ const SingleInput = ({ isFocus, onChange, onFocus, value, ...rest }) => {
     }
   }, [isFocus]);
 
-  return <input className="input-otp" maxLength={1} onChange={onChange} onFocus={onFocus} ref={inputRef} type="number" value={value ? value : ""} {...rest} />;
+  return (
+    <input
+      className="input-otp"
+      maxLength={1}
+      onChange={onChange}
+      onFocus={onFocus}
+      ref={inputRef}
+      type="number"
+      value={value ? value : ""}
+      {...rest}
+    />
+  );
 };
 
 const OTPInput = (props) => {
@@ -30,29 +41,29 @@ const OTPInput = (props) => {
     otp[activeInput] = value[0];
     const otpValue = otp.join("");
     onChange(otpValue);
-  }
+  };
 
   const focusNextInput = () => {
     setActiveInput((activeInput) => Math.min(activeInput + 1, props.length - 1));
   };
 
   const focusPrevInput = () => {
-    setActiveInput(activeInput => Math.max(activeInput - 1, 0));
-  }
+    setActiveInput((activeInput) => Math.max(activeInput - 1, 0));
+  };
 
   const getOtpValue = () => (props.value ? props.value.toString().split("") : []);
 
   const handleKeyDown = (event) => {
-    if (event.keyCode === BACKSPACE || event.key === 'Backspace') {
+    if (event.keyCode === BACKSPACE || event.key === "Backspace") {
       event.preventDefault();
-      changeCodeAtFocus('');
+      changeCodeAtFocus("");
       focusPrevInput();
     }
-  }
+  };
 
   function inputChange(event) {
     const { value } = event.target;
-    changeCodeAtFocus(value)
+    changeCodeAtFocus(value);
     if (isInputValueValid(value)) {
       focusNextInput();
     }
@@ -62,7 +73,8 @@ const OTPInput = (props) => {
   const otp = getOtpValue();
   for (let i = 0; i < props.length; i++) {
     OTPStack.push(
-      <SingleInput key={i}
+      <SingleInput
+        key={i}
         isFocus={activeInput === i}
         onChange={inputChange}
         onKeyDown={handleKeyDown}
@@ -71,7 +83,8 @@ const OTPInput = (props) => {
           e.target.select();
         }}
         value={otp[i]}
-      />);
+      />
+    );
   }
 
   return <div className="input-otp-wrap">{OTPStack}</div>;

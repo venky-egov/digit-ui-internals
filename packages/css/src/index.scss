@@ -56,6 +56,12 @@
 @import "./pages/employee/inbox.scss";
 @import "./pages/employee/response.scss";
 
+@import "./pages/citizen/payment/payment-type.scss";
+
+.dark {
+  @apply text-text-primary;
+}
+
 .home-link {
   margin-left: 16px;
   margin-bottom: 16px;
@@ -167,9 +173,9 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-
+/*TODO: multiple device enhacements*/
 .bill-details {
-  height: calc(100vh - 196px);
+  height: calc(100vh - 186px);
 
   &-summary {
     height: 30vh;
@@ -177,11 +183,24 @@ input[type="number"] {
   }
 }
 
+@media (max-width: 375px) {
+  height: calc(100vh - 156px);
+}
+
 @media (max-width: 360px) {
   .bill-details {
     &-summary {
       height: 20vh;
       overflow: scroll;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .bill-details {
+    height: 100%;
+    &-summary {
+      height: 100%;
     }
   }
 }
@@ -248,7 +267,7 @@ input[type="number"] {
   }
 }
 
-.text-indent-xl {
+.text-indent-xl input {
   text-indent: 40px;
 }
 

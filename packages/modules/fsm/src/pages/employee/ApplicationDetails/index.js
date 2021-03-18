@@ -157,26 +157,30 @@ const ApplicationDetails = (props) => {
         source: applicationData.source || "",
       };
       return <TLCaption data={caption} />;
-    } else if (checkpoint.status === "PENDING_APPL_FEE_PAYMENT" || checkpoint.status === "ASSING_DSO" || checkpoint.status === "PENDING_DSO_APPROVAL") {
+    } else if (
+      checkpoint.status === "PENDING_APPL_FEE_PAYMENT" ||
+      checkpoint.status === "ASSING_DSO" ||
+      checkpoint.status === "PENDING_DSO_APPROVAL"
+    ) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
-        name: checkpoint.assigner.name
-      }
+        name: checkpoint.assigner.name,
+      };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_REJECTED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
         name: checkpoint?.assigner?.name,
-        comment: t(checkpoint?.comment)
-      }
-      return <TLCaption data={caption} />
+        comment: t(checkpoint?.comment),
+      };
+      return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_INPROGRESS") {
       const caption = {
         name: applicationData?.dsoDetails?.displayName,
         mobileNumber: applicationData?.dsoDetails?.mobileNumber,
-        date: `${t('CS_FSM_EXPECTED_DATE')} ${Digit.DateUtils.ConvertTimestampToDate(applicationData?.possibleServiceDate)}`,
-      }
-      return <TLCaption data={caption} />
+        date: `${t("CS_FSM_EXPECTED_DATE")} ${Digit.DateUtils.ConvertTimestampToDate(applicationData?.possibleServiceDate)}`,
+      };
+      return <TLCaption data={caption} />;
     } else if (checkpoint.status === "COMPLETED") {
       return (
         <div>
@@ -185,7 +189,7 @@ const ApplicationDetails = (props) => {
             <ActionLinks>{t("CS_FSM_RATE_VIEW")}</ActionLinks>
           </Link>
         </div>
-      )
+      );
     }
   };
 

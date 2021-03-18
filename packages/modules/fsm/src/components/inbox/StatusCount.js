@@ -7,7 +7,12 @@ const StatusCount = ({ status, fsmfilters, onAssignmentChange }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data } = Digit.Hooks.fsm.useInbox(
     tenantId,
-    { applicationStatus: [status], total: true },
+    { applicationStatus: [status],
+      total: true,
+      uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+      sortBy: "createdTime",
+      sortOrder: "DESC"
+    },
     null,
   )
 

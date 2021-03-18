@@ -23,6 +23,7 @@ import PropertyUsageType from "./pageComponents/PropertyUsageType";
 import GroundFloorDetails from "./pageComponents/GroundFloorDetails";
 import PropertyFloorDetails from "./pageComponents/PropertyFloorDetails";
 import PropertyBasementDetails from "./pageComponents/PropertyBasementDetails";
+import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 
 import IsThisFloorSelfOccupied from "./pageComponents/IsThisFloorSelfOccupied";
 import ProvideSubUsageType from "./pageComponents/ProvideSubUsageType";
@@ -59,6 +60,7 @@ const componentsToRegister = {
   GroundFloorDetails,
   PropertyFloorDetails,
   PropertyBasementDetails,
+  PropertyInformation,
 };
 
 const addComponentsToRegistry = () => {

@@ -25,7 +25,7 @@ const MyProperty = ({ application }) => {
         }
       />
       <KeyNote keyValue={t("PT_COMMON_TABLE_COL_STATUS_LABEL")} note={t("PT_COMMON_" + application.status)} />
-      <Link /* to={`/digit-ui/citizen/pt/property/application/${application.acknowldgementNumber}`} */>
+      <Link to={`/digit-ui/citizen/pt/property/propertyinfo`}>
         <SubmitBar label={t("PT_VIEW_DETAILS")} />
       </Link>
     </Card>

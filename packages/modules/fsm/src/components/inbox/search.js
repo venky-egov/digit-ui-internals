@@ -26,7 +26,8 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   };
 
   function clearSearch() {
-    reset();
+    const resetValues = searchFields.reduce((acc, field) => ({ ...acc, [field?.name]: '' }), {});
+    reset(resetValues);
     onSearch({});
   }
 

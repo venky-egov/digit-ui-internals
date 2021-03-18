@@ -14,8 +14,6 @@ export const SuccessfulPayment = (props) => {
 
   const { label } = Digit.Hooks.useApplicationsForBusinessServiceSearch({ businessService: business_service }, { enabled: false });
 
-  console.log(label);
-
   const payments = data?.payments;
 
   useEffect(() => {

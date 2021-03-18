@@ -56,6 +56,12 @@
 @import "./pages/employee/inbox.scss";
 @import "./pages/employee/response.scss";
 
+@import "./pages/citizen/payment/payment-type.scss";
+
+.dark {
+  @apply text-text-primary;
+}
+
 .home-link {
   margin-left: 16px;
   margin-bottom: 16px;
@@ -167,7 +173,7 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-
+/*TODO: multiple device enhacements*/
 .bill-details {
   height: calc(100vh - 186px);
 

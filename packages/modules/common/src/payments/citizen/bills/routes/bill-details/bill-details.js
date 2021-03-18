@@ -73,9 +73,11 @@ const BillDetails = ({ paymentRules, businessService }) => {
     <React.Fragment>
       <Header>{t("CS_PAYMENT_BILL_DETAILS")}</Header>
       <Card className="bill-details">
-        <KeyNote keyValue={t(label)} note={consumerCode} />
-        <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
-        <BillSumary billAccountDetails={getBillBreakDown()} />
+        <div className="bill-details-summary">
+          <KeyNote keyValue={t(label)} note={consumerCode} />
+          <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
+          <BillSumary billAccountDetails={getBillBreakDown()} />
+        </div>
         <div className="bill-payment-amount">
           <hr className="underline" />
           <CardSubHeader>{t("CS_COMMON_PAYMENT_AMOUNT")}</CardSubHeader>

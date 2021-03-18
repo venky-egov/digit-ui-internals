@@ -169,7 +169,7 @@ input[type="number"] {
 }
 
 .bill-details {
-  height: calc(100vh - 196px);
+  height: calc(100vh - 186px);
 
   &-summary {
     height: 30vh;
@@ -177,11 +177,24 @@ input[type="number"] {
   }
 }
 
+@media (max-width: 375px) {
+  height: calc(100vh - 156px);
+}
+
 @media (max-width: 360px) {
   .bill-details {
     &-summary {
       height: 20vh;
       overflow: scroll;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .bill-details {
+    height: 100%;
+    &-summary {
+      height: 100%;
     }
   }
 }

@@ -19,6 +19,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
+import TLCaption from "../../../components/TLCaption";
 
 import { useQueryClient } from "react-query";
 
@@ -74,20 +75,7 @@ const ApplicationDetails = (props) => {
     setDisplayMenu(false);
   }
 
-  const TLCaption = ({ data }) => {
-    const { t } = useTranslation();
-    return (
-      <div>
-        {data.date && <p>{data.date}</p>}
-        <p>{data.name}</p>
-        <p>{data.mobileNumber}</p>
-        {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
-      </div>
-    );
-  };
-
   useEffect(() => {
-    console.log("action selected in case", selectedAction);
     switch (selectedAction) {
       case "DSO_ACCEPT":
       case "ACCEPT":
@@ -163,12 +151,45 @@ const ApplicationDetails = (props) => {
     // console.log("tl", checkpoint);
     if (checkpoint.status === "CREATED") {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(applicationData.auditDetails.createdTime),
+        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
         name: applicationData.citizen.name,
         mobileNumber: applicationData.citizen.mobileNumber,
         source: applicationData.source || "",
       };
       return <TLCaption data={caption} />;
+    } else if (
+      checkpoint.status === "PENDING_APPL_FEE_PAYMENT" ||
+      checkpoint.status === "ASSING_DSO" ||
+      checkpoint.status === "PENDING_DSO_APPROVAL"
+    ) {
+      const caption = {
+        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
+        name: checkpoint.assigner.name,
+      };
+      return <TLCaption data={caption} />;
+    } else if (checkpoint.status === "DSO_REJECTED") {
+      const caption = {
+        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
+        name: checkpoint?.assigner?.name,
+        comment: t(checkpoint?.comment),
+      };
+      return <TLCaption data={caption} />;
+    } else if (checkpoint.status === "DSO_INPROGRESS") {
+      const caption = {
+        name: applicationData?.dsoDetails?.displayName,
+        mobileNumber: applicationData?.dsoDetails?.mobileNumber,
+        date: `${t("CS_FSM_EXPECTED_DATE")} ${Digit.DateUtils.ConvertTimestampToDate(applicationData?.possibleServiceDate)}`,
+      };
+      return <TLCaption data={caption} />;
+    } else if (checkpoint.status === "COMPLETED") {
+      return (
+        <div>
+          <Rating withText={true} text={t(`ES_FSM_YOU_RATED`)} currentRating={checkpoint.rating} />
+          <Link to={`/digit-ui/employee/fsm/rate-view/${applicationNumber}`}>
+            <ActionLinks>{t("CS_FSM_RATE_VIEW")}</ActionLinks>
+          </Link>
+        </div>
+      );
     }
   };
 

@@ -12,20 +12,9 @@ import {
   SubmitBar,
   LinkButton,
   Loader,
-  TelePhone,
+  Rating,
 } from "@egovernments/digit-ui-react-components";
-
-const TLCaption = ({ data }) => {
-  const { t } = useTranslation();
-  return (
-    <div>
-      {data.date && <p>{data.date}</p>}
-      <p>{data.name}</p>
-      {data.mobileNumber && <TelePhone mobile={data.mobileNumber} />}
-      {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
-    </div>
-  );
-};
+import TLCaption from "./TLCaption";
 
 export const ApplicationTimeline = (props) => {
   const { t } = useTranslation();
@@ -42,13 +31,34 @@ export const ApplicationTimeline = (props) => {
         source: props.application?.source || "",
       };
       return <TLCaption data={caption} />;
+    } else if (
+      checkpoint.status === "PENDING_APPL_FEE_PAYMENT" ||
+      checkpoint.status === "ASSING_DSO" ||
+      checkpoint.status === "PENDING_DSO_APPROVAL"
+    ) {
+      const caption = {
+        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
+        name: checkpoint.assigner.name,
+      };
+      return <TLCaption data={caption} />;
+    } else if (checkpoint.status === "DSO_REJECTED" || (checkpoint.status === checkpoint.status) === "CANCELED" || checkpoint.status === "REJECTED") {
+      const caption = {
+        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
+        name: checkpoint?.assigner?.name,
+        comment: t(checkpoint?.comment),
+      };
+      return <TLCaption data={caption} />;
     } else if (checkpoint.status === "CITIZEN_FEEDBACK_PENDING") {
       return (
-        <div>
-          <Link to={`/digit-ui/citizen/fsm/rate/${props.id}`}>
-            <ActionLinks>{t("CS_FSM_RATE")}</ActionLinks>
-          </Link>
-        </div>
+        <>
+          {data?.nextActions.length > 0 && (
+            <div>
+              <Link to={`/digit-ui/citizen/fsm/rate/${props.id}`}>
+                <ActionLinks>{t("CS_FSM_RATE")}</ActionLinks>
+              </Link>
+            </div>
+          )}
+        </>
       );
     } else if (checkpoint.status === "DSO_INPROGRESS") {
       const caption = {
@@ -57,6 +67,15 @@ export const ApplicationTimeline = (props) => {
         date: `${t("CS_FSM_EXPECTED_DATE")} ${Digit.DateUtils.ConvertTimestampToDate(props.application?.possibleServiceDate)}`,
       };
       return <TLCaption data={caption} />;
+    } else if (checkpoint.status === "COMPLETED") {
+      return (
+        <div>
+          <Rating withText={true} text={t(`CS_FSM_YOU_RATED`)} currentRating={checkpoint.rating} />
+          <Link to={`/digit-ui/citizen/fsm/rate-view/${props.id}`}>
+            <ActionLinks>{t("CS_FSM_RATE_VIEW")}</ActionLinks>
+          </Link>
+        </div>
+      );
     }
   };
 

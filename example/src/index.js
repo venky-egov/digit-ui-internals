@@ -6,7 +6,7 @@ import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-
 import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
 import { initFSMComponents } from "@egovernments/digit-ui-module-fsm";
 import { initPGRComponents } from "@egovernments/digit-ui-module-pgr";
-import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
+import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
@@ -103,6 +103,7 @@ const initDigitUI = () => {
   Digit.ComponentRegistryService.setupRegistry({
     ...pgrComponents,
     PaymentModule,
+    ...paymentConfigs,
     PaymentLinks,
     PTModule,
     PTLinks,
@@ -119,6 +120,8 @@ const initDigitUI = () => {
 
   const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
   initTokens(stateCode);
+
+  const registry = Digit.ComponentRegistryService.getRegistry();
 
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 };

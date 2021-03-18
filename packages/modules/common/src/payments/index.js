@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import EmployeePayment from "./employee";
 import CitizenPayment from "./citizen";
-import { getKeyNotesConfig } from "../payments/citizen/bills/routes/my-bills/keynotesConfig";
+import { getKeyNotesConfig } from "./citizen/keynotesConfig";
 
 export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "Payment", userType }) => {
   const { path, url } = useRouteMatch();
@@ -17,8 +17,6 @@ export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCod
   if (Object.keys(store).length === 0) {
     return <Loader />;
   }
-
-  console.log("payment", userType, state, store);
 
   const getPaymentHome = () => {
     if (userType === "citizen") return <CitizenPayment {...{ stateCode, moduleCode, cityCode, path, url }} />;

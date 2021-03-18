@@ -195,6 +195,7 @@ export const newConfig = [
           header: "Un - occupied area",
           cardText: "Area that is locked up and not used on a daily basis.",
           submitBarLabel: "PT_COMMON_NEXT",
+          skipText: "CORE_COMMON_SKIP_CONTINUE",
         },
         key: "UnOccupiedArea",
         withoutLabel: true,

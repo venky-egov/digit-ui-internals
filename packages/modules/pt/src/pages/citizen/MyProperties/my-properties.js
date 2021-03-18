@@ -24,7 +24,7 @@ const MyProperty = ({ application }) => {
           }${t(address?.locality.name)}, ${t(address?.city)},${t(address?.pincode) ? `${address.pincode}` : " "}` || "CS_APPLICATION_TYPE_PT"
         }
       />
-      <KeyNote keyValue={t("PT_COMMON_TABLE_COL_STATUS_LABEL")} note={t("CS_COMMON_" + application.status)} />
+      <KeyNote keyValue={t("PT_COMMON_TABLE_COL_STATUS_LABEL")} note={t("PT_COMMON_" + application.status)} />
       <Link /* to={`/digit-ui/citizen/pt/property/application/${application.acknowldgementNumber}`} */>
         <SubmitBar label={t("PT_VIEW_DETAILS")} />
       </Link>

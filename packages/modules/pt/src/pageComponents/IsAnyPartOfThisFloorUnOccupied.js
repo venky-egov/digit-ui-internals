@@ -4,16 +4,16 @@ import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-re
 const IsAnyPartOfThisFloorUnOccupied = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
-  const [selfOccupied, setSelfOccupied] = useState(formData?.IsThisFloorSelfOccupied);
+  const [unOccupiedFloorPart, setSelfOccupied] = useState(formData?.IsAnyPartOfThisFloorUnOccupied);
   const { data: Menu, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType");
 
   const data = [
     {
-      i18nKey: "No"
+      i18nKey: "No",
     },
     {
-      i18nKey: "Yes"
-    }
+      i18nKey: "Yes",
+    },
   ];
   const onSkip = () => onSelect();
 
@@ -22,16 +22,16 @@ const IsAnyPartOfThisFloorUnOccupied = ({ t, config, onSelect, userType, formDat
   }
 
   function goNext() {
-    onSelect(config.key, selfOccupied);
+    onSelect(config.key, unOccupiedFloorPart);
   }
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!selfOccupied}>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!unOccupiedFloorPart}>
       <RadioButtons
         t={t}
         optionsKey="i18nKey"
         isMandatory={config.isMandatory}
         options={data}
-        selectedOption={selfOccupied}
+        selectedOption={unOccupiedFloorPart}
         onSelect={selectSelfOccupied}
       />
     </FormStep>

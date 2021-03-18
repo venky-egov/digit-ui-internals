@@ -58,6 +58,7 @@ const Area = ({ t, config, onSelect, formData, userType }) => {
       onSelect={(data) => onSelect(config.key, { ...data })}
       onSkip={onSkip}
       t={t}
+      isDisabled={!landmark}
       forcedError={t(error)}
     ></FormStep>
   );

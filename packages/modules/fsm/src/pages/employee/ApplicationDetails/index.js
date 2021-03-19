@@ -274,7 +274,7 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-          {console.log("above show modal", showModal)}
+          {/* {console.log("above show modal", showModal)} */}
           {showModal ? (
             <ActionModal
               t={t}

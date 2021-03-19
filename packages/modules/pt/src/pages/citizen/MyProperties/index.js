@@ -13,8 +13,6 @@ export const MyProperties = () => {
 
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ tenantId });
 
-  //debugger;
-  //console.log(data);
   if (isLoading) {
     return <Loader />;
   }

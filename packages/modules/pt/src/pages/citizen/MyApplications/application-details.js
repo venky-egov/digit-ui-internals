@@ -14,7 +14,6 @@ const ApplicationDetails = () => {
 
   const application = data?.Properties[0];
 
-  console.log({ application });
   if (isLoading) {
     return <Loader />;
   }

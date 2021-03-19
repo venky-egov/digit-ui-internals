@@ -26,8 +26,7 @@ const PropertyFloorsDetails = ({ t, config, onSelect, formData }) => {
     onSelect(config.key, FloorDetails);
   }
 
-  debugger;
-
+  
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!FloorDetails}>
       <RadioButtons

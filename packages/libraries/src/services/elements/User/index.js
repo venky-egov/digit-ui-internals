@@ -1,5 +1,5 @@
 import Urls from "../../atoms/urls";
-import { ServiceRequest, Request } from "../../atoms/Utils/Request";
+import { Request, ServiceRequest } from "../../atoms/Utils/Request";
 import { Storage } from "../../atoms/Utils/Storage";
 
 export const UserService = {
@@ -76,7 +76,7 @@ export const UserService = {
     const user = Digit.UserService.getUser();
     if (!user || !user.info) return false;
     const { roles } = user.info;
-    return roles.filter((role) => accessTo.includes(role.code)).length;
+    return roles && Array.isArray(roles) && roles.filter((role) => accessTo.includes(role.code)).length;
   },
 
   changePassword: (details, stateCode) =>

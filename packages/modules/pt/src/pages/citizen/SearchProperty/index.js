@@ -21,8 +21,7 @@ const SearchProperty = () => {
     )
   );
 
-  console.log({ params });
-  return (
+    return (
     <Switch>
       <Route path={`${path}`} exact>
         <SearchPropertyComponent config={params[0]} t={t} />

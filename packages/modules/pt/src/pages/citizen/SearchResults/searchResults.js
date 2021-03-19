@@ -5,9 +5,7 @@ import { useHistory } from "react-router-dom";
 
 const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
   const { mobileNumber, propertyIds, oldpropertyids } = Digit.Hooks.useQueryParams();
-  console.log({ mobileNumber });
   const result = Digit.Hooks.pt.usePropertySearch({ tenantId: "pb", filters: { mobileNumber, propertyIds, oldpropertyids } });
-  console.log({ property: result });
   const consumerCodes = result?.data?.Properties?.map((a) => a.propertyId).join(",");
   const paymentDetails = Digit.Hooks.pt.usePropertyPayment({ tenantId: "pb", consumerCodes });
   const history = useHistory();

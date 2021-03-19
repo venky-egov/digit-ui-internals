@@ -26,8 +26,7 @@ const PropertyBasementsDetails = ({ t, config, onSelect, userType, formData }) =
     onSelect(config.key, BasementDetails);
   }
 
-  debugger;
-
+  
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BasementDetails}>
       <RadioButtons

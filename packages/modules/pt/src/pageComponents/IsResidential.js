@@ -13,8 +13,6 @@ const IsResidential = ({ t, config, onSelect, userType, formData }) => {
     onSelect(config.key, ResidentialType, false, index);
   }
 
-  debugger;
-
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ResidentialType}>
       <RadioOrSelect

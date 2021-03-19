@@ -26,8 +26,7 @@ const PropertyUsageType = ({ t, config, onSelect, userType, formData }) => {
   function selectPropertyPurpose(value) {
     setPropertyPurpose(value);
   }
-  debugger;
-
+  
   function goNext() {
     onSelect(config.key, PropertyPurpose);
     // onSelect(config.key,ResidentialType, false, index);

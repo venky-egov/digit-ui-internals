@@ -25,8 +25,7 @@ const PropertyInformation = () => {
 
   const property = data?.Properties[0] || " ";
 
-  console.log({ property });
-  if (isLoading) {
+    if (isLoading) {
     return <Loader />;
   }
 
@@ -53,7 +52,7 @@ const PropertyInformation = () => {
         <StatusTable>
           <Row label={t("Pincode ")} text={`${property.pincode || "NA"}`} />
           <Row label={t("City")} text={`${property.address?.city || "NA"}`} />
-          <Row label={t("Mohalla")} text={"PB_AMRITSAR_REVENUE_SUN04"} />
+          <Row label={t("Mohalla")} text={t("PB_AMRITSAR_REVENUE_SUN04")} />
           <Row label={t("Street Name")} text={`${property.street || "NA"}`} />
           <Row label={t(" Building Name ")} text={`${property.address?.buildingName || "NA"}`} />
         </StatusTable>

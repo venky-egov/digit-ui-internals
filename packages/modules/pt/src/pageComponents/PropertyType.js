@@ -16,8 +16,7 @@ const PropertyType = ({ t, config, onSelect, userType, formData }) => {
       i18nKey: "PROPERTYTAX_BILLING_SLAB_VACANT",
     },
   ];
-  debugger;
-
+  
   const onSkip = () => onSelect();
 
   // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});

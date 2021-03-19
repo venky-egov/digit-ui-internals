@@ -171,7 +171,7 @@ const ApplicationDetails = (props) => {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
         name: checkpoint?.assigner?.name,
-        comment: t(checkpoint?.comment),
+        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment}`) : null,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_INPROGRESS") {
@@ -281,6 +281,7 @@ const ApplicationDetails = (props) => {
               id={applicationNumber}
               closeModal={closeModal}
               submitAction={submitAction}
+              actionData={workflowDetails?.data?.timeline}
             />
           ) : null}
           {showToast && (

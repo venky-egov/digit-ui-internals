@@ -10,9 +10,9 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
   const history = useHistory();
 
   const consumerCodes = billsList.map((bill) => bill.consumerCode);
-  const { mobileNumber, tenantId } = Digit.UserService.getUser().info;
+  // const { mobileNumber } = Digit.UserService.getUser()?.info;
 
-  const searchResult = Digit.Hooks.useApplicationsForBusinessServiceSearch({ filters: {}, businessService });
+  const searchResult = Digit.Hooks.useApplicationsForBusinessServiceSearch({ filters: { consumerCodes: consumerCodes.join() }, businessService });
 
   /* 
   call the relevant business search and find what key is being used as consumerCode in bills it is as follows :-

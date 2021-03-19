@@ -10,18 +10,23 @@ const ptApplications = async (tenantId, filters) => {
   return (await PTService.search({ tenantId, filters })).Properties;
 };
 
-const refObj = (tenantId, filters) => ({
-  pt: {
-    searchFn: () => ptApplications(tenantId, filters),
-    key: "propertyId",
-    label: "PT_UNIQUE_PROPERTY_ID",
-  },
-  fsm: {
-    searchFn: () => fsmApplications(tenantId, filters),
-    key: "applicationNo",
-    label: "FSM_APPLICATION_NO",
-  },
-});
+const refObj = (tenantId, filters) => {
+  let consumerCodes = filters?.consumerCodes;
+  delete filters.consumerCodes;
+
+  return {
+    pt: {
+      searchFn: () => ptApplications(null, { ...filters, propertyIds: consumerCodes }),
+      key: "propertyId",
+      label: "PT_UNIQUE_PROPERTY_ID",
+    },
+    fsm: {
+      searchFn: () => fsmApplications(tenantId, filters),
+      key: "applicationNo",
+      label: "FSM_APPLICATION_NO",
+    },
+  };
+};
 
 export const useApplicationsForBusinessServiceSearch = ({ tenantId, businessService, filters }, config = {}) => {
   const _key = businessService?.toLowerCase().split(".")[0];

@@ -71,7 +71,7 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
                 <MyBill {...{ bill, currentPath, businessService, getKeyNotesConfig }} />
               </div>
             ))}
-          {!applicationList?.length > 0 && <p>No Bills Found.</p>}
+          {!applicationList?.length > 0 && <p>{t("CS_BILLS_TEXT_NO_BILLS_FOUND")}</p>}
         </div>
         <p>
           {t("PT_TEXT_NOT_ABLE_TO_FIND_THE_PROPERTY")}{" "}

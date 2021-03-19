@@ -91,9 +91,7 @@ const CreateProperty = ({ parentRoute }) => {
         <Response data={params} onSuccess={handleSUccess} />
       </Route>
       <Route>
-        {/*         <Redirect to={`${match.path}/${config.indexRoute}`} />
-         */}{" "}
-        <Redirect to={`my-properties`} />
+        <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>
     </Switch>
   );

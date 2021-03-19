@@ -4,7 +4,7 @@ import BillSumary from "./bill-summary";
 import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const BillDetails = ({ paymentRules }) => {
+const BillDetails = ({ paymentRules, businessService }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const { state, ...location } = useLocation();
@@ -15,6 +15,8 @@ const BillDetails = ({ paymentRules }) => {
 
   const billDetails = (bill?.billDetails.length && bill?.billDetails[0]) || [];
 
+  const { key, label } = Digit.Hooks.useApplicationsForBusinessServiceSearch({ businessService }, { enabled: false });
+
   const getBillingPeriod = () => {
     let from = new Date(billDetails.fromPeriod).getFullYear().toString();
     let to = new Date(billDetails.toPeriod).getFullYear().toString();
@@ -22,11 +24,13 @@ const BillDetails = ({ paymentRules }) => {
   };
 
   const getBillBreakDown = () => billDetails?.billAccountDetails || [];
+
   const getTotal = () => getBillBreakDown()?.reduce((total, tax) => total + tax.amount, 0) || 0;
 
   const [paymentType, setPaymentType] = useState(t("CS_PAYMENT_FULL_AMOUNT"));
   const [amount, setAmount] = useState(getTotal());
   const [paymentAllowed, setPaymentAllowed] = useState(true);
+  const [formError, setError] = useState("");
 
   useEffect(() => {
     window.scroll({ top: 0, behavior: "smooth" });
@@ -38,7 +42,7 @@ const BillDetails = ({ paymentRules }) => {
 
   useEffect(() => {
     const { minAmountPayable, isAdvanceAllowed } = paymentRules;
-    const allowPayment = minAmountPayable && amount >= minAmountPayable && !isAdvanceAllowed && amount <= getTotal();
+    const allowPayment = minAmountPayable && amount >= minAmountPayable && !isAdvanceAllowed && amount <= getTotal() && !formError;
     if (paymentType != t("CS_PAYMENT_FULL_AMOUNT")) setPaymentAllowed(allowPayment);
     else setPaymentAllowed(true);
   }, [paymentType, amount]);
@@ -46,14 +50,21 @@ const BillDetails = ({ paymentRules }) => {
   useEffect(() => {
     if (!bill && data) {
       let requiredBill = data.Bill.filter((e) => e.consumerCode == consumerCode)[0];
-      console.log("=================>>>>>>>", requiredBill, data.Bill);
       setBill(requiredBill);
     }
   }, [isLoading]);
 
   const onSubmit = () => {
     let paymentAmount = paymentType === t("CS_PAYMENT_FULL_AMOUNT") ? getTotal() : amount;
-    history.push(`/digit-ui/citizen/payment/collect/PT/${consumerCode}`, { paymentAmount });
+    history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, { paymentAmount, tenantId: billDetails.tenantId });
+  };
+
+  const onChangeAmount = (value) => {
+    setError("");
+    if (value.includes(".")) {
+      setError("CS_PAYMENT_NO_FRACTIONAL_PAYMENT_ALLOWED");
+    }
+    setAmount(value);
   };
 
   if (isLoading) return <Loader />;
@@ -63,7 +74,7 @@ const BillDetails = ({ paymentRules }) => {
       <Header>{t("CS_PAYMENT_BILL_DETAILS")}</Header>
       <Card className="bill-details">
         <div className="bill-details-summary">
-          <KeyNote keyValue={t("PT_UNIQUE_PROPERTY_ID")} note={consumerCode} />
+          <KeyNote keyValue={t(label)} note={consumerCode} />
           <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
           <BillSumary billAccountDetails={getBillBreakDown()} />
         </div>
@@ -83,12 +94,13 @@ const BillDetails = ({ paymentRules }) => {
               ₹
             </span>
             {paymentType !== t("CS_PAYMENT_FULL_AMOUNT") ? (
-              <TextInput className="text-indent-xl" onChange={(e) => setAmount(e.target.value)} value={amount} />
+              <TextInput className="text-indent-xl" onChange={(e) => onChangeAmount(e.target.value)} value={amount} />
             ) : (
               <TextInput className="text-indent-xl" value={getTotal()} onChange={() => {}} disable={true} />
             )}
+            {<span className="card-label-error">{t(formError)}</span>}
           </div>
-          <SubmitBar disabled={!paymentAllowed} onSubmit={onSubmit} label={t("CS_COMMON_PAY")}></SubmitBar>
+          <SubmitBar disabled={!paymentAllowed} onSubmit={onSubmit} label={t("CS_COMMON_PAY")} />
         </div>
       </Card>
     </React.Fragment>

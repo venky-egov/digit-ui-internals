@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Header, Card, RadioButtons, CardSubHeader, SubmitBar, BackButton } from "@egovernments/digit-ui-react-components";
+import {
+  Header,
+  Card,
+  RadioButtons,
+  SubmitBar,
+  BackButton,
+  CardLabel,
+  CardLabelDesc,
+  CardSectionHeader,
+} from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useRouteMatch, useHistory, useLocation } from "react-router-dom";
@@ -64,14 +73,11 @@ export const SelectPaymentType = (props) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>
-          <div className="detail select-payment-type">
-            <span className="label">
-              <h2>{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</h2>
-            </span>
-            <span className="name value">₹ {paymentAmount || billDetails.totalAmount}</span>
+          <div className="payment-amount-info">
+            <CardLabelDesc className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabelDesc>
+            <CardSectionHeader> ₹ {paymentAmount || billDetails.totalAmount}</CardSectionHeader>
           </div>
-
-          <CardSubHeader>{t("PAYMENT_CS_SELECT_METHOD")}</CardSubHeader>
+          <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
 
           {menu?.length && (
             <Controller

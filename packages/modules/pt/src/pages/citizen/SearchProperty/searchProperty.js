@@ -18,11 +18,12 @@ const SearchProperty = ({ config: propsConfig, t }) => {
   };
 
   const [mobileNumber, property, oldProperty] = propsConfig.inputs;
+
   const config = [
     {
       body: [
         {
-          label: t(mobileNumber.label),
+          label: mobileNumber.label,
           type: mobileNumber.type,
           populators: {
             name: mobileNumber.name,
@@ -30,7 +31,7 @@ const SearchProperty = ({ config: propsConfig, t }) => {
           isMandatory: false,
         },
         {
-          label: t(property.label),
+          label: property.label,
           type: property.type,
           populators: {
             name: property.name,
@@ -38,7 +39,7 @@ const SearchProperty = ({ config: propsConfig, t }) => {
           isMandatory: false,
         },
         {
-          label: t(oldProperty.label),
+          label: oldProperty.label,
           type: oldProperty.type,
           populators: {
             name: oldProperty.name,
@@ -48,6 +49,8 @@ const SearchProperty = ({ config: propsConfig, t }) => {
       ],
     },
   ];
+
+  console.log(config[0].body);
 
   return (
     <FormComposer

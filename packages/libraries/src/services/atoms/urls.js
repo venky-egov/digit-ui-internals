@@ -51,6 +51,7 @@ const Urls = {
     fectch_property: "/property-services/property/_search",
     fetch_payment_details: "/billing-service/bill/v2/_fetchbill",
     create: "/property-services/property/_create",
+    search: "/property-services/property/_search",
   },
 };
 

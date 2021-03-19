@@ -14,4 +14,6 @@ export const ComponentRegistryService = {
     // should be call only once at the starting
     return componentRegistry.setAllComponents(components);
   },
+
+  getRegistry: () => componentRegistry,
 };

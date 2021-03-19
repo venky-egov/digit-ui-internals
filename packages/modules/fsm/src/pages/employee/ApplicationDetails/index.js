@@ -172,6 +172,7 @@ const ApplicationDetails = (props) => {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
         name: checkpoint?.assigner?.name,
         comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment}`) : null,
+        otherComment: applicationDetails?.additionalDetails?.comments?.DSO_REJECT,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_INPROGRESS") {
@@ -211,7 +212,7 @@ const ApplicationDetails = (props) => {
                 }}
               />
             )} */}
-            {applicationDetails.map((detail, index) => (
+            {applicationDetails?.applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
                 {index === 0 ? (
                   <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>

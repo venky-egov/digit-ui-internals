@@ -41,7 +41,7 @@ export const usePaymentUpdate = ({ egId }, businessService) => {
     const payments = await Digit.PaymentService.getReciept(transaction.Transaction[0].tenantId, businessService, {
       consumerCodes: transaction.Transaction[0].consumerCode,
     });
-    return { payments, applicationNo: transaction.consumerCode };
+    return { payments, applicationNo: transaction.Transaction[0].consumerCode, txnStatus: transaction.Transaction[0].txnStatus };
   };
 
   return useQuery(["paymentUpdate", egId], () => getPaymentData(egId));

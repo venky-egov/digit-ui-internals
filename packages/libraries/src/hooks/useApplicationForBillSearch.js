@@ -12,7 +12,7 @@ const ptApplications = async (tenantId, filters) => {
 
 const refObj = (tenantId, filters) => {
   let consumerCodes = filters?.consumerCodes;
-  delete filters.consumerCodes;
+  // delete filters.consumerCodes;
 
   return {
     pt: {
@@ -33,7 +33,7 @@ export const useApplicationsForBusinessServiceSearch = ({ tenantId, businessServ
 
   /* key from application ie being used as consumer code in bill */
   const { searchFn, key, label } = refObj(tenantId, filters)[_key];
-  const applications = useQuery(["applicationsForBillDetails", { tenantId, businessService, filters }], searchFn, {
+  const applications = useQuery(["applicationsForBillDetails", { tenantId, businessService, filters, searchFn }], searchFn, {
     ...config,
   });
 

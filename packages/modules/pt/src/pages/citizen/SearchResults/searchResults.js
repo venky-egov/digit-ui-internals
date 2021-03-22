@@ -17,13 +17,6 @@ const PropertySearchResults = ({ template, header, actionButtonLabel }) => {
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
   const paymentDetails = Digit.Hooks.useFetchPayment({ tenantId, consumerCode, businessService: "PT" }, { enabled: consumerCode ? true : false });
 
-
-const PropertySearchResults = ({ template, header, actionButtonLabel, t }) => {
-  const { mobileNumber, propertyIds, oldpropertyids } = Digit.Hooks.useQueryParams();
-  const result = Digit.Hooks.pt.usePropertySearch({ tenantId: "pb", filters: { mobileNumber, propertyIds, oldpropertyids } });
-  const consumerCodes = result?.data?.Properties?.map((a) => a.propertyId).join(",");
-  const paymentDetails = Digit.Hooks.pt.usePropertyPayment({ tenantId: "pb", consumerCodes });
-
   const history = useHistory();
 
   if (result.error || !consumerCode) {

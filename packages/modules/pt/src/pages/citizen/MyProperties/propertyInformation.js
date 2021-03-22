@@ -14,6 +14,7 @@ import {
   SubmitBar,
   CardText,
   Loader,
+  Header,
 } from "@egovernments/digit-ui-react-components";
 
 const PropertyInformation = () => {
@@ -24,8 +25,13 @@ const PropertyInformation = () => {
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ tenantId, filters: { propertyIds } });
 
   const property = data?.Properties[0] || " ";
-
-    if (isLoading) {
+  let docs = [];
+  docs = property?.documents;
+  let unit = [];
+  let owners = [];
+  owners = property?.owners;
+  unit = property?.units;
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -40,51 +46,87 @@ const PropertyInformation = () => {
 
   return (
     <React.Fragment>
-      <CardHeader>{t("PT_PROPERTY_INFORMATION")}</CardHeader>
+      <Header>{t("PT_PROPERTY_INFORMATION")}</Header>
       <Card>
         <StatusTable>
           <Row label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || "NA"}`} />
           <Row label={t("Total Property Due")} text={"3223"} />
         </StatusTable>
-      </Card>
-      <Card>
-        <CardSubHeader> {t("PT_PROPERTY_ADDRESS_SUB_HEADER")} </CardSubHeader>
+        <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
         <StatusTable>
-          <Row label={t("Pincode ")} text={`${property.pincode || "NA"}`} />
-          <Row label={t("City")} text={`${property.address?.city || "NA"}`} />
-          <Row label={t("Mohalla")} text={t("PB_AMRITSAR_REVENUE_SUN04")} />
-          <Row label={t("Street Name")} text={`${property.street || "NA"}`} />
-          <Row label={t(" Building Name ")} text={`${property.address?.buildingName || "NA"}`} />
+          <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={`${property.pincode || "NA"}`} />
+          <Row label={t("PT_COMMON_CITY")} text={`${property.address?.city || "NA"}`} />
+          <Row label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text={t("PB_AMRITSAR_REVENUE_SUN04")} />
+          <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={`${property.street || "NA"}`} />
+          <Row label={t("PT_PROPERTY_ADDRESS_COLONY_NAME")} text={`${property.address?.buildingName || "NA"}`} />
         </StatusTable>
-
-        <CardSubHeader> {t("Property Assesment Details")} </CardSubHeader>
+        <CardSubHeader>{t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
         <StatusTable>
-          <Row label={t("Property Usage Type")} text={`${property.usageCategory || "NA"}`} />
-          <Row label={t("Property Type")} text={`${property.propertyType || "NA"}`} />
-          <Row label={t(" Plot Size(sq yards)")} text={`${property.landArea || "NA"}`} />
-          <Row label={t(" No. of Floors ")} text={`${property.noOfFloors || "NA"}`} />
-          <Row label={t(" Building Name ")} text={`${property.address?.buildingName || "NA"}`} />
+          <Row label={t("PT_ASSESMENT_INFO_USAGE_TYPE")} text={`${property.usageCategory || "NA"}`} />
+          <Row label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(property?.propertyType.toLowerCase().split(".")[1])}` || "NA"} />
+          <Row label={t("PT_ASSESMENT1_PLOT_SIZE")} text={`${property.landArea || "NA"}`} />
+          <Row label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${property.noOfFloors || "NA"}`} />
         </StatusTable>
-        <CardSubHeader> {t("Ground Floor")} </CardSubHeader>
-        <StatusTable>
-          <Row label={t("unit 1")} />
-          <Row label={t("unit usage type")} text={`${property.units?.usageCategory || "NA"}`} />
-          <Row label={t("unit occupancy type")} text={`${property.units?.occupancyType || "NA"}`} />
-          <Row label={t("unit buildup area")} text={`${property.units?.constructionDetail?.builtUpArea || "NA"}`} />
-        </StatusTable>
-
-        <CardSubHeader>{t("Property Ownership Details")}</CardSubHeader>
-
-        <StatusTable>
-          <Row label={t("Owners Name")} text={`${property.owners?.name || "NA"}`} actionButton={<ActionButton jumpTo="" />} />
-          <Row label={t(" Gender")} text={`${property.owners?.gender || "NA"}`} />
-          <Row label={t("Mobile No")} text={"233234"} />
-          <Row label={t("Special Category")} text={"none"} />
-          <Row label={t("Guardian's Name")} text={`${property.owners?.fatherOrHusbandName || "NA"}`} />
-          <Row label={t("Ownership Type")} text={`${property.ownershipCategory || "NA"}`} />
-          <Row label={t("Email")} text={"xyew"} />
-          <Row label={t("Correspondence Address")} text={`${property.owners?.correspondenceAddress || "NA"}`} />
-        </StatusTable>
+        <CardSubHeader>{t("Ground Floor")}</CardSubHeader>
+        <CardSubHeader>{t("Unit 1")}</CardSubHeader>
+        <div style={{ border: "groove" }}>
+          <StatusTable>
+            <Row label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")} text={`${property.units[0].usageCategory.toLowerCase() || "NA"}`} />
+            <Row label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${property.units[0].occupancyType.toLowerCase() || "NA"}`} />
+            <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${property.units[0].constructionDetail?.builtUpArea || "NA"}`} />
+          </StatusTable>
+        </div>
+        <div>
+          {unit.length > 1 &&
+            unit.map((unit, index) => (
+              <div key={index}>
+                <CardSubHeader>
+                  {index} {t("Floor")}
+                </CardSubHeader>
+                <CardSubHeader>{t("Unit 1")}</CardSubHeader>
+                <StatusTable>
+                  <Row label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")} text={`${property.units?.usageCategory.toLowerCase() || "NA"}`} />
+                  <Row label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${property.units?.occupancyType.toLowerCase() || "NA"}`} />
+                  <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${property.units?.constructionDetail?.builtUpArea || "NA"}`} />
+                </StatusTable>
+              </div>
+            ))}
+        </div>
+        <CardSubHeader>{t("PT_COMMON_PROPERTY_OWNERSHIP_DETAILS_HEADER")}</CardSubHeader>
+        <div>
+          {owners.map((owners, index) => (
+            <div key={index}>
+              <CardSubHeader>
+                {t("PT_OWNER_SUB_HEADER")} - {index + 1}
+              </CardSubHeader>
+              <StatusTable>
+                <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${owners?.name || "NA"}`} actionButton={<ActionButton jumpTo="" />} />
+                <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${owners?.fatherOrHusbandName || "NA"}`} />
+                <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${owners?.gender.toLowerCase() || "NA"}`} />
+                <Row label={t("PT_FORM3_OWNERSHIP_TYPE")} text={`${t(property?.ownershipCategory.toLowerCase().split(".")[1])}` || "NA"} />
+                <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owners?.mobileNumber)}` || "NA"} />
+                <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t("NA")}`} />
+                <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(owners?.ownerType).toLowerCase()}` || "NA"} />
+                <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owners?.correspondenceAddress)}` || "NA"} />
+              </StatusTable>
+            </div>
+          ))}
+        </div>
+        <CardSubHeader>{t("PT_COMMON_DOCS")}</CardSubHeader>
+        <div>
+          {docs.length > 0 &&
+            docs.map((docs, index) => (
+              <div key="index">
+                <CardSubHeader>
+                  {t("PT_COMMON_DOCS")} - {index + 1}
+                </CardSubHeader>
+                <StatusTable>
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType.toLowerCase().split(".")[2])}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.id)}`} />
+                </StatusTable>
+              </div>
+            ))}
+        </div>
       </Card>
     </React.Fragment>
   );

@@ -9,7 +9,7 @@ const StatusCount = ({ status, fsmfilters, onAssignmentChange }) => {
     tenantId,
     { applicationStatus: [status],
       total: true,
-      uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+      uuid: { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
       sortBy: "createdTime",
       sortOrder: "DESC"
     },

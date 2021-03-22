@@ -62,7 +62,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const onChangeAmount = (value) => {
     setError("");
     if (value.includes(".")) {
-      setError("CS_PAYMENT_NO_FRACTIONAL_PAYMENT_ALLOWED");
+      setError("AMOUNT_INVALID");
     }
     setAmount(value);
   };

@@ -151,6 +151,9 @@ const ApplicationDetails = (props) => {
 
   const getTimelineCaptions = (checkpoint) => {
     // console.log("tl", checkpoint);
+    const __comment = checkpoint?.comment.split("~");
+    const reason = __comment[0];
+    const reason_comment = __comment[1];
     if (checkpoint.status === "CREATED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
@@ -167,15 +170,15 @@ const ApplicationDetails = (props) => {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
         name: checkpoint.assigner.name,
-        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment.split("~")[0]}`) : null,
+        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${reason}`) : null,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_REJECTED" || checkpoint.status === "CANCELED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
         name: checkpoint?.assigner?.name,
-        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment.split("~")[0]}`) : null,
-        otherComment: checkpoint?.comment && checkpoint?.comment.split("~")[1] ? checkpoint?.comment.split("~")[1] : null,
+        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${reason}`) : null,
+        otherComment: checkpoint?.comment && reason_comment ? reason_comment : null,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_INPROGRESS") {

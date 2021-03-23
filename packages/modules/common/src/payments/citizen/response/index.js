@@ -50,11 +50,14 @@ export const SuccessfulPayment = (props) => {
   const amount = paymentData.totalAmountPaid;
   const transactionDate = paymentData.transactionDate;
 
-  const { data: billData, isLoading: billDataLoading } = Digit.Hooks.useFetchPayment({
-    tenantId,
-    businessService: "PT",
-    consumerCode: applicationNo,
-  });
+  const { data: billData, isLoading: billDataLoading } = Digit.Hooks.useFetchPayment(
+    {
+      tenantId: paymentData?.tenantId,
+      businessService: "PT",
+      consumerCode: applicationNo,
+    },
+    { enabled: paymentData?.tenantId ? true : false }
+  );
 
   const printReciept = async () => {
     if (printing) return;

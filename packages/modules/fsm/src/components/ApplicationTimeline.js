@@ -39,13 +39,15 @@ export const ApplicationTimeline = (props) => {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
         name: checkpoint.assigner.name,
+        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment.split("`")[0]}`) : null,
       };
       return <TLCaption data={caption} />;
-    } else if (checkpoint.status === "DSO_REJECTED" || (checkpoint.status === checkpoint.status) === "CANCELED" || checkpoint.status === "REJECTED") {
+    } else if (checkpoint.status === "DSO_REJECTED" || checkpoint.status === "CANCELED" || checkpoint.status === "REJECTED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
         name: checkpoint?.assigner?.name,
-        comment: t(checkpoint?.comment),
+        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment.split("`")[0]}`) : null,
+        otherComment: checkpoint?.comment && checkpoint?.comment.split("`")[1] ? checkpoint?.comment.split("`")[1] : null,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "CITIZEN_FEEDBACK_PENDING") {

@@ -1,11 +1,10 @@
 import { useQuery, useQueryClient } from "react-query";
 
-export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...filters }) => {
+export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...filters }, config = {}) => {
   const queryClient = useQueryClient();
   const { mobileNumber, tenantId } = Digit.UserService.getUser()?.info || {};
   const { isLoading, error, isError, data } = useQuery(["citizenBillsForBuisnessService", businessService], () =>
-    // Digit.PaymentService.fetchBill(tenantId, { mobileNumber, businessService, ...filters })
-    Digit.PaymentService.fetchBill(tenantId, { mobileNumber, businessService, ...filters })
+    Digit.PaymentService.fetchBill(tenantId, { mobileNumber, businessService, ...filters }, config)
   );
   return { isLoading, error, isError, data, revalidate: () => queryClient.invalidateQueries(["citizenBillsForBuisnessService", businessService]) };
 };

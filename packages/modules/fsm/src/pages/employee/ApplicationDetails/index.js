@@ -167,13 +167,15 @@ const ApplicationDetails = (props) => {
       const caption = {
         date: checkpoint.auditDetails.created,
         name: checkpoint.assigner.name,
+        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment}`) : null,
       };
       return <TLCaption data={caption} />;
-    } else if (checkpoint.status === "DSO_REJECTED") {
+    } else if (checkpoint.status === "DSO_REJECTED" || checkpoint.status === "CANCELED") {
       const caption = {
         date: checkpoint.auditDetails.created,
         name: checkpoint?.assigner?.name,
-        comment: t(checkpoint?.comment),
+        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment}`) : null,
+        otherComment: applicationDetails?.additionalDetails?.comments?.[checkpoint?.status?.toString()?.substring(0, checkpoint?.status?.length - 2)],
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_INPROGRESS") {
@@ -213,7 +215,7 @@ const ApplicationDetails = (props) => {
                 }}
               />
             )} */}
-            {applicationDetails.map((detail, index) => (
+            {applicationDetails?.applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
                 {index === 0 ? (
                   <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
@@ -273,7 +275,7 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-          {console.log("above show modal", showModal)}
+          {/* {console.log("above show modal", showModal)} */}
           {showModal ? (
             <ActionModal
               t={t}
@@ -283,6 +285,7 @@ const ApplicationDetails = (props) => {
               id={applicationNumber}
               closeModal={closeModal}
               submitAction={submitAction}
+              actionData={workflowDetails?.data?.timeline}
             />
           ) : null}
           {showToast && (

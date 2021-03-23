@@ -224,6 +224,12 @@ input[type="number"] {
 .my-bills {
   @apply flex flex-col;
   min-height: 85vh;
+
+  &-wrapper {
+    flex: 1;
+    max-height: 75vh;
+    overflow: scroll;
+  }
 }
 
 .bill-summary {
@@ -381,4 +387,8 @@ input[type="number"] {
   .result {
     @apply mt-lg;
   }
+}
+
+.payment-form-text-input-correction{
+  width: 100% !important;
 }

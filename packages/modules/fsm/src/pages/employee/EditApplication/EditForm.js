@@ -77,11 +77,15 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       formData?.subtype &&
       formData?.address?.locality?.code &&
       formData?.tripData?.vehicleType &&
-      formData?.pitType &&
-      formData?.pitDetail &&
       formData?.tripData?.amountPerTrip
     ) {
       setSubmitValve(true);
+      if (
+        parseInt(formData?.pitDetail?.height) * parseInt(formData?.pitDetail?.length) * parseInt(formData?.pitDetail?.width) > 0 &&
+        !formData?.pitType
+      ) {
+        setSubmitValve(false);
+      }
     } else {
       setSubmitValve(false);
     }
@@ -96,7 +100,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   const onSubmit = (data) => {
     console.log("find submit data", data);
     const applicationChannel = data.channel;
-    const sanitationtype = data.pitType.code;
+    const sanitationtype = data?.pitType?.code;
     const pitDimension = data?.pitDetail;
     const applicantName = data.applicationData.applicantName;
     const mobileNumber = data.applicationData.mobileNumber;

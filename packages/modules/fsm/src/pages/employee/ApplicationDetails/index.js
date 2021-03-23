@@ -156,7 +156,7 @@ const ApplicationDetails = (props) => {
     const reason_comment = __comment ? __comment[1] : null;
     if (checkpoint.status === "CREATED") {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
+        date: checkpoint.auditDetails.created,
         name: applicationData.citizen.name,
         mobileNumber: applicationData.citizen.mobileNumber,
         source: applicationData.source || "",
@@ -168,14 +168,14 @@ const ApplicationDetails = (props) => {
       checkpoint.status === "PENDING_DSO_APPROVAL"
     ) {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
+        date: checkpoint.auditDetails.created,
         name: checkpoint.assigner.name,
         comment: reason ? t(`ES_ACTION_REASON_${reason}`) : null,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_REJECTED" || checkpoint.status === "CANCELED") {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
+        date: checkpoint.auditDetails.created,
         name: checkpoint?.assigner?.name,
         comment: reason ? t(`ES_ACTION_REASON_${reason}`) : null,
         otherComment: reason_comment ? reason_comment : null,

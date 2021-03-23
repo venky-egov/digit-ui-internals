@@ -233,6 +233,59 @@ const getSlumLocalityCriteria = (tenantId, moduleCode, type) => ({
     ],
   },
 });
+const getPropertyOwnerTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [{ name: "OwnerType" }],
+      },
+    ],
+  },
+});
+
+const getSubPropertyOwnerShipCategoryCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [{ name: "SubOwnerShipCategory" }],
+      },
+    ],
+  },
+});
+const getPropertyOwnerShipCategoryCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [{ name: "OwnerShipCategory" }],
+      },
+    ],
+  },
+});
+
+const getDocumentRequiredScreenCategory = (tenantId, moduleCode) => ({
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "Documents",
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const getReasonCriteria = (tenantId, moduleCode, type, payload) => ({
   type,
@@ -327,6 +380,41 @@ const GetSlumLocalityMapping = (MdmsRes) =>
         };
   }, {});
 
+const GetPropertyOwnerShipCategory = (MdmsRes) =>
+  MdmsRes["PropertyTax"].OwnerShipCategory.filter((ownerShip) => ownerShip.active).map((ownerShipDetails) => {
+    return {
+      ...ownerShipDetails,
+      i18nKey: `COMMON_MASTER_OWNER_TYPE_${ownerShipDetails.code}`,
+    };
+  });
+
+const GetPropertyOwnerType = (MdmsRes) =>
+  MdmsRes["PropertyTax"].OwnerType.filter((owner) => owner.active).map((ownerDetails) => {
+    return {
+      ...ownerDetails,
+      i18nKey: `PROPERTYTAX_OWNERTYPE_${ownerDetails.code}`,
+    };
+  });
+
+const getSubPropertyOwnerShipCategory = (MdmsRes) => {
+  MdmsRes["PropertyTax"].SubOwnerShipCategory.filter((category) => category.active).map((subOwnerShipDetails) => {
+    return {
+      ...subOwnerShipDetails,
+      i18nKey: `PROPERTYTAX_BILLING_SLAB_${subOwnerShipDetails.code}`,
+    };
+  });
+  sessionStorage.setItem("getSubPropertyOwnerShipCategory", JSON.stringify(MdmsRes));
+};
+
+const getDocumentRequiredScreen = (MdmsRes) => {
+  MdmsRes["PropertyTax"].Documents.filter((Documents) => Documents.active).map((dropdownData) => {
+    return {
+      ...Documents,
+      i18nKey: `${dropdownData.code}`,
+    };
+  });
+};
+
 const GetReasonType = (MdmsRes, type, moduleCode) =>
   Object.assign(
     {},
@@ -362,6 +450,14 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetVehicleType(MdmsRes);
     case "Slum":
       return GetSlumLocalityMapping(MdmsRes);
+    case "OwnerShipCategory":
+      return GetPropertyOwnerShipCategory(MdmsRes);
+    case "OwnerType":
+      return GetPropertyOwnerType(MdmsRes);
+    case "SubOwnerShipCategory":
+      return getSubPropertyOwnerShipCategory(MdmsRes);
+    case "Documents":
+      return getDocumentRequiredScreen(MdmsRes);
     case "Reason":
       return GetReasonType(MdmsRes, type, moduleCode);
     default:
@@ -430,4 +526,16 @@ export const MdmsService = {
 
   getReason: (tenantId, moduleCode, type, payload) =>
     MdmsService.getDataByCriteria(tenantId, getReasonCriteria(tenantId, moduleCode, type, payload), moduleCode),
+  getPropertyOwnerShipCategory: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getPropertyOwnerShipCategoryCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getPropertyOwnerType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getPropertyOwnerTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getPropertySubOwnerShipCategory: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getSubPropertyOwnerShipCategoryCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getDocumentRequiredScreen: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getDocumentRequiredScreenCategory(tenantId, moduleCode), moduleCode);
+  },
 };

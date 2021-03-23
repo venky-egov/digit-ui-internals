@@ -21,6 +21,7 @@ const SearchProperty = () => {
     )
   );
 
+
   return (
     <Switch>
       <Route path={`${path}`} exact>

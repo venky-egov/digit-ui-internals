@@ -11,6 +11,26 @@ export const PTService = {
       userService: true,
       params: { tenantId, ...filters },
     }),
+
+  fetchPaymentDetails: ({ tenantId, consumerCodes }) =>
+    Request({
+      url: Urls.pt.fetch_payment_details,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId, consumerCode: consumerCodes, businessService: "PT" },
+    }),
+  create: (details, tenantId) =>
+    Request({
+      url: Urls.pt.create,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
 };
 
 // export const PTService = {

@@ -167,14 +167,15 @@ const ApplicationDetails = (props) => {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
         name: checkpoint.assigner.name,
+        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment}`) : null,
       };
       return <TLCaption data={caption} />;
-    } else if (checkpoint.status === "DSO_REJECTED") {
+    } else if (checkpoint.status === "DSO_REJECTED" || checkpoint.status === "CANCELED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails.createdTime),
         name: checkpoint?.assigner?.name,
         comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${checkpoint?.comment}`) : null,
-        otherComment: applicationDetails?.additionalDetails?.comments?.DSO_REJECT,
+        otherComment: applicationDetails?.additionalDetails?.comments?.[checkpoint?.status?.toString()?.substring(0, checkpoint?.status?.length - 2)],
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_INPROGRESS") {

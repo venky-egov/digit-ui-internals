@@ -18,7 +18,7 @@ const BillSumary = ({ billAccountDetails }) => {
 
         <hr className="underline" />
         <div className="amount-details">
-          <div className="label">Total Amount</div>
+          <div className="label">{t("CS_PAYMENT_TOTAL_AMOUNT")}</div>
           <div className="value">₹ {total.toFixed(2)}</div>
         </div>
       </div>

@@ -25,9 +25,9 @@ export const ApplicationTimeline = (props) => {
   });
 
   const getTimelineCaptions = (checkpoint) => {
-    const __comment = checkpoint?.comment.split("~");
-    const reason = __comment[0];
-    const reason_comment = __comment[1];
+    const __comment = checkpoint?.comment?.split("~");
+    const reason = __comment ? __comment[0] : null;
+    const reason_comment = __comment ? __comment[1] : null;
     if (checkpoint.status === "CREATED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
@@ -42,15 +42,15 @@ export const ApplicationTimeline = (props) => {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
         name: checkpoint.assigner.name,
-        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${reason}`) : null,
+        comment: reason ? t(`ES_ACTION_REASON_${reason}`) : null,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_REJECTED" || checkpoint.status === "CANCELED" || checkpoint.status === "REJECTED") {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
         name: checkpoint?.assigner?.name,
-        comment: checkpoint?.comment ? t(`ES_ACTION_REASON_${reason}`) : null,
-        otherComment: checkpoint?.comment && reason_comment ? reason_comment : null,
+        comment: reason ? t(`ES_ACTION_REASON_${reason}`) : null,
+        otherComment: reason_comment ? reason_comment : null,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "CITIZEN_FEEDBACK_PENDING") {

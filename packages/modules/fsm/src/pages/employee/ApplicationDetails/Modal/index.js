@@ -145,33 +145,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.date) applicationData.possibleServiceDate = new Date(`${data.date}`).getTime();
     if (data.desluged) applicationData.completedOn = new Date(data.desluged).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
-    if (reassignReason) {
-      workflow.comments = reassignReason.code;
-      if (data.comments) {
-        workflow.comments = reassignReason.code + "`" + data.comments;
-      }
-    }
+    if (reassignReason) workflow.comments = data.comments ? reassignReason.code + "~" + data.comments : reassignReason.code;
 
-    if (rejectionReason) {
-      workflow.comments = rejectionReason.code;
-      if (data.comments) {
-        workflow.comments = rejectionReason.code + "`" + data.comments;
-      }
-    }
+    if (rejectionReason) workflow.comments = data.comments ? rejectionReason.code + "~" + data.comments : rejectionReason.code;
 
-    if (declineReason) {
-      workflow.comments = declineReason.code;
-      if (data.comments) {
-        workflow.comments = declineReason.code + "`" + data.comments;
-      }
-    }
+    if (declineReason) workflow.comments = data.comments ? declineReason.code + "~" + data.comments : declineReason.code;
 
-    if (cancelReason) {
-      workflow.comments = cancelReason.code;
-      if (data.comments) {
-        workflow.comments = cancelReason.code + "`" + data.comments;
-      }
-    }
+    if (cancelReason) workflow.comments = data.comments ? cancelReason.code + "~" + data.comments : cancelReason.code;
 
     // console.log("find fsm update object here",{ fsm: applicationData, workflow });
     submitAction({ fsm: applicationData, workflow });

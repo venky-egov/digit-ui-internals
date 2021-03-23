@@ -27,7 +27,7 @@ export const ApplicationTimeline = (props) => {
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.status === "CREATED") {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
+        date: checkpoint.auditDetails.created,
         source: props.application?.source || "",
       };
       return <TLCaption data={caption} />;
@@ -37,13 +37,13 @@ export const ApplicationTimeline = (props) => {
       checkpoint.status === "PENDING_DSO_APPROVAL"
     ) {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
+        date: checkpoint.auditDetails.created,
         name: checkpoint.assigner.name,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_REJECTED" || (checkpoint.status === checkpoint.status) === "CANCELED" || checkpoint.status === "REJECTED") {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.createdTime),
+        date: checkpoint.auditDetails.created,
         name: checkpoint?.assigner?.name,
         comment: t(checkpoint?.comment),
       };

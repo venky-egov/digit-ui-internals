@@ -8,6 +8,7 @@ export const config = [
     inputs: [
       {
         label: "PT_HOME_SEARCH_RESULTS_OWN_MOB_LABEL",
+        description: "CS_SEARCH_MUST_BE_10_DIGIT_NUMBER",
         type: "text",
         name: "mobileNumber",
         error: "ERR_HRMS_INVALID_USER_ID",

@@ -24,6 +24,7 @@ const SearchProperty = ({ config: propsConfig, t }) => {
       body: [
         {
           label: mobileNumber.label,
+          description: mobileNumber.description,
           type: mobileNumber.type,
           populators: {
             name: mobileNumber.name,

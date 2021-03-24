@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
-import { newConfig } from "../../../config/Create/config";
 import { useQueryClient } from "react-query";
+import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { newConfig } from "../../../config/Create/config";
 import CheckPage from "./CheckPage";
-import Response from "./Response";
-import { MyProperties } from "../MyProperties";
+import PTAcknowledgement from "./PTAcknowledgement";
+
 const CreateProperty = ({ parentRoute }) => {
   const queryClient = useQueryClient();
   const match = useRouteMatch();
@@ -13,7 +13,7 @@ const CreateProperty = ({ parentRoute }) => {
   const { pathname } = useLocation();
   const history = useHistory();
   let config = [];
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", {});
 
   const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
@@ -46,8 +46,8 @@ const CreateProperty = ({ parentRoute }) => {
     redirectWithHistory(nextPage);
   };
 
-  const submitComplaint = async () => {
-    history.push(`${match.path}/response`);
+  const createProperty = async () => {
+    history.push(`${match.path}/acknowledgement`);
   };
 
   function handleSelect(key, data, skipStep, index, isAddMultiple = false) {
@@ -61,18 +61,18 @@ const CreateProperty = ({ parentRoute }) => {
     goNext(skipStep, index, isAddMultiple, key);
   }
 
-  const handleSkip = () => {};
-  const handleMultiple = () => {};
+  const handleSkip = () => { };
+  const handleMultiple = () => { };
 
-  const handleSUccess = () => {
+  const onSuccess = () => {
     clearParams();
-    queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+    queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  //config.indexRoute = "map";
   config.indexRoute = "info";
+
   return (
     <Switch>
       {config.map((routeObj, index) => {
@@ -85,10 +85,10 @@ const CreateProperty = ({ parentRoute }) => {
         );
       })}
       <Route path={`${match.path}/check`}>
-        <CheckPage onSubmit={submitComplaint} value={params} />
+        <CheckPage onSubmit={createProperty} value={params} />
       </Route>
-      <Route path={`${match.path}/response`}>
-        <Response data={params} onSuccess={handleSUccess} />
+      <Route path={`${match.path}/acknowledgement`}>
+        <PTAcknowledgement data={params} onSuccess={onSuccess} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />

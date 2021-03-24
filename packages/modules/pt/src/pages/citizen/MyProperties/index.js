@@ -1,11 +1,9 @@
+import { Card, Header, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React from "react";
-import { Header, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
-//import MyApplication from "./my-application";
 import { useTranslation } from "react-i18next";
-import { Card } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
-
 import MyProperty from "./my-properties";
+
 
 export const MyProperties = () => {
   const { t } = useTranslation();

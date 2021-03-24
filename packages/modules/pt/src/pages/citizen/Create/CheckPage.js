@@ -1,24 +1,17 @@
-import React from "react";
 import {
   Card,
-  CardCaption,
   CardHeader,
-  CardLabel,
   CardSubHeader,
-  StatusTable,
-  Row,
-  ActionLinks,
-  LinkButton,
-  SubmitBar,
-  CardText,
+  CardText, LinkButton, Row, StatusTable,
+  SubmitBar
 } from "@egovernments/digit-ui-react-components";
-import { useHistory } from "react-router-dom";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
 
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
   const history = useHistory();
-
   function routeTo() {
     history.push(jumpTo);
   }
@@ -39,9 +32,8 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       <StatusTable>
         <Row
           label={t("PT_PROPERTY_ADDRESS_SUB_HEADER")}
-          text={`${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
-            address?.landmark ? `${address?.landmark}, ` : ""
-          }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`}
+          text={`${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${address?.landmark ? `${address?.landmark}, ` : ""
+            }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/pincode" />}
         />
         <Row

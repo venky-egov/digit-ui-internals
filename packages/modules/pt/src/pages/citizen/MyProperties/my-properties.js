@@ -1,6 +1,6 @@
+import { Card, KeyNote, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Card, KeyNote, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
 const MyProperty = ({ application }) => {
@@ -19,8 +19,7 @@ const MyProperty = ({ application }) => {
       <KeyNote
         keyValue={t("PT_COMMON_COL_ADDRESS")}
         note={
-          `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
-            address?.landmark ? `${address?.landmark}, ` : ""
+          `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${address?.landmark ? `${address?.landmark}, ` : ""
           }${t(address?.locality.name)}, ${t(address?.city)},${t(address?.pincode) ? `${address.pincode}` : " "}` || "CS_APPLICATION_TYPE_PT"
         }
       />

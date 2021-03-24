@@ -20,7 +20,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const getBillingPeriod = () => {
     let from = new Date(billDetails.fromPeriod).getFullYear().toString();
     let to = new Date(billDetails.toPeriod).getFullYear().toString();
-    return "FY " + from + "~" + to;
+    return "FY " + from + "-" + to;
   };
 
   const getBillBreakDown = () => billDetails?.billAccountDetails || [];

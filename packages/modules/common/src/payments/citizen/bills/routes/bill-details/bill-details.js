@@ -61,7 +61,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
 
   const onChangeAmount = (value) => {
     setError("");
-    if (value.includes(".")) {
+    if (isNaN(value) || value.includes(".")) {
       setError("AMOUNT_INVALID");
     }
     setAmount(value);

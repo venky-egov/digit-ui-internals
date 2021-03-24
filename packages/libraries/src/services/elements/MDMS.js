@@ -258,6 +258,24 @@ const getBillingServiceForBusinessServiceCriteria = () => ({
   ],
 });
 
+const getRoleStatusCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "RoleStatusMapping",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -340,6 +358,8 @@ const GetReasonType = (MdmsRes, type, moduleCode) =>
     }))
   );
 
+const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
+
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
     case "citymodule":
@@ -364,6 +384,8 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetSlumLocalityMapping(MdmsRes);
     case "Reason":
       return GetReasonType(MdmsRes, type, moduleCode);
+    case "RoleStatusMapping":
+      return GetRoleStatusMapping(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -430,4 +452,7 @@ export const MdmsService = {
 
   getReason: (tenantId, moduleCode, type, payload) =>
     MdmsService.getDataByCriteria(tenantId, getReasonCriteria(tenantId, moduleCode, type, payload), moduleCode),
+
+  getRoleStatus: (tenantId, moduleCode, type) =>
+    MdmsService.getDataByCriteria(tenantId, getRoleStatusCriteria(tenantId, moduleCode, type), moduleCode),
 };

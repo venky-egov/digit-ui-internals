@@ -46,6 +46,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("CANCELLATION_REASON", () => MdmsService.getReason(tenantId, moduleCode, type, payload));
   };
 
+  const useRoleStatusMapping = () => {
+    return useQuery("ROLE_STATUS_MAPPING", () => MdmsService.getRoleStatus(tenantId, moduleCode, type));
+  };
+
   switch (type) {
     case "SanitationType":
       return useSanitationType();
@@ -76,6 +80,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
 
     case "Reason":
       return useReason();
+
+    case "RoleStatusMapping":
+      return useRoleStatusMapping();
   }
 };
 

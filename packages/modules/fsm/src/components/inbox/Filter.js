@@ -1,15 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Dropdown,
-  CardLabel,
-  RadioButtons,
-  CardCaption,
-  CheckBox,
-  SubmitBar,
-  ActionBar,
-  RemoveableTag,
-  CloseSvg,
-} from "@egovernments/digit-ui-react-components";
+import React from "react";
+import { Dropdown, RadioButtons, ActionBar, RemoveableTag, CloseSvg, Loader } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -22,6 +12,10 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = tenantId.split(".")[0];
+
+  const { data: roleStatuses, isFetched: isRoleStatusFetched } = Digit.Hooks.fsm.useMDMS(state, "DIGIT-UI", "RoleStatusMapping");
+
   const localities = useSelector((state) => state.common.revenue_localities[tenantId]);
   const selectLocality = (d) => {
     onFilterChange({ locality: [...searchParams?.locality, d] });
@@ -95,7 +89,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
             </div>
           </div>
           <div>
-            <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} />
+            {isRoleStatusFetched ? <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} roleStatuses={roleStatuses} /> : <Loader />}
           </div>
         </div>
       </div>

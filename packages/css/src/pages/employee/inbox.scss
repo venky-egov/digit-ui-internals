@@ -36,6 +36,13 @@
   }
 }
 
+.filter-button{
+  @apply text-primary-main;
+  &:hover {
+    @apply text-primary-dark cursor-pointer;
+  }
+}
+
 .employeeCard-info-box {
   @apply flex justify-end ml-md;
   background-color: #fafafa;

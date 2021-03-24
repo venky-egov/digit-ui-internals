@@ -2,8 +2,10 @@ import { Card, CardSubHeader, Header, Loader, Row, StatusTable } from "@egovernm
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
+import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
 
-const ApplicationDetails = () => {
+
+const PTApplicationDetails = () => {
   const { t } = useTranslation();
   const { acknowledgementIds } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -106,9 +108,10 @@ const ApplicationDetails = () => {
               </div>
             ))}
         </div>
+        <PTWFApplicationTimeline application={application} id={acknowledgementIds} />
       </Card>
     </React.Fragment>
   );
 };
 
-export default ApplicationDetails;
+export default PTApplicationDetails;

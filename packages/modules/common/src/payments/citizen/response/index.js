@@ -43,11 +43,11 @@ export const SuccessfulPayment = (props) => {
         <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
 
         {business_service !== "PT" ? (
-          <Link to={`digit-ui/citizen/payment/my-bills/${business_service}/${applicationNo}`}>
+          <Link to={`digit-ui/citizen`}>
             <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
           </Link>
         ) : (
-          <Link to={(applicationNo && `/digit-ui/citizen/payment/collect/${business_service}/${applicationNo}`) || "/digit-ui/citizen"}>
+          <Link to={(applicationNo && `/digit-ui/citizen/payment/my-bills/${business_service}/${applicationNo}`) || "/digit-ui/citizen"}>
             <SubmitBar label={t("CS_PAYMENT_TRY_AGAIN")} />
           </Link>
         )}

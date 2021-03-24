@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
-import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
+import { TypeSelectCard, Loader } from "@egovernments/digit-ui-react-components";
 import { newConfig } from "../../../config/NewApplication/config";
 import CheckPage from "./CheckPage";
 import Response from "./Response";
@@ -13,9 +13,11 @@ const FileComplaint = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const history = useHistory();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
-
+  const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
@@ -44,7 +46,13 @@ const FileComplaint = ({ parentRoute }) => {
     clearParams();
     queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
   };
-  newConfig.forEach((obj) => {
+
+  if (isLoading) {
+    return (
+      <Loader />
+    );
+  }
+  commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "property-type";

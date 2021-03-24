@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
-import { newConfig } from "../../../config/NewApplication/config";
-import TripDetails from "../../../config/Employee/TripDetailsConfig";
-import ApplicantDetails from "../../../config/Employee/ApplicantConfig";
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
+  // const { data: commonFields, isLoading } = useQuery('newConfig', () => fetch(`http://localhost:3002/commonFields`).then(res => res.json()))
+  // const { data: postFields, isLoading: isTripConfigLoading } = useQuery('tripConfig', () => fetch(`http://localhost:3002/tripDetails`).then(res => res.json()))
+  const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
+  const { data: preFields, isLoading: isApplicantConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PreFieldsConfig");
+  const { data: postFields, isLoading: isTripConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PostFieldsConfig");
   // const state = tenantId?.split(".")[0] || "pb";
 
   // const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
@@ -123,7 +126,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
     history.push("/digit-ui/employee/fsm/response", formData);
   };
 
-  const configs = [...ApplicantDetails, ...newConfig, ...TripDetails];
+  if (isLoading || isTripConfigLoading || isApplicantConfigLoading) {
+    return (
+      <Loader />
+    )
+  }
+
+  const configs = [...preFields, ...commonFields, ...postFields];
 
   return (
     <FormComposer

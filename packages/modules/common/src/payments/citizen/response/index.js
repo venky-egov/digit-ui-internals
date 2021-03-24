@@ -16,6 +16,15 @@ export const SuccessfulPayment = (props) => {
 
   const payments = data?.payments;
 
+  const { data: billData, isLoading: billDataLoading } = Digit.Hooks.useFetchPayment(
+    {
+      tenantId: paymentData?.tenantId,
+      businessService: "PT",
+      consumerCode: applicationNo,
+    },
+    { enabled: paymentData?.tenantId ? true : false }
+  );
+
   useEffect(() => {
     return () => {
       queryClient.clear();
@@ -34,7 +43,7 @@ export const SuccessfulPayment = (props) => {
         <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
 
         {business_service !== "PT" ? (
-          <Link to="/digit-ui/citizen">
+          <Link to={`digit-ui/citizen/payment/my-bills/${business_service}/${applicationNo}`}>
             <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
           </Link>
         ) : (
@@ -49,15 +58,6 @@ export const SuccessfulPayment = (props) => {
   const paymentData = data?.payments?.Payments[0];
   const amount = paymentData.totalAmountPaid;
   const transactionDate = paymentData.transactionDate;
-
-  const { data: billData, isLoading: billDataLoading } = Digit.Hooks.useFetchPayment(
-    {
-      tenantId: paymentData?.tenantId,
-      businessService: "PT",
-      consumerCode: applicationNo,
-    },
-    { enabled: paymentData?.tenantId ? true : false }
-  );
 
   const printReciept = async () => {
     if (printing) return;

@@ -54,7 +54,7 @@ const getPTAcknowledgementData = (application, tenantInfo, t) => {
       {
         title: t("PT_PROPERTY_ADDRESS_SUB_HEADER"),
         values: [
-          { title: t("CORE_COMMON_PINCODE"), value: application?.address?.pincode || "N/A" },
+          { title: t("PT_PROPERTY_ADDRESS_PINCODE"), value: application?.address?.pincode || "N/A" },
           { title: t("PT_PROPERTY_ADDRESS_CITY"), value: application?.address?.city || "N/A" },
           {
             title: t("PT_PROPERTY_ADDRESS_MOHALLA"),
@@ -62,7 +62,7 @@ const getPTAcknowledgementData = (application, tenantInfo, t) => {
           },
           { title: t("PT_PROPERTY_ADDRESS_STREET_NAME"), value: application?.address?.street || "N/A" },
           { title: t("PT_PROPERTY_ADDRESS_HOUSE_NO"), value: application?.address?.doorNo || "N/A" },
-          { title: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"), value: application?.address?.landmark || "N/A" },
+          { title: t("PT_PROPERTY_ADDRESS_LANDMARK"), value: application?.address?.landmark || "N/A" },
         ],
       },
       {

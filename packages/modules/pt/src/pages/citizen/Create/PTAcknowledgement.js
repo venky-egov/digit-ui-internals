@@ -3,7 +3,7 @@ import { Banner, Card, CardText, LinkButton, Loader, SubmitBar } from "@egovernm
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-
+import getPTAcknowledgementData from "../../../getPTAcknowledgementData";
 
 const GetActionMessage = () => {
   const { t } = useTranslation();
@@ -14,8 +14,8 @@ const BannerPicker = (props) => {
   return (
     <Banner
       message={GetActionMessage()}
-      applicationNumber={props.data?.Properties[0].propertyId}
-      info={props.t("CS_PROPERTY_APPLICATION_NO")}
+      applicationNumber={props.data?.Properties[0].acknowldgementNumber}
+      info={props.t("PT_APPLICATION_NO")}
       successful={props.isSuccess}
     />
   );
@@ -24,9 +24,8 @@ const BannerPicker = (props) => {
 const PTAcknowledgement = ({ data, onSuccess }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  debugger;
   const mutation = Digit.Hooks.pt.usePropertyAPI(data?.address?.city ? data.address?.city?.code : tenantId);
-
+  const coreData = Digit.Hooks.useCoreData();
 
   useEffect(() => {
     try {
@@ -129,7 +128,11 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
   }, []);
 
   const handleDownloadPdf = () => {
-
+    const { Properties = [] } = mutation.data;
+    const Property = Properties && Properties[0] || {};
+    const tenantInfo = coreData.tenants.find((tenant) => tenant.code === Property.tenantId);
+    const data = getPTAcknowledgementData({ ...Property }, tenantInfo, t);
+    Digit.Utils.pdf.generate(data);
   };
 
   return mutation.isLoading || mutation.isIdle ? (

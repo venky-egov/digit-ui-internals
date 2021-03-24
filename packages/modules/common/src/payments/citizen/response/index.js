@@ -92,7 +92,7 @@ export const SuccessfulPayment = (props) => {
   const getBillingPeriod = (billDetails) => {
     let from = new Date(billDetails.fromPeriod).getFullYear().toString();
     let to = new Date(billDetails.toPeriod).getFullYear().toString();
-    return "FY " + from + "~" + to;
+    return "FY " + from + "-" + to;
   };
 
   const bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;

@@ -12,10 +12,11 @@ import PTWFCaption from "./PTWFCaption";
 
 const PTWFApplicationTimeline = (props) => {
   const { t } = useTranslation();
+  const businessService=props.application?.creationReason && `PT.${props.application.creationReason}` || 'PT.CREATE';
   const { isLoading, data } = Digit.Hooks.useWorkflowDetails({
     tenantId: props.application?.tenantId,
     id: props.id,
-    moduleCode: props.application?.creationReason && `PT.${props.application.creationReason}` || 'PT.CREATE',
+    moduleCode: businessService,
   });
 
   const getTimelineCaptions = (checkpoint) => {
@@ -62,15 +63,10 @@ const PTWFApplicationTimeline = (props) => {
       };
       return <PTWFCaption data={caption} />;
     } else if (checkpoint.status === "ACTIVE") {
-      const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.lastModified),
-        name: checkpoint?.assigner?.name,
-        comment: t(checkpoint?.comment),
-      };
     
       return (
         <div>
-           <PTWFCaption data={caption} />
+        
           <Link to={`/digit-ui/citizen/pt/property/properties/${props?.application?.propertyId}`}>
             <ActionLinks>{t("PT_VIEW_PROPERTY_DETAILS")}</ActionLinks>
           </Link>
@@ -123,7 +119,7 @@ const PTWFApplicationTimeline = (props) => {
             </CardSectionHeader>
           )}
           {data?.timeline && data?.timeline?.length === 1 ? (
-            <CheckPoint isCompleted={true} label={t("CS_COMMON_" + data?.timeline[0]?.status)} customChild={getTimelineCaptions(data?.timeline[0])} />
+            <CheckPoint isCompleted={true} label={t(data?.timeline[0]?.state&&`WF_${businessService}_${data.timeline[0].state}` ||'NA')} customChild={getTimelineCaptions(data?.timeline[0])} />
           ) : (
             <ConnectingCheckPoints>
               {data?.timeline &&
@@ -133,7 +129,7 @@ const PTWFApplicationTimeline = (props) => {
                       <CheckPoint
                         keyValue={index}
                         isCompleted={index === 0}
-                        label={t("CS_COMMON_" + checkpoint.performedAction)}
+                        label={t(checkpoint.state&&`WF_${businessService}_${checkpoint.state}` ||'NA')}
                         customChild={getTimelineCaptions(checkpoint)}
                       />
                     </React.Fragment>

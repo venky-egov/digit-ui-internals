@@ -1,7 +1,7 @@
-import React from "react";
 import { Header, Loader } from "@egovernments/digit-ui-react-components";
-import MyApplication from "./my-application";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import MyApplication from "./my-application";
 
 export const MyApplications = () => {
   const { t } = useTranslation();

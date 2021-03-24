@@ -21,10 +21,10 @@ const BannerPicker = (props) => {
   );
 };
 
-const Response = ({ data, onSuccess }) => {
+const PTAcknowledgement = ({ data, onSuccess }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  debugger;
   const mutation = Digit.Hooks.pt.usePropertyAPI(data?.address?.city ? data.address?.city?.code : tenantId);
 
 
@@ -40,7 +40,7 @@ const Response = ({ data, onSuccess }) => {
             doorNo: address?.doorNo,
             buildingName: "NA",
             locality: {
-              code: loc.split("_").length == 4 ? loc.split("_")[3] : "NA",
+              code: loc && loc.split("_").length == 4 ? loc.split("_")[3] : "NA",
               area: address?.locality.name,
             },
           },
@@ -61,7 +61,7 @@ const Response = ({ data, onSuccess }) => {
           propertyType: "BUILTUP.SHAREDPROPERTY",
           noOfFloors: 1,
           ownershipCategory: "INDIVIDUAL.SINGLEOWNER",
-          owners: owners.map((owners, index) => ({
+          owners: owners && owners.map((owners, index) => ({
             name: owners?.name,
             mobileNumber: owners?.mobileNumber,
             fatherOrHusbandName: owners?.fatherOrHusbandName,
@@ -69,9 +69,19 @@ const Response = ({ data, onSuccess }) => {
             permanentAddress: owners?.permanentAddress,
             relationship: owners?.relationship?.code,
             ownerType: owners?.ownerType?.code,
-            gender: owners?.gender.value,
+            gender: owners?.gender?.value,
             isCorrespondenceAddress: null,
-          })),
+          })) || [{
+            "name": "Jagan",
+            "mobileNumber": "9965664222",
+            "fatherOrHusbandName": "E",
+            "emailId": null,
+            "permanentAddress": "1111, 1111, Back Side 33 KVA Grid Patiala Road - Area1, Amritsar, ",
+            "relationship": "FATHER",
+            "ownerType": "FREEDOMFIGHTER",
+            "gender": "MALE",
+            "isCorrespondenceAddress": null
+          }],
           additionalDetails: {
             inflammable: false,
             heightAbove36Feet: false,
@@ -151,4 +161,4 @@ const Response = ({ data, onSuccess }) => {
   );
 };
 
-export default Response;
+export default PTAcknowledgement;

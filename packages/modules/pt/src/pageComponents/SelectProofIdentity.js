@@ -40,7 +40,9 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
   const handleSubmit = () => {
     let fileStoreId = uploadedFile;
     let fileDetails = file;
-    if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
+    if (fileDetails) {
+      fileDetails={...fileDetails}
+      fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;}
     let ownerDetails = formData.owners && formData.owners[index];
     if (ownerDetails && ownerDetails.documents) {
       ownerDetails.documents["proofIdentity"] = {...fileDetails};

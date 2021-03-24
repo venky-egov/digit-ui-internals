@@ -84,7 +84,7 @@ export const PTModule = ({ userType, tenants }) => {
 
 export const PTLinks = ({ matchPath, userType }) => {
   const { t } = useTranslation();
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", {});
 
   useEffect(() => {
     clearParams();

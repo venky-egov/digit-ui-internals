@@ -1,7 +1,7 @@
+import { Card, CardSubHeader, Header, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Card, KeyNote, SubmitBar, Loader, CardHeader, StatusTable, Row, Header, CardSubHeader } from "@egovernments/digit-ui-react-components";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const ApplicationDetails = () => {
   const { t } = useTranslation();

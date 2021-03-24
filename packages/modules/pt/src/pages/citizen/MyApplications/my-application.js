@@ -1,6 +1,6 @@
+import { Card, KeyNote, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Card, KeyNote, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
 const MyApplication = ({ application }) => {

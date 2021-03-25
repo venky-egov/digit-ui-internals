@@ -28,7 +28,15 @@ const CreateProperty = ({ parentRoute }) => {
     }
     let { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null) {
-      nextStep = `${nextStep[sessionStorage.getItem("ownershipCategory")]}/${index}`;
+      if (nextStep[sessionStorage.getItem("ownershipCategory")]) {
+        nextStep = `${nextStep[sessionStorage.getItem("ownershipCategory")]}/${index}`;
+      } else {
+        nextStep = `${"floordetails"}/${index}`;
+      }
+      console.log(nextStep);
+    }
+    if (nextStep === "is-this-floor-self-occupied") {
+      isMultiple = false;
     }
     let redirectWithHistory = history.push;
     if (skipStep) {
@@ -55,14 +63,18 @@ const CreateProperty = ({ parentRoute }) => {
       let owners = params.owners || [];
       owners[index] = data;
       setParams({ ...params, ...{ [key]: [...owners] } });
+    } else if (key === "units") {
+      let units = params.units || [];
+      units[index] = data;
+      setParams({ ...params, units });
     } else {
       setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
     }
     goNext(skipStep, index, isAddMultiple, key);
   }
 
-  const handleSkip = () => { };
-  const handleMultiple = () => { };
+  const handleSkip = () => {};
+  const handleMultiple = () => {};
 
   const onSuccess = () => {
     clearParams();

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TypeSelectCard, RadioButtons, FormStep } from "@egovernments/digit-ui-react-components";
 
 const PropertyFloorsDetails = ({ t, config, onSelect, formData }) => {
-  const [FloorDetails, setFloorDetails] = useState(formData?.PropertyFloorsDetails);
+  const [FloorDetails, setFloorDetails] = useState(formData?.noOfFloors);
 
   const menu = [
     {
@@ -26,9 +26,8 @@ const PropertyFloorsDetails = ({ t, config, onSelect, formData }) => {
     onSelect(config.key, FloorDetails);
   }
 
-  
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!FloorDetails}>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!FloorDetails} isMultipleAllow={true}>
       <RadioButtons
         t={t}
         optionsKey="i18nKey"

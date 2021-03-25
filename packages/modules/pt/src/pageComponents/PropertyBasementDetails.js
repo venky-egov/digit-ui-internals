@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { RadioButtons, TypeSelectCard, FormStep } from "@egovernments/digit-ui-react-components";
 
 const PropertyBasementsDetails = ({ t, config, onSelect, userType, formData }) => {
-  const [BasementDetails, setBasementDetails] = useState(formData?.PropertyBasementsDetails);
+  const [BasementDetails, setBasementDetails] = useState(formData?.noOofBasements);
 
   const menu = [
     {
@@ -23,12 +23,13 @@ const PropertyBasementsDetails = ({ t, config, onSelect, userType, formData }) =
   }
 
   function goNext() {
-    onSelect(config.key, BasementDetails);
+    let index = window.location.href.charAt(window.location.href.length - 1);
+    sessionStorage.setItem("noOofBasements", BasementDetails);
+    onSelect(config.key, BasementDetails, "", index);
   }
 
-  
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BasementDetails}>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BasementDetails} isMultipleAllow={true}>
       <RadioButtons
         t={t}
         optionsKey="i18nKey"

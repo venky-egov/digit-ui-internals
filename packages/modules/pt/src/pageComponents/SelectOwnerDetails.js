@@ -38,7 +38,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   const options = [
     { value: "Female", code: "PT_FORM3_FEMALE", value: "FEMALE" },
     { value: "Male", code: "PT_FORM3_MALE", value: "MALE" },
-    { value: "Transgender", code: "PT_COMMON_GENDER_TRANSGENDER", value: "TRANSGENDER" }
+    { value: "Transgender", code: "PT_COMMON_GENDER_TRANSGENDER", value: "TRANSGENDER" },
   ];
 
   const GuardianOptions = [

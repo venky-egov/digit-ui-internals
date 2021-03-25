@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardSubHeader,
-  Header, LinkButton,
-  Loader, Row, StatusTable
-} from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";

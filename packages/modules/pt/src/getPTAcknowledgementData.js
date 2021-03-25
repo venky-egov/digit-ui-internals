@@ -69,7 +69,7 @@ const getPTAcknowledgementData = (application, tenantInfo, t) => {
         title: t("PT_COMMON_DOCS"),
         values: application.documents.length > 0 ?
           application.documents.map(document => {
-            return { title: t(document?.documentType || "N/A"), value: document?.documentName || "N/A" }
+            return { title: t(document?.documentType || "N/A"), value: document?.documentUid || "N/A" }
           }) : 'NA'
       },
     ],

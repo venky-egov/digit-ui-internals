@@ -108,12 +108,12 @@ const PropertyInformation = () => {
           {docs.length > 0 &&
             docs.map((docs, index) => (
               <div key="index">
-                <CardSubHeader>
+           <span>
                   {t("PT_COMMON_DOCS")} - {index + 1}
-                </CardSubHeader>
+                  </span>
                 <StatusTable>
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType.toLowerCase().split(".")[2])}`} />
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.id)}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType)}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid)}`} />
                 </StatusTable>
               </div>
             ))}

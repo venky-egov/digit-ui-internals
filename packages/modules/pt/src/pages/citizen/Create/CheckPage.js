@@ -19,7 +19,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
 
   const {
     address,
-    isResidental,
+    isResdential,
     PropertyType,
     noOfFloors,
     noOofBasements,
@@ -96,7 +96,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       <StatusTable>
         <Row
           label={t("PT_RESIDENTIAL_PROP_LABEL")}
-          text={`${t(isResidental?.value?.i18nKey)}`}
+          text={`${t(isResdential?.i18nKey)}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/isResidential" />}
         />
         <Row

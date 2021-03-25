@@ -20,7 +20,7 @@ export const newConfig = [
           cardText: "PT_PROPERTY_DETAILS_RESIDENTIAL_PROPERTY_TEXT",
           submitBarLabel: "PT_COMMON_NEXT",
         },
-        key: "isResidental",
+        key: "isResdential",
         withoutLabel: true,
         hideInEmployee: true,
         nextStep: "property-usage-type",

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, TypeSelectCard, RadioButtons } from "@egovernments/digit-ui-react-components";
+import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 
 const PropertyUsageType = ({ t, config, onSelect, userType, formData }) => {
   const [usageCategoryMajor, setPropertyPurpose] = useState(formData?.usageCategoryMajor);
@@ -20,11 +21,11 @@ const PropertyUsageType = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
 
   useEffect(() => {
-    if (userType !== "employee" && formData?.isResidental?.value?.code === true) {
+    if (userType !== "employee" && formData?.isResdential?.i18nKey === "PT_COMMON_YES" && formData?.usageCategoryMajor?.i18nKey !== "RESIDENTIAL") {
       //selectPropertyPurpose({i18nKey : "RESIDENTAL"})
-      onSelect(config.key, { i18nKey: "RESIDENTAL" });
+      onSelect(config.key, { i18nKey: "PROPERTYTAX_BILLING_SLAB_RESIDENTIAL" }, true);
     }
-  }, [formData?.usageCategoryMajor?.usageCategoryMajor?.code]);
+  }, [formData?.usageCategoryMajor?.i18nKey]);
 
   function selectPropertyPurpose(value) {
     setPropertyPurpose(value);

@@ -23,7 +23,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     PropertyType,
     noOfFloors,
     noOofBasements,
-    units,
+    units=[{}],
     UnOccupiedArea,
     city_complaint,
     locality_complaint,
@@ -62,7 +62,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         />
       </StatusTable>
       <div>
-        {owners.map((owners, index) => (
+        {owners&&owners.map&&owners.map((owners, index) => (
           <div key={index}>
             <CardSubHeader>
               {t("PT_OWNER_SUB_HEADER")} - {index + 1}
@@ -143,7 +143,9 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/un-occupied-area" />}
         />
       </StatusTable>
+  
       <SubmitBar label="Submit" onSubmit={onSubmit} />
+    
     </Card>
   );
 };

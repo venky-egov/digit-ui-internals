@@ -55,11 +55,12 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
       isDisabled={!name || !mobileNumber || !gender || !relationship || !fatherOrHusbandName}
     >
       <CardLabel>{`${t("PT_OWNER_NAME")}*`}</CardLabel>
-      <TextInput t={t} isMandatory={false} optionKey="i18nKey" name="name" value={name} onChange={setOwnerName} pattern="^[a-zA-Z_ ]*$" />
+      <TextInput t={t} type={"text"} isMandatory={false} optionKey="i18nKey" name="name" value={name} onChange={setOwnerName} pattern="^[a-zA-Z-.`' ]*$" />
       <CardLabel>{`${t("PT_FORM3_GENDER")}*`}</CardLabel>
       <RadioButtons t={t} options={options} optionsKey="code" name="gender" value={gender} selectedOption={gender} onSelect={setGenderName} />
       <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}*`}</CardLabel>
       <TextInput
+        type={"text"}
         t={t}
         isMandatory={false}
         optionKey="i18nKey"
@@ -71,12 +72,13 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
       <CardLabel>{`${t("PT_FORM3_GUARDIAN_NAME")}*`}</CardLabel>
       <TextInput
         t={t}
+        type={"text"}
         isMandatory={false}
         optionKey="i18nKey"
         name="fatherOrHusbandName"
         value={fatherOrHusbandName}
         onChange={setGuardiansName}
-        pattern="^[a-zA-Z_ ]*$"
+        pattern="^[a-zA-Z-.`' ]*$"
       />
       <RadioButtons
         t={t}

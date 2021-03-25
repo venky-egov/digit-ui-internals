@@ -5,14 +5,16 @@ import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 
 const config = {
-  placeholderData: [],
   select: (response) => {
-    return response?.vehicleTrip.map((trip) => {
-      const owner = trip.tripOwner;
-      const displayName = owner.name + (owner.userName ? `- ${owner.userName}` : "");
-      const tripOwner = { ...owner, displayName };
-      return { ...trip, tripOwner };
-    });
+    return {
+      totalCount: response?.totalCount,
+      vehicleLog: response?.vehicleTrip.map((trip) => {
+        const owner = trip.tripOwner;
+        const displayName = owner.name + (owner.userName ? `- ${owner.userName}` : "");
+        const tripOwner = { ...owner, displayName };
+        return { ...trip, tripOwner };
+      })
+    }
   },
 };
 
@@ -22,10 +24,29 @@ const FstpInbox = () => {
   const [searchParams, setSearchParams] = useState({ applicationStatus: "WAITING_FOR_DISPOSAL" });
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const { isLoading, data: vehicleLog, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters: searchParams, config });
+  const { isLoading: isVehiclesLoading, data: vehicles } = Digit.Hooks.fsm.useVehiclesSearch({
+    tenantId,
+    filters: { registrationNumber: searchParams?.registrationNumber },
+    config: { enabled: searchParams?.registrationNumber?.length > 0 }
+  });
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(
+    tenantId,
+    { name: searchParams?.name },
+    { enabled: searchParams?.name?.length > 1 }
+  );
+  let filters = {
+    vehicleIds: vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || 'null' : '',
+    tripOwnerIds: dsoData !== undefined && searchParams?.name?.length > 0 ? dsoData?.[0]?.id || 'null' : '',
+    applicationStatus: searchParams?.applicationStatus 
+  }
+  const { isLoading, data: { totalCount, vehicleLog } = {}, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
+    tenantId,
+    filters,
+    config 
+  });
 
   const onSearch = (params = {}) => {
-    setSearchParams({ ...searchParams, ...params });
+    setSearchParams({ applicationStatus: "WAITING_FOR_DISPOSAL", ...params });
   };
 
   const fetchNextPage = () => {
@@ -83,6 +104,7 @@ const FstpInbox = () => {
           currentPage={Math.floor(pageOffset / pageSize)}
           pageSizeLimit={pageSize}
           onPageSizeChange={handlePageSizeChange}
+          totalRecords={totalCount || 0}
         />
       </div>
     );

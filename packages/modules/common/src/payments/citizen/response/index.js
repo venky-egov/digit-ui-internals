@@ -81,7 +81,7 @@ export const SuccessfulPayment = (props) => {
     if (!paymentData?.fileStoreId) {
       response = await Digit.PaymentService.generatePdf(state, { Payments: payments.Payments });
     }
-    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
     if (fileStore && fileStore[response.filestoreIds[0]]) {
       window.open(fileStore[response.filestoreIds[0]], "_blank");
     }

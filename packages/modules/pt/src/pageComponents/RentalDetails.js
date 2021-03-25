@@ -44,9 +44,9 @@ const RentalDetails = ({ t, config, onSelect, value, userType, formData }) => {
 
   return (
     <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={!RentArea || !AnnualRent}>
-      <CardLabel>{`${t("Rented Area (Square feet)")}*`}</CardLabel>
+      <CardLabel>{`${t("PT_FLOOR_DETAILS_RENTED_AREA_LABEL")}*`}</CardLabel>
       <TextInput t={t} isMandatory={false} optionKey="i18nKey" name="RentArea" value={RentArea} onChange={setPropertyRentArea} />
-      <CardLabel>{`${t("Built Up Area(sq.yd)")}*`}</CardLabel>
+      <CardLabel>{`${t("PT_FLOOR_DETAILS_BUILT_UP_AREA_LABEL")}*`}</CardLabel>
       <TextInput t={t} isMandatory={false} optionKey="i18nKey" name="AnnualRent" value={AnnualRent} onChange={setPropertyAnnualRent} />
     </FormStep>
   );

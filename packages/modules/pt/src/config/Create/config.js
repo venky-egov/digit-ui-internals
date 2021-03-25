@@ -147,7 +147,7 @@ export const newConfig = [
         isMandatory: true,
         component: "RentalDetails",
         texts: {
-          headerCaption: "Ground Floor Details",
+          headerCaption: "PT_GROUND_FLOOR_DETAILS_LABEL",
           header: "Rental Details",
           cardText: "Tax is 7.5% of the annual rent for the rented part of the property.",
           submitBarLabel: "PT_COMMON_NEXT",
@@ -179,8 +179,8 @@ export const newConfig = [
         isMandatory: true,
         component: "IsAnyPartOfThisFloorUnOccupied",
         texts: {
-          headerCaption: "Ground Floor details",
-          header: "Is any part of this floor un -occupied?",
+          headerCaption: "PT_GROUND_FLOOR_DETAILS_LABEL",
+          header: "Is any part of this floor unoccupied?",
           cardText: "Tax is lower for incomplete construction, un-usable and locked up areas of property.",
           submitBarLabel: "PT_COMMON_NEXT",
         },
@@ -195,8 +195,8 @@ export const newConfig = [
         isMandatory: true,
         component: "UnOccupiedArea",
         texts: {
-          headerCaption: "Ground Floor details",
-          header: "Un - occupied area",
+          headerCaption: "PT_GROUND_FLOOR_DETAILS_LABEL",
+          header: "Unoccupied area",
           cardText: "Area that is locked up and not used on a daily basis.",
           submitBarLabel: "PT_COMMON_NEXT",
           skipText: "CORE_COMMON_SKIP_CONTINUE",

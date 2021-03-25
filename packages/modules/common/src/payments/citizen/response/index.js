@@ -76,9 +76,10 @@ export const SuccessfulPayment = (props) => {
     if (printing) return;
     setPrinting(true);
     const tenantId = paymentData?.tenantId;
+    const state = tenantId?.split(".")[0];
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
     if (!paymentData?.fileStoreId) {
-      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: payments.Payments });
+      response = await Digit.PaymentService.generatePdf(state, { Payments: payments.Payments });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     if (fileStore && fileStore[response.filestoreIds[0]]) {
@@ -129,26 +130,26 @@ export const SuccessfulPayment = (props) => {
         <Row rowContainerStyle={rowContainerStyle} last label={t(label)} text={applicationNo} />
         {/** TODO : move this key and value into the hook based on business Service */}
         {business_service === "PT" && (
-          <Row
-            rowContainerStyle={{ padding: "4px 10px" }}
-            last
-            label={t("CS_PAYMENT_BILLING_PERIOD")}
-            text={getBillingPeriod(demand?.Demands?.[0])}
-          />
+          <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_BILLING_PERIOD")} text={getBillingPeriod(demand?.Demands?.[0])} />
         )}
 
         {business_service === "PT" &&
           (isBillDataLoading ? (
             <Loader />
           ) : (
-            <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PENDING")} text={billData?.Bill[0]?.totalAmount} />
+            <Row
+              rowContainerStyle={rowContainerStyle}
+              last
+              label={t("CS_PAYMENT_AMOUNT_PENDING")}
+              text={demand?.Demands?.[0]?.isPaymentCompleted ? 0 : billData?.Bill[0]?.totalAmount}
+            />
           ))}
 
         <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
         <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_AMOUNT_PAID")} text={amount} />
         {business_service !== "PT" && (
           <Row
-            rowContainerStyle={{ padding: "4px 10px" }}
+            rowContainerStyle={rowContainerStyle}
             last
             label={t("CS_PAYMENT_TRANSANCTION_DATE")}
             text={transactionDate && new Date(transactionDate).toLocaleDateString("in")}

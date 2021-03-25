@@ -35,7 +35,7 @@ const Area = ({ t, config, onSelect, value, userType, formData }) => {
 
   return (
     <FormStep config={config} onChange={onChange} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={!floorarea}>
-      <CardLabel>{`${t("Plot Size (Square Feet)")}*`}</CardLabel>
+      <CardLabel>{`${t("PT_FLOOR_DETAILS_PLOT_SIZE_LABEL")}*`}</CardLabel>
       <TextInput t={t} isMandatory={false} optionKey="i18nKey" name="floorarea" value={floorarea} onChange={setPropertyfloorarea} />
     </FormStep>
   );

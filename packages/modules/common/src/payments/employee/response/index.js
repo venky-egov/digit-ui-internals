@@ -23,11 +23,12 @@ export const SuccessfulPayment = (props) => {
 
   const printReciept = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
+    const state = tenantId?.split(".")[0];
     const payments = await Digit.PaymentService.getReciept(tenantId, businessService, { receiptNumbers: receiptNumber });
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 
     if (!payments.Payments[0]?.fileStoreId) {
-      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: payments.Payments });
+      response = await Digit.PaymentService.generatePdf(state, { Payments: payments.Payments });
       // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });

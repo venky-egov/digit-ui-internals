@@ -2,6 +2,7 @@ import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable } fro
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
+import { getFixedFilename } from "../../../utils";
 
 const PropertyInformation = () => {
   const { t } = useTranslation();
@@ -103,12 +104,12 @@ const PropertyInformation = () => {
           {docs.length > 0 &&
             docs.map((docs, index) => (
               <div key="index">
-                <CardSubHeader>
+           <span>
                   {t("PT_COMMON_DOCS")} - {index + 1}
-                </CardSubHeader>
+                  </span>
                 <StatusTable>
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType.toLowerCase().split(".")[2])}`} />
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.id)}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType||"NA")}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid&&getFixedFilename(docs.documentUid,20)||'NA')}`} />
                 </StatusTable>
               </div>
             ))}

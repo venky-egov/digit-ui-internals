@@ -9,6 +9,7 @@ const StatusCount = ({ status, fsmfilters, onAssignmentChange }) => {
   const { data } = Digit.Hooks.fsm.useInbox(
     tenantId,
     { applicationStatus: [status],
+      locality: fsmfilters?.locality,
       total: true,
       uuid: DSO ? { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") } : { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
       sortBy: "createdTime",

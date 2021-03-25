@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { newConfig } from "../../../config/NewApplication/config";
 import { useHistory } from "react-router-dom";
-import { FormComposer } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import TripDetails from "../../../config/Employee/TripDetailsConfig";
-import ApplicantDetails from "../../../config/Employee/ApplicantConfig";
 import { getVehicleType } from "../../../utils";
 
 const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitationMenu }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [canSubmit, setSubmitValve] = useState(false);
+  const stateId = tenantId.split(".")[0];
+  const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
+  const { data: preFields, isLoading: isApplicantConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PreFieldsConfig");
+  const { data: postFields, isLoading: isTripConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PostFieldsConfig");
 
   const defaultValues = {
     channel: channelMenu.filter((channel) => channel.code === applicationData.source)[0],
@@ -77,11 +78,15 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       formData?.subtype &&
       formData?.address?.locality?.code &&
       formData?.tripData?.vehicleType &&
-      formData?.pitType &&
-      formData?.pitDetail &&
       formData?.tripData?.amountPerTrip
     ) {
       setSubmitValve(true);
+      if (
+        parseInt(formData?.pitDetail?.height) * parseInt(formData?.pitDetail?.length) * parseInt(formData?.pitDetail?.width) > 0 &&
+        !formData?.pitType
+      ) {
+        setSubmitValve(false);
+      }
     } else {
       setSubmitValve(false);
     }
@@ -96,7 +101,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   const onSubmit = (data) => {
     console.log("find submit data", data);
     const applicationChannel = data.channel;
-    const sanitationtype = data.pitType.code;
+    const sanitationtype = data?.pitType?.code;
     const pitDimension = data?.pitDetail;
     const applicantName = data.applicationData.applicantName;
     const mobileNumber = data.applicationData.mobileNumber;
@@ -170,7 +175,11 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     });
   };
 
-  const configs = [...ApplicantDetails, ...newConfig, ...TripDetails];
+  if (isLoading || isTripConfigLoading || isApplicantConfigLoading) {
+    return <Loader />;
+  }
+
+  const configs = [...preFields, ...commonFields, ...postFields];
 
   return (
     <FormComposer

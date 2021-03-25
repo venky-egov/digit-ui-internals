@@ -8,9 +8,9 @@ const MyApplication = ({ application }) => {
   return (
     <Card>
       <KeyNote keyValue={t("PT_APPLICATION_NO_LABEL")} note={application.acknowldgementNumber} />
-      <KeyNote keyValue={t("PT_APPLICATION_CATEGORY")} note={ t("PROPERTY_TAX")} />
-      <KeyNote keyValue={t("PT_COMMON_TABLE_COL_APP_TYPE")} note={application?.creationReason&&t(`PT.${application.creationReason}`)|| 'NA'} />
-      <KeyNote keyValue={t("PT_COMMON_TABLE_COL_STATUS_LABEL")} note={t( application.status)} />
+      <KeyNote keyValue={t("PT_APPLICATION_CATEGORY")} note={t("PROPERTY_TAX")} />
+      <KeyNote keyValue={t("PT_COMMON_TABLE_COL_APP_TYPE")} note={(application?.creationReason && t(`PT.${application.creationReason}`)) || "NA"} />
+      <KeyNote keyValue={t("PT_COMMON_TABLE_COL_STATUS_LABEL")} note={t(application.status)} />
       <Link to={`/digit-ui/citizen/pt/property/application/${application.acknowldgementNumber}`}>
         <SubmitBar label={t("PT_MY_APPLICATION_TRACK")} />
       </Link>

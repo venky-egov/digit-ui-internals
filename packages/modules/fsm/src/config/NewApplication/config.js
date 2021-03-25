@@ -140,7 +140,7 @@ export const newConfig = [
     body: [
       {
         label: "ES_NEW_APPLICATION_PIT_TYPE",
-        isMandatory: true,
+        isMandatory: false,
         type: "component",
         route: "pit-type",
         key: "pitType",
@@ -156,7 +156,7 @@ export const newConfig = [
       {
         route: "tank-size",
         component: "SelectTankSize",
-        isMandatory: true,
+        isMandatory: false,
         texts: {
           headerCaption: "",
           header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",

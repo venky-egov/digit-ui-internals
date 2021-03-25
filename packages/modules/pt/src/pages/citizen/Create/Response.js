@@ -1,9 +1,7 @@
-
 import { Banner, Card, CardText, LinkButton, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-
 
 const GetActionMessage = () => {
   const { t } = useTranslation();
@@ -26,7 +24,6 @@ const Response = ({ data, onSuccess }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
   const mutation = Digit.Hooks.pt.usePropertyAPI(data?.address?.city ? data.address?.city?.code : tenantId);
-
 
   useEffect(() => {
     try {
@@ -118,9 +115,7 @@ const Response = ({ data, onSuccess }) => {
     }
   }, []);
 
-  const handleDownloadPdf = () => {
-
-  };
+  const handleDownloadPdf = () => {};
 
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />

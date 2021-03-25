@@ -7,7 +7,21 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled, _defaultValues = {}, forcedError, componentInFront, onAdd, isMultipleAllow = false }) => {
+const FormStep = ({
+  t,
+  children,
+  config,
+  onSelect,
+  onSkip,
+  value,
+  onChange,
+  isDisabled,
+  _defaultValues = {},
+  forcedError,
+  componentInFront,
+  onAdd,
+  isMultipleAllow = false,
+}) => {
   const { register, watch, errors, handleSubmit } = useForm({
     defaultValues: _defaultValues,
   });
@@ -53,7 +67,7 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
 
   return (
     <form onSubmit={handleSubmit(goNext)}>
-      <InputCard {...{ isDisable: isDisable, isMultipleAllow: isMultipleAllow }} {...config} submit {...{ onSkip: onSkip, onAdd:onAdd }} t={t}>
+      <InputCard {...{ isDisable: isDisable, isMultipleAllow: isMultipleAllow }} {...config} submit {...{ onSkip: onSkip, onAdd: onAdd }} t={t}>
         {inputs}
         {forcedError && <CardLabelError>{t(forcedError)}</CardLabelError>}
         {children}

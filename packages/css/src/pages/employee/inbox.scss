@@ -123,6 +123,10 @@
   @apply text-focus text-body-s-dt;
 }
 
+.inbox-count{
+  @apply inline ml-sm p-sm bg-primary-main rounded-full text-white text-heading-s align-middle text-center
+}
+
 @screen dt {
   .complaint-links-container {
     @apply bg-white;

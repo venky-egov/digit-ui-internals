@@ -195,7 +195,12 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     } else {
       return (
         <div>
-          {!isSearch && <Header>{t("ES_COMMON_INBOX")}</Header>}
+          {!isSearch && (
+            <Header>
+              {t("ES_COMMON_INBOX")}
+              {Number(applications?.[0]?.totalCount) ? <p className="inbox-count">{Number(applications?.[0]?.totalCount)}</p> : null}
+            </Header>
+          )}
           <DesktopInbox
             data={isInbox ? applications : data}
             isLoading={isInbox ? isLoading || isIdle : isSearchLoading}

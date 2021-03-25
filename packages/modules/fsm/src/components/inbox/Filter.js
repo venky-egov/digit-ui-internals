@@ -11,6 +11,8 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
+  const hideLocalityFilter = Digit.UserService.hasAccess(["FSM_CREATOR_EMP", "FSM_VIEW_EMP"]);
+
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
 
@@ -71,23 +73,25 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
             {/* <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={searchParams} /> */}
           </div>
 
-          <div>
-            <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-            <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} />
-            <div className="tag-container">
-              {searchParams?.locality.map((locality, index) => {
-                return (
-                  <RemoveableTag
-                    key={index}
-                    text={locality.name}
-                    onClick={() => {
-                      onFilterChange({ locality: searchParams?.locality.filter((loc) => loc.code !== locality.code) });
-                    }}
-                  />
-                );
-              })}
+          {!hideLocalityFilter ? (
+            <div>
+              <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
+              <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} />
+              <div className="tag-container">
+                {searchParams?.locality.map((locality, index) => {
+                  return (
+                    <RemoveableTag
+                      key={index}
+                      text={locality.name}
+                      onClick={() => {
+                        onFilterChange({ locality: searchParams?.locality.filter((loc) => loc.code !== locality.code) });
+                      }}
+                    />
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ) : null}
           <div>
             {isRoleStatusFetched ? <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} roleStatuses={roleStatuses} /> : <Loader />}
           </div>

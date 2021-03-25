@@ -13,7 +13,7 @@ const Status = ({ onAssignmentChange, fsmfilters, roleStatuses }) => {
 
   const mergedRoleDetails = userRoleDetails.reduce(
     (merged, details) => ({
-      fixed: details?.fixed || merged?.fixed,
+      fixed: details?.fixed && merged?.fixed,
       statuses: [...details?.statuses, ...merged?.statuses],
       zeroCheck: details?.zeroCheck || merged?.zeroCheck,
     }),
@@ -39,7 +39,7 @@ const Status = ({ onAssignmentChange, fsmfilters, roleStatuses }) => {
     return <Loader />;
   }
 
-  return (
+  return finalApplicationWithCount ? (
     <div className="status-container">
       <div className="filter-label">{t("ES_INBOX_STATUS")}</div>
       {finalApplicationWithCount?.map((option, index) => (
@@ -57,7 +57,7 @@ const Status = ({ onAssignmentChange, fsmfilters, roleStatuses }) => {
         </div>
       ) : null}
     </div>
-  );
+  ) : null;
 };
 
 export default Status;

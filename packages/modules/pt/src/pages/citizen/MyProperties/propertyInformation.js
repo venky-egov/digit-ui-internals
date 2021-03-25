@@ -104,12 +104,12 @@ const PropertyInformation = () => {
           {docs.length > 0 &&
             docs.map((docs, index) => (
               <div key="index">
-           <span>
+                <span>
                   {t("PT_COMMON_DOCS")} - {index + 1}
-                  </span>
+                </span>
                 <StatusTable>
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType||"NA")}`} />
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid&&getFixedFilename(docs.documentUid,20)||'NA')}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType || "NA")}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid && getFixedFilename(docs.documentUid, 17) || 'NA')}`} />
                 </StatusTable>
               </div>
             ))}

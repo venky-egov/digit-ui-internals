@@ -1,4 +1,4 @@
-import { Banner, Card, CardText, LinkButton, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, LinkButton, Loader,StatusTable,Row, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -14,6 +14,11 @@ const GetActionMessage = (props) => {
     return t("CS_PROPERTY_APPLICATION_FAILED");
   }
  
+};
+
+const rowContainerStyle = {
+  padding: "4px 0px",
+  justifyContent: "space-between",
 };
 
 const BannerPicker = (props) => {
@@ -149,7 +154,8 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
   ) : (
     <Card>
       <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-      <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
+      {mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>}
+      {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
       {mutation.isSuccess && (
         <LinkButton
           label={
@@ -166,6 +172,14 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
           className="w-full"
         />
       )}
+            <StatusTable>
+ 
+        {mutation.isSuccess &&(
+            <Row rowContainerStyle={rowContainerStyle} last label={t("PT_COMMON_TABLE_COL_PT_ID")} text={props.data?.Properties[0].propertyId} />
+        )}
+
+       
+      </StatusTable>
       <Link to={`/digit-ui/citizen`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

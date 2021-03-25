@@ -34,7 +34,7 @@ const RentalDetails = ({ t, config, onSelect, value, userType, formData }) => {
 
   return (
     <FormStep config={config} onChange={onChange} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={!UnOccupiedArea}>
-      <CardLabel>{`${t("Rented Area (Square feet)")}*`}</CardLabel>
+      <CardLabel>{`${t("PT_FLOOR_DETAILS_RENTED_AREA_LABEL")}*`}</CardLabel>
       <TextInput t={t} isMandatory={false} optionKey="i18nKey" name="RentArea" value={UnOccupiedArea} onChange={setPropertyUnOccupiedArea} />
     </FormStep>
   );

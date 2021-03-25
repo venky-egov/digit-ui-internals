@@ -45,6 +45,7 @@ import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
 import useApplicationAudit from "./fsm/useApplicationAudit";
 import useSearchForAuditData from "./fsm/useSearchForAudit";
+import useVehiclesSearch from "./fsm/useVehiclesSearch";
 import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
@@ -88,6 +89,7 @@ const fsm = {
   useVehicleSearch,
   useVehicleUpdate,
   useVendorDetail,
+  useVehiclesSearch,
   useConfig,
   useSlum,
 };

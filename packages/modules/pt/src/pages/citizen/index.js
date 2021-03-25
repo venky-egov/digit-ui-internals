@@ -16,7 +16,7 @@ const App = () => {
     <span className={"pt-citizen"}>
     <Switch>
       <AppContainer >
-        <BackButton>Back</BackButton>
+        {!window.location.href.includes("pt/property/new-application/acknowledgement") ? <BackButton style = {{position: "fixed", top: "9.5%"}}>Back</BackButton> : ""}
         <PrivateRoute path={`${path}/property/new-application`} component={CreateProperty} />
         <PrivateRoute path={`${path}/property/search`} component={SearchPropertyComponent} />
         <PrivateRoute path={`${path}/property/search-results`} component={SearchResultsComponent} />

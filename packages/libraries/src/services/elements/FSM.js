@@ -51,6 +51,15 @@ export const FSMService = {
     }),
   vehicleSearch: (tenantId, details) =>
     Request({
+      url: Urls.fsm.vehicleTripSearch,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId, ...details },
+      auth: true,
+    }),
+  vehiclesSearch: (tenantId, details) =>
+    Request({
       url: Urls.fsm.vehicleSearch,
       useCache: false,
       userService: true,

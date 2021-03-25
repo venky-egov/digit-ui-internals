@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
 
 const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formData }) => {
-  let index = window.location.href.charAt(window.location.href.length-1);
+  let index = window.location.href.charAt(window.location.href.length - 1);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const [ownerType, setOwnerType] = useState(formData.owners && formData.owners[index] && formData.owners[index].ownerType);

@@ -12,7 +12,6 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData }) => 
   let OwnerShipCategory = {};
   let SubOwnerShipCategory = {};
 
-
   useEffect(() => {
     if (!isLoading && SubOwnerShipCategoryOb && OwnerShipCategoryOb) {
       const preFilledPropertyType = SubOwnerShipCategoryOb.filter(
@@ -22,44 +21,52 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData }) => 
     }
   }, [formData?.ownershipCategory, SubOwnerShipCategoryOb]);
 
-  OwnerShipCategoryOb && OwnerShipCategoryOb.length > 0 && OwnerShipCategoryOb.map(category => {
-    OwnerShipCategory[category.code] = category
-  });
-  SubOwnerShipCategoryOb && SubOwnerShipCategoryOb.length > 0 && SubOwnerShipCategoryOb.map(category => {
-    SubOwnerShipCategory[category.code] = category
-  });
+  OwnerShipCategoryOb &&
+    OwnerShipCategoryOb.length > 0 &&
+    OwnerShipCategoryOb.map((category) => {
+      OwnerShipCategory[category.code] = category;
+    });
+  SubOwnerShipCategoryOb &&
+    SubOwnerShipCategoryOb.length > 0 &&
+    SubOwnerShipCategoryOb.map((category) => {
+      SubOwnerShipCategory[category.code] = category;
+    });
 
   getOwnerDetails();
 
   function formDropdown(category) {
-    const { name, code } = category
+    const { name, code } = category;
     return {
       label: name,
       value: code,
-    }
+    };
   }
 
   function getDropdwonForProperty(ownerShipdropDown) {
-    return ownerShipdropDown && ownerShipdropDown.length && ownerShipdropDown.splice(0, 4).map((ownerShipDetails) => ({
-      ...ownerShipDetails,
-      i18nKey: `PT_OWNERSHIP_${ownerShipDetails.value.split('.')[1] ? ownerShipDetails.value.split('.')[1] : ownerShipDetails.value.split('.')[0]}`,
-    }));;
+    return (
+      ownerShipdropDown &&
+      ownerShipdropDown.length &&
+      ownerShipdropDown.splice(0, 4).map((ownerShipDetails) => ({
+        ...ownerShipDetails,
+        i18nKey: `PT_OWNERSHIP_${ownerShipDetails.value.split(".")[1] ? ownerShipDetails.value.split(".")[1] : ownerShipDetails.value.split(".")[0]}`,
+      }))
+    );
   }
 
   function getOwnerDetails() {
     if (OwnerShipCategory && SubOwnerShipCategory) {
       Object.keys(OwnerShipCategory).forEach((category) => {
-        const categoryCode = OwnerShipCategory[category].code
+        const categoryCode = OwnerShipCategory[category].code;
         if (subCategoriesInOwnersType.indexOf(categoryCode) !== -1) {
           Object.keys(SubOwnerShipCategory)
-            .filter(subCategory => categoryCode === SubOwnerShipCategory[subCategory].ownerShipCategory)
-            .forEach(linkedCategory => {
-              ownerShipdropDown.push(formDropdown(SubOwnerShipCategory[linkedCategory]))
-            })
+            .filter((subCategory) => categoryCode === SubOwnerShipCategory[subCategory].ownerShipCategory)
+            .forEach((linkedCategory) => {
+              ownerShipdropDown.push(formDropdown(SubOwnerShipCategory[linkedCategory]));
+            });
         } else {
-          ownerShipdropDown.push(formDropdown(OwnerShipCategory[category]))
+          ownerShipdropDown.push(formDropdown(OwnerShipCategory[category]));
         }
-      })
+      });
     }
   }
 
@@ -69,7 +76,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData }) => 
 
   const onSkip = () => onSelect();
   function goNext() {
-    let index = window.location.href.charAt(window.location.href.length-1);
+    let index = window.location.href.charAt(window.location.href.length - 1);
     sessionStorage.setItem("ownershipCategory", ownershipCategory.value);
     onSelect(config.key, ownershipCategory, "", index);
   }

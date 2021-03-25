@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
 
-
 const PTApplicationDetails = () => {
   const { t } = useTranslation();
   const { acknowledgementIds } = useParams();

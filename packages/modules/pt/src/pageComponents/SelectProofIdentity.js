@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormStep, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
 
 const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
-  let index = window.location.href.charAt(window.location.href.length-1);
+  let index = window.location.href.charAt(window.location.href.length - 1);
   const [uploadedFile, setUploadedFile] = useState(formData?.owners[index]?.documents?.proofIdentity?.fileStoreId || null);
   const [file, setFile] = useState(formData?.owners[index]?.documents?.proofIdentity);
   const [error, setError] = useState(null);
@@ -41,25 +41,34 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
     let fileStoreId = uploadedFile;
     let fileDetails = file;
     if (fileDetails) {
-      fileDetails={...fileDetails}
-      fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;}
+      fileDetails = { ...fileDetails };
+      fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
+    }
     let ownerDetails = formData.owners && formData.owners[index];
     if (ownerDetails && ownerDetails.documents) {
-      ownerDetails.documents["proofIdentity"] = {...fileDetails};
+      ownerDetails.documents["proofIdentity"] = { ...fileDetails };
     } else {
       ownerDetails["documents"] = [];
-      ownerDetails.documents["proofIdentity"] = {...fileDetails};
+      ownerDetails.documents["proofIdentity"] = { ...fileDetails };
     }
     onSelect(config.key, ownerDetails, "", index);
     // onSelect(config.key, { specialProofIdentity: fileDetails }, "", index);
   };
 
-  function onAdd () {
+  function onAdd() {
     let newIndex = parseInt(index) + 1;
     onSelect("owner-details", {}, false, newIndex, true);
   }
   return (
-    <FormStep t={t} config={config} onSelect={handleSubmit} onSkip={onSkip} isDisabled={!uploadedFile} onAdd={onAdd} isMultipleAllow={(formData?.ownershipCategory?.value == "INDIVIDUAL.MULTIPLEOWNERS")}>
+    <FormStep
+      t={t}
+      config={config}
+      onSelect={handleSubmit}
+      onSkip={onSkip}
+      isDisabled={!uploadedFile}
+      onAdd={onAdd}
+      isMultipleAllow={formData?.ownershipCategory?.value == "INDIVIDUAL.MULTIPLEOWNERS"}
+    >
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <UploadFile
@@ -70,7 +79,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
         }}
         message={uploadedFile ? `1 ${t(`PT_ACTION_FILEUPLOADED`)}` : t(`PT_ACTION_NO_FILEUPLOADED`)}
       />
-      <CardLabelDesc>{" "}</CardLabelDesc>
+      <CardLabelDesc> </CardLabelDesc>
     </FormStep>
   );
 };

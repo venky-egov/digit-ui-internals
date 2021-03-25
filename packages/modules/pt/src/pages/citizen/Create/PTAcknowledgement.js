@@ -1,4 +1,3 @@
-
 import { Banner, Card, CardText, LinkButton, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -60,27 +59,30 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
           propertyType: "BUILTUP.SHAREDPROPERTY",
           noOfFloors: 1,
           ownershipCategory: "INDIVIDUAL.SINGLEOWNER",
-          owners: owners && owners.map((owners, index) => ({
-            name: owners?.name,
-            mobileNumber: owners?.mobileNumber,
-            fatherOrHusbandName: owners?.fatherOrHusbandName,
-            emailId: null,
-            permanentAddress: owners?.permanentAddress,
-            relationship: owners?.relationship?.code,
-            ownerType: owners?.ownerType?.code,
-            gender: owners?.gender?.value,
-            isCorrespondenceAddress: null,
-          })) || [{
-            "name": "Jagan",
-            "mobileNumber": "9965664222",
-            "fatherOrHusbandName": "E",
-            "emailId": null,
-            "permanentAddress": "1111, 1111, Back Side 33 KVA Grid Patiala Road - Area1, Amritsar, ",
-            "relationship": "FATHER",
-            "ownerType": "FREEDOMFIGHTER",
-            "gender": "MALE",
-            "isCorrespondenceAddress": null
-          }],
+          owners: (owners &&
+            owners.map((owners, index) => ({
+              name: owners?.name,
+              mobileNumber: owners?.mobileNumber,
+              fatherOrHusbandName: owners?.fatherOrHusbandName,
+              emailId: null,
+              permanentAddress: owners?.permanentAddress,
+              relationship: owners?.relationship?.code,
+              ownerType: owners?.ownerType?.code,
+              gender: owners?.gender?.value,
+              isCorrespondenceAddress: null,
+            }))) || [
+            {
+              name: "Jagan",
+              mobileNumber: "9965664222",
+              fatherOrHusbandName: "E",
+              emailId: null,
+              permanentAddress: "1111, 1111, Back Side 33 KVA Grid Patiala Road - Area1, Amritsar, ",
+              relationship: "FATHER",
+              ownerType: "FREEDOMFIGHTER",
+              gender: "MALE",
+              isCorrespondenceAddress: null,
+            },
+          ],
           additionalDetails: {
             inflammable: false,
             heightAbove36Feet: false,
@@ -129,7 +131,7 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
 
   const handleDownloadPdf = () => {
     const { Properties = [] } = mutation.data;
-    const Property = Properties && Properties[0] || {};
+    const Property = (Properties && Properties[0]) || {};
     const tenantInfo = coreData.tenants.find((tenant) => tenant.code === Property.tenantId);
     const data = getPTAcknowledgementData({ ...Property }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);

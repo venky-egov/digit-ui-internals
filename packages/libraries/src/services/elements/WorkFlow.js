@@ -47,7 +47,7 @@ export const WorkflowService = {
             const checkPoint = {
               performedAction: instance.action,
               status: instance.state.applicationStatus,
-              state:instance.state.state,
+              state: instance.state.state,
               assigner: instance?.assigner,
               rating: instance?.rating,
               comment: instance?.comment,

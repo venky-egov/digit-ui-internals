@@ -76,9 +76,10 @@ export const SuccessfulPayment = (props) => {
     if (printing) return;
     setPrinting(true);
     const tenantId = paymentData?.tenantId;
+    const state = tenantId?.split(".")[0];
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
     if (!paymentData?.fileStoreId) {
-      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: payments.Payments });
+      response = await Digit.PaymentService.generatePdf(state, { Payments: payments.Payments });
     }
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     if (fileStore && fileStore[response.filestoreIds[0]]) {

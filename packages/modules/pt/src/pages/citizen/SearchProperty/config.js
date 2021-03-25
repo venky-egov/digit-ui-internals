@@ -3,11 +3,12 @@ export const config = [
     texts: {
       header: "SEARCH_PROPERTY",
       submitButtonLabel: "PT_HOME_SEARCH_RESULTS_BUTTON_SEARCH",
-      description: "PT_HOME_SEARCH_RESULTS_DESC",
+      description: "CS_PT_HOME_SEARCH_RESULTS_DESC",
     },
     inputs: [
       {
         label: "PT_HOME_SEARCH_RESULTS_OWN_MOB_LABEL",
+        description: "CS_SEARCH_MUST_BE_10_DIGIT_NUMBER",
         type: "text",
         name: "mobileNumber",
         error: "ERR_HRMS_INVALID_USER_ID",

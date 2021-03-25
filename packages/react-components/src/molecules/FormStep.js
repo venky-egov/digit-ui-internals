@@ -7,7 +7,21 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled, _defaultValues = {}, forcedError, componentInFront }) => {
+const FormStep = ({
+  t,
+  children,
+  config,
+  onSelect,
+  onSkip,
+  value,
+  onChange,
+  isDisabled,
+  _defaultValues = {},
+  forcedError,
+  componentInFront,
+  onAdd,
+  isMultipleAllow = false,
+}) => {
   const { register, watch, errors, handleSubmit } = useForm({
     defaultValues: _defaultValues,
   });
@@ -53,7 +67,7 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
 
   return (
     <form onSubmit={handleSubmit(goNext)}>
-      <InputCard {...{ isDisable: isDisable }} {...config} submit {...{ onSkip: onSkip }} t={t}>
+      <InputCard {...{ isDisable: isDisable, isMultipleAllow: isMultipleAllow }} {...config} submit {...{ onSkip: onSkip, onAdd: onAdd }} t={t}>
         {inputs}
         {forcedError && <CardLabelError>{t(forcedError)}</CardLabelError>}
         {children}
@@ -66,6 +80,7 @@ FormStep.propTypes = {
   config: PropTypes.shape({}),
   onSelect: PropTypes.func,
   onSkip: PropTypes.func,
+  onAdd: PropTypes.func,
   t: PropTypes.func,
 };
 
@@ -73,6 +88,7 @@ FormStep.defaultProps = {
   config: {},
   onSelect: undefined,
   onSkip: undefined,
+  onAdd: undefined,
   t: (value) => value,
 };
 

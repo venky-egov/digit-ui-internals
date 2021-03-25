@@ -259,9 +259,8 @@ input[type="number"] {
     }
 
     .value {
-      @apply w-1/2 font-bold;
+      @apply w-1/2 font-bold text-right;
       font-size: 18px;
-      text-align: dropRight;
     }
   }
 }
@@ -389,6 +388,6 @@ input[type="number"] {
   }
 }
 
-.payment-form-text-input-correction{
+.payment-form-text-input-correction {
   width: 100% !important;
 }

@@ -9,6 +9,7 @@ export const SuccessfulPayment = (props) => {
   const queryClient = useQueryClient();
   const { eg_pg_txnid: egId } = Digit.Hooks.useQueryParams();
   const [printing, setPrinting] = useState(false);
+  const [fetchBill, setFetchBill] = useState(false);
   const { businessService: business_service } = useParams();
   const { isLoading, data, isError } = Digit.Hooks.usePaymentUpdate({ egId }, business_service);
 
@@ -16,32 +17,62 @@ export const SuccessfulPayment = (props) => {
 
   const payments = data?.payments;
 
+  // const { data: billData, isLoading: billDataLoading } = Digit.Hooks.useFetchPayment(
+  //   {
+  //     tenantId: paymentData?.tenantId,
+  //     businessService: "PT",
+  //     consumerCode: applicationNo,
+  //   },
+  //   { enabled: (paymentData?.tenantId ? true : false) && fetchBill }
+  // );
+
   useEffect(() => {
     return () => {
       queryClient.clear();
     };
   }, []);
 
+  // useEffect(() => {
+  //   if (business_service === "PT" && data?.txnStatus && data.txnStatus !== "FAILURE") {
+  //     setFetchBill(true);
+  //   }
+  // }, [data]);
+
+  // useEffect(() => {
+  //   console.log(billData);
+  // }, [billData]);
+
   if (isLoading) {
     return <Loader />;
   }
+
+  const applicationNo = data?.applicationNo;
 
   if (isError || !payments || !payments.Payments || payments.Payments.length === 0 || data.txnStatus === "FAILURE") {
     return (
       <Card>
         <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
 
-        <Link to="/digit-ui/citizen">
-          <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
-        </Link>
+        {business_service !== "PT" ? (
+          <Link to={`digit-ui/citizen`}>
+            <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+          </Link>
+        ) : (
+          <Link to={(applicationNo && `/digit-ui/citizen/payment/my-bills/${business_service}/${applicationNo}`) || "/digit-ui/citizen"}>
+            <SubmitBar label={t("CS_PAYMENT_TRY_AGAIN")} />
+          </Link>
+        )}
       </Card>
     );
   }
 
+  // if (billDataLoading) {
+  //   return <Loader />;
+  // }
+
   const paymentData = data?.payments?.Payments[0];
   const amount = paymentData.totalAmountPaid;
   const transactionDate = paymentData.transactionDate;
-  const applicationNo = data?.applicationNo;
 
   const printReciept = async () => {
     if (printing) return;
@@ -58,9 +89,17 @@ export const SuccessfulPayment = (props) => {
     setPrinting(false);
   };
 
+  const getBillingPeriod = (billDetails) => {
+    let from = new Date(billDetails.fromPeriod).getFullYear().toString();
+    let to = new Date(billDetails.toPeriod).getFullYear().toString();
+    return "FY " + from + "-" + to;
+  };
+
   const bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
 
   // https://dev.digit.org/collection-services/payments/FSM.TRIP_CHARGES/_search?tenantId=pb.amritsar&consumerCodes=107-FSM-2021-02-18-063433
+
+  // if (billDataLoading) return <Loader />;
 
   return (
     <Card>
@@ -82,14 +121,30 @@ export const SuccessfulPayment = (props) => {
       </React.Fragment>
       <StatusTable>
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t(label)} text={applicationNo} />
+        {/** TODO : move this key and value into the hook based on business Service */}
+        {/* {business_service === "PT" && (
+          <Row
+            rowContainerStyle={{ padding: "4px 10px" }}
+            last
+            label={t("CS_PAYMENT_BILLING_PERIOD")}
+            text={getBillingPeriod(billData?.Bill[0]?.billDetails)}
+          />
+        )} */}
+
+        {/* {business_service === "PT" && (
+          <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PENDING")} text={billData?.Bill[0]?.totalAmount} />
+        )} */}
+
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
         <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PAID")} text={amount} />
-        <Row
-          rowContainerStyle={{ padding: "4px 10px" }}
-          last
-          label={t("CS_PAYMENT_TRANSANCTION_DATE")}
-          text={transactionDate && new Date(transactionDate).toLocaleDateString("in")}
-        />
+        {business_service !== "PT" && (
+          <Row
+            rowContainerStyle={{ padding: "4px 10px" }}
+            last
+            label={t("CS_PAYMENT_TRANSANCTION_DATE")}
+            text={transactionDate && new Date(transactionDate).toLocaleDateString("in")}
+          />
+        )}
       </StatusTable>
       <Link to="/digit-ui/citizen">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />

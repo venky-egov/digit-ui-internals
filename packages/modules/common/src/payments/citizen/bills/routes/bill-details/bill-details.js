@@ -20,7 +20,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const getBillingPeriod = () => {
     let from = new Date(billDetails.fromPeriod).getFullYear().toString();
     let to = new Date(billDetails.toPeriod).getFullYear().toString();
-    return "FY " + from + "~" + to;
+    return "FY " + from + "-" + to;
   };
 
   const getBillBreakDown = () => billDetails?.billAccountDetails || [];
@@ -61,8 +61,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
 
   const onChangeAmount = (value) => {
     setError("");
-    if (value.includes(".")) {
-      setError("CS_PAYMENT_NO_FRACTIONAL_PAYMENT_ALLOWED");
+    if (isNaN(value) || value.includes(".")) {
+      setError("AMOUNT_INVALID");
     }
     setAmount(value);
   };
@@ -100,7 +100,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
             )}
             {<span className="card-label-error">{t(formError)}</span>}
           </div>
-          <SubmitBar disabled={!paymentAllowed} onSubmit={onSubmit} label={t("CS_COMMON_PAY")} />
+          <SubmitBar disabled={!paymentAllowed} onSubmit={onSubmit} label={t("CS_COMMON_PROCEED_TO_PAY")} />
         </div>
       </Card>
     </React.Fragment>

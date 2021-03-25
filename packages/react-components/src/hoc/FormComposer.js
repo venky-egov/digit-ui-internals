@@ -116,6 +116,11 @@ export const FormComposer = (props) => {
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
                     )}
+                    {field?.description && (
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert", fontSize: "16px", fontWeight: "bold", color: "#505A5F" }}>
+                        {t(field.description)}
+                      </CardLabel>
+                    )}
                     {errors && errors[field.populators.name] && Object.keys(errors[field.populators.name]).length ? (
                       <CardLabelError>{field.populators.error}</CardLabelError>
                     ) : null}

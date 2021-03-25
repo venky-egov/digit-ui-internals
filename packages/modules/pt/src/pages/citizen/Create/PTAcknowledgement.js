@@ -1,4 +1,4 @@
-import { Banner, Card, CardText, LinkButton, Loader,StatusTable,Row, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -6,14 +6,14 @@ import getPTAcknowledgementData from "../../../getPTAcknowledgementData";
 
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
-  if(props.isSuccess){
+  if (props.isSuccess) {
     return t("CS_PROPERTY_APPLICATION_SUCCESS");
-  }else if(props.isLoading){
+  } else if (props.isLoading) {
     return t("CS_PROPERTY_APPLICATION_PENDING");
-  }else if(!props.isSuccess){
+  } else if (!props.isSuccess) {
     return t("CS_PROPERTY_APPLICATION_FAILED");
   }
- 
+
 };
 
 const rowContainerStyle = {
@@ -44,10 +44,10 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
       const loc = address?.locality.code;
       const formdata = {
         Property: {
-          tenantId: address?.city?.code||'pb.amritsar',
+          tenantId: address?.city?.code || 'pb.amritsar',
           address: {
-            pincode:address?.pincode,
-            landmark:address?.landmark,
+            pincode: address?.pincode,
+            landmark: address?.landmark,
             city: address?.city?.name,
             doorNo: address?.doorNo,
             buildingName: "NA",
@@ -74,13 +74,13 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
           noOfFloors: 1,
           ownershipCategory: "INDIVIDUAL.SINGLEOWNER",
           owners: owners && owners.map((owners, index) => ({
-            name: owners?.name||'Ajit',
-            mobileNumber: owners?.mobileNumber||"9965664222",
+            name: owners?.name || 'Ajit',
+            mobileNumber: owners?.mobileNumber || "9965664222",
             fatherOrHusbandName: owners?.fatherOrHusbandName,
             emailId: null,
             permanentAddress: owners?.permanentAddress,
             relationship: owners?.relationship?.code,
-            ownerType: owners?.ownerType?.code||'NONE',
+            ownerType: owners?.ownerType?.code || 'NONE',
             gender: owners?.gender?.value,
             isCorrespondenceAddress: null,
           })) || [{
@@ -172,13 +172,13 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
           className="w-full"
         />
       )}
-            <StatusTable>
- 
-        {mutation.isSuccess &&(
-            <Row rowContainerStyle={rowContainerStyle} last label={t("PT_COMMON_TABLE_COL_PT_ID")} text={props.data?.Properties[0].propertyId} />
+      <StatusTable>
+
+        {mutation.isSuccess && (
+          <Row rowContainerStyle={rowContainerStyle} last label={t("PT_COMMON_TABLE_COL_PT_ID")} text={mutation?.data?.Properties[0]?.propertyId} />
         )}
 
-       
+
       </StatusTable>
       <Link to={`/digit-ui/citizen`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />

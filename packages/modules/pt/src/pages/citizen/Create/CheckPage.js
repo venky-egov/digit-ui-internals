@@ -130,17 +130,17 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         />
         <Row
           label={t("PT_PROPERTY_RENTED_AREA_LABEL")}
-          text="120 sq.ft"
+          text={`${t(units["s"]?.RentArea)}sq.ft`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/rental-details" />}
         />
         <Row
           label={t("PT_PROPERTY_ANNUAL_RENT_LABEL")}
-          text="12000 sq.ft"
+          text={`${t(units["s"]?.AnnualRent)}sq.ft`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/rental-details" />}
         />
         <Row
           label={t("PT_PROPERTY_UNOCCUPIED_AREA_LABEL")}
-          text={`${t(UnOccupiedArea?.landmark)}sq.ft`}
+          text={`${t(units["a"]?.UnOccupiedArea)}sq.ft`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/new-application/un-occupied-area" />}
         />
       </StatusTable>

@@ -21,7 +21,7 @@ const useApplicationStatus = (select, isEnabled = true) => {
     const response = WorkflowService.BusinessServices[0].states
       .filter((state) => state.applicationStatus)
       .filter((status) => {
-        if (status.actions === null) return 1;
+        if (status.actions === null) return 0;
         const ref = status.actions.reduce((prev, curr) => [...prev, ...curr.roles], []);
         const res = [userRoles, ref].reduce((a, c) => a.filter((i) => c.includes(i)));
         return res.length;

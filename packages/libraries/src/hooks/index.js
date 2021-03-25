@@ -4,7 +4,13 @@ import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
 import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
-import { useFetchPayment, usePaymentUpdate, useFetchCitizenBillsForBuissnessService, useGetPaymentRulesForBusinessServices } from "./payment";
+import {
+  useFetchPayment,
+  usePaymentUpdate,
+  useFetchCitizenBillsForBuissnessService,
+  useGetPaymentRulesForBusinessServices,
+  useDemandSearch,
+} from "./payment";
 import { useUserSearch } from "./userSearch";
 import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBillSearch";
 
@@ -107,6 +113,7 @@ const Hooks = {
   useCoreData,
   useUserSearch,
   useApplicationsForBusinessServiceSearch,
+  useDemandSearch,
   pgr,
   fsm,
   pt,

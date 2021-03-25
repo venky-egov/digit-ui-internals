@@ -50,7 +50,7 @@ export const SelectPaymentType = (props) => {
           tenantId: tenantId,
         },
         // success
-        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}`,
+        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}`,
         additionalDetails: {
           isWhatsapp: false,
         },

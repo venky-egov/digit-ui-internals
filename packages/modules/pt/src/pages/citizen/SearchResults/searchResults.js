@@ -31,7 +31,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel }) => {
   }
 
   const onSubmit = (data) => {
-    if (parseFloat(data?.total_due)) history.push(`/digit-ui/citizen/payment/my-bills/PT/${data.property_id}`, { tenantId });
+    history.push(`/digit-ui/citizen/payment/my-bills/PT/${data.property_id}`, { tenantId });
   };
 
   const payment = {};
@@ -55,7 +55,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel }) => {
         .filter((a) => a)
         .join(", "),
       total_due: payment[property?.propertyId]?.total_due || 0,
-      bil_due__date: payment[property?.propertyId]?.bil_due__date || t("PT_NO_DEMAND_FOUND"),
+      bil_due__date: payment[property?.propertyId]?.bil_due__date || t("N/A"),
     };
   });
 

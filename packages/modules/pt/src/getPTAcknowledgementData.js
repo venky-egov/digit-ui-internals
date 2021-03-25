@@ -7,7 +7,7 @@ const getPTAcknowledgementData = (application, tenantInfo, t) => {
   return {
     t: t,
     tenantId: tenantInfo?.code,
-    name: `${t(tenantInfo?.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`,
+    name: `${t(tenantInfo?.i18nKey)} ${ulbCamel(t(`ULBGRADE_${tenantInfo?.city?.ulbGrade.toUpperCase().replace(" ", "_").replace(".", "_")}`))}`,
     email: tenantInfo?.emailId,
     phoneNumber: tenantInfo?.contactNumber,
     heading: t("PT_ACKNOWLEDGEMENT"),
@@ -65,11 +65,15 @@ const getPTAcknowledgementData = (application, tenantInfo, t) => {
       },
       {
         title: t("PT_COMMON_DOCS"),
-        values: application.documents.length > 0 ?
-          application.documents.map(document => {
-            return { title: t(document?.documentType || "N/A"), value:document?.documentUid&& getFixedFilename(document.documentUid )|| "N/A" }
-          }) : 'NA'
-
+        values:
+          application.documents.length > 0
+            ? application.documents.map((document) => {
+                return {
+                  title: t(document?.documentType || "N/A"),
+                  value: (document?.documentUid && getFixedFilename(document.documentUid)) || "N/A",
+                };
+              })
+            : "NA",
       },
     ],
   };

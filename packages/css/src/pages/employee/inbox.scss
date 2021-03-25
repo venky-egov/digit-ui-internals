@@ -36,6 +36,13 @@
   }
 }
 
+.filter-button {
+  @apply text-primary-main;
+  &:hover {
+    @apply text-primary-dark cursor-pointer;
+  }
+}
+
 .employeeCard-info-box {
   @apply flex justify-end ml-md;
   background-color: #fafafa;
@@ -114,6 +121,10 @@
 }
 .button-clear {
   @apply text-focus text-body-s-dt;
+}
+
+.inbox-count {
+  @apply inline ml-sm p-sm bg-primary-main rounded-full text-white text-heading-s align-middle text-center;
 }
 
 @screen dt {

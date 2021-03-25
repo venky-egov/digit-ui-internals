@@ -32,8 +32,6 @@ import PropertyInformation from "./pages/citizen/MyProperties/propertyInformatio
 import PTWFCaption from "./pageComponents/PTWFCaption";
 import PTWFReason from "./pageComponents/PTWFReason";
 
-
-
 const componentsToRegister = {
   PropertyTax,
   PTSelectPincode,

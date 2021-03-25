@@ -1,11 +1,7 @@
-
-
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
 
-
 const getPTAcknowledgementData = (application, tenantInfo, t) => {
-
   return {
     t: t,
     tenantId: tenantInfo?.code,
@@ -67,10 +63,12 @@ const getPTAcknowledgementData = (application, tenantInfo, t) => {
       },
       {
         title: t("PT_COMMON_DOCS"),
-        values: application.documents.length > 0 ?
-          application.documents.map(document => {
-            return { title: t(document?.documentType || "N/A"), value: document?.documentName || "N/A" }
-          }) : 'NA'
+        values:
+          application.documents.length > 0
+            ? application.documents.map((document) => {
+                return { title: t(document?.documentType || "N/A"), value: document?.documentName || "N/A" };
+              })
+            : "NA",
       },
     ],
   };

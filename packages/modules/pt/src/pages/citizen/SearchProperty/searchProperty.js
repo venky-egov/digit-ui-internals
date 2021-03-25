@@ -64,6 +64,7 @@ const SearchProperty = ({ config: propsConfig, t }) => {
       heading={propsConfig.texts.header}
       description={propsConfig.texts.description}
       cardStyle={{ margin: "auto" }}
+      headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
     ></FormComposer>
   );
 };

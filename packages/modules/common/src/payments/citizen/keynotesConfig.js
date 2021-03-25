@@ -26,6 +26,18 @@ export const getKeyNotesConfig = (businessService) => {
             keyPath: ["address", "locality", "name"],
             fallback: "CS_APPLICATION_TYPE_DESLUDGING",
           },
+          {
+            keyValue: "PT_DUE_DATE",
+            keyPath: [
+              "billDetails",
+              (d) => {
+                if (!d[0]?.toPeriod) return "N/A";
+                const date = new Date(d[0]?.toPeriod);
+                return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+              },
+            ],
+            fallback: "N/A",
+          },
         ],
         response: [],
       };

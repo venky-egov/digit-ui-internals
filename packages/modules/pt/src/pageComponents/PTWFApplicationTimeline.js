@@ -1,10 +1,4 @@
-import {
-  ActionLinks,
-  CardSectionHeader,
-  CheckPoint, ConnectingCheckPoints,
-  Loader,
-  SubmitBar
-} from "@egovernments/digit-ui-react-components";
+import { ActionLinks, CardSectionHeader, CheckPoint, ConnectingCheckPoints, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -12,7 +6,7 @@ import PTWFCaption from "./PTWFCaption";
 
 const PTWFApplicationTimeline = (props) => {
   const { t } = useTranslation();
-  const businessService=props.application?.creationReason && `PT.${props.application.creationReason}` || 'PT.CREATE';
+  const businessService = (props.application?.creationReason && `PT.${props.application.creationReason}`) || "PT.CREATE";
   const { isLoading, data } = Digit.Hooks.useWorkflowDetails({
     tenantId: props.application?.tenantId,
     id: props.id,
@@ -63,10 +57,8 @@ const PTWFApplicationTimeline = (props) => {
       };
       return <PTWFCaption data={caption} />;
     } else if (checkpoint.status === "ACTIVE") {
-    
       return (
         <div>
-        
           <Link to={`/digit-ui/citizen/pt/property/properties/${props?.application?.propertyId}`}>
             <ActionLinks>{t("PT_VIEW_PROPERTY_DETAILS")}</ActionLinks>
           </Link>
@@ -119,7 +111,11 @@ const PTWFApplicationTimeline = (props) => {
             </CardSectionHeader>
           )}
           {data?.timeline && data?.timeline?.length === 1 ? (
-            <CheckPoint isCompleted={true} label={t(data?.timeline[0]?.state&&`WF_${businessService}_${data.timeline[0].state}` ||'NA')} customChild={getTimelineCaptions(data?.timeline[0])} />
+            <CheckPoint
+              isCompleted={true}
+              label={t((data?.timeline[0]?.state && `WF_${businessService}_${data.timeline[0].state}`) || "NA")}
+              customChild={getTimelineCaptions(data?.timeline[0])}
+            />
           ) : (
             <ConnectingCheckPoints>
               {data?.timeline &&
@@ -129,7 +125,7 @@ const PTWFApplicationTimeline = (props) => {
                       <CheckPoint
                         keyValue={index}
                         isCompleted={index === 0}
-                        label={t(checkpoint.state&&`WF_${businessService}_${checkpoint.state}` ||'NA')}
+                        label={t((checkpoint.state && `WF_${businessService}_${checkpoint.state}`) || "NA")}
                         customChild={getTimelineCaptions(checkpoint)}
                       />
                     </React.Fragment>

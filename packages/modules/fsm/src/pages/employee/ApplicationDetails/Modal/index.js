@@ -134,6 +134,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   //   setToastError({ label: errorMsg, error: true });
   // }
 
+  function addCommentToWorkflow(state, workflow, data) {
+    workflow.comments = data.comments ? state.code + "~" + data.comments : state.code;
+  }
+
   function submit(data) {
     // console.log("find submit here",data);
     const workflow = { action: action };
@@ -145,15 +149,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.date) applicationData.possibleServiceDate = new Date(`${data.date}`).getTime();
     if (data.desluged) applicationData.completedOn = new Date(data.desluged).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
-    if (data.comments)
-      applicationData.additionalDetails.comments = {
-        ...applicationData.additionalDetails.comments,
-        [action]: data.comments,
-      };
-    if (reassignReason) workflow.comments = reassignReason.code;
-    if (rejectionReason) workflow.comments = rejectionReason.code;
-    if (declineReason) workflow.comments = declineReason.code;
-    if (cancelReason) workflow.comments = cancelReason.code;
+    if (reassignReason) addCommentToWorkflow(reassignReason, workflow, data);
+    if (rejectionReason) addCommentToWorkflow(rejectionReason, workflow, data);
+    if (declineReason) addCommentToWorkflow(declineReason, workflow, data);
+    if (cancelReason) addCommentToWorkflow(cancelReason, workflow, data);
+
     // console.log("find fsm update object here",{ fsm: applicationData, workflow });
     submitAction({ fsm: applicationData, workflow });
   }

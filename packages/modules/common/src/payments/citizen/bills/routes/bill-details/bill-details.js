@@ -12,6 +12,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || Digit.UserService.getUser().info.tenantId;
   const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService: "PT", consumerCode });
+  const { minAmountPayable, isAdvanceAllowed } = paymentRules;
 
   const billDetails = (bill?.billDetails.length && bill?.billDetails[0]) || [];
 
@@ -45,7 +46,6 @@ const BillDetails = ({ paymentRules, businessService }) => {
   }, [paymentType, bill]);
 
   useEffect(() => {
-    const { minAmountPayable, isAdvanceAllowed } = paymentRules;
     const allowPayment = minAmountPayable && amount >= minAmountPayable && !isAdvanceAllowed && amount <= getTotal() && !formError;
     if (paymentType != t("CS_PAYMENT_FULL_AMOUNT")) setPaymentAllowed(allowPayment);
     else setPaymentAllowed(true);
@@ -67,6 +67,10 @@ const BillDetails = ({ paymentRules, businessService }) => {
     setError("");
     if (isNaN(value) || value.includes(".")) {
       setError("AMOUNT_INVALID");
+    } else if (!isAdvanceAllowed && value > getTotal()) {
+      setError("CS_ADVANCED_PAYMENT_NOT_ALLOWED");
+    } else if (value < minAmountPayable) {
+      setError("CS_CANT_PAY_BELOW_MIN_AMOUNT");
     }
     setAmount(value);
   };
@@ -102,7 +106,13 @@ const BillDetails = ({ paymentRules, businessService }) => {
             ) : (
               <TextInput className="text-indent-xl" value={getTotal()} onChange={() => {}} disable={true} />
             )}
-            {<span className="card-label-error">{t(formError)}</span>}
+            {formError === "CS_CANT_PAY_BELOW_MIN_AMOUNT" ? (
+              <span className="card-label-error">
+                {t(formError)}: {minAmountPayable}
+              </span>
+            ) : (
+              <span className="card-label-error">{t(formError)}</span>
+            )}
           </div>
           <SubmitBar disabled={!paymentAllowed || getTotal() == 0} onSubmit={onSubmit} label={t("CS_COMMON_PROCEED_TO_PAY")} />
         </div>

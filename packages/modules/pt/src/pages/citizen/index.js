@@ -13,8 +13,9 @@ import SearchResultsComponent from "./SearchResults";
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
   return (
+    <span className={"pt-citizen"}>
     <Switch>
-      <AppContainer>
+      <AppContainer >
         <BackButton>Back</BackButton>
         <PrivateRoute path={`${path}/property/new-application`} component={CreateProperty} />
         <PrivateRoute path={`${path}/property/search`} component={SearchPropertyComponent} />
@@ -28,6 +29,7 @@ const App = () => {
         {/* <Redirect to={`${path}/property/my-applications`}></Redirect> */}
       </AppContainer>
     </Switch>
+    </span>
   );
 };
 

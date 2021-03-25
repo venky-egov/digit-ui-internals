@@ -1,4 +1,4 @@
-import { Card, Header, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, CardText, Header, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -14,7 +14,7 @@ export const MyProperties = () => {
     return <Loader />;
   }
 
-  const { Properties: applicationsList } = data;
+  const { Properties: applicationsList } = data || {};
 
   return (
     <React.Fragment>
@@ -25,11 +25,13 @@ export const MyProperties = () => {
             <MyProperty application={application} />
           </div>
         ))}
-      <Card>
-        <Link to={`/digit-ui/citizen/pt/property/new-application/info`}>
-          <SubmitBar label={t("PT_ADD_NEW_PROPERTY")} />
-        </Link>
-      </Card>
+      {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_PROP_FOUND_MSG")}</p>}
+      <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+        {t("PT_TEXT_NOT_ABLE_TO_FIND_THE_PROPERTY")}{" "}
+        <span className="link">
+          <Link to="/digit-ui/citizen/pt/property/new-application/info">{t("PT_COMMON_CLICK_HERE")}</Link>
+        </span>
+      </p>
     </React.Fragment>
   );
 };

@@ -5,15 +5,22 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import getPTAcknowledgementData from "../../../getPTAcknowledgementData";
 
-const GetActionMessage = () => {
+const GetActionMessage = (props) => {
   const { t } = useTranslation();
-  return t("CS_PROPERTY_APPLICATION_SUCCESS");
+  if(props.isSuccess){
+    return t("CS_PROPERTY_APPLICATION_SUCCESS");
+  }else if(props.isLoading){
+    return t("CS_PROPERTY_APPLICATION_PENDING");
+  }else if(!props.isSuccess){
+    return t("CS_PROPERTY_APPLICATION_FAILED");
+  }
+ 
 };
 
 const BannerPicker = (props) => {
   return (
     <Banner
-      message={GetActionMessage()}
+      message={GetActionMessage(props)}
       applicationNumber={props.data?.Properties[0].acknowldgementNumber}
       info={props.t("PT_APPLICATION_NO")}
       successful={props.isSuccess}
@@ -33,14 +40,16 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
       const loc = address?.locality.code;
       const formdata = {
         Property: {
-          tenantId: address?.city.code,
+          tenantId: address?.city?.code||'pb.amritsar',
           address: {
-            city: address?.city.name,
+            pincode:address?.pincode,
+            landmark:address?.landmark,
+            city: address?.city?.name,
             doorNo: address?.doorNo,
             buildingName: "NA",
             locality: {
               code: loc && loc.split("_").length == 4 ? loc.split("_")[3] : "NA",
-              area: address?.locality.name,
+              area: address?.locality?.name,
             },
           },
           usageCategoryMinor: null,
@@ -51,7 +60,7 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
               constructionDetail: {
                 builtUpArea: 16.67,
               },
-              tenantId: address?.city.code,
+              tenantId: address?.city?.code,
               usageCategory: "RESIDENTIAL",
             },
           ],

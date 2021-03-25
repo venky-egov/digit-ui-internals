@@ -88,7 +88,7 @@ export const SuccessfulPayment = (props) => {
   };
 
   const getBillingPeriod = (billDetails) => {
-    const { taxPeriodFrom, taxPeriodTo } = billDetails;
+    const { taxPeriodFrom, taxPeriodTo } = billDetails || {};
     if (taxPeriodFrom && taxPeriodTo) {
       let from = new Date(taxPeriodFrom).getFullYear().toString();
       let to = new Date(taxPeriodTo).getFullYear().toString();

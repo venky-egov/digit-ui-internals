@@ -13,7 +13,7 @@ const PropertyType = ({ t, config, onSelect, userType, formData }) => {
       i18nKey: "PROPERTYTAX_BILLING_SLAB_SHAREDPROPERTY",
     },
     {
-      i18nKey: "PROPERTYTAX_BILLING_SLAB_VACANT",
+      i18nKey: "COMMON_PROPTYPE_VACANT",
     },
   ];
   

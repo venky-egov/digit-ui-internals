@@ -116,17 +116,22 @@
   }
 
   color: #f47738;
-  &:hover {
-    color: #000;
-
-    svg {
-      fill: #000;
-    }
-  }
 
   cursor: pointer;
   font-weight: 500;
   width: fit-content;
+}
+
+@media (hover: hover) {
+  .primary-label-btn {
+    &:hover {
+      color: #000;
+  
+      svg {
+        fill: #000;
+      }
+    }
+  }
 }
 
 .disabled {

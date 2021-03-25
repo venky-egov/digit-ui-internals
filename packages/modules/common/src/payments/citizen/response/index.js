@@ -51,7 +51,7 @@ export const SuccessfulPayment = (props) => {
         <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
 
         {business_service !== "PT" ? (
-          <Link to={`digit-ui/citizen`}>
+          <Link to={`/digit-ui/citizen`}>
             <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
           </Link>
         ) : (
@@ -60,7 +60,7 @@ export const SuccessfulPayment = (props) => {
               <SubmitBar label={t("CS_PAYMENT_TRY_AGAIN")} />
             </Link>
             <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
-              <Link to={`digit-ui/citizen`}>{t("CORE_COMMON_GO_TO_HOME")}</Link>
+              <Link to={`/digit-ui/citizen`}>{t("CORE_COMMON_GO_TO_HOME")}</Link>
             </div>
           </React.Fragment>
         )}

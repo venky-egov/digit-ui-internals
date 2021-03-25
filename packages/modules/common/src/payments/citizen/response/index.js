@@ -48,6 +48,8 @@ export const SuccessfulPayment = (props) => {
 
   const applicationNo = data?.applicationNo;
 
+  const isMobile = window.Digit.Utils.browser.isMobile();
+
   if (isError || !payments || !payments.Payments || payments.Payments.length === 0 || data.txnStatus === "FAILURE") {
     return (
       <Card>
@@ -58,9 +60,14 @@ export const SuccessfulPayment = (props) => {
             <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
           </Link>
         ) : (
-          <Link to={(applicationNo && `/digit-ui/citizen/payment/my-bills/${business_service}/${applicationNo}`) || "/digit-ui/citizen"}>
-            <SubmitBar label={t("CS_PAYMENT_TRY_AGAIN")} />
-          </Link>
+          <React.Fragment>
+            <Link to={(applicationNo && `/digit-ui/citizen/payment/my-bills/${business_service}/${applicationNo}`) || "/digit-ui/citizen"}>
+              <SubmitBar label={t("CS_PAYMENT_TRY_AGAIN")} />
+            </Link>
+            <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
+              <Link to={`digit-ui/citizen`}>{t("CORE_COMMON_GO_TO_HOME")}</Link>
+            </div>
+          </React.Fragment>
         )}
       </Card>
     );
@@ -101,6 +108,11 @@ export const SuccessfulPayment = (props) => {
 
   // if (billDataLoading) return <Loader />;
 
+  const rowContainerStyle = {
+    padding: "4px 0px",
+    justifyContent: "space-between",
+  };
+
   return (
     <Card>
       <Banner
@@ -120,7 +132,7 @@ export const SuccessfulPayment = (props) => {
         </div>
       </React.Fragment>
       <StatusTable>
-        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t(label)} text={applicationNo} />
+        <Row rowContainerStyle={rowContainerStyle} last label={t(label)} text={applicationNo} />
         {/** TODO : move this key and value into the hook based on business Service */}
         {/* {business_service === "PT" && (
           <Row
@@ -135,8 +147,8 @@ export const SuccessfulPayment = (props) => {
           <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PENDING")} text={billData?.Bill[0]?.totalAmount} />
         )} */}
 
-        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
-        <Row rowContainerStyle={{ padding: "4px 10px" }} last label={t("CS_PAYMENT_AMOUNT_PAID")} text={amount} />
+        <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
+        <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_AMOUNT_PAID")} text={amount} />
         {business_service !== "PT" && (
           <Row
             rowContainerStyle={{ padding: "4px 10px" }}

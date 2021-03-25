@@ -49,3 +49,10 @@ export const usePaymentUpdate = ({ egId }, businessService) => {
 export const useGetPaymentRulesForBusinessServices = (tenantId) => {
   return useQuery(["getPaymentRules", tenantId], () => Digit.MDMSService.getPaymentRules(tenantId));
 };
+
+export const useDemandSearch = ({ consumerCode, businessService, tenantId }, config = {}) => {
+  if (!tenantId) tenantId = Digit.ULBService.getCurrentTenantId();
+  const queryFn = () => Digit.PaymentService.demandSearch(tenantId, consumerCode, businessService);
+  const queryData = useQuery(["demand_search", { consumerCode, businessService, tenantId }], queryFn, { refetchOnMount: "always", ...config });
+  return queryData;
+};

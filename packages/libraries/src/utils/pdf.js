@@ -20,6 +20,7 @@ function getBase64Image(tenantId) {
 const defaultLogo =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABBtJREFUWAntV11oVEcUnjN3mzXm111toQ8lWOtLTbIG0YgpMdQ05CEv0iTU1hhR7EMRWYuKSkteVExJBRGkpaUk0ChRSYtpKam4sbE0ia7RSNaS0uIfWtT4E8Xs5u7O8Vy7c3f27t2fh4W+ZF7OmfN9c86Ze2bOvZex/3mAGv/RIU9xJCL2IWIdAS7C/Nyhtbm8l39XeVKfOrLcHZoOHmCA7zJkC6VdSmAQRoYBAHbCXZBzED726xKT0kwgGnyUgpdI0JBEEMD4B+4dV3pU+9Mvyl4NMTZKAV5X7cl0APC5P127BqBNqBwuJ5Gw2G8NbmDIGEcQR+9/u6pAcg0ZYtiRaXCDT75rHnT0bjF0dZgJkLP3VEDVEakcj58ti7MBJOWrPFUHJurUuaGbCVCd5llBdQ4Yw7GnUaM9Fal4JjptJCGGmQA964upnPBXHCYOTSciDMGcp1qnYpzBBXVu6LEEGHxOByViJURJX7m2+W+qmKax3cn4Kk/qdJgnnXOdHXIupZnA/B1jw5TP+wzgngSpLEhX6ahLy/dKm5Su7WODBK4l/I60JZPkJ0DcuvxPLvxr5ZjXUAL45crchxD00A12OR3apTyv/67E7CQerndOztwto9uymPI1N2RwOcMwgBYorigah5qBsN36WVtCCZI9kqqu8Td0DG2mhlJKdb8JGvQOrV86YMevPDZagjpuQoFLqPY3gDtOjawvH7TjZpRAZeelesHwON3jQtUJtej2kdalu1RbZZe/QSB0U6L5ph0AObB9wy0Vn5m2qJI2geWd19yI09eo8SywLjbmdMgaRjZ4+gx9RffV13BGD1BXNV5kCYMzrW641dOvAnGnVgVMHYLUPu2DGxxk4iPJFeFwfbLgL7lcfCi5UqZNgK7WIkm2k4AxHARLyaUSJuBpE6AtBuwCmzaAGM5Tc6neMW7UQdoEcnOdv9Cpv24GjFNAAPCvpalwTuFP1J5vy7kqqRtGOGjfqDZDT5vAQNPbzzTgzQmOAWZotXe4xXNeOj3T9OYTjUMzHU1Le4YQImwdaimndh8/0t4CSV/T83fR1PRUI9W8lALc4jla3x/ryv6UuCqrvh+bp+t6IwL81weQn6abMqFyZnX5BDIugVyQifT52hxD7HyVAFFKb8nreVg46K354bHd2qwn0H6u9i0dI9S2scIMSN8YHHDjnmrfz6YtqmQ1gZ7xxpyJ+5MX6ROYDqplADzPAc2zs/rXv1Qk7TVUyen0iclHDbbBjYWIc3UR3mb1kdUEQGC5NYA6p1dzAp7VBKjulgakhjf+sqwNKoNOGO8i9Uxz8H6KEkzKAvzRimX1Cex+58w/9O2/nT4S4v7/jKDUyo/vrfZ1WxPI6i2Qzvf/VrtKRMJbKewSeiI3aJcn96w++53EVfkCw79XQZYr/EsAAAAASUVORK5CYII=";
 const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
+  const emailLeftMargin = email.length <= 15 ? 170 : email.length <= 20 ? 140 : email.length <= 25 ? 110 : email.length <= 30 ? 80 : 40;
   const dd = {
     pageMargins: [40, 80, 40, 30],
     header: {
@@ -37,7 +38,7 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
         },
         {
           text: email,
-          margin: [165, 25, 0, 25],
+          margin: [emailLeftMargin, 25, 0, 25],
           fontSize: 11,
           color: "#464747",
         },
@@ -45,7 +46,7 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
           text: phoneNumber,
           color: "#6f777c",
           fontSize: 11,
-          margin: [-70, 45, 0, 25],
+          margin: [-65, 45, 0, 25],
         },
       ],
     },

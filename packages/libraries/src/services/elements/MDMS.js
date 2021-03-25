@@ -175,12 +175,12 @@ const getCommonFieldsCriteria = (tenantId, moduleCode, type) => ({
         masterDetails: [
           {
             name: "CommonFieldsConfig",
-            filter: null
-          }
-        ]
-      }
-    ]
-  }
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
 });
 
 const getPreFieldsCriteria = (tenantId, moduleCode, type) => ({
@@ -193,12 +193,12 @@ const getPreFieldsCriteria = (tenantId, moduleCode, type) => ({
         masterDetails: [
           {
             name: "PreFieldsConfig",
-            filter: null
-          }
-        ]
-      }
-    ]
-  }
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
 });
 
 const getPostFieldsCriteria = (tenantId, moduleCode, type) => ({
@@ -211,12 +211,12 @@ const getPostFieldsCriteria = (tenantId, moduleCode, type) => ({
         masterDetails: [
           {
             name: "PostFieldsConfig",
-            filter: null
-          }
-        ]
-      }
-    ]
-  }
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
 });
 
 const getConfig = (tenantId, moduleCode) => ({
@@ -312,6 +312,24 @@ const getBillingServiceForBusinessServiceCriteria = () => ({
   ],
 });
 
+const getRoleStatusCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "RoleStatusMapping",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -394,6 +412,7 @@ const GetReasonType = (MdmsRes, type, moduleCode) =>
     }))
   );
 
+const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
 const GetCommonFields = (MdmsRes) => MdmsRes["FSM"].CommonFieldsConfig;
 
 const GetPreFields = (MdmsRes) => MdmsRes["FSM"].PreFieldsConfig;
@@ -424,8 +443,10 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetSlumLocalityMapping(MdmsRes);
     case "Reason":
       return GetReasonType(MdmsRes, type, moduleCode);
+    case "RoleStatusMapping":
+      return GetRoleStatusMapping(MdmsRes);
     case "CommonFieldsConfig":
-      return GetCommonFields(MdmsRes)
+      return GetCommonFields(MdmsRes);
     case "PreFieldsConfig":
       return GetPreFields(MdmsRes);
     case "PostFieldsConfig":
@@ -496,13 +517,16 @@ export const MdmsService = {
 
   getReason: (tenantId, moduleCode, type, payload) =>
     MdmsService.getDataByCriteria(tenantId, getReasonCriteria(tenantId, moduleCode, type, payload), moduleCode),
-  
+
+  getRoleStatus: (tenantId, moduleCode, type) =>
+    MdmsService.getDataByCriteria(tenantId, getRoleStatusCriteria(tenantId, moduleCode, type), moduleCode),
+
   getCommonFieldsConfig: (tenantId, moduleCode, type, payload) =>
     MdmsService.getDataByCriteria(tenantId, getCommonFieldsCriteria(tenantId, moduleCode, type, payload), moduleCode),
 
   getPreFieldsConfig: (tenantId, moduleCode, type, payload) =>
     MdmsService.getDataByCriteria(tenantId, getPreFieldsCriteria(tenantId, moduleCode, type, payload), moduleCode),
-  
+
   getPostFieldsConfig: (tenantId, moduleCode, type, payload) =>
     MdmsService.getDataByCriteria(tenantId, getPostFieldsCriteria(tenantId, moduleCode, type, payload), moduleCode),
 };

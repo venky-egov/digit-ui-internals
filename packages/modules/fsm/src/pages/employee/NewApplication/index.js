@@ -131,9 +131,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   if (isLoading || isTripConfigLoading || isApplicantConfigLoading) {
-    return (
-      <Loader />
-    )
+    return <Loader />;
   }
 
   const configs = [...preFields, ...commonFields, ...postFields];

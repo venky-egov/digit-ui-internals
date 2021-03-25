@@ -46,17 +46,20 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("CANCELLATION_REASON", () => MdmsService.getReason(tenantId, moduleCode, type, payload));
   };
 
+  const useRoleStatusMapping = () => {
+    return useQuery("ROLE_STATUS_MAPPING", () => MdmsService.getRoleStatus(tenantId, moduleCode, type));
+  };
   const useCommonFieldsConfig = () => {
     return useQuery("COMMON_FIELDS", () => MdmsService.getCommonFieldsConfig(tenantId, moduleCode, type, payload));
-  }
+  };
 
   const usePreFieldsConfig = () => {
     return useQuery("PRE_FIELDS", () => MdmsService.getPreFieldsConfig(tenantId, moduleCode, type, payload));
-  }
+  };
 
   const usePostFieldsConfig = () => {
-    return useQuery("POST_FIELDS", () => MdmsService.getPostFieldsConfig(tenantId, moduleCode, type, payload))
-  }
+    return useQuery("POST_FIELDS", () => MdmsService.getPostFieldsConfig(tenantId, moduleCode, type, payload));
+  };
 
   switch (type) {
     case "SanitationType":
@@ -88,7 +91,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
 
     case "Reason":
       return useReason();
-    
+
+    case "RoleStatusMapping":
+      return useRoleStatusMapping();
+
     case "CommonFieldsConfig":
       return useCommonFieldsConfig();
     case "PreFieldsConfig":

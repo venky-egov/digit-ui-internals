@@ -176,9 +176,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   };
 
   if (isLoading || isTripConfigLoading || isApplicantConfigLoading) {
-    return (
-      <Loader />
-    )
+    return <Loader />;
   }
 
   const configs = [...preFields, ...commonFields, ...postFields];

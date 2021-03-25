@@ -1,9 +1,9 @@
 import React from "react";
 import { ArrowLeft } from "./svgindex";
 import { withRouter } from "react-router-dom";
-const BackButton = ({ history }) => {
+const BackButton = ({ history, style }) => {
   return (
-    <div className="back-btn2" onClick={() => history.goBack()}>
+    <div className="back-btn2" style={style ? style : {}} onClick={() => history.goBack()}>
       <ArrowLeft />
       <p>Back</p>
     </div>

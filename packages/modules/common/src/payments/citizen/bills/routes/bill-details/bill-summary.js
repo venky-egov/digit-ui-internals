@@ -7,14 +7,16 @@ const BillSumary = ({ billAccountDetails }) => {
   return (
     <React.Fragment>
       <div className="bill-summary">
-        {billAccountDetails.map((amountDetails, index) => {
-          return (
-            <div key={index} className="bill-account-details">
-              <div className="label">{t(amountDetails.taxHeadCode)}</div>
-              <div className="value">₹ {amountDetails.amount?.toFixed(2)}</div>
-            </div>
-          );
-        })}
+        {billAccountDetails
+          .sort((a, b) => b.amount - a.amount)
+          .map((amountDetails, index) => {
+            return (
+              <div key={index} className="bill-account-details">
+                <div className="label">{t(amountDetails.taxHeadCode)}</div>
+                <div className="value">₹ {amountDetails.amount?.toFixed(2)}</div>
+              </div>
+            );
+          })}
 
         <hr className="underline" />
         <div className="amount-details">

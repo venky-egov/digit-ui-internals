@@ -4,7 +4,13 @@ import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
 import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
-import { useFetchPayment, usePaymentUpdate, useFetchCitizenBillsForBuissnessService, useGetPaymentRulesForBusinessServices } from "./payment";
+import {
+  useFetchPayment,
+  usePaymentUpdate,
+  useFetchCitizenBillsForBuissnessService,
+  useGetPaymentRulesForBusinessServices,
+  useDemandSearch,
+} from "./payment";
 import { useUserSearch } from "./userSearch";
 import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBillSearch";
 
@@ -39,6 +45,7 @@ import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
 import useApplicationAudit from "./fsm/useApplicationAudit";
 import useSearchForAuditData from "./fsm/useSearchForAudit";
+import useVehiclesSearch from "./fsm/useVehiclesSearch";
 import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
@@ -82,6 +89,7 @@ const fsm = {
   useVehicleSearch,
   useVehicleUpdate,
   useVendorDetail,
+  useVehiclesSearch,
   useConfig,
   useSlum,
 };
@@ -107,6 +115,7 @@ const Hooks = {
   useCoreData,
   useUserSearch,
   useApplicationsForBusinessServiceSearch,
+  useDemandSearch,
   pgr,
   fsm,
   pt,

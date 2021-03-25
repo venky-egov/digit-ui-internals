@@ -1,18 +1,30 @@
-import { Banner, Card, CardText, LinkButton, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import getPTAcknowledgementData from "../../../getPTAcknowledgementData";
 
-const GetActionMessage = () => {
+const GetActionMessage = (props) => {
   const { t } = useTranslation();
-  return t("CS_PROPERTY_APPLICATION_SUCCESS");
+  if (props.isSuccess) {
+    return t("CS_PROPERTY_APPLICATION_SUCCESS");
+  } else if (props.isLoading) {
+    return t("CS_PROPERTY_APPLICATION_PENDING");
+  } else if (!props.isSuccess) {
+    return t("CS_PROPERTY_APPLICATION_FAILED");
+  }
+
+};
+
+const rowContainerStyle = {
+  padding: "4px 0px",
+  justifyContent: "space-between",
 };
 
 const BannerPicker = (props) => {
   return (
     <Banner
-      message={GetActionMessage()}
+      message={GetActionMessage(props)}
       applicationNumber={props.data?.Properties[0].acknowldgementNumber}
       info={props.t("PT_APPLICATION_NO")}
       successful={props.isSuccess}
@@ -32,14 +44,16 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
       const loc = address?.locality.code;
       const formdata = {
         Property: {
-          tenantId: address?.city.code,
+          tenantId: address?.city?.code || 'pb.amritsar',
           address: {
-            city: address?.city.name,
+            pincode: address?.pincode,
+            landmark: address?.landmark,
+            city: address?.city?.name,
             doorNo: address?.doorNo,
             buildingName: "NA",
             locality: {
               code: loc && loc.split("_").length == 4 ? loc.split("_")[3] : "NA",
-              area: address?.locality.name,
+              area: address?.locality?.name,
             },
           },
           usageCategoryMinor: null,
@@ -50,7 +64,7 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
               constructionDetail: {
                 builtUpArea: 16.67,
               },
-              tenantId: address?.city.code,
+              tenantId: address?.city?.code,
               usageCategory: "RESIDENTIAL",
             },
           ],
@@ -59,30 +73,28 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
           propertyType: "BUILTUP.SHAREDPROPERTY",
           noOfFloors: 1,
           ownershipCategory: "INDIVIDUAL.SINGLEOWNER",
-          owners: (owners &&
-            owners.map((owners, index) => ({
-              name: owners?.name,
-              mobileNumber: owners?.mobileNumber,
-              fatherOrHusbandName: owners?.fatherOrHusbandName,
-              emailId: null,
-              permanentAddress: owners?.permanentAddress,
-              relationship: owners?.relationship?.code,
-              ownerType: owners?.ownerType?.code,
-              gender: owners?.gender?.value,
-              isCorrespondenceAddress: null,
-            }))) || [
-            {
-              name: "Jagan",
-              mobileNumber: "9965664222",
-              fatherOrHusbandName: "E",
-              emailId: null,
-              permanentAddress: "1111, 1111, Back Side 33 KVA Grid Patiala Road - Area1, Amritsar, ",
-              relationship: "FATHER",
-              ownerType: "FREEDOMFIGHTER",
-              gender: "MALE",
-              isCorrespondenceAddress: null,
-            },
-          ],
+          owners: owners && owners.map((owners, index) => ({
+            name: owners?.name || 'Ajit',
+            mobileNumber: owners?.mobileNumber || "9965664222",
+            fatherOrHusbandName: owners?.fatherOrHusbandName,
+            emailId: null,
+            permanentAddress: owners?.permanentAddress,
+            relationship: owners?.relationship?.code,
+            ownerType: owners?.ownerType?.code || 'NONE',
+            gender: owners?.gender?.value,
+            isCorrespondenceAddress: null,
+          })) || [{
+            "name": "Jagan",
+            "mobileNumber": "9965664222",
+            "fatherOrHusbandName": "E",
+            "emailId": null,
+            "permanentAddress": "1111, 1111, Back Side 33 KVA Grid Patiala Road - Area1, Amritsar, ",
+            "relationship": "FATHER",
+            "ownerType": "FREEDOMFIGHTER",
+            "gender": "MALE",
+            "isCorrespondenceAddress": null
+          }],
+
           additionalDetails: {
             inflammable: false,
             heightAbove36Feet: false,
@@ -93,27 +105,27 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
             {
               documentType: "OWNER.ADDRESSPROOF.WATERBILL",
               fileStoreId: "19caf3fe-a98b-4207-94cd-d2092f9f78a2",
-              documentUid: "19caf3fe-a98b-4207-94cd-d2092f9f78a2",
+              documentUid: "file1.jpg",
             },
             {
               documentType: "OWNER.IDENTITYPROOF.PAN",
               fileStoreId: "985f53c5-f09f-4d17-8fa7-5593cf1de47a",
-              documentUid: "985f53c5-f09f-4d17-8fa7-5593cf1de47a",
+              documentUid: "file.jpg",
             },
             {
               documentType: "OWNER.REGISTRATIONPROOF.GIFTDEED",
               fileStoreId: "6aaf6f3e-21fb-4e4f-8c5b-2d98eeff2709",
-              documentUid: "6aaf6f3e-21fb-4e4f-8c5b-2d98eeff2709",
+              documentUid: "doc.pdf",
             },
             {
               documentType: "OWNER.USAGEPROOF.ELECTRICITYBILL",
               fileStoreId: "858cc6b5-969c-479d-a89a-91d7319e5b07",
-              documentUid: "858cc6b5-969c-479d-a89a-91d7319e5b07",
+              documentUid: "doc.pdf",
             },
             {
               documentType: "OWNER.CONSTRUCTIONPROOF.BPACERTIFICATE",
               fileStoreId: "044616b2-7556-4903-9908-941f03ac6a70",
-              documentUid: "044616b2-7556-4903-9908-941f03ac6a70",
+              documentUid: "doc.pdf",
             },
           ],
           superBuiltUpArea: 16.67,
@@ -142,7 +154,8 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
   ) : (
     <Card>
       <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-      <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
+      {mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>}
+      {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
       {mutation.isSuccess && (
         <LinkButton
           label={
@@ -159,6 +172,14 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
           className="w-full"
         />
       )}
+      <StatusTable>
+
+        {mutation.isSuccess && (
+          <Row rowContainerStyle={rowContainerStyle} last label={t("PT_COMMON_TABLE_COL_PT_ID")} text={mutation?.data?.Properties[0]?.propertyId} />
+        )}
+
+
+      </StatusTable>
       <Link to={`/digit-ui/citizen`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

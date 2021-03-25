@@ -167,7 +167,7 @@ function TopBar(props) {
     <div className="topbar">
       <img className="city" src={cityDetails?.logoId} />
       <span className="ulb" style={mobileView ? { fontSize: "14px" } : {}}>
-        {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
+        {t(cityDetails?.i18nKey)} {t(`ULBGRADE_${cityDetails?.city?.ulbGrade.toUpperCase().replace(" ", "_").replace(".", "_")}`)}
       </span>
       <div className={mobileView ? "right" : "flex-right right w-80 column-gap-15"}>
         {!mobileView && (

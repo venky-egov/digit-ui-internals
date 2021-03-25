@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
+import { getFixedFilename } from "../../utils";
 
 const PTApplicationDetails = () => {
   const { t } = useTranslation();
@@ -30,6 +31,7 @@ const PTApplicationDetails = () => {
       <Card>
         <StatusTable>
           <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={application?.acknowldgementNumber} />
+          <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={application?.propertyId} />
           <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text="online" />
         </StatusTable>
         <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
@@ -104,8 +106,8 @@ const PTApplicationDetails = () => {
                   {t("PT_COMMON_DOCS")} - {index + 1}
                 </CardSubHeader>
                 <StatusTable>
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType).toLowerCase().split(".")[2]}`} />
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.id)}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType || 'NA')}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid && getFixedFilename(docs.documentUid, 17) || 'NA')}`} />
                 </StatusTable>
               </div>
             ))

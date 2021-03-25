@@ -15,13 +15,14 @@ import { useParams, useRouteMatch, useHistory, useLocation } from "react-router-
 
 export const SelectPaymentType = (props) => {
   const { state } = useLocation();
+  const { tenantId: __tenantId } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
   const history = useHistory();
   const { path: currentPath } = useRouteMatch();
   const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
-  const tenantId = state.tenantId || Digit.ULBService.getCurrentTenantId();
+  const tenantId = state?.tenantId || __tenantId || Digit.ULBService.getCurrentTenantId();
   const { control, handleSubmit } = useForm();
   const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
 
@@ -50,7 +51,7 @@ export const SelectPaymentType = (props) => {
           tenantId: tenantId,
         },
         // success
-        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}`,
+        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}`,
         additionalDetails: {
           isWhatsapp: false,
         },

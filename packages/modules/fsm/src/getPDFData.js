@@ -36,7 +36,7 @@ const getPDFData = (application, tenantInfo, t) => {
   return {
     t: t,
     tenantId: tenantInfo?.code,
-    name: `${t(tenantInfo?.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`,
+    name: `${t(tenantInfo?.i18nKey)} ${t(`ULBGRADE_${tenantInfo?.city?.ulbGrade.toUpperCase().replace(" ", "_").replace(".", "_")}`)}`,
     email: tenantInfo?.emailId,
     phoneNumber: tenantInfo?.contactNumber,
     heading: t("PDF_HEADER_DESLUDGING_REQUEST_ACKNOWLEDGEMENT"),

@@ -167,7 +167,8 @@ const ApplicationDetails = (props) => {
       checkpoint.status === "ASSING_DSO" ||
       checkpoint.status === "PENDING_DSO_APPROVAL" ||
       checkpoint.status === "DSO_REJECTED" ||
-      checkpoint.status === "CANCELED"
+      checkpoint.status === "CANCELED" ||
+      checkpoint.status === "REJECTED"
     ) {
       const caption = {
         date: checkpoint?.auditDetails?.created,

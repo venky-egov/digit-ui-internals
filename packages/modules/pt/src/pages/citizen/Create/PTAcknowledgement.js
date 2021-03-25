@@ -1,4 +1,3 @@
-
 import { Banner, Card, CardText, LinkButton, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -81,6 +80,7 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
             "gender": "MALE",
             "isCorrespondenceAddress": null
           }],
+
           additionalDetails: {
             inflammable: false,
             heightAbove36Feet: false,
@@ -129,7 +129,7 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
 
   const handleDownloadPdf = () => {
     const { Properties = [] } = mutation.data;
-    const Property = Properties && Properties[0] || {};
+    const Property = (Properties && Properties[0]) || {};
     const tenantInfo = coreData.tenants.find((tenant) => tenant.code === Property.tenantId);
     const data = getPTAcknowledgementData({ ...Property }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);

@@ -1,7 +1,7 @@
-import React, { useMemo, useEffect } from "react";
-import { Route, BrowserRouter as Router, Switch, useRouteMatch, useLocation, Link } from "react-router-dom";
+import React, { useMemo, useEffect, useState } from "react";
+import { Route, BrowserRouter as Router, Switch, useRouteMatch, useLocation, Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { BackButton, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { BackButton, BreadCrumb, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
 import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
@@ -38,20 +38,51 @@ import FSMCard from "./components/FsmCard";
 import { Redirect } from "react-router-dom";
 import RateView from "./pages/citizen/Rating/RateView";
 
-const EmployeeApp = ({ path, url, userType }) => {
+const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
-  const location = useLocation();
-  const mobileView = innerWidth <= 640;
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
+  const isApplicationDetails = location?.pathname?.includes("application-details");
+  const isInbox = location?.pathname?.includes("inbox");
+  const isFsm = location?.pathname?.includes("fsm");
+  const isSearch = location?.pathname?.includes("search");
+  const [search, setSearch] = useState(false);
+
+  useEffect(() => {
+    if (!search) {
+      setSearch(isSearch);
+    } else if (isInbox && search) {
+      setSearch(false);
+    }
+  }, [location]);
+
+  const crumbs = [
+    {
+      path: DSO ? "/digit-ui/citizen/fsm/dso-dashboard" : "/digit-ui/employee",
+      content: t("ES_COMMON_HOME"),
+      show: isFsm,
+    },
+    {
+      path: "/digit-ui/employee/fsm/inbox",
+      content: isInbox || isApplicationDetails || search ? t("ES_TITLE_INBOX") : "FSM",
+      show: isFsm,
+    },
+    {
+      path: "/digit-ui/employee/fsm/search",
+      content: t("ES_TITILE_SEARCH_APPLICATION"),
+      show: search,
+    },
+    { content: t("ES_TITLE_APPLICATION_DETAILS"), show: isApplicationDetails },
+  ];
+
+  return <BreadCrumb crumbs={crumbs} />;
+};
+
+const EmployeeApp = ({ path, url, userType }) => {
+  const location = useLocation();
   return (
     <Switch>
       <div className="ground-container">
-        <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
-          <Link to={DSO ? "/digit-ui/citizen/fsm/dso-dashboard" : "/digit-ui/employee"} style={{ cursor: "pointer", color: "#666" }}>
-            {t("ES_COMMON_HOME")}
-          </Link>{" "}
-          / <span>{location.pathname === "/digit-ui/employee/fsm/inbox" ? t("ES_TITLE_INBOX") : "FSM"}</span>
-        </p>
+        <FsmBreadCrumb location={location} />
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
         <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
         <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />

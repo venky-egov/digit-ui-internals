@@ -16,7 +16,7 @@ const PropertyType = ({ t, config, onSelect, userType, formData }) => {
       i18nKey: "COMMON_PROPTYPE_VACANT",
     },
   ];
-  
+
   const onSkip = () => onSelect();
 
   // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});

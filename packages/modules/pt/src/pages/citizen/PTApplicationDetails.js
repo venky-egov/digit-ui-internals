@@ -101,8 +101,8 @@ const PTApplicationDetails = () => {
                   {t("PT_COMMON_DOCS")} - {index + 1}
                 </CardSubHeader>
                 <StatusTable>
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType)}`} />
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid)}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType||'NA')}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid&&getFixedFilename(docs.documentUid,20)||'NA')}`} />
                 </StatusTable>
               </div>
             ))}

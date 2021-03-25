@@ -1,3 +1,5 @@
+import { getFixedFilename } from "./utils";
+
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
 
@@ -65,7 +67,7 @@ const getPTAcknowledgementData = (application, tenantInfo, t) => {
         title: t("PT_COMMON_DOCS"),
         values: application.documents.length > 0 ?
           application.documents.map(document => {
-            return { title: t(document?.documentType || "N/A"), value: document?.documentUid || "N/A" }
+            return { title: t(document?.documentType || "N/A"), value:document?.documentUid&& getFixedFilename(document.documentUid )|| "N/A" }
           }) : 'NA'
 
       },

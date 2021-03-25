@@ -2,6 +2,7 @@ import { Card, CardHeader, CardSubHeader, CardText, LinkButton, Row, StatusTable
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+import { getFixedFilename } from "../../../utils";
 
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
@@ -49,7 +50,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         />
         <Row
           label={t("PT_PROOF_OF_ADDRESS_SUB_HEADER")}
-          text={`${address?.documents.ProofOfAddress?.name || "na"}`}
+          text={`${address?.documents?.ProofOfAddress?.name&&getFixedFilename(address.documents.ProofOfAddress.name) || "na"}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/createProperty/proof" />}
         />
       </StatusTable>

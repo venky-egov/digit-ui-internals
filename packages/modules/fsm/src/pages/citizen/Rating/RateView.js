@@ -26,7 +26,7 @@ const RateView = (props) => {
         <Rating currentRating={data?.timeline[0]?.rating} />
       </KeyNote>
       {application.additionalDetails.CheckList.map((checklist) => (
-        <KeyNote keyValue={t(checklist.code)} note={t(checklist.value)} />
+        <KeyNote keyValue={t(checklist.code)} note={checklist.value.split(',').map(val => t(val)).join(', ')} />
       ))}
       <KeyNote keyValue={t("CS_COMMON_COMMENTS")} note={data?.timeline[0]?.comment || "N/A"} />
     </Card>

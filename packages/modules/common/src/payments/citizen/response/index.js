@@ -49,7 +49,7 @@ export const SuccessfulPayment = (props) => {
     return (
       <Card>
         <Banner message={t("CITIZEN_FAILURE_COMMON_PAYMENT_MESSAGE")} info="" successful={false} />
-
+        <CardText>{t("CS_PAYMENT_FAILURE_MESSAGE")}</CardText>
         {business_service !== "PT" ? (
           <Link to={`/digit-ui/citizen`}>
             <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />

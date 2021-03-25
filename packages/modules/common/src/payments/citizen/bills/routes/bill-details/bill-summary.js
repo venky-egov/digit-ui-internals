@@ -8,7 +8,7 @@ const BillSumary = ({ billAccountDetails }) => {
     <React.Fragment>
       <div className="bill-summary">
         {billAccountDetails
-          .sort((a, b) => a.amount - b.amount)
+          .sort((a, b) => b.amount - a.amount)
           .map((amountDetails, index) => {
             return (
               <div key={index} className="bill-account-details">

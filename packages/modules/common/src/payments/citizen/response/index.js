@@ -137,7 +137,12 @@ export const SuccessfulPayment = (props) => {
           (isBillDataLoading ? (
             <Loader />
           ) : (
-            <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_AMOUNT_PENDING")} text={billData?.Bill[0]?.totalAmount} />
+            <Row
+              rowContainerStyle={rowContainerStyle}
+              last
+              label={t("CS_PAYMENT_AMOUNT_PENDING")}
+              text={demand?.Demands?.[0]?.isPaymentCompleted ? 0 : billData?.Bill[0]?.totalAmount}
+            />
           ))}
 
         <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />

@@ -149,7 +149,7 @@ export const newConfig = [
         texts: {
           headerCaption: "PT_GROUND_FLOOR_DETAILS_LABEL",
           header: "PT_ASSESSMENT_FLOW_RENTAL_DETAIL_HEADER",
-          cardText: "PT_ASSESSMENT_FLOW_RENTAL_DETAIL_TEXT",
+          cardText: "",
           submitBarLabel: "PT_COMMON_NEXT",
         },
         key: "units",

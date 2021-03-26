@@ -382,6 +382,21 @@ const getRoleStatusCriteria = (tenantId, moduleCode, type) => ({
     ],
   },
 });
+const getRentalDetailsCategoryCriteria = (tenantId, moduleCode) => ({
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "RentalDetails",
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
@@ -500,6 +515,15 @@ const GetReasonType = (MdmsRes, type, moduleCode) =>
     }))
   );
 
+const getRentalDetailsCategory = (MdmsRes) => {
+  MdmsRes["PropertyTax"].RentalDetails.filter((category) => category.active).map((RentalDetailsInfo) => {
+    return {
+      ...RentalDetailsInfo,
+      i18nKey: `PROPERTYTAX_BILLING_SLAB_${RentalDetailsInfo.code}`,
+    };
+  });
+};
+
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
 const GetCommonFields = (MdmsRes) => MdmsRes["FSM"].CommonFieldsConfig;
 
@@ -547,6 +571,8 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetPreFields(MdmsRes);
     case "PostFieldsConfig":
       return GetPostFields(MdmsRes);
+    case "RentalDeatils":
+      return getRentalDetailsCategory(MdmsRes)
     default:
       return MdmsRes;
   }
@@ -638,4 +664,7 @@ export const MdmsService = {
   getDocumentRequiredScreen: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getDocumentRequiredScreenCategory(tenantId, moduleCode), moduleCode);
   },
+  getRentalDetails: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getRentalDetailsCategoryCriteria(tenantId, moduleCode), moduleCode);
+  }
 };

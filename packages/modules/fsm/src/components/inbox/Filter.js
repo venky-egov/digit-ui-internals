@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
+import AssignedTo from "./AssignedTo";
 
 const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
   const { t } = useTranslation();
@@ -68,18 +69,8 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
             )}
           </div>
           <div>
-            {!DSO && !isFstpOperator && (
-              <React.Fragment>
-                <RadioButtons
-                  onSelect={(d) => onFilterChange({ uuid: d })}
-                  selectedOption={searchParams?.uuid}
-                  optionsKey="name"
-                  options={[
-                    { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
-                    { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
-                  ]}
-                />
-              </React.Fragment>
+            {!DSO && !isFstpOperator && searchParams && (
+              <AssignedTo onFilterChange={onFilterChange} searchParams={searchParams} tenantId={tenantId} t={t} />
             )}
             <div>
               {/* {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")} */}

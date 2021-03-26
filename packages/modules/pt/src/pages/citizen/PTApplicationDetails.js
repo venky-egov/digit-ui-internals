@@ -53,13 +53,14 @@ const PTApplicationDetails = () => {
         <CardSubHeader>{t("Unit 1")}</CardSubHeader>
         <div style={{ border: "groove" }}>
           <StatusTable>
-            <Row label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")} text={`${t(unit[0].usageCategory)}` || "NA"} />
-            <Row label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${t(unit[0].occupancyType)}` || "NA"} />
-            <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${t(unit[0].constructionDetail?.builtUpArea)}` || "NA"} />
+            <Row label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")} text={`${t(Array.isArray(unit) && unit[0].usageCategory)}` || "NA"} />
+            <Row label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${t(Array.isArray(unit) && unit[0].occupancyType)}` || "NA"} />
+            <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${t(Array.isArray(unit) && unit[0].constructionDetail?.builtUpArea)}` || "NA"} />
           </StatusTable>
         </div>
         <div>
-          {unit.length > 1 &&
+          {Array.isArray(unit) &&
+            unit.length > 1 &&
             unit.map((unit, index) => (
               <div key={index}>
                 <CardSubHeader>
@@ -76,27 +77,29 @@ const PTApplicationDetails = () => {
         </div>
         <CardSubHeader>{t("PT_COMMON_PROPERTY_OWNERSHIP_DETAILS_HEADER")}</CardSubHeader>
         <div>
-          {owners.map((owners, index) => (
-            <div key={index}>
-              <CardSubHeader>
-                {t("PT_OWNER_SUB_HEADER")} - {index + 1}
-              </CardSubHeader>
-              <StatusTable>
-                <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(owners?.name)}` || "NA"} />
-                <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${t(owners?.fatherOrHusbandName)}` || "NA"} />
-                <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(owners?.gender)}` || "NA"} />
-                <Row label={t("PT_FORM3_OWNERSHIP_TYPE")} text={`${t(application?.ownershipCategory.toLowerCase().split(".")[1])}` || "NA"} />
-                <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owners?.mobileNumber)}`} />
-                <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t("NA")}`} />
-                <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(owners?.ownerType).toLowerCase()}`} />
-                <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owners?.correspondenceAddress)}` || "NA"} />
-              </StatusTable>
-            </div>
-          ))}
+          {Array.isArray(owners) &&
+            owners.map((owners, index) => (
+              <div key={index}>
+                <CardSubHeader>
+                  {t("PT_OWNER_SUB_HEADER")} - {index + 1}
+                </CardSubHeader>
+                <StatusTable>
+                  <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(owners?.name)}` || "NA"} />
+                  <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${t(owners?.fatherOrHusbandName)}` || "NA"} />
+                  <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(owners?.gender)}` || "NA"} />
+                  <Row label={t("PT_FORM3_OWNERSHIP_TYPE")} text={`${t(application?.ownershipCategory.toLowerCase().split(".")[1])}` || "NA"} />
+                  <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owners?.mobileNumber)}`} />
+                  <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t("NA")}`} />
+                  <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(owners?.ownerType).toLowerCase()}`} />
+                  <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owners?.correspondenceAddress)}` || "NA"} />
+                </StatusTable>
+              </div>
+            ))}
         </div>
         <CardSubHeader>{t("PT_COMMON_DOCS")}</CardSubHeader>
         <div>
-          {docs.length > 0 &&
+          {Array.isArray(docs) ? (
+            docs.length > 0 &&
             docs.map((docs, index) => (
               <div key="index">
                 <CardSubHeader>
@@ -107,7 +110,12 @@ const PTApplicationDetails = () => {
                   <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid && getFixedFilename(docs.documentUid, 17) || 'NA')}`} />
                 </StatusTable>
               </div>
-            ))}
+            ))
+          ) : (
+            <StatusTable>
+              <Row text="PT_NO_DOCUMENTS_MSG" />
+            </StatusTable>
+          )}
         </div>
         <PTWFApplicationTimeline application={application} id={acknowledgementIds} />
       </Card>

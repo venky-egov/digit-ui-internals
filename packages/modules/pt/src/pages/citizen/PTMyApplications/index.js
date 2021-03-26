@@ -2,9 +2,9 @@ import { Header, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import MyApplication from "./my-application";
+import PTApplication from "./pt-application";
 
-export const MyApplications = () => {
+export const PTMyApplications = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
@@ -22,7 +22,7 @@ export const MyApplications = () => {
       {applicationsList?.length > 0 &&
         applicationsList.map((application, index) => (
           <div key={index}>
-            <MyApplication application={application} />
+            <PTApplication application={application} />
           </div>
         ))}
       {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_APPLICATION_FOUND_MSG")}</p>}

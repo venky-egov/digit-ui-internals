@@ -50,6 +50,10 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         setSelectedLocality();
       }
 
+      if (userType === "employee") {
+        onSelect(config.key, { ...formData[config.key], city: selectedCity });
+      }
+
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
       if (filteredLocalityList.length === 1) {
         setSelectedLocality(filteredLocalityList[0]);
@@ -64,9 +68,6 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     setSelectedLocality(null);
     setLocalities(null);
     setSelectedCity(city);
-    if (userType === "employee") {
-      onSelect(config.key, { ...formData[config.key], city: city });
-    }
   }
 
   function selectLocality(locality) {

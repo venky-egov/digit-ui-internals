@@ -210,7 +210,10 @@ export const Search = {
     };
   },
 
-  allVehicles: async (tenantId, filters) => {
+  allVehicles: (tenantId, filters) => {
+    return FSMService.vehicleSearch(tenantId, filters);
+  },
+  allVehiclesWithDSO: async (tenantId, filters) => {
     const response = await FSMService.vehicleSearch(tenantId, filters);
     const { vehicleTrip } = response;
     let result = vehicleTrip;

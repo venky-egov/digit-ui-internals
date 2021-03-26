@@ -42,7 +42,8 @@ const FstpInbox = () => {
   const { isLoading, data: { totalCount, vehicleLog } = {}, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
     tenantId,
     filters,
-    config 
+    config,
+    options: { searchWithDSO: true }
   });
 
   const onSearch = (params = {}) => {

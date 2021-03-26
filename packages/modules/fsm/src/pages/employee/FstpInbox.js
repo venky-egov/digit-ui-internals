@@ -36,13 +36,14 @@ const FstpInbox = () => {
   );
   let filters = {
     vehicleIds: vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || 'null' : '',
-    tripOwnerIds: dsoData !== undefined && searchParams?.name?.length > 0 ? dsoData?.[0]?.id || 'null' : '',
+    tripOwnerIds: dsoData !== undefined && searchParams?.name?.length > 0 ? dsoData?.[0]?.ownerId || 'null' : '',
     applicationStatus: searchParams?.applicationStatus 
   }
   const { isLoading, data: { totalCount, vehicleLog } = {}, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
     tenantId,
     filters,
-    config 
+    config,
+    options: { searchWithDSO: true }
   });
 
   const onSearch = (params = {}) => {

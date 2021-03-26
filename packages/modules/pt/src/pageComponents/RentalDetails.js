@@ -6,7 +6,13 @@ const RentalDetails = ({ t, config, onSelect, value, userType, formData }) => {
   const onSkip = () => onSelect();
   const [RentArea, setRentArea] = useState(formData.units && formData.units[index] && formData.units[index].RentArea);
   const [AnnualRent, setAnnualRent] = useState(formData.units && formData.units[index] && formData.units[index].AnnualRent);
-
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = tenantId.split(".")[0];
+  const { data: Menu, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RentalDetails");
+  
+  if(Menu) {
+    config.texts.cardText = Menu?.PropertyTax?.RentalDetails[0]?.code ? `PT_ASSESSMENT_FLOW_RENTAL_DETAIL_${Menu?.PropertyTax?.RentalDetails[0]?.code}`: "";
+  }
   function setPropertyRentArea(e) {
     setRentArea(e.target.value);
   }

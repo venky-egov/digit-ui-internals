@@ -34,6 +34,7 @@ import QA_FSM_DSO from "./userInfo/QADSO.json";
 import QA_FSM_FSTP from "./userInfo/QAFSTPO.json";
 import QA_CECOLL from "./userInfo/qa-cecoll.json";
 import QACREDITOR from "./userInfo/QACREDITOR.json";
+import QACREATOR from "./userInfo/QACREATOR.json";
 
 import QAFSTP from "./userInfo/fstp.json";
 import QAADMIN from "./userInfo/QAADMIN.json";
@@ -69,6 +70,7 @@ const userInfo = {
   QA_CECOLL,
   QACREDITOR,
   QAADMIN,
+  QACREATOR,
 };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];

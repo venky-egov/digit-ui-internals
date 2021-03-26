@@ -3,22 +3,8 @@ import { LinkButton, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import StatusCount from "./StatusCount";
 
-const Status = ({ onAssignmentChange, fsmfilters, roleStatuses }) => {
+const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails }) => {
   const { t } = useTranslation();
-
-  const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-
-  const userRoleDetails = roleStatuses.filter((roleDetails) => userRoles.filter((role) => role === roleDetails.userRole)[0]);
-
-  const mergedRoleDetails = userRoleDetails.reduce(
-    (merged, details) => ({
-      fixed: details?.fixed && merged?.fixed,
-      statuses: [...details?.statuses, ...merged?.statuses],
-      zeroCheck: details?.zeroCheck || merged?.zeroCheck,
-    }),
-    { statuses: [] }
-  );
 
   const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus(true);
   // console.log("find application stats", applicationsWithCount)
@@ -39,7 +25,7 @@ const Status = ({ onAssignmentChange, fsmfilters, roleStatuses }) => {
     return <Loader />;
   }
 
-  return finalApplicationWithCount ? (
+  return finalApplicationWithCount?.length > 0 ? (
     <div className="status-container">
       <div className="filter-label">{t("ES_INBOX_STATUS")}</div>
       {finalApplicationWithCount?.map((option, index) => (

@@ -19,6 +19,7 @@ export const PaymentService = {
       method: "POST",
       auth: true,
       userService: true,
+      reciept: true,
       params: { tenantId },
       data: { ...details },
     }),

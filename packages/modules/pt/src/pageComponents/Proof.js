@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { FormStep, ImageUploadHandler, Loader, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
+import { FormStep, UploadFile, CardLabelDesc } from "@egovernments/digit-ui-react-components";
 
 const Proof = ({ t, config, onSelect, userType, formData }) => {
   let index = window.location.href.charAt(window.location.href.length - 1);
-  const [uploadedFile, setUploadedFile] = useState(formData?.documents?.proofIdentity?.fileStoreId || null);
-  const [file, setFile] = useState(formData?.documents?.proofIdentity);
+  const [uploadedFile, setUploadedFile] = useState(formData?.documents?.ProofOfAddress?.fileStoreId || null);
+  const [file, setFile] = useState(formData?.documents?.ProofOfAddress);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
+  const handleSubmit = () => {
+    let fileStoreId = uploadedFile;
+    let fileDetails = file;
+    if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
+    let address = formData;
+    if (address && address.documents) {
+      address.documents["ProofOfAddress"] = fileDetails;
+    } else {
+      address["documents"] = [];
+      address.documents["ProofOfAddress"] = fileDetails;
+    }
+    onSelect(config.key, address, "", index);
+    // onSelect(config.key, { specialProofIdentity: fileDetails }, "", index);
+  };
   const onSkip = () => onSelect();
 
   function selectfile(e) {
@@ -21,7 +35,6 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
           setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
-            // TODO: change module in file storage
             const response = await Digit.UploadServices.Filestorage("property-upload", file, "pb");
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
@@ -37,39 +50,12 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
     })();
   }, [file]);
 
-  function goNext() {
-    let fileStoreId = uploadedFile;
-    let fileDetails = file;
-    if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
-    let address = formData && formData;
-    if (address && address.documents) {
-      address.documents["ProofOfAddress"] = fileDetails;
-    } else {
-      address["documents"] = [];
-      address.documents["ProofOfAddress"] = fileDetails;
-    }
-
-    onSelect(config.key, address, "", index);
-  }
-
-  function onAdd() {
-    let newIndex = parseInt(index) + 1;
-    onSelect("owner-details", {}, false, newIndex, true);
-  }
   return (
-    <FormStep
-      t={t}
-      config={config}
-      onSelect={goNext}
-      onSkip={onSkip}
-      isDisabled={!uploadedFile}
-      onAdd={onAdd}
-      isMultipleAllow={formData?.ownershipCategory?.value == "INDIVIDUAL.MULTIPLEOWNERS"}
-    >
+    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile}>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <UploadFile
-        accept={(".jpg", "PNG", "PDF")}
+        accept=".jpg"
         onUpload={selectfile}
         onDelete={() => {
           setUploadedFile(null);

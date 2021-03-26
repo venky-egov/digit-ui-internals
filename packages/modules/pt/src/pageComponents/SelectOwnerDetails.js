@@ -80,6 +80,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         onChange={setGuardiansName}
         pattern="^[a-zA-Z-.`' ]*$"
       />
+      <CardLabel>{`${t("PT_FORM3_RELATIONSHIP")}*`}</CardLabel>
       <RadioButtons
         t={t}
         optionsKey="i18nKey"

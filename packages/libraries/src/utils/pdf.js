@@ -22,26 +22,27 @@ const defaultLogo =
 const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
   const emailLeftMargin =
     email.length <= 15
-      ? 170
+      ? 190
       : email.length <= 20
-      ? 140
+      ? 170
       : email.length <= 25
-      ? 110
+      ? 130
       : email.length <= 30
-      ? 80
+      ? 90
       : email.length <= 35
       ? 50
       : email.length <= 40
-      ? 20
+      ? 10
       : email.length <= 45
       ? 0
       : email.length <= 50
-      ? -10
+      ? -20
       : email.length <= 55
       ? -70
       : email.length <= 60
       ? -100
       : -60;
+
   const dd = {
     pageMargins: [40, 80, 40, 30],
     header: {
@@ -67,7 +68,7 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
           text: phoneNumber,
           color: "#6f777c",
           fontSize: 11,
-          margin: [-65, 45, 0, 25],
+          margin: [-70, 45, 0, 25],
         },
       ],
     },

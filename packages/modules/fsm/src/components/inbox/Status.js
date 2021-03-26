@@ -25,9 +25,9 @@ const Status = ({ onAssignmentChange, fsmfilters, roleStatuses }) => {
 
   const [moreStatus, showMoreStatus] = useState(false);
 
-  const finalApplicationWithCount = mergedRoleDetails.statuses.map(
-    (roleDetails) => applicationsWithCount?.filter((application) => application.code === roleDetails)[0]
-  );
+  const finalApplicationWithCount = mergedRoleDetails.statuses
+    .map((roleDetails) => applicationsWithCount?.filter((application) => application.code === roleDetails)[0])
+    .filter((status) => status?.code);
 
   const moreApplicationWithCount = applicationsWithCount?.filter(
     (application) => !finalApplicationWithCount.find((listedApplication) => listedApplication.code === application.code)
@@ -50,7 +50,7 @@ const Status = ({ onAssignmentChange, fsmfilters, roleStatuses }) => {
             <StatusCount key={index} onAssignmentChange={onAssignmentChange} status={option} fsmfilters={fsmfilters} />
           ))
         : null}
-      {!mergedRoleDetails.fixed ? (
+      {mergedRoleDetails.fixed === false ? (
         <div className="filter-button" onClick={() => showMoreStatus(!moreStatus)}>
           {" "}
           {moreStatus ? t("ES_COMMON_LESS") : t("ES_COMMON_MORE")}{" "}

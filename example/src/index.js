@@ -36,6 +36,7 @@ import QA_CECOLL from "./userInfo/qa-cecoll.json";
 import QACREDITOR from "./userInfo/QACREDITOR.json";
 
 import QAFSTP from "./userInfo/fstp.json";
+import QAADMIN from "./userInfo/QAADMIN.json";
 import NAWANSHAHR_QA_GRO from "./userInfo/qa-gro-nawanshahr.json";
 
 import * as comps from "@egovernments/digit-ui-react-components";
@@ -67,6 +68,7 @@ const userInfo = {
   QA_FSM_FSTP,
   QA_CECOLL,
   QACREDITOR,
+  QAADMIN,
 };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];

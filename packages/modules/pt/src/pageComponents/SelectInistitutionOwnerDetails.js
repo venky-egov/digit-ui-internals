@@ -1,5 +1,6 @@
+import { CardHeader, CardLabel, Dropdown, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
-import { FormStep, TextInput, CardLabel, CardHeader, Dropdown } from "@egovernments/digit-ui-react-components";
+import { cardBodyStyle } from "../utils";
 
 const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   let index = 0;
@@ -87,7 +88,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
       onSelect={goNext}
       isDisabled={!inistitutionName || !inistitutetype || !name || !designation || !mobileNumber || !altContactNumber}
     >
-      <div>
+      <div style={cardBodyStyle}>
         <CardLabel>{t("PT_COMMON_INSTITUTION_NAME")}</CardLabel>
         <TextInput
           isMandatory={false}

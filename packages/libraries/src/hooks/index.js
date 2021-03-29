@@ -49,6 +49,7 @@ import useVehiclesSearch from "./fsm/useVehiclesSearch";
 import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
+import useEmployeeSearch from "./useEmployeeSearch";
 
 import usePropertyMDMS from "./pt/usePropertyMDMS";
 import usePropertyAPI from "./pt/usePropertyAPI";
@@ -116,6 +117,7 @@ const Hooks = {
   useUserSearch,
   useApplicationsForBusinessServiceSearch,
   useDemandSearch,
+  useEmployeeSearch,
   pgr,
   fsm,
   pt,

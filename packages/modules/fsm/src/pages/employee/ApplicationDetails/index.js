@@ -157,7 +157,7 @@ const ApplicationDetails = (props) => {
     if (checkpoint.status === "CREATED") {
       const caption = {
         date: checkpoint?.auditDetails?.created,
-        name: applicationData.citizen.name,
+        name: checkpoint?.assigner,
         mobileNumber: applicationData.citizen.mobileNumber,
         source: applicationData.source || "",
       };
@@ -172,14 +172,14 @@ const ApplicationDetails = (props) => {
     ) {
       const caption = {
         date: checkpoint?.auditDetails?.created,
-        name: checkpoint?.assigner?.name,
+        name: checkpoint?.assigner,
         comment: reason ? t(`ES_ACTION_REASON_${reason}`) : null,
         otherComment: reason_comment ? reason_comment : null,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "DSO_INPROGRESS") {
       const caption = {
-        name: `${checkpoint?.assigner?.name} (${t("ES_FSM_DSO")})`,
+        name: checkpoint?.assigner,
         mobileNumber: checkpoint?.assigner?.mobileNumber,
         date: `${t("CS_FSM_EXPECTED_DATE")} ${Digit.DateUtils.ConvertTimestampToDate(applicationData?.possibleServiceDate)}`,
       };

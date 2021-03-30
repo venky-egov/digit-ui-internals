@@ -62,7 +62,7 @@ const SearchProperty = ({ config: propsConfig, t }) => {
       config={config}
       label={propsConfig.texts.submitButtonLabel}
       heading={propsConfig.texts.header}
-      description={propsConfig.texts.description}
+      text={propsConfig.texts.text}
       cardStyle={{ margin: "auto" }}
       headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
     ></FormComposer>

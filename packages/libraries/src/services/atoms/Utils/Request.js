@@ -1,4 +1,5 @@
 import Axios from "axios";
+import { da } from "date-fns/locale";
 
 Axios.interceptors.response.use(
   (res) => res,
@@ -24,7 +25,17 @@ const userServiceData = () => ({ userInfo: Digit.UserService.getUser().info });
 
 window.Digit = window.Digit || {};
 window.Digit = { ...window.Digit, RequestCache: window.Digit.RequestCache || {} };
-export const Request = async ({ method = "POST", url, data = {}, headers = {}, useCache = false, params = {}, auth, userService }) => {
+export const Request = async ({
+  method = "POST",
+  url,
+  data = {},
+  headers = {},
+  useCache = false,
+  params = {},
+  auth,
+  userService,
+  reciept = false,
+}) => {
   // console.log("params:", params);
   // console.log("in request", method);
   // console.log("url:", url);
@@ -37,6 +48,9 @@ export const Request = async ({ method = "POST", url, data = {}, headers = {}, u
     }
     if (userService) {
       data.RequestInfo = { ...data.RequestInfo, ...userServiceData() };
+    }
+    if (reciept) {
+      data.RequestInfo = { ...data.RequestInfo, msgId: "string|en_IN" };
     }
   }
 

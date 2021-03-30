@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const MyApplication = ({ application }) => {
+const PTApplication = ({ application }) => {
   const { t } = useTranslation();
   return (
     <Card>
@@ -19,4 +19,4 @@ const MyApplication = ({ application }) => {
   );
 };
 
-export default MyApplication;
+export default PTApplication;

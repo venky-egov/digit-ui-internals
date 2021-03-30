@@ -10,6 +10,7 @@ const DsoDetails = async (tenantId, filters = {}) => {
     mobileNumber: dso.owner?.mobileNumber,
     name: dso.name,
     username: dso.owner?.userName,
+    ownerId: dso.ownerId,
     id: dso.id,
     vehicles: dso.vehicles
       .filter((vehicle) => vehicle.status === "ACTIVE")

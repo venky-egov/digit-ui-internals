@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
+import AssignedTo from "./AssignedTo";
 
 const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
   const { t } = useTranslation();
@@ -11,12 +12,26 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
-  const hideLocalityFilter = Digit.UserService.hasAccess(["FSM_CREATOR_EMP", "FSM_VIEW_EMP"]);
+  // const hideLocalityFilter = Digit.UserService.hasAccess(["FSM_CREATOR_EMP", "FSM_VIEW_EMP"]);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
 
   const { data: roleStatuses, isFetched: isRoleStatusFetched } = Digit.Hooks.fsm.useMDMS(state, "DIGIT-UI", "RoleStatusMapping");
+
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+
+  const userRoleDetails = roleStatuses?.filter((roleDetails) => userRoles.filter((role) => role === roleDetails.userRole)[0]);
+
+  const mergedRoleDetails = userRoleDetails?.reduce(
+    (merged, details) => ({
+      fixed: details?.fixed && merged?.fixed,
+      statuses: [...details?.statuses, ...merged?.statuses],
+      zeroCheck: details?.zeroCheck || merged?.zeroCheck,
+    }),
+    { statuses: [] }
+  );
 
   const localities = useSelector((state) => state.common.revenue_localities[tenantId]);
   const selectLocality = (d) => {
@@ -54,18 +69,8 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
             )}
           </div>
           <div>
-            {!DSO && !isFstpOperator && (
-              <React.Fragment>
-                <RadioButtons
-                  onSelect={(d) => onFilterChange({ uuid: d })}
-                  selectedOption={searchParams?.uuid}
-                  optionsKey="name"
-                  options={[
-                    { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
-                    { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
-                  ]}
-                />
-              </React.Fragment>
+            {!DSO && !isFstpOperator && searchParams && (
+              <AssignedTo onFilterChange={onFilterChange} searchParams={searchParams} tenantId={tenantId} t={t} />
             )}
             <div>
               {/* {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")} */}
@@ -73,7 +78,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
             {/* <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={searchParams} /> */}
           </div>
 
-          {!hideLocalityFilter ? (
+          {mergedRoleDetails?.statuses?.length > 0 ? (
             <div>
               <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
               <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} />
@@ -93,7 +98,11 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
             </div>
           ) : null}
           <div>
-            {isRoleStatusFetched ? <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} roleStatuses={roleStatuses} /> : <Loader />}
+            {isRoleStatusFetched && mergedRoleDetails ? (
+              <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} mergedRoleDetails={mergedRoleDetails} />
+            ) : (
+              <Loader />
+            )}
           </div>
         </div>
       </div>

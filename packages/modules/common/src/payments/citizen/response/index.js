@@ -81,7 +81,7 @@ export const SuccessfulPayment = (props) => {
     if (!paymentData?.fileStoreId) {
       response = await Digit.PaymentService.generatePdf(state, { Payments: payments.Payments });
     }
-    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
     if (fileStore && fileStore[response.filestoreIds[0]]) {
       window.open(fileStore[response.filestoreIds[0]], "_blank");
     }
@@ -116,7 +116,7 @@ export const SuccessfulPayment = (props) => {
         applicationNumber={paymentData?.paymentDetails[0].receiptNumber}
         successful={true}
       />
-      <CardText>{t("CS_PAYMENT_SUCCESSFUL_DESCRIPTION")}</CardText>
+      {business_service !== "PT" ? <CardText>{t("CS_PAYMENT_SUCCESSFUL_DESCRIPTION")}</CardText> : <React.Fragment></React.Fragment>}{" "}
       <React.Fragment>
         <div className="primary-label-btn d-grid" onClick={printReciept}>
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">

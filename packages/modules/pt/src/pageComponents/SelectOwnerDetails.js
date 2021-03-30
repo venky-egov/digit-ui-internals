@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons } from "@egovernments/digit-ui-react-components";
+import { cardBodyStyle } from "../utils";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   let index = window.location.href.charAt(window.location.href.length - 1);
@@ -54,6 +55,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
       t={t}
       isDisabled={!name || !mobileNumber || !gender || !relationship || !fatherOrHusbandName}
     >
+      <div style={cardBodyStyle}>
       <CardLabel>{`${t("PT_OWNER_NAME")}*`}</CardLabel>
       <TextInput t={t} type={"text"} isMandatory={false} optionKey="i18nKey" name="name" value={name} onChange={setOwnerName} pattern="^[a-zA-Z-.`' ]*$" />
       <CardLabel>{`${t("PT_FORM3_GENDER")}*`}</CardLabel>
@@ -80,6 +82,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         onChange={setGuardiansName}
         pattern="^[a-zA-Z-.`' ]*$"
       />
+      <CardLabel>{`${t("PT_FORM3_RELATIONSHIP")}*`}</CardLabel>
       <RadioButtons
         t={t}
         optionsKey="i18nKey"
@@ -89,6 +92,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         selectedOption={relationship}
         onSelect={setGuardianName}
       />
+      </div>
     </FormStep>
   );
 };

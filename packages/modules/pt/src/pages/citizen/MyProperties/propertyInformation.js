@@ -97,8 +97,11 @@ const PropertyInformation = () => {
                 <StatusTable>
                   <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${owners?.name || "NA"}`} actionButton={<ActionButton jumpTo="" />} />
                   <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${owners?.fatherOrHusbandName || "NA"}`} />
-                  <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${owners?.gender.toLowerCase() || "NA"}`} />
-                  <Row label={t("PT_FORM3_OWNERSHIP_TYPE")} text={`${t(property?.ownershipCategory.toLowerCase().split(".")[1])}` || "NA"} />
+                  <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${owners?.gender ? owners?.gender.toLowerCase() : "NA"}`} />
+                  <Row
+                    label={t("PT_FORM3_OWNERSHIP_TYPE")}
+                    text={`${property?.ownershipCategory ? t(property?.ownershipCategory.toLowerCase().split(".")[1]) : "NA"}`}
+                  />
                   <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owners?.mobileNumber)}` || "NA"} />
                   <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t("NA")}`} />
                   <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(owners?.ownerType).toLowerCase()}` || "NA"} />
@@ -118,7 +121,7 @@ const PropertyInformation = () => {
                 </span>
                 <StatusTable>
                   <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType || "NA")}`} />
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid && getFixedFilename(docs.documentUid, 17) || 'NA')}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t((docs?.documentUid && getFixedFilename(docs.documentUid, 17)) || "NA")}`} />
                 </StatusTable>
               </div>
             ))

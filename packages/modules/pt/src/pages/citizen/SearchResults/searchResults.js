@@ -1,7 +1,7 @@
 import React from "react";
-import { CardSubHeader, ResponseComposer, Loader } from "@egovernments/digit-ui-react-components";
+import { Header, ResponseComposer, Loader } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const PropertySearchResults = ({ template, header, actionButtonLabel }) => {
@@ -60,9 +60,18 @@ const PropertySearchResults = ({ template, header, actionButtonLabel }) => {
   });
 
   return (
-    <div>
-      {header && <CardSubHeader style={{ marginLeft: "8px" }}> {t(header)} </CardSubHeader>}
-      <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel} onSubmit={onSubmit} />
+    <div className="static" style={{ marginTop: "16px" }}>
+      <div className="static-wrapper">
+        {header && <Header style={{ marginLeft: "8px" }}>{t(header)}</Header>}
+        <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel} onSubmit={onSubmit} />
+      </div>
+
+      <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+        {t("PT_TEXT_NOT_ABLE_TO_FIND_THE_PROPERTY")}{" "}
+        <span className="link">
+          <Link to="/digit-ui/citizen/pt/property/search">{t("PT_COMMON_CLICK_HERE")}</Link>
+        </span>
+      </p>
     </div>
   );
 };

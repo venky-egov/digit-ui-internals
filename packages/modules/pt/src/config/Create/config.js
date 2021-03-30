@@ -199,7 +199,7 @@ export const newConfig = [
           header: "PT_ASSESSMENT_FLOW_UNOCCUPIED_AREA_HEADER",
           cardText: "PT_ASSESSMENT_FLOW_UNOCCUPIED_AREA_TEXT",
           submitBarLabel: "PT_COMMON_NEXT",
-          skipText: "CORE_COMMON_SKIP_CONTINUE",
+          skipText: "",
         },
         key: "units",
         withoutLabel: true,

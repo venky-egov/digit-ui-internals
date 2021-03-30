@@ -39,7 +39,7 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   };
 
   const useSlumLocality = () => {
-    return useQuery(["SLUM_LOCALITY_MAPPING", tenantId, moduleCode], () => MdmsService.getSlumLocalityMapping(tenantId, moduleCode, type));
+    return useQuery(["SLUM_LOCALITY_MAPPING", tenantId, moduleCode], () => MdmsService.getSlumLocalityMapping(tenantId, moduleCode, type), config);
   };
 
   const useReason = () => {

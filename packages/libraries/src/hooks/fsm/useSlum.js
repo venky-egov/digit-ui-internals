@@ -1,5 +1,5 @@
-const useSlum = (tenantId, slumCode, localityCode) => {
-  const { data: slumData } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "Slum");
+const useSlum = (tenantId, slumCode, localityCode, config = {}) => {
+  const { data: slumData } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "Slum", config);
 
   if (!slumData || !slumCode || !localityCode) return;
 

@@ -27,7 +27,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
     label: {
       heading: `ES_FSM_ACTION_TITLE_${action}`,
       submit: `CS_COMMON_${action}`,
-      cancel: "CS_COMMON_CANCEL",
+      cancel: "CS_COMMON_CLOSE",
     },
     form: [
       {

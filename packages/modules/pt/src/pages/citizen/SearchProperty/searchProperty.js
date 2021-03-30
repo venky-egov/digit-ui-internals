@@ -54,18 +54,20 @@ const SearchProperty = ({ config: propsConfig, t }) => {
   console.log(config[0].body);
 
   return (
-    <FormComposer
-      onSubmit={onPropertySearch}
-      noBoxShadow
-      inline
-      submitInForm
-      config={config}
-      label={propsConfig.texts.submitButtonLabel}
-      heading={propsConfig.texts.header}
-      description={propsConfig.texts.description}
-      cardStyle={{ margin: "auto" }}
-      headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
-    ></FormComposer>
+    <div style={{ marginTop: "16px" }}>
+      <FormComposer
+        onSubmit={onPropertySearch}
+        noBoxShadow
+        inline
+        submitInForm
+        config={config}
+        label={propsConfig.texts.submitButtonLabel}
+        heading={propsConfig.texts.header}
+        description={propsConfig.texts.description}
+        cardStyle={{ margin: "auto" }}
+        headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
+      ></FormComposer>
+    </div>
   );
 };
 

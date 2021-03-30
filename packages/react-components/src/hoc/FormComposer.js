@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import BreakLine from "../atoms/BreakLine";
 import Card from "../atoms/Card";
 import CardLabel from "../atoms/CardLabel";
+import CardText from "../atoms/CardText";
 // import CardLabelError from "../atoms/CardLabelError";
 import CardSubHeader from "../atoms/CardSubHeader";
 import CardSectionHeader from "../atoms/CardSectionHeader";
@@ -164,6 +165,7 @@ export const FormComposer = (props) => {
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}
         {props.description && <CardLabelDesc> {props.description} </CardLabelDesc>}
+        {props.text && <CardText>{props.text}</CardText>}
         {formFields}
         {props.childrenAtTheBottom && props.children}
         {props.submitInForm && <SubmitBar label={t(props.label)} submit="submit" className="w-full" />}

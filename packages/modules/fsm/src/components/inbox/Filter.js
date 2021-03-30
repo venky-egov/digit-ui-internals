@@ -27,7 +27,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
   const mergedRoleDetails = userRoleDetails?.reduce(
     (merged, details) => ({
       fixed: details?.fixed && merged?.fixed,
-      statuses: [...details?.statuses, ...merged?.statuses],
+      statuses: [...details?.statuses, ...merged?.statuses].filter((item, pos, self) => self.indexOf(item) == pos),
       zeroCheck: details?.zeroCheck || merged?.zeroCheck,
     }),
     { statuses: [] }

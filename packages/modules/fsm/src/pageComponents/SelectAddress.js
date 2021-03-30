@@ -90,7 +90,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <Dropdown
-            className="field w-half"
+            className="form-field"
             isMandatory
             selected={cities?.length === 1 ? cities[0] : selectedCity}
             disable={cities?.length === 1}
@@ -106,7 +106,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <Dropdown
-            className="field w-half"
+            className="form-field"
             isMandatory
             selected={selectedLocality}
             option={localities}

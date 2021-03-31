@@ -22,12 +22,12 @@ const PropertySearchResults = ({ template, header, actionButtonLabel }) => {
 
   const history = useHistory();
 
-  if (result.error || !consumerCode) {
-    return <div>{t("CS_PT_NO_PROPERTIES_FOUND")}</div>;
-  }
-
   if (paymentDetails.isLoading || result.isLoading) {
     return <Loader />;
+  }
+
+  if (result.error || !consumerCode) {
+    return <div>{t("CS_PT_NO_PROPERTIES_FOUND")}</div>;
   }
 
   const onSubmit = (data) => {

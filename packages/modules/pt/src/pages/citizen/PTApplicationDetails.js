@@ -4,11 +4,13 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
 import { getFixedFilename } from "../../utils";
-
+import getPTAcknowledgementData from "../../getPTAcknowledgementData";
+import { LinkButton } from "@egovernments/digit-ui-react-components";
 const PTApplicationDetails = () => {
   const { t } = useTranslation();
   const { acknowledgementIds } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const coreData = Digit.Hooks.useCoreData();
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({
     tenantId,
     filters: { acknowledgementIds },
@@ -24,10 +26,17 @@ const PTApplicationDetails = () => {
   if (isLoading) {
     return <Loader />;
   }
+  const handleDownloadPdf = () => {
+    const applications = application || {};
+    const tenantInfo = coreData.tenants.find((tenant) => tenant.code === applications.tenantId);
+    const data = getPTAcknowledgementData({ ...applications }, tenantInfo, t);
+    Digit.Utils.pdf.generate(data);
+  };
 
   return (
     <React.Fragment>
       <Header>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
+      <LinkButton label={t("CS_COMMON_DOWNLOAD")} className="check-page-link-button" onClick={handleDownloadPdf} />
       <Card>
         <StatusTable>
           <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={application?.acknowldgementNumber} />
@@ -106,8 +115,8 @@ const PTApplicationDetails = () => {
                   {t("PT_COMMON_DOCS")} - {index + 1}
                 </CardSubHeader>
                 <StatusTable>
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType || 'NA')}`} />
-                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t(docs?.documentUid && getFixedFilename(docs.documentUid, 17) || 'NA')}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_TYPE")} text={`${t(docs?.documentType || "NA")}`} />
+                  <Row label={t("PT_OWNERSHIP_DOCUMENT_ID")} text={`${t((docs?.documentUid && getFixedFilename(docs.documentUid, 17)) || "NA")}`} />
                 </StatusTable>
               </div>
             ))

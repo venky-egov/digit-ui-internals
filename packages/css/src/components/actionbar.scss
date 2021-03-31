@@ -3,7 +3,7 @@
   max-width: 480px;
   z-index: 100;
 
-  @apply bottom-0 w-full bg-white py-sm px-sm fixed text-right;
+  @apply left-0 bottom-0 w-full bg-white py-sm px-sm fixed text-right;
 
   div {
     @apply w-full;

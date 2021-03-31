@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Banner, Card, CardText, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
-import { useHistory, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 
@@ -20,7 +20,7 @@ export const SuccessfulPayment = (props) => {
 
   const { data: billData, isLoading: isBillDataLoading } = Digit.Hooks.useFetchPayment(
     { tenantId, consumerCode, businessService: business_service },
-    { enabled: allowFetchBill }
+    { enabled: allowFetchBill, retry: false }
   );
 
   const payments = data?.payments;

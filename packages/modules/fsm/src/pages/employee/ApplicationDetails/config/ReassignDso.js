@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { DatePicker, Dropdown, CardLabelError } from "@egovernments/digit-ui-react-components";
 
 function getFilteredDsoData(dsoData, vehicle) {
   return dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.type == vehicle?.code));
@@ -22,7 +22,7 @@ export const configReassignDSO = ({
   label: {
     heading: `ES_FSM_ACTION_TITLE_${action}`,
     submit: `CS_COMMON_${action}`,
-    cancel: "CS_COMMON_CANCEL",
+    cancel: "CS_COMMON_CLOSE",
   },
   form: [
     {
@@ -68,7 +68,20 @@ export const configReassignDSO = ({
           isMandatory: true,
           type: "dropdown",
           populators: (
-            <Dropdown option={getFilteredDsoData(dsoData, vehicle)} autoComplete="off" optionKey="name" id="dso" selected={dso} select={selectDSO} />
+            <React.Fragment>
+              {/* {console.log("find get dso here",getFilteredDsoData(), getFilteredDsoData() && !getFilteredDsoData().length )} */}
+              {getFilteredDsoData(dsoData, vehicle) && !getFilteredDsoData(dsoData, vehicle).length ? (
+                <CardLabelError>{t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}</CardLabelError>
+              ) : null}
+              <Dropdown
+                option={getFilteredDsoData(dsoData, vehicle)}
+                autoComplete="off"
+                optionKey="displayName"
+                id="dso"
+                selected={dso}
+                select={selectDSO}
+              />
+            </React.Fragment>
           ),
         },
         {
@@ -85,14 +98,15 @@ export const configReassignDSO = ({
         {
           label: t("ES_FSM_ACTION_SERVICE_DATE"),
           isMandatory: true,
-          type: "date",
+          type: "custom",
           populators: {
             name: "date",
             validation: {
               required: true,
             },
-            min: Digit.Utils.date.getDate(),
+            customProps: { min: Digit.Utils.date.getDate() },
             defaultValue: Digit.Utils.date.getDate(),
+            component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
           },
         },
       ],

@@ -76,7 +76,12 @@ const Response = (props) => {
   const coreData = Digit.Hooks.useCoreData();
   const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   const slumCode = mutation?.data?.fsm[0].address?.slumName;
-  const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm[0].address?.tenantId, slumCode, localityCode);
+  // console.log("find mutation here", mutation);
+  // debugger
+  const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm[0]?.tenantId, slumCode, localityCode, {
+    enabled: slumCode ? true : false,
+    retry: slumCode ? true : false,
+  });
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(stateId, "Vehicle", "VehicleType", { staleTime: Infinity });
   const vehicle = vehicleMenu?.find((vehicle) => mutation?.data?.fsm[0]?.vehicleType === vehicle?.code);
   const pdfVehicleType = getVehicleType(vehicle, t);

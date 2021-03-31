@@ -5,7 +5,7 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
   label: {
     heading: `ES_FSM_ACTION_TITLE_${action}`,
     submit: `CS_COMMON_${action}`,
-    cancel: "CS_COMMON_CANCEL",
+    cancel: "CS_COMMON_CLOSE",
   },
   form: [
     {

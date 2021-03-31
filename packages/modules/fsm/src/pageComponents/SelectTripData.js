@@ -109,7 +109,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">{t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED") + " * "}</CardLabel>
         <Dropdown
-          className="field w-half"
+          className="form-field"
           isMandatory
           option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))}
           optionKey="label"
